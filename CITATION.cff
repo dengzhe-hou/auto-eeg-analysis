@@ -1,5 +1,5 @@
 cff-version: 1.2.0
-title: "auto-eeg-analysis (AEA)"
+title: "Automated EEG Analysis (AEA)"
 message: "If you use this software in your research, please cite it as below. If you used a specific recipe, also cite the source paper declared in that recipe's citation.bib."
 type: software
 authors:

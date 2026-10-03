@@ -1,6 +1,6 @@
 # AEA
 
-An open library of EEG analysis skills for **MNE-Python**, with executable specifications and a numerically certified core.
+EEG analysis skills for **MNE-Python**, with executable specifications and a numerically certified core.
 
 **22 skills · 10 recipes · Codex CLI / Claude Code**
 
