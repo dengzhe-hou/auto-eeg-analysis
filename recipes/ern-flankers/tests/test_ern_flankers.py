@@ -1,12 +1,13 @@
 """Numerical regression guard for the `ern-flankers` recipe.
 
-This is the reference exemplar of the recipe-acceptance gate the ROADMAP
-requires ("numerical regression test passes"). It re-runs the recipe's two
-*supported* claims on ERP CORE Subject-001 Flankers and pins their qualitative
-verdicts plus bounded magnitudes against the validated results (RECIPE.md):
+The numeric guards rerun ERP CORE Subject-001 preprocessing and check two
+planned-domain descriptive contrasts from the corrected example:
 
-    C2 (ERN):   incompatible - compatible diff ~= -1.15 uV  (more negative)
-    C3 (theta): incompatible - compatible diff ~= +0.12 dB  (more positive)
+    C2 (response-locked compatibility): incompatible - compatible ~= -1.15 uV
+    C3 (per-trial baseline theta): incompatible - compatible ~= +1.28 dB
+
+These tests do not run the cluster permutation tests or establish significance.
+The saved corrected run reports all three planned tests, including C1.
 
 Bounds are deliberately wide, not bit-exact: extended-Infomax ICA + ICLabel are
 not reproducible across BLAS / onnxruntime builds, so the guard catches sign
@@ -104,10 +105,10 @@ def results() -> dict:
                              preload=True, reject=dict(eeg=150e-6))
 
     roi_idx = [epochs_resp.ch_names.index(c) for c in ROI]
-    t_ern = (epochs_resp.times >= 0.0) & (epochs_resp.times <= 0.1)
-    comp_ern = epochs_resp["comp"].average().data[roi_idx][:, t_ern].mean() * 1e6
-    incomp_ern = epochs_resp["incomp"].average().data[roi_idx][:, t_ern].mean() * 1e6
-    c2_diff = float(incomp_ern - comp_ern)
+    t_response = (epochs_resp.times >= 0.0) & (epochs_resp.times <= 0.1)
+    comp_response = epochs_resp["comp"].average().data[roi_idx][:, t_response].mean() * 1e6
+    incomp_response = epochs_resp["incomp"].average().data[roi_idx][:, t_response].mean() * 1e6
+    c2_diff = float(incomp_response - comp_response)
 
     # Stimulus-locked theta (C3)
     stim_ev = stim.copy()
@@ -118,32 +119,37 @@ def results() -> dict:
                              preload=True, reject=dict(eeg=150e-6))
     freqs = np.arange(4, 30, 1)
     n_cycles = freqs / 3
-    kw = dict(freqs=freqs, n_cycles=n_cycles, return_itc=False, decim=4, average=True, verbose=False)
-    tfr_comp = epochs_stim["comp"].compute_tfr(method="morlet", **kw).apply_baseline((-0.2, 0), mode="logratio")
-    tfr_incomp = epochs_stim["incomp"].compute_tfr(method="morlet", **kw).apply_baseline((-0.2, 0), mode="logratio")
+    # Normalize each trial before averaging, matching the corrected C3 estimand.
+    tfr = epochs_stim.copy().pick(ROI).compute_tfr(
+        method="morlet", freqs=freqs, n_cycles=n_cycles, return_itc=False,
+        decim=4, average=False, output="power", zero_mean=True, use_fft=False,
+        n_jobs=1, verbose=False,
+    ).apply_baseline((-0.2, 0), mode="logratio")
+    tfr.data *= 10  # MNE logratio is log10; dB is 10 * log10.
     theta = (freqs >= 4) & (freqs <= 8)
-    t_theta = (tfr_comp.times >= 0.2) & (tfr_comp.times <= 0.5)
-    roi_tfr = [tfr_comp.ch_names.index(c) for c in ROI]
-    comp_theta = tfr_comp.data[roi_tfr][:, theta][:, :, t_theta].mean()
-    incomp_theta = tfr_incomp.data[roi_tfr][:, theta][:, :, t_theta].mean()
+    t_theta = (tfr.times >= 0.2) & (tfr.times <= 0.5)
+    trial_means = tfr.data[:, :, theta][:, :, :, t_theta].mean(axis=(1, 2, 3))
+    incompatible = epochs_stim.events[:, 2] == 102
+    comp_theta = trial_means[~incompatible].mean()
+    incomp_theta = trial_means[incompatible].mean()
     c3_diff = float(incomp_theta - comp_theta)
 
-    return {"c2_ern_diff_uV": c2_diff, "c3_theta_diff_dB": c3_diff,
+    return {"c2_response_diff_uV": c2_diff, "c3_theta_diff_dB": c3_diff,
             "n_comp_resp": len(epochs_resp["comp"]), "n_incomp_resp": len(epochs_resp["incomp"])}
 
 
-def test_c2_ern_more_negative_for_incompatible(results):
+def test_c2_response_contrast_more_negative_for_incompatible(results):
     # Validated diff = -1.15 uV. Guard against sign flips / gross drift.
-    diff = results["c2_ern_diff_uV"]
-    assert diff < 0, f"ERN should be more negative for incompatible, got {diff:+.2f} uV"
-    assert -3.0 < diff < -0.2, f"ERN diff {diff:+.2f} uV outside expected band [-3.0, -0.2]"
+    diff = results["c2_response_diff_uV"]
+    assert diff < 0, f"Response contrast should be more negative for incompatible, got {diff:+.2f} uV"
+    assert -3.0 < diff < -0.2, f"Response contrast diff {diff:+.2f} uV outside expected band [-3.0, -0.2]"
 
 
 def test_c3_theta_greater_for_incompatible(results):
-    # Validated diff = +0.12 dB. Frontal theta enhanced by conflict.
+    # Corrected per-trial baseline contrast is about +1.28 dB.
     diff = results["c3_theta_diff_dB"]
     assert diff > 0, f"Frontal theta should be greater for incompatible, got {diff:+.3f} dB"
-    assert diff < 0.6, f"Theta diff {diff:+.3f} dB implausibly large (>0.6)"
+    assert diff < 6.0, f"Theta diff {diff:+.3f} dB outside the historical regression range (<6.0)"
 
 
 def test_trial_counts_sane(results):

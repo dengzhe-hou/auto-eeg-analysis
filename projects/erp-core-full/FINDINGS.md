@@ -1,5 +1,7 @@
 # FINDINGS — erp-core-flankers-full (AEA Full Case Study)
 
+> Historical record. The corrected 2026-10-04 analysis is in [REANALYSIS.md](REANALYSIS.md). The values and earlier audit claims below are preserved verbatim; they contain the statistical, TFR unit and contrast-label errors described there and must not be used as current results.
+
 ## 2026-05-23 — Flankers Conflict Processing
 
 ### C1: N2 (Incompatible > Compatible, stimulus-locked)

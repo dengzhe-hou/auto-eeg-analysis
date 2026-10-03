@@ -26,7 +26,7 @@ n_cycles = freqs / 3  # fewer cycles → shorter wavelet, fits 0.7s epoch
 decim = 2  # temporal decimation
 
 print(f"  Freqs: {freqs[0]}-{freqs[-1]} Hz ({len(freqs)} bins)", flush=True)
-print(f"  n_cycles: adaptive (freqs/2)", flush=True)
+print(f"  n_cycles: adaptive (freqs/3)", flush=True)
 print(f"  Auditory: {len(aud)} trials, Visual: {len(vis)} trials", flush=True)
 
 # Compute TFR per condition (averaged across trials)
@@ -42,10 +42,12 @@ tfr_vis = mne.time_frequency.tfr_morlet(
     decim=decim, average=True, verbose=False
 )
 
-# Baseline correction (logratio: 10*log10(power/baseline_power))
+# MNE logratio is log10(power/baseline_power); multiply by 10 for dB.
 baseline = (-0.2, 0)
 tfr_aud.apply_baseline(baseline=baseline, mode="logratio")
 tfr_vis.apply_baseline(baseline=baseline, mode="logratio")
+tfr_aud.data *= 10
+tfr_vis.data *= 10
 
 # Difference
 tfr_diff = tfr_aud.copy()
@@ -99,9 +101,11 @@ tfr_summary = {
     "stage": "tfr",
     "method": "morlet",
     "freqs": [int(f) for f in freqs],
-    "n_cycles": "freqs/2 (adaptive)",
+    "n_cycles": "freqs/3 (adaptive)",
     "baseline": list(baseline),
     "baseline_mode": "logratio",
+    "logratio_scale": 10,
+    "power_unit": "dB",
     "decim": decim,
     "roi_channels": roi_eeg,
     "roi_1020": [ch_map[c] for c in roi_eeg],

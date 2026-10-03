@@ -70,27 +70,45 @@
         <h2 id="examples-title">Example</h2>
         <div class="example-layout">
           <figure>
-            <a href="assets/flankers-case-study.png" aria-label="Open the full-size Flankers case-study figure">
-              <img src="assets/flankers-case-study.png"
-                   alt="Six-panel ERP CORE Flankers figure showing N2, response-related negativity, and frontal theta results for one participant"
-                   width="1963" height="1397" decoding="async">
+            <a href="assets/flankers-case-study-corrected.png" aria-label="Open the full-size corrected Flankers case-study figure">
+              <img src="assets/flankers-case-study-corrected.png"
+                   alt="Corrected six-panel Flankers results: stimulus- and response-locked ERPs, scalp map, time-frequency difference, theta power, and power spectra"
+                   width="4251" height="3141" decoding="async">
             </a>
-            <figcaption>Original analysis output. Select the figure to view it at full size.</figcaption>
+            <figcaption>
+              Corrected analysis, 4 October 2026.
+              <a href="assets/flankers-case-study-corrected.pdf">PDF</a> ·
+              <a href="assets/flankers-case-study-corrected.svg">SVG</a> ·
+              <a href="assets/flankers-case-study-corrected.caption.txt">Caption</a>
+            </figcaption>
           </figure>
           <div>
             <h3>ERP CORE Flankers</h3>
             <p>
-              Subject-001: N2, response-related negativity, and frontal theta, with
-              Bonferroni correction. Two of the three planned claims were supported
-              in this N=1 demonstration.
+              Subject-001: stimulus-locked N2, response-locked conflict, and frontal
+              theta. Two of the three tests pass the Bonferroni-adjusted cluster
+              threshold (p &lt; .05 / 3).
             </p>
             <details>
               <summary>Recorded results</summary>
               <p>
-                Six panels show the ERP and time-frequency outputs. The N2 claim was
-                not supported after correction. ERN: d = −0.23; theta: d = 0.20.
-                The recorded runtime was 94.6 s for this historical run, not a
-                general performance guarantee.
+                Minimum cluster p values: N2 .0588 (d = −0.062), response-locked
+                conflict .0006 (d = −0.316), and theta .0002 (d = 0.295).
+                All retained trials enter the analysis; 5,000 label permutations
+                preserve block and target side. Theta uses joint frequency × time ×
+                electrode clusters.
+              </p>
+              <p>
+                The response contrast is incompatible minus compatible, separate
+                from the <a href="BENCHMARK.html">14-participant error-minus-correct ERN benchmark</a>.
+                The <a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/projects/erp-core-full/REANALYSIS.md">run record</a>
+                gives the trial counts, assumptions and results.
+              </p>
+              <p>
+                The original pipeline reported 94.6 s; the corrected downstream run
+                took 12.60 s from saved epochs. These measure different stages and
+                do not establish complete-pipeline or LLM-related speedup. The
+                <a href="assets/flankers-case-study.png">historical figure</a> remains available.
               </p>
             </details>
           </div>
@@ -98,27 +116,43 @@
         <details class="additional-example">
           <summary>MNE sample: auditory versus visual N100</summary>
           <p>
-            One participant, trial-level inference. Cluster permutation used 5,000
-            permutations. This historical audit used GPT-5.4; the current default
-            reviewer is configured separately.
+            One participant, 61 complete stimulus cycles (244 trials). The analysis
+            pairs auditory and visual responses within each cycle and uses six
+            electrodes approximating the planned ROI, with 3–27 mm location differences.
           </p>
           <figure>
-            <a href="assets/n100-case-study.png" aria-label="Open the full-size N100 case-study figure">
-              <img src="assets/n100-case-study.png"
-                   alt="MNE sample auditory versus visual N100 case-study figure"
-                   width="1890" height="586" loading="lazy" decoding="async">
+            <a href="assets/n100-case-study-corrected.png" aria-label="Open the full-size corrected N100 case-study figure">
+              <img src="assets/n100-case-study-corrected.png"
+                   alt="Corrected N100 condition means and difference with cycle-level SEM, alongside measured and target ROI locations"
+                   width="4251" height="1889" loading="lazy" decoding="async">
             </a>
-            <figcaption>Original MNE sample output, following the recorded audit corrections.</figcaption>
+            <figcaption>
+              Corrected analysis, 4 October 2026. Shading shows ±1 SEM across cycles;
+              grey backgrounds mark the planned window.
+              <a href="assets/n100-case-study-corrected.pdf">PDF</a> ·
+              <a href="assets/n100-case-study-corrected.svg">SVG</a> ·
+              <a href="assets/n100-case-study-corrected.caption.txt">Caption</a>
+            </figcaption>
           </figure>
           <p>
-            Cluster permutation p = .0002; Cohen's d = −0.46. Epoch retention was
-            90.3% (289 / 320). The final audit verdict after 9 fixes was
-            PASS-WITH-CAVEATS. The original review found 4 critical and 9 major issues.
+            Auditory minus visual: −1.54 µV, paired-cycle Cohen's d<sub>z</sub> = −0.462.
+            One cluster passed the p &lt; .05 threshold (p = .0004; 5,000 permutations).
+            The original target-epoch retention was 100% (289 / 289). The corrected
+            analysis excludes 45 target trials in incomplete cycles, separately from
+            artifact rejection.
+          </p>
+          <p>
+            The fixed presentation order confounds condition with position within a
+            cycle. The sign-flip test assumes independent, symmetric cycle differences;
+            it does not establish a population effect. See the
+            <a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/projects/mne-sample-audvis/REANALYSIS.md">run record</a>.
+            The
+            <a href="assets/n100-case-study.png">historical figure</a> remains available.
           </p>
         </details>
         <p class="note">
-          These are historical single-subject demonstrations. Later group validations
-          are documented in the <a href="BENCHMARK.html">benchmark record</a>.
+          These single-participant corrections were made after v0.3.2. Group
+          validations are documented separately in the <a href="BENCHMARK.html">benchmark record</a>.
         </p>
       </section>
 

@@ -1,5 +1,7 @@
 # FINDINGS — mne-sample-audvis
 
+> Historical record. The corrected 2026-10-04 analysis is in [REANALYSIS.md](REANALYSIS.md). The values and earlier audit claims below are preserved verbatim; they contain the statistical, ROI and retention errors described there and must not be used as current results.
+
 ## 2026-05-22 — Case Study: Auditory vs Visual N100 (v2, post-audit fix)
 
 ### C1: Auditory > Visual N100

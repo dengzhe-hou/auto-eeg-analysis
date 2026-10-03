@@ -40,11 +40,11 @@ For each row in ANALYSIS_PLAN's claim table:
 3. Determine test type:
    - `cluster perm, paired` → `mne.stats.spatio_temporal_cluster_1samp_test` on (subjects × time × channels) difference array.
    - `cluster perm, independent` → `mne.stats.spatio_temporal_cluster_test` on two group arrays.
-   - If single-subject (N=1): use trial-level inference, document the limitation.
+   - If single-subject (N=1): determine the observation unit from the acquisition design before using trial-level inference. Two conditions recorded from one person do not make their individual trials paired. Never pair equal-length prefixes or discard extra trials merely to form differences. Use an approved trial-pair/block definition, or an approved unpaired test with the appropriate exchangeability restrictions; document the single-subject limitation.
 3b. **Determine the design (within vs between) — this switches BOTH the test and the pairing:**
    - **Within-subject** (same subjects measured under ≥2 conditions; the contrast is a condition difference): compute the per-subject difference `A − B` and feed it to `spatio_temporal_cluster_1samp_test` (one-sample test on the difference). This is the exact analog of FieldTrip `ft_statfun_depsamplesT`. Use `ttest_rel` / `f_mway_rm` for the per-point case. Requires **equal N and matched subject ordering** between conditions.
    - **Between-subject** (different groups, e.g. patients vs controls): feed the two group arrays to `spatio_temporal_cluster_test` (independent). Use `ttest_ind` for the per-point case. Tolerates **unequal N** (e.g. 20 controls vs 18 patients) — never pair.
-   - The plan's `contrast` column plus the cohort description determines this. If ambiguous, **stop and ask** — pairing the wrong way silently invalidates the inference.
+   - The plan's `contrast` column plus the cohort description determines this. These subject-level rules do not establish trial pairing within a single subject. Inspect event order, pairing keys and design blocks; fixed condition order does not establish randomization. If the required observation unit or exchangeability scheme is ambiguous, record the concrete alternatives for the researcher before running inference.
 4. Determine tail from `direction`:
    - "A more negative" → `tail = -1`, threshold must be negative.
    - "A more positive" or "A > B" → `tail = 1`, threshold positive.
@@ -71,7 +71,7 @@ For each claim in `STATS_PLAN.json`, write and execute a Python script:
 The script must:
 
 1. **Load data**: read `-ave.fif` (ERP) or `-tfr.h5` (TFR) per subject per condition from `erp-stage/` or `tfr-stage/`.
-2. **Build arrays**: shape `(n_subjects_or_trials, n_times, n_channels)` for the difference (condition_A - condition_B).
+2. **Build arrays**: shape `(n_observations, n_times, n_channels)`. Subtract conditions only for design-matched paired observations; retain separate condition arrays for unpaired observations. Record the observation identifiers and any design blocks.
 3. **Constrain to ROI + time window**: only include planned channels and time range.
 4. **Compute adjacency**: `mne.channels.find_ch_adjacency(info, ch_type="eeg")` on the ROI subset.
 5. **Compute the cluster-forming threshold from the design df — do NOT hard-code 1.96 / 2.0.** This is the cluster-FORMING threshold (which data points enter a cluster), a *different* knob from the cluster-LEVEL alpha (whether a formed cluster is significant). `df = n_subjects − 1` for the within/paired one-sample-on-difference design; `df = nA + nB − 2` for independent. For an F-based cluster test, use `scipy.stats.f.ppf(1 - alpha, dfn, dfd)`.
@@ -80,9 +80,9 @@ The script must:
    - `tail=0`:  `threshold = scipy.stats.t.ppf(1 - alpha/2, df)`  (halve alpha ONCE, here, for the two-sided forming threshold)
    - **Do not halve alpha a second time at the cluster level.** With `tail=0`, MNE already accounts for two-sidedness internally; judge the returned `cluster_p` against the full `alpha` (e.g. 0.05). FieldTrip users halve `cfg.alpha` to 0.025 because FieldTrip does not — that 0.025 is NOT a second correction to copy into MNE.
    - **Forming-threshold sensitivity is not just "report it" — sanity-check it.** A *low* forming threshold merges genuine and spurious effects and over-spreads cluster extent; a *high* one fragments a single true effect into several small clusters. Before interpreting cluster extent, re-run with two or three forming thresholds and confirm the cluster is stable; when no principled threshold exists, default to **TFCE** (`threshold=dict(start=…, step=…)`) which integrates over thresholds. Use a **permutation** null for the cluster, not a bootstrap (bootstrap cluster nulls can be liberal). Cite: Pernet et al. (2015). Cluster-based computational methods for mass univariate analyses of event-related brain potentials/fields. *J. Neurosci. Methods*, 250, 85–93.
-6. **Run**: `mne.stats.spatio_temporal_cluster_1samp_test(X, n_permutations=N, threshold=threshold, tail=tail, seed=SEED, adjacency=adj, out_type="mask")`.
+6. **Run the approved design**: for paired differences, use `mne.stats.spatio_temporal_cluster_1samp_test(X, n_permutations=N, threshold=threshold, tail=tail, seed=SEED, adjacency=adj, out_type="mask")`. For an unpaired signed t contrast with unrestricted label exchangeability, use `mne.stats.spatio_temporal_cluster_test([A, B], stat_fun=mne.stats.ttest_ind_no_p, ...)` with an explicit t threshold and tail; its default statistic is F, not a signed t statistic. If the acquisition design requires block-restricted permutations, preserve those restrictions in the implementation instead of silently using the unrestricted-label API.
 7. **Extract significant clusters**: `cluster_p < alpha`.
-8. **Compute effect size**: Cohen's d (or dz for paired) = mean(differences) / std(differences) across the cluster or the planned ROI+window.
+8. **Compute effect size** on the planned ROI+window irrespective of significance. For paired observations, Cohen's dz is mean(differences) divided by their sample standard deviation (`ddof=1`). For unpaired observations, use the difference in means divided by the pooled sample standard deviation, with the formula recorded. An unpaired contrast must not be converted into arbitrary pairwise differences to obtain an effect size.
 
 > **Robust location for amplitude/latency inference.** ERP amplitude and latency scores are outlier-prone and non-normal, and a single bad subject or trial can shift the mean enough to manufacture or erase an effect — a failure mode that permutation testing does *not* address (permutation handles the null distribution, not a corrupted central tendency). Following the LIMO-EEG convention, default subject-level amplitude/latency summaries to a **20% trimmed mean with a percentile-bootstrap CI** rather than the raw mean and parametric CI. Report the estimator alongside the test. Cite: Pernet et al. (2011). LIMO EEG: a toolbox for hierarchical linear modeling of electroencephalographic data. *Comput. Intell. Neurosci.*, 2011, 831409.
 
@@ -232,7 +232,7 @@ All must pass before declaring success:
 - **Never** change `n_permutations` to chase significance.
 - **Never** use `tail=0` when the plan specifies a directional hypothesis (or vice versa).
 - **Never** report cluster boundaries as precise onset/offset — cluster permutation only supports "a difference exists somewhere in the tested space."
-- **Never** pair a between-subjects contrast or run an independent test on within-subjects conditions — match the test to the design (Phase A step 3b). Paired tests require equal N and matched ordering.
+- **Never** pair different participants or treat repeated measurements from the same participants as separate groups. At the trial level, establish pairing separately from participant identity (Phase A step 3b). Paired tests require matched observation identifiers, not just equal array lengths.
 - **Never** copy FieldTrip's `cfg.alpha=0.025` as a second halving in MNE — MNE handles two-sidedness internally; judge `cluster_p < alpha` with `tail=0` (Phase C step 5).
 - **Never** average across subjects before a group test, and never present an uncorrected p-map as 'significant' — uncorrected maps are visualization only.
 - **Never** select the TF band/window or ERP channel+window from the grand average and then test it (double-dipping) — a-priori ROIs come from ANALYSIS_PLAN only.
@@ -331,9 +331,9 @@ The Sassenhagen & Draschkow and Rousselet sections above tell you what you *cann
 | ROI channels not found in data | Stop. Check channel_mapping.json or ask user. |
 | No significant clusters | Report as ❌ does_not_support. Do NOT rerun with different params. |
 | Cluster spans entire tested window | Report but warn: "cluster hits analysis boundary — consider wider window or note temporal non-specificity." |
-| Only 1 subject | Use trial-level test. Document: "single-subject, trial-level inference, does not support population claims." |
+| Only 1 subject | Establish the approved trial or block observation unit and exchangeability scheme. Document single-subject inference; one person does not imply paired trials. |
 | MNE-Python unavailable | Stop. MNE-Python is required for statistics. |
-| Within-subject conditions but unequal/mismatched N | Stop. Paired design requires equal N and matched ordering — check the contrast and cohort, do not silently fall back to independent. |
+| Participant-paired conditions but unequal/mismatched N | Stop. Subject-level pairing requires matched participants — check the contrast and cohort, do not silently fall back to independent. For single-subject trials, use the separately approved observation and exchangeability scheme. |
 | Plan specifies two-sided but code halves alpha twice (0.025 at cluster level) | Fix: derive forming threshold with `alpha/2`, judge `cluster_p < alpha` with `tail=0`. MNE handles two-sidedness once. |
 | TFR claim with no baseline applied before stats | Stop. Apply `logratio`/`percent` (evoked power) or `zscore` (single-trial) baseline inside the COI first. |
 | Mass-univariate p-map reported without correction | Reject as 'significant'. Apply cluster permutation (contiguous) or `fdr_correction` (sparse); uncorrected maps are visualization only. |

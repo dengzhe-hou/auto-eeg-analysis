@@ -215,11 +215,81 @@ If that sentence is right, AEA becomes the de facto EEG analysis sharing format 
 
 | Claim | Confidence | Evidence at v0.1 | Evidence needed for confidence ↑ |
 |---|---|---|---|
-| N1. Recipe library is novel | High | 4 recipes shipped; ern-flankers validated end-to-end in 94.6s | Demonstrate community contributions ≥ 10 external recipes |
+| N1. Recipe library is novel | High | 4 recipes shipped at v0.1; the original Flankers pipeline reported 94.6 s. This historical timing is separate from the corrected downstream analyses below. | Demonstrate community contributions ≥ 10 external recipes |
 | N2. Auto COBIDAS methods is novel | High | Demonstrated in 3 case studies; **first empirical eval — 100% COBIDAS coverage, 100% value accuracy, 0/12 fabrications on withheld items** across MMN/P3/N170 (`tools/validation/methods_text_eval/`) | Expert-rating vs manually-written paragraphs; ICA/source-item coverage; broader fabrication traps |
 | N3. EEG-specific reviewer simulator is novel | Moderate→**High** | Empirical detection eval — **8/8 seeded EEG defects caught + clean control passed on BOTH backends** (blind Claude, and the shipped GPT/Codex) (`tools/validation/audit_eval/`) | Subtle/compound defects; comparison against real reviewer comments on real papers |
 | N4. Markdown-LLM EEG pipeline is novel | Low as "first LLM×EEG" (EEGAgent AAAI 2026 predates); **defensible as "first portable EEG *skills corpus*"** (no EEG member of that category found — [RELATED_WORK.md](RELATED_WORK.md)) | ~22 SKILL.md; but the moat is N1–N3+N5 (validation+audit+methods), which every scanned competitor omits | Keep [RELATED_WORK.md](RELATED_WORK.md) current |
 | N5. Recipe pipelines (reference impl) are numerically faithful | **High (5 components, both epoching modes)** | Cross-tool benchmark vs MNE-BIDS-Pipeline: MMN (N=38, CCC 0.9997), P3b, N170, response-locked ERN, N400 — all CCC ≥ 0.9997, within ±0.1 µV, scalar+waveform **CI-gated** (§7). **Generation step now tested (§6f): 7/7 blind generations from a pinned spec hit the certified values to ≤0.5 nV across MMN/P3/N170 and two generator backends (Claude, GPT/Codex).** *Scope: harmonized minimal pipeline; 3 recipes / 9 generations / 2 backends; the recipe as *written* diverges 0.245 µV until every number-moving step is pinned.* | N2pc + LRP (need new recipes); EEGLAB *toolbox* (SciPy kernel-check done §4g); generation eval on more recipes/backends |
+
+### Corrected examples
+
+The 4 October 2026 corrections below were made after the v0.3.2 release. They
+reuse saved epochs and retain the historical figures. Each case has one participant;
+the statistical units are cycles or trials, not participants.
+
+**MNE sample N100.** The approved analysis uses 61 complete four-stimulus cycles,
+244 trials in total (122 auditory and 122 visual). It excludes 45 target trials
+from incomplete cycles. This selection is separate from artifact rejection:
+the saved epochs retained all 289 / 289 target events (100%). The earlier
+289 / 320 percentage used a denominator containing 15 smiley events and 16 button
+events, which were outside the target conditions.
+
+The six measured ROI electrodes are matched to the intended Fz, Cz, FC1, FC2, F3
+and F4 sites after aligning the head coordinate frames. They remain approximate
+matches, with three-dimensional distances of 2.96–27.04 mm; they are not recovered
+acquisition labels. The auditory-minus-visual mean over 80–150 ms is −1.5368 µV
+(auditory −2.0148 µV; visual −0.4781 µV), with paired-cycle Cohen's d<sub>z</sub> =
+−0.4624. One spatiotemporal cluster passes p < .05 (cluster p = .0004;
+5,000 sign-flip permutations, seed 42).
+
+The fixed within-cycle order confounds condition with cycle position. The test
+assumes independent cycle differences with a symmetric null distribution; the
+fixed schedule does not establish these assumptions. Cluster-level significance
+does not identify each included electrode or time point as significant.
+The [corrected figure](assets/n100-case-study-corrected.png) shows means and ±1 SEM
+across cycles together with the approximate ROI mapping. The
+[historical figure](assets/n100-case-study.png) is retained.
+[Run record](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/projects/mne-sample-audvis/REANALYSIS.md)
+and [result JSON](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/projects/mne-sample-audvis/REANALYSIS.json);
+reproduction: `tools/run_fix_audit.py`.
+
+**ERP CORE Flankers.** The approved correction retains all available compatible
+and incompatible trials and restricts label permutations within block × target-side
+strata. C1 and C2 use time × electrode clusters; C3 uses joint frequency × time ×
+electrode clusters over 4–8 Hz and 200–500 ms, rather than the historical
+pointwise theta tests. Each claim uses the Bonferroni-adjusted cluster threshold
+.05 / 3. C2 is the response-locked incompatible-minus-compatible conflict contrast.
+It is separate from the [N = 14 canonical error-minus-correct ERN benchmark](BENCHMARK.md).
+
+| Test | Retained trials (compatible / incompatible) | Incompatible − compatible | Cohen's d | Minimum cluster p | Clusters passing .05 / 3 |
+|---|---|---|---|---|---|
+| C1, stimulus-locked N2 | 196 / 197 | −0.1924 µV | −0.0621 | .0588 | 0 |
+| C2, response-locked conflict | 196 / 194 | −1.1512 µV | −0.3164 | .0006 | 1 |
+| C3, frontal theta | 196 / 197 | 1.2790 dB | 0.2953 | .0002 | 1 |
+
+All tests use 5,000 permutations and seed 42. The descriptive trial-level Cohen's
+d values use the pooled sample standard deviation of each trial's planned-domain
+mean, without block or target-side adjustment. C2 and
+C3 pass the adjusted cluster threshold; C1 does not. The theta display and test
+both use per-trial baseline normalization followed by conversion to dB. The
+restricted label permutations assume conditional exchangeability within block ×
+target side. They do not provide population inference.
+
+The [corrected six-panel figure](assets/flankers-case-study-corrected.png) retains
+stimulus-locked ERP, response-locked ERP, scalp topography, time–frequency
+difference, theta time course and PSD. The scalp map is the mean difference over
+the planned N2 window. The averaged theta curve is descriptive; inference uses
+the joint frequency × time × electrode domain. The
+[historical figure](assets/flankers-case-study.png) is retained.
+[Run record](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/projects/erp-core-full/REANALYSIS.md)
+and [result JSON](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/projects/erp-core-full/REANALYSIS.json);
+reproduction: `tools/run_full_case_study.py --reuse-epochs`.
+
+The reported 94.6 s belongs to the original historical Flankers pipeline. Any
+timing of these corrections covers only the rerun stages from saved inputs. The
+corrected Flankers run recorded 12.60 s for downstream analysis from saved epochs,
+excluding preprocessing, ICA, and later figure rendering. It is not a new
+complete-pipeline benchmark or evidence of LLM-related speedup.
 
 ## 7. Validation depth — are the generated pipelines actually correct?
 

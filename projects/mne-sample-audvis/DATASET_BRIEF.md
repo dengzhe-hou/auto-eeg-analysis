@@ -37,7 +37,7 @@
 | smiley face | 5 | ~15 | rare target (ignore) |
 | button press | 32 | ~16 | response (ignore) |
 
-- **Block structure:** continuous, randomized
+- **Stimulus order:** 76 fixed four-stimulus cycles in the recorded sequence (auditory/right, visual/left, auditory/left, visual/right); 15 cycles contain a smiley replacing one stimulus. This is not a randomized condition sequence.
 - **ITI:** ~0.75 s
 - **Trial timing:** stimulus onset → ~0.6 s analysis window
 

@@ -169,7 +169,7 @@ findings = f"""# FINDINGS — mne-sample-audvis
 ### Pipeline
 - Preprocess: 0.1–40 Hz FIR, average ref, 59 EEG channels
 - ICA: Infomax 15 comp, ICLabel excluded {len(exclude)}
-- Epochs: {len(epochs)}, ±150µV reject
+- Epochs: {len(epochs)}, 150 µV peak-to-peak rejection
 - Aud: {len(aud)} trials, Vis: {len(vis)} trials
 """
 (PROJECT / "FINDINGS.md").write_text(findings, encoding="utf-8")
