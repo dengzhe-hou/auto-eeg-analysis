@@ -1,8 +1,4 @@
-"""Numerical references and known-input controls, beyond API smoke tests.
-
-The QC sine control is a documented, unresolved failure of the released flat
-threshold. It is xfailed explicitly, not converted into a passing QC claim.
-"""
+"""Numerical references and known-input controls, beyond API smoke tests."""
 from pathlib import Path
 import sys
 
@@ -59,9 +55,12 @@ def test_amplitude_qc_injected_faults(amplitude_qc):
     assert amplitude_qc["mechanism_checks_passed"]
 
 
-@pytest.mark.xfail(strict=True, reason="Released adjacent-difference flat threshold flags artifact-free 10 Hz sine control; owner decision pending")
 def test_amplitude_qc_clean_sinusoid(amplitude_qc):
-    assert amplitude_qc["sine_negative_control_passed"], {
-        "bad_channels": amplitude_qc["sine_bad_channels"],
-        "annotation_count": amplitude_qc["sine_annotation_count"],
-    }
+    assert amplitude_qc["sine_negative_control_passed"]
+    assert len(amplitude_qc["normal_waveform_controls"]) == 27
+
+
+def test_amplitude_qc_low_amplitude_remains_warning(amplitude_qc):
+    result = amplitude_qc["low_amplitude_control"]
+    assert len(result["low_amplitude_warnings"]) == 100
+    assert not result["bad_channel_candidates"]

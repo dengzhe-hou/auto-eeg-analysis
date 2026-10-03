@@ -55,20 +55,34 @@ For each subject's continuous data at each present stage, write and execute a sc
 ### B.1 Amplitude / variance / flatline / high-amplitude
 
 - **Variance / RMS** per channel (`np.var`, `np.sqrt(np.mean(x**2))` on `raw.get_data(picks='eeg')`). Robust z-score each channel's log-variance against the across-channel median/MAD; `|z| > 3` flags a deviant channel (FASTER channel criterion, Nolan et al. 2010).
-- **Flatline / rapid-change detection**: MNE's amplitude annotator thresholds differences between **adjacent samples** for at least `min_duration`, rather than the peak-to-peak range of a sliding window:
+- **Separate constant segments, low amplitude and rapid changes.** Use the shipped `tools/qc_amplitude.py` helper rather than applying a nonzero adjacent-difference threshold as a generic flatline detector. Its defaults are diagnostic settings, not universal EEG-quality cutoffs; write their resolved values into `QC_GATES.json` and retain the returned `settings` with each subject's results.
+
+  Before generating a standalone QC program, copy the exact helper used from `<AEA_REPO>/tools/qc_amplitude.py` into the saved `analysis/` directory beside that program. Import that saved copy and include it in the program bundle, so replay does not depend on another checkout or a later helper revision.
+
   ```python
-  from mne.preprocessing import annotate_amplitude
-  annots, amplitude_bads = annotate_amplitude(
-      raw, peak=dict(eeg=PEAK_V),   # adjacent-sample change threshold (e.g. 150e-6)
-      flat=dict(eeg=FLAT_V),        # adjacent-sample change floor (e.g. 5e-7)
-      bad_percent=5.0,              # either condition in >5% of recording -> bad channel
-      min_duration=0.005)
-  # annots: 'BAD_flat' / 'BAD_peak'; amplitude_bads: channels exceeding either criterion
-  raw.set_annotations(raw.annotations + annots)
+  # This program and the copied qc_amplitude.py are both in the saved analysis/ directory.
+  import json
+  from pathlib import Path
+  from qc_amplitude import amplitude_qc
+
+  amplitude = amplitude_qc(
+      raw,
+      constant_min_duration=0.020,  # elapsed time across exactly equal samples
+      low_amplitude_window=0.100,   # non-overlapping peak-to-peak windows
+      low_amplitude_ptp=0.5e-6,     # warning only; volts
+      jump_threshold=150e-6,        # consecutive adjacent-sample changes; volts
+      jump_min_duration=0.005,      # independent of constant-segment duration
+      bad_percent=5.0,              # candidate if constant/jump fraction exceeds 5%
+  )
+  Path(amplitude_output_path).write_text(json.dumps(amplitude, indent=2), encoding="utf-8")
+  # No raw.set_annotations(), raw.info['bads'] assignment or data modification here.
   ```
-  `amplitude_bads` includes persistently flat **or rapidly changing** channels; report them as candidates with the triggering metric. The `BAD_*` annotations mark shorter qualifying spans. Record sampling frequency with these thresholds because an adjacent-sample difference depends on it.
-- **Known negative-control failure**: at 250 Hz, the example `flat=5e-7`, `bad_percent=5`, `min_duration=.005` marks two of three artifact-free 20 µV, 10 Hz sinusoids as bad channels and produces 100 `BAD_flat` spans in the retained 10 s fixture. This check is not sufficient evidence that a channel is dead. The thresholds are unchanged pending the user's decision; see `tools/validation/library_numerics_2026-10-03.json`.
-- **High amplitude / saturation**: `peak=` detects sustained large *adjacent-sample changes*. It does not generally detect slowly varying high-amplitude waves or a constant clipped plateau. Assess those with the separately reported amplitude/range metrics and waveform inspection; do not describe `BAD_peak` as comprehensive saturation detection.
+
+- **Constant segments** require exactly equal consecutive samples, not merely small changes. At 250 Hz, six equal samples span five intervals, or 20 ms. Short qualifying segments are retained individually even if they occupy less than 5% of the recording; a channel exceeding 5% becomes a review candidate. This does not detect every near-flat signal after filtering or resampling.
+- **Low-amplitude windows** use peak-to-peak range in `ceil(window_seconds * sfreq)` samples. Windows do not overlap; the final incomplete window is omitted and its sample count is recorded. A low-amplitude oscillation or slow-wave extremum can legitimately qualify. These findings are **warnings only**: never create `BAD_*` annotations, count them as bad channels/bad time, or remove data because of this metric alone.
+- **Rapid changes** require adjacent-sample differences of at least `jump_threshold` for `jump_min_duration`. Their duration threshold remains 5 ms independently of the 20 ms constant threshold, preserving short rapid-change findings. This is not a detector for all slow high-amplitude waves or clipped plateaus; inspect the separately reported amplitude/range metrics and waveforms as well.
+- **Candidate channel accounting**: `bad_channel_candidates` comes only from constant or rapid-change occupancy. `per_channel` retains each reason and fraction. Constant and rapid-change reasons are part of one amplitude detector family, not two independent detector votes. Findings are diagnostic candidates, not automatic cleaning instructions.
+- **Retained prior failure**: the former `annotate_amplitude(flat=5e-7, min_duration=.005, bad_percent=5)` approach marked two of three artifact-free 20 µV/10 Hz sinusoids as bad channels and emitted 100 `BAD_flat` spans at 250 Hz. That failed result remains in `tools/validation/library_numerics_2026-10-03.json`; it must not be overwritten by the new check. The revised helper follows the user's approved separation of constant, low-amplitude and rapid-change evidence.
 
 ### B.2 PSD-based bad-channel and line-noise detection
 
@@ -134,7 +148,7 @@ The headline QC value of this skill: show that each stage **improved** the data,
 | Median broadband SNR | should rise | should rise (blinks gone) | n/a |
 | Line-noise ratio | should drop sharply (notch/ZapLine) | ~flat | ~flat |
 | EMG/HF ratio | drops if LP applied | drops (muscle ICs removed) | drops (bad epochs gone) |
-| % bad-time (flat/high annot) | baseline | should drop | n/a |
+| % candidate bad-time (constant/rapid-change spans) | baseline | inspect change | n/a |
 | N bad channels | detected→interpolated | ~flat | ~flat |
 
 - Compute the same B.1–B.4 scalars on each stage's data and store the **deltas**. A stage that makes a metric WORSE (e.g. SNR drops after re-reference, line ratio rises after a botched notch) is the single most useful thing this report surfaces — flag it loudly.
@@ -147,8 +161,9 @@ Write `qc-stage/<sub>/stage_snr_delta.json`.
 
 Aggregate the channel table into subject-level numbers (these drive the gates in Phase F):
 
-- `n_bad_channels` and `pct_bad_channels` (flagged by ≥2 detectors), with the channel list in 10-20 names.
-- `pct_bad_time` — fraction of recording in `BAD_flat`/`BAD_peak` annotations (from B.1).
+- `n_bad_channels` and `pct_bad_channels` (flagged by ≥2 independent detector families), with the channel list in 10-20 names. Low-amplitude warnings do not contribute; the amplitude helper alone supplies candidates, not the two required votes.
+- `pct_bad_time` — duration of the union of constant and rapid-change intervals from B.1, divided by recording duration. Exclude channels already listed as persistent amplitude candidates from this time calculation, so a persistently dead channel is represented in channel QC rather than making every time point bad. Do not include low-amplitude windows, and do not attach these diagnostic spans to the input data as annotations.
+- `low_amplitude_warning_windows` — count and channel/time list of low-amplitude windows, reported separately for inspection.
 - `median_line_ratio`, `median_emg_ratio`, `median_snr`, `median_hurst` (or `not_computed`).
 - **Head-motion / drift index** — RMS of the very-low-frequency band (e.g. <1 Hz, computed before the high-pass on a raw copy, or from the slow-drift residual) and the count of large all-channel excursions. Big synchronous low-frequency swings across all channels = head movement, which is **uncorrectable** and must be rejected as bad segments, not ICA'd (Luck 2014; see `eeg-preprocess` artifact table). Report the count and total bad-time.
 - **EMG/muscle index** — subject-median high-frequency ratio and the count/time of muscle bursts. Peri-auricular muscle is ICA-resistant — high residual EMG after ICA is a real warn, not a pipeline bug.
@@ -191,7 +206,8 @@ Apply the thresholds from `QC_GATES.json` (the `normal` preset below; `strict`/`
 | Metric | pass | warn | fail (normal preset) |
 |---|---|---|---|
 | % bad channels | ≤10% | 10–20% | >20% |
-| % bad time (flat/high) | ≤5% | 5–20% | >20% |
+| % candidate bad time (constant/rapid-change) | ≤5% | 5–20% | >20% |
+| Low-amplitude windows | none | one or more; inspect | never fail on this metric alone |
 | Epoch rejection rate (per condition) | ≤15% | 15–30% | >30% |
 | Trials retained per analyzed condition | ≥ recommended | ≥ minimum | < minimum (see `eeg-epoch` table) |
 | Line-noise ratio (post-preprocess) | ≤ 2× flanking | 2–5× | >5× (notch failed) |
@@ -216,6 +232,7 @@ Apply the thresholds from `QC_GATES.json` (the `normal` preset below; `strict`/`
   "bad_channels_1020": ["T7", "TP9", "Fp1", "Oz"],
   "bad_channel_detectors": {"lof": ["T7","Oz"], "ransac": ["T7","TP9","Fp1"], "agreed": ["T7"]},
   "pct_bad_time": 3.1,
+  "amplitude": {"results_file": "sub-01-amplitude.json", "low_amplitude_action": "warning_only"},
   "median_line_ratio_post": 1.4,
   "median_emg_ratio_post": 0.8,
   "median_snr": 6.2,
@@ -278,6 +295,7 @@ All must pass before declaring success:
 - **Never** modify, re-reject, or re-reference upstream stage data — QC measures, it does not clean. A `fail` routes the user back to `eeg-preprocess`/`eeg-ica`/`eeg-epoch`; it never edits their outputs.
 - **Never** call `find_bad_channels_maxwell` on scalp EEG — it is MEG-only (Maxwell/SSS + fine-cal/crosstalk). Use `find_bad_channels_lof` (+ pyprep RANSAC) for EEG.
 - **Never** gate on a threshold that is not written to `QC_GATES.json` — hidden thresholds violate COBIDAS reproducibility.
+- **Never** promote a low-amplitude warning to a bad channel, bad-time annotation or automatic exclusion. Keep constant and rapid-change duration thresholds independent; save the exact amplitude helper beside the generated program for replay.
 - **Never** silently skip a metric when its optional backend is missing — record `not_computed (<reason>)` and log the substitution (House rule: no silent fallbacks). The dashboard must still run without `pyprep`/`autoreject`/`antropy`.
 - **Never** try to ICA out or "correct" head-movement / saturation segments — they are uncorrectable; report them as bad-time and reject the segment (Luck 2014).
 - **Never** report a single SNR number without stating its definition (spectral vs across-trial evoked) and the trial count it depends on — ERP SNR scales as `sqrt(N)`.

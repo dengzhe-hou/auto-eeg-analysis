@@ -9,8 +9,10 @@ Run from the repository root::
 
     python tools/validation/library_numerics.py --out /tmp/library-numerics.json
 
-No downloaded data, language model, GPU, MATLAB or FreeSurfer is needed. Missing
-optional dependencies are failures in this explicit validation run; pytest may
+The default checks need no downloaded data, language model, GPU, MATLAB or
+FreeSurfer. Select ``--checks qc qc_sample`` to include an internal before/after
+injection comparison on an already cached MNE sample recording; it never downloads.
+Missing optional dependencies are failures in this explicit validation run; pytest may
 skip those checks in a minimal installation. Existing result files are not
 modified unless explicitly selected with --out.
 """
@@ -23,10 +25,14 @@ import importlib.metadata
 import json
 from pathlib import Path
 import platform
+import sys
 import tempfile
 
 import mne
 import numpy as np
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from qc_amplitude import amplitude_qc
 
 
 def _comparison(actual, expected, *, atol, rtol=0.0):
@@ -314,58 +320,136 @@ def check_bids():
 
 
 def check_qc():
-    """Amplitude QC detects injected faults and accepts the matching clean control."""
+    """Test the distinct constant, low-amplitude and rapid-change diagnostics."""
+    normal_controls = []
+    for sfreq in (128., 250., 1000.):
+        t = np.arange(int(2 * sfreq)) / sfreq
+        for frequency in (1., 10., 40.):
+            for phase in (0., .3, np.pi / 2):
+                data = 20e-6 * np.sin(2 * np.pi * frequency * t + phase)
+                raw = mne.io.RawArray(data[None], mne.create_info(["normal"], sfreq, "eeg"), verbose=False)
+                result = amplitude_qc(raw)
+                assert not result["constant_segments"], result
+                assert not result["jump_segments"], result
+                assert not result["bad_channel_candidates"], result
+                normal_controls.append({"sfreq": sfreq, "frequency": frequency,
+                    "phase": float(phase), "constant_count": 0, "jump_count": 0,
+                    "bad_channel_candidates": [],
+                    "low_amplitude_warning_count": len(result["low_amplitude_warnings"])})
+
     sfreq = 250.
     t = np.arange(2500) / sfreq
-    sinusoids = np.array([20e-6 * np.sin(2*np.pi*10*t + phase) for phase in [0., .3, .6]])
-    # A piecewise linear control has nonzero adjacent differences everywhere.
-    # It isolates annotator mechanics; the smooth clean sine probe below tests
-    # the actual false-positive limitation of the released threshold.
-    triangle = (np.abs((np.arange(t.size) % 20) - 10) - 5) * 4e-6
-    data = np.array([np.roll(triangle, offset) for offset in [0, 3, 6]])
+    data = np.array([20e-6 * np.sin(2*np.pi*10*t + phase) for phase in [0., .3, .6]])
     info = mne.create_info(["clean", "flat", "transient"], sfreq, "eeg")
-    settings = dict(peak={"eeg": 150e-6}, flat={"eeg": 5e-7}, bad_percent=5., min_duration=.005)
     clean = mne.io.RawArray(data, info, verbose=False)
-    annotations, bads = mne.preprocessing.annotate_amplitude(clean, **settings, verbose=False)
-    assert len(annotations) == 0 and bads == [], (annotations, bads)
+    clean_result = amplitude_qc(clean)
+    assert not clean_result["bad_channel_candidates"]
+    assert not clean_result["constant_segments"] and not clean_result["jump_segments"]
+
     corrupt = data.copy()
     corrupt[1] = 0
     corrupt[2, 500:550] = 0
     corrupt[2, 1000:1008] = np.tile([-300e-6, 300e-6], 4)
     raw = mne.io.RawArray(corrupt, info, verbose=False)
-    annotations, bads = mne.preprocessing.annotate_amplitude(raw, **settings, verbose=False)
-    assert bads == ["flat"], bads
-    labels = set(annotations.description)
-    assert labels == {"BAD_flat", "BAD_peak"}, labels
-    for expected_label, point in [("BAD_flat", 2.1), ("BAD_peak", 4.012)]:
-        assert any(desc == expected_label and onset <= point <= onset + duration
-                   for onset, duration, desc in zip(annotations.onset, annotations.duration, annotations.description))
-    sine_raw = mne.io.RawArray(sinusoids, info, verbose=False)
-    sine_annotations, sine_bads = mne.preprocessing.annotate_amplitude(
-        sine_raw, **settings, verbose=False)
-    negative_control_passed = not sine_bads and len(sine_annotations) == 0
-    return {"status": "pass" if negative_control_passed else "fail", "skill": "eeg-qc",
-            "scope": "annotate_amplitude at released thresholds; injected faults and two artifact-free controls",
-            "reference": "known injected fault locations and uncorrupted synthetic controls",
-            "mechanism_checks_passed": True, "triangle_false_positives": 0,
-            "sine_negative_control_passed": negative_control_passed,
-            "sine_bad_channels": sine_bads, "sine_annotation_count": len(sine_annotations),
+    injected = amplitude_qc(raw)
+    assert injected["bad_channel_candidates"] == ["flat"], injected
+    # Expected locations derive from literal injected sample ranges, not the
+    # detector's run-finding code. A run of 50 equal samples spans 49 intervals.
+    constant = next(s for s in injected["constant_segments"] if s["channel"] == "transient")
+    np.testing.assert_allclose([constant["onset"], constant["duration"]], [500 / sfreq, 49 / sfreq], atol=1e-12)
+    jump = next(s for s in injected["jump_segments"] if s["channel"] == "transient")
+    # Eight alternating samples plus entry/exit transitions occupy nine intervals.
+    np.testing.assert_allclose([jump["onset"], jump["duration"]], [999 / sfreq, 9 / sfreq], atol=1e-12)
+    np.testing.assert_array_equal(raw.get_data(), corrupt)
+    assert not raw.info["bads"] and len(raw.annotations) == 0
+
+    low = mne.io.RawArray((.1e-6 * np.sin(2*np.pi*10*t))[None],
+                         mne.create_info(["low"], sfreq, "eeg"), verbose=False)
+    low_result = amplitude_qc(low)
+    assert len(low_result["low_amplitude_warnings"]) == 100
+    assert not low_result["bad_channel_candidates"]
+    assert not low_result["constant_segments"] and not low_result["jump_segments"]
+
+    # Retain the old released rule as a measured before/after comparison. Its
+    # failure remains in the dated result files, which this run does not replace.
+    legacy_annotations, legacy_bads = mne.preprocessing.annotate_amplitude(
+        clean, peak={"eeg": 150e-6}, flat={"eeg": 5e-7}, bad_percent=5.,
+        min_duration=.005, verbose=False)
+    return {"status": "pass", "skill": "eeg-qc",
+            "scope": "constant spans, window PTP warnings and rapid changes on specified synthetic controls",
+            "reference": "literal injected sample ranges and known analytic waveforms",
+            "mechanism_checks_passed": True, "sine_negative_control_passed": True,
+            "normal_waveform_controls": normal_controls,
             "sine_fixture": "three 20 microvolt 10 Hz sinusoids, phases 0/.3/.6 rad, 250 Hz sampling",
-            "limitation": "released flat threshold can flag smooth, artifact-free oscillations near extrema; no threshold changed",
-            "detected_bad_channels": bads, "annotations": [dict(onset=float(o), duration=float(d), description=str(s))
-                for o, d, s in zip(annotations.onset, annotations.duration, annotations.description)],
-            "excludes": "slow large-amplitude events, LOF, RANSAC and clinical QC sensitivity"}
+            "legacy_adjacent_difference_rule": {"bad_channels": legacy_bads,
+                "annotation_count": len(legacy_annotations),
+                "negative_control_passed": not legacy_bads and len(legacy_annotations) == 0},
+            "new_rule_clean_control": clean_result, "injected_control": injected,
+            "low_amplitude_control": low_result,
+            "excludes": "clinical QC sensitivity, arbitrary artifacts, LOF, RANSAC and full skill workflows"}
+
+
+def check_qc_sample():
+    """Internal cached-recording comparison; original data are not clean ground truth."""
+    from regression_pipeline import resolve_raw_path
+
+    source = resolve_raw_path(download=False)
+    raw = mne.io.read_raw_fif(source, preload=False, verbose=False)
+    picks = mne.pick_types(raw.info, meg=False, eeg=True, exclude="bads")[:3]
+    raw.pick(picks).crop(tmin=0., tmax=10.).load_data(verbose=False)
+    original = raw.get_data()
+    before = amplitude_qc(raw)
+    corrupt = original.copy()
+    sfreq = raw.info["sfreq"]
+    dropout_start, dropout_stop = int(round(2 * sfreq)), int(round(2.2 * sfreq))
+    jump_start = int(round(4 * sfreq))
+    jump_length = 8
+    corrupt[0] = 0.
+    corrupt[1, dropout_start:dropout_stop] = 0.
+    corrupt[2, jump_start:jump_start + jump_length] = np.tile([-300e-6, 300e-6], 4)
+    injected_raw = mne.io.RawArray(corrupt, raw.info.copy(), first_samp=raw.first_samp, verbose=False)
+    after = amplitude_qc(injected_raw)
+    assert raw.ch_names[0] in after["bad_channel_candidates"]
+    whole = next(s for s in after["constant_segments"] if s["channel"] == raw.ch_names[0])
+    np.testing.assert_allclose([whole["onset"], whole["duration"]], [0., (raw.n_times - 1) / sfreq], atol=1e-12)
+    dropout = [s for s in after["constant_segments"] if s["channel"] == raw.ch_names[1]
+               and abs(s["onset"] - dropout_start / sfreq) < 1e-12]
+    assert len(dropout) == 1, after
+    np.testing.assert_allclose(dropout[0]["duration"], (dropout_stop - dropout_start - 1) / sfreq, atol=1e-12)
+    jump = [s for s in after["jump_segments"] if s["channel"] == raw.ch_names[2]
+            and abs(s["onset"] - (jump_start - 1) / sfreq) < 1e-12]
+    assert len(jump) == 1, after
+    np.testing.assert_allclose(jump[0]["duration"], (jump_length + 1) / sfreq, atol=1e-12)
+    # The unmodified recording has no constant/rapid-change event covering the
+    # injected interval centers; other original findings remain in the report.
+    for channel, key, point in [(raw.ch_names[1], "constant_segments", (dropout_start + dropout_stop - 1) / (2 * sfreq)),
+                                (raw.ch_names[2], "jump_segments", (jump_start + 3) / sfreq)]:
+        assert not any(s["channel"] == channel and s["onset"] <= point <= s["onset"] + s["duration"]
+                       for s in before[key]), before
+    np.testing.assert_array_equal(raw.get_data(), original)
+    np.testing.assert_array_equal(injected_raw.get_data(), corrupt)
+    return {"skill": "eeg-qc", "scope": "internal before/after injection on the first 10 seconds and first three usable EEG channels of cached MNE sample",
+            "source": str(source), "sfreq": float(sfreq), "channels": raw.ch_names,
+            "first_samp": int(raw.first_samp), "n_times": int(raw.n_times),
+            "injections": {"whole_constant": {"channel": raw.ch_names[0]},
+                "dropout": {"channel": raw.ch_names[1], "start_sample": dropout_start, "stop_sample_exclusive": dropout_stop},
+                "rapid_change": {"channel": raw.ch_names[2], "start_sample": jump_start, "stop_sample_exclusive": jump_start + jump_length}},
+            "original_recording": before, "with_injections": after,
+            "input_data_unchanged": True,
+            "excludes": "ground-truth quality labels for the original recording, clinical sensitivity and other skills"}
 
 
 CHECKS = {"tfr": check_tfr, "connectivity": check_connectivity, "ica": check_ica,
           "source": check_source, "decoding": check_decoding, "complexity": check_complexity,
-          "microstate": check_microstate, "bids": check_bids, "qc": check_qc}
+          "microstate": check_microstate, "bids": check_bids, "qc": check_qc,
+          "qc_sample": check_qc_sample}
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--out", required=True, type=Path)
-    parser.add_argument("--checks", nargs="+", choices=CHECKS, default=list(CHECKS))
+    parser.add_argument("--checks", nargs="+", choices=CHECKS,
+                        default=[name for name in CHECKS if name != "qc_sample"])
     args = parser.parse_args()
     mne.set_log_level("ERROR")
     versions = {}
