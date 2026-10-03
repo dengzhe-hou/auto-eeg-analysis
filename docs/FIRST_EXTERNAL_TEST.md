@@ -1,58 +1,94 @@
-# First external test — what to send, and what to ask back
+# External use test
 
-AEA's binding gap is that **nobody outside this machine has ever run it**. The
-[cold-start test](DEPLOYABILITY.md) checked the precondition (a clean clone works *here*); this
-closes the remaining half by asking one person on one other machine.
+AEA is public. Three external Windows rounds are recorded below; a maintainer
+pre-flight is recorded separately. The remaining evidence to collect is an
+unfamiliar researcher using their own EEG data, then rerunning the saved analysis
+on their machine. Automated checks and maintainer runs do not substitute for that
+record. No completed own-data case has been recorded here yet.
 
-The design constraint is that a tester's time is the scarce resource. So: **one file to receive,
-one command to run, one file to send back.** No install, no data download, no account needed.
+## Run the test
 
----
+1. Follow [Getting started](GETTING_STARTED.md) from a fresh checkout on the
+   tester's machine. Record the exact Git commit, operating system, agent client
+   and model. Note prior AEA experience, cached data, and any maintainer assistance.
+   Use an existing raw-data location; copying or publishing the EEG is unnecessary.
+2. In the activated analysis environment, run the deployment report below. Read
+   all three sections. A clean report establishes that the environment probe,
+   backend resolver and available tests passed, not that an EEG study is complete.
+   A missing prerequisite or failed stage returns nonzero; keep the report anyway.
+3. Choose a recipe matching the tester's actual paradigm, or use the custom MNE
+   workflow. Fill the dataset brief with event meanings, channels, subject design
+   and the scientific question. Approve the analysis plan before execution. Ask
+   the agent to preserve the runnable code and configuration in `analysis/`, using
+   the command manifest described in [Saved runs](REPLAY.md). Keep the first run's
+   logs, trial counts, numerical outputs, figures, methods text and audit outcome.
+4. Capture the program that produced the first analysis, then replay it into a
+   separate empty output directory with the same data and configuration. Compare
+   the replay with the **original first analysis**, not merely with another
+   replay. Do not ask the model to regenerate the program between runs. Before
+   replaying, name the scientific outputs, units and numerical tolerances to
+   compare. Record the observed differences; timestamps and log paths are not
+   scientific outputs.
+5. Complete the [feedback template](EXTERNAL_USE_REPORT_TEMPLATE.md). Return the
+   report, saved code/configuration, environment record, execution logs and the
+   shareable numerical comparison. Keep raw EEG local. Record failures, unclear
+   instructions and help received; a blocked attempt is useful evidence too.
 
-## What you send
-
-**1. The code.** The repo is private, so pick whichever is less friction for them:
+Deployment report, from the repository root:
 
 ```bash
-# a) a self-contained archive of the current commit — no GitHub account needed
-git archive --format=tar.gz --prefix=aea/ -o /tmp/aea.tar.gz HEAD
+bash tools/env/deploy_report.sh
 ```
 
-or add them as a collaborator on the repo if they already have GitHub.
+On native Windows PowerShell:
 
-**2. This message.** Copy it as-is:
+```powershell
+powershell -ExecutionPolicy Bypass -File tools/env/deploy_report.ps1
+```
 
-> Hi — I've built an EEG analysis tool and I need to find out whether it works on a machine that
-> isn't mine. It's never been run anywhere else, so anything that breaks is genuinely useful to me.
->
-> It takes about 5 minutes and needs nothing installed beyond Python with `mne`, `numpy`, `scipy`
-> and `pytest`. It doesn't download any data, doesn't touch your files, and doesn't upload anything
-> — it just writes one text file that you send back to me.
->
-> ```bash
-> tar xzf aea.tar.gz && cd aea
-> bash tools/env/deploy_report.sh
-> ```
->
-> On Windows: `powershell -ExecutionPolicy Bypass -File tools\env\deploy_report.ps1`
->
-> (`-ExecutionPolicy Bypass` affects only this one invocation and changes nothing on your system.
-> If Windows still refuses because the archive came from the internet, run
-> `Get-ChildItem -Recurse | Unblock-File` inside the extracted folder first.)
->
-> That writes `AEA_DEPLOY_REPORT.md`. Home paths in it are already redacted to `~` — have a look
-> before you send it, it's short and plain text.
->
-> **What I'd like back:**
-> 1. `AEA_DEPLOY_REPORT.md`
-> 2. Whether anything surprised you or was unclear — including in these instructions
-> 3. Roughly how long it took, and whether you had to install anything
->
-> **If it fails, please send the report anyway.** A failure is the result I'm actually looking for.
+The report is `AEA_DEPLOY_REPORT.md`; it redacts home paths. Inspect files before
+sharing. If PowerShell refuses a browser-downloaded archive, unblock the extracted
+scripts with `Get-ChildItem -Recurse | Unblock-File` from that archive's directory.
 
----
+Example capture and replay commands, after `analysis/run.json` and its programs
+are ready; replace the project and raw-data paths:
 
-## The one failure mode that produces no report at all
+```bash
+python tools/replay.py capture --project projects/my-study --data /path/to/raw --bundle projects/my-study/runs/run-001
+python tools/replay.py run --bundle projects/my-study/runs/run-001 --out projects/my-study/runs/replay-1
+```
+
+The bundle contains the saved `analysis/`, `environment.yml`, `requirements.txt`
+and `capture.json`. Each replay writes `execution.json` and `stdout.log` alongside
+the program's outputs. A new process tests replayability; recreating the captured
+environment is a separate step documented in [Saved runs](REPLAY.md).
+
+## Record the outcome
+
+A complete case needs a real tester's own-data analysis and a successful replay,
+with the replay's chosen outputs compared against the original analysis. Report deployment, analysis, report/audit and
+replay outcomes separately. A scientifically null effect is a valid analysis
+result; a skipped required stage is incomplete. Do not infer numerical
+certification or population-wide usability from one case.
+
+The maintainer appends each returned case here with its date, commit, provenance,
+failures and artifact locations. Label maintainer or agent rehearsals explicitly.
+Keep original failures when fixes are followed by another run.
+
+## Historical deployment context
+
+The original archive test needed Python with `mne`, `numpy`, `scipy` and `pytest`.
+Its observed result was **62 passed, 9 skipped**: ERP CORE (1), MNE sample data (7),
+and an absent optional package (1). These counts are historical. Current skips
+depend on installed packages and cached datasets; list them rather than treating
+a fixed pass count as the acceptance condition. The MNE sample download requires
+explicit `AEA_FETCH_DATA=1`; reuse an existing cache first.
+
+The original probe record reports four executions under Windows PowerShell 5.1;
+it records no PowerShell 7 execution. The tester invitation asked for the report,
+unclear instructions, elapsed time and any additional installation needed.
+
+### Historical Windows launch notes
 
 Everything else in this document assumes the script *runs*. Two Windows conditions stop it before
 its first line executes, and they are the only known way to make this whole mechanism fail
@@ -76,51 +112,10 @@ said nothing about either condition. Both were found by inspection afterwards, n
 
 ---
 
-## What comes back, and what each outcome means
+## Historical results
 
-The report has three sections and a verdict.
-
-| section | what a failure there tells you |
-|---|---|
-| **1. Environment probe** | `check_env.sh`/`.ps1` broke on a real machine, or emitted invalid JSON. Every skill reads that file first, so this is a hard stop. `check_env.ps1` has now run four times on real Windows under PowerShell 5.1; it has **never** run under PowerShell 7, which takes a different branch. |
-| **2. Backend resolution** | The resolver crashed, or declined when it should have resolved. "Declined" is not a failure: it refuses rather than degrading silently, and the report shows what was missing. |
-| **3. Test suite** | The interesting one. Skips are expected without the large datasets; **failures** mean something depends on this developer's machine in a way the cold-start test could not see. |
-
-**What "clean" looks like: zero failures and zero errors.** Do not compare the *counts* — the
-number of skips depends on which optional packages the tester happens to have, so a fixed number
-would generate false alarms. On a pristine unpacked archive with no datasets and no optional
-extras, the observed result was:
-
-```
-62 passed, 9 skipped
-```
-
-with the skips being the ERP CORE data gate (1), the MNE sample dataset gate (7, each naming
-`AEA_FETCH_DATA=1` as the opt-in), and one absent optional package (`pactools`). A machine with
-more of the optional stack installed will show more passes and fewer skips; that is fine. The
-signal is `failed` and `error`, both of which must be 0.
-
-### What each answer buys
-
-- **Everything passes** → external adoption goes from 0 to 1 *as a runnable artefact*. Not adoption
-  in the sense that matters (nobody has analysed their own data with it), but it is the first
-  evidence the project works off this machine.
-- **The probe or resolver fails** → a portability defect, exactly what this is for. Fix, and ask
-  the same person to re-run — a second data point from the same machine is cheap.
-- **The instructions confused them** → also a finding, and one no test can produce. Question 2 in
-  the message exists for this.
-
-## What this still does not establish
-
-Getting a green report back is **not** adoption. It proves the code runs somewhere else. It does
-not prove anyone can analyse *their own* EEG with it, which needs a tester with their own dataset
-and a real question — a much larger ask, and the right one to make only after this smaller one
-comes back clean.
-
-Record whatever comes back — including a non-reply — in this file. A tester who never got around
-to it is itself information about the friction.
-
-## Results
+These are the original pre-public-release runs. Commit IDs and test counts below
+describe those snapshots, not the current public release.
 
 ### Run 1 — Windows, 2026-07-29 (commit `bd1b6a6`)
 
@@ -214,10 +209,12 @@ and not the definition, parametrise the guard over *every* file of that type rat
 
 ## Tally after three external rounds
 
-**8 defects, none reproducible on the developer's Linux machine.** The most instructive one
+**8 defects in total: 7 from three external Windows rounds and 1 from the maintainer's
+Linux pre-flight.** The most instructive one
 (defect 7) was not Windows-specific at all — it was broken on both platforms, and it took someone
 who refused to trust the maintainer's own check to expose it.
 
-**What is still not established.** Every run so far was performed by someone who had read the code,
-on a machine with the datasets already cached. Nobody has followed the instructions cold, and
-nobody has analysed their own EEG. Those remain the two open questions, in that order.
+**What these historical runs did not establish.** The external tester had already read the
+code and had the datasets cached. These records do not document an unfamiliar user following
+the instructions from scratch or completing an analysis of their own EEG. The current protocol
+above asks for both and keeps incomplete attempts in the record.

@@ -1,6 +1,6 @@
 name: CI
 
-# Numerical-regression gate: every push / PR rebuilds the env, probes
+# Numerical-regression gate: every push / PR restores the tested Linux versions, probes
 # capabilities, and re-runs the deterministic sample-data pipeline against the
 # committed baseline (tools/baselines/sample_pipeline.json). Catches silent
 # MNE / NumPy / SciPy drift before it reaches a paper.
@@ -19,6 +19,10 @@ jobs:
   regression:
     name: Regression (ubuntu)
     runs-on: ubuntu-latest
+    env:
+      # A cold cache must fetch the sample and run all seven core tests.
+      # Fetch failures and missing core dependencies fail this job.
+      AEA_FETCH_DATA: "1"
     defaults:
       run:
         shell: bash -el {0}
@@ -35,7 +39,7 @@ jobs:
       - name: Set up aeais environment
         uses: mamba-org/setup-micromamba@v2
         with:
-          environment-file: environment.yml
+          environment-file: environment-pinned.yml
           cache-environment: true
           cache-downloads: true
 

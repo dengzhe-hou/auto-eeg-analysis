@@ -13,7 +13,7 @@ Four levels, from strongest to weakest:
 | **L1 — behaviourally evaluated** | not a number, so measured a different way — detection rate against seeded defects, coverage against a checklist |
 | **L0 — API-tested** | the documented interface is exercised by an automated test — from an import/presence check to a synthetic-data run returning a correctly shaped, sane result. This says the skill passes its specified interface checks. **It does not say the number is right.** |
 
-## Per skill
+## Released certification inventory (v0.3.2)
 
 | skill | level | evidence |
 |---|:---:|---|
@@ -40,19 +40,59 @@ Four levels, from strongest to weakest:
 | `eeg-report` | **L0** | API smoke |
 | `eeg-pipeline` | **L0** | orchestration only; certification comes from the skills it calls |
 
-**Summary: 4 skills at L3, 1 at L2, 3 at L1, 14 at L0** (eeg-recipe reclassified from L2 to L0 on 2026-09-13: its L2 rested solely on the historical generation pilot, whose programs and per-subject vectors were not retained).
+**Released inventory: 4 skills at L3, 1 at L2, 3 at L1, 14 at L0** (eeg-recipe reclassified from L2 to L0 on 2026-09-13: its L2 rested solely on the historical generation pilot, whose programs and per-subject vectors were not retained).
+
+## Additional output-specific checks (2026-10-03)
+
+The released inventory above is retained as historical certification coverage. The following
+new checks add independent formulas or known-input controls for selected outputs. They do not
+promote an entire skill, certify a generated workflow, or extend a result to untested options.
+The existing ERP, cluster and Welch evidence is unchanged.
+
+| Skill | New check and reference | Result and scope |
+|---|---|---|
+| `eeg-tfr` | Explicit Gaussian Morlet wavelets and direct time-domain convolution vs MNE; independent power, ITC and baseline formulas | Pass for zero-mean Morlet, `n_cycles=f/2`, `decim=4`, power/ITC, logratio, dB and percentage units. This does not cover multitaper, Stockwell or arbitrary TFR workflows. |
+| `eeg-connectivity` | Direct DFT and debiased imaginary-cross-spectrum moment formula vs `wpli2_debiased` | Pass for Fourier mode, three edges and 8–13 Hz bins. The default multitaper path, PAC and time-resolved estimators remain outside this numerical check. |
+| `eeg-ica` | Known rank-three sources mixed into four average-referenced channels; extended Infomax and specified component removal | Pass for source recovery and reconstruction on this fixture. Component identity is supplied from ground truth; this is not ICLabel or real-artifact classification validation. The iteration count is retained. |
+| `eeg-source` | Direct regularized matrix inverse and noise normalization vs MNE/dSPM | Pass for a spherical leadfield, fixed orientations, `depth=None`, average reference and `lambda2=1/9`. The forward model is shared, not independently checked. Individual MRI, default depth/loose settings, beamformers and localization accuracy are not tested. |
+| `eeg-decoding` | Explicit train-only fold/time loop vs MNE `SlidingEstimator`, with disjoint groups | Exact score agreement: 1.0 on injected-signal times and 0.5 on paired null times, across three folds. The classifier implementation is shared; this validates dispatch, splitting and aggregation, not an independent classifier or real-data prediction. |
+| `eeg-complexity` | Explicit ordinal-pattern histogram and Shannon formula vs normalized permutation entropy | Pass for order 3, delay 1, monotonic and random distinct-valued signals. Other complexity estimators remain outside this check. |
+| `eeg-microstate` | Literal transitions in a known label sequence vs pycrostates | Exact observed transition probabilities with repeated and unlabeled samples excluded. Clustering, templates and temporal-duration estimates are not tested. |
+| `eeg-bids` | Original volts, channels, bad status and event samples vs BrainVision BIDS read-back | Pass for the synthetic round trip, with 1e-11 V tolerance for float32 export. This is not all-format testing or full BIDS Validator conformance. |
+| `eeg-qc` | Known injected flat/rapid-change spans plus artifact-free triangle and sinusoid controls | **Unresolved negative-control failure.** Injection locations and triangle control pass, but the released flat threshold flags two of three artifact-free 20 µV/10 Hz sinusoids as bad and emits 100 `BAD_flat` spans at 250 Hz. The successful mechanism checks do not cancel this failure. |
+
+Run every check without downloading data:
+
+```bash
+conda run -n aeais python tools/validation/library_numerics.py --out /tmp/library-numerics.json
+conda run -n aeais python -m pytest tools/tests/test_library_numerics.py -q
+```
+
+The standalone validator currently exits **1**, because the QC negative control fails. Pytest
+records that same unresolved case as an explicit strict `xfail`; the passing tests are not an
+all-clear for QC. Missing optional dependencies are reported as pytest skips, while an explicit
+standalone validation request fails if a required dependency is unavailable.
+
+The committed [result](../tools/validation/library_numerics_2026-10-03.json) retains versions,
+fixtures, tolerances, measured errors and each check's status. The [initial result](../tools/validation/library_numerics_initial_2026-10-03.json)
+retains the first QC failure, before adding the separate triangle mechanism control; that first
+ICA probe used 1000 iterations, while the final fixture follows the skill's `max_iter="auto"`.
+The [executable checks](../tools/validation/library_numerics.py) and [pytest entry points](../tools/tests/test_library_numerics.py)
+are retained so these are rerunnable measurements, not just stored PASS labels.
+
+### Objective specification corrections
+
+These checks also exposed and corrected numerical/mechanism errors in the instructions:
+
+- MNE `logratio` returns `log10(power/baseline)`, not dB. Requested dB needs multiplication by 10; `db` is not an MNE baseline mode. MNE `percent` returns a fraction, so a percentage label needs multiplication by 100. The default remains `logratio`.
+- The Morlet amplitude-envelope frequency standard deviation is `f/n_cycles`, not `f/(2*pi*n_cycles)`. With the released `n_cycles=f/2`, time and frequency widths are constant in absolute units; the fixed-cycle table and explanation were corrected. Morlet power is not a Welch-style V²/Hz PSD. MNE samples wavelets to approximately ±5 Gaussian standard deviations, so the finite-kernel edge margin is `5*n_cycles/(2*pi*f)` (rounded to included samples), rather than `n_cycles/(2*f)`; it is approximately 0.398 s across all frequencies for the released cycle schedule. The explicitly written `zero_mean=True` matches the installed MNE 1.12.1 defaults, including a direct default-versus-explicit call comparison for `Epochs.compute_tfr`.
+- `annotate_amplitude` thresholds adjacent-sample differences, emits `BAD_peak` rather than `BAD_high`, and returns persistent high-change as well as flat channels. The QC instructions now state these mechanisms and retain the negative-control warning. No QC threshold was changed.
 
 ## How to read this
 
-An L0 skill is not untrustworthy — it calls the same MNE functions a careful analyst would, and its
-API is exercised on every push. What L0 means precisely is that **nobody has checked its output
-against an independent implementation**, so a composition error inside it would not be caught by
-anything here.
-
-The honest one-line version of AEA's numeric claim is therefore:
-
-> **ERP amplitude and the cluster test are certified across independently implemented toolboxes.
-> Everything else is tested, not certified.**
-
-Anyone extending the library should raise a skill's level before, not after, describing its output
-as validated. `tools/benchmark/` shows how each level was reached.
+Certification applies to a stated output and configuration. Cross-toolbox ERP amplitudes and
+observed cluster statistics, the independent Welch implementation, and the additional formulas
+above support their respective measured outputs. A passing API check alone does not establish
+numerical correctness, and a known-source synthetic check does not establish biological validity.
+Full generated workflows and options outside these checks still need their own evidence before
+being described as certified. `tools/benchmark/` and `tools/validation/` retain that evidence.

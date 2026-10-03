@@ -22,6 +22,12 @@ conda env create -f environment.yml
 conda activate aeais
 ```
 
+On Linux x86_64, replace the environment creation command with
+`conda env create -f environment-pinned.yml` to use the tested package versions.
+This snapshot has been rebuilt in a separate Linux environment; it is not a
+cross-platform lock. Other platforms can use `environment.yml`, then capture the
+installed environment with their [saved analysis](REPLAY.md).
+
 Keep the agent's working directory at the **AEA repository root**. Skills refer to
 `tools/`, `templates/`, and `recipes/` there. Put each study in its own directory,
 such as `projects/my-study/`, and pass that path to the skill.
@@ -233,6 +239,11 @@ has been evaluated end-to-end.
 Analysis outputs belong to the study directory: stage-specific folders such as
 `preprocess-stage/`, `erp-stage/`, `stats-stage/`, `figure-stage/`, `report-stage/`,
 and `audit-stage/`. The plan and run logs record what was requested and completed.
+
+For a repeatable run, retain the generated program and configuration using the
+[saved-analysis replay workflow](REPLAY.md). It captures installed versions and
+runs the saved code without another model call. The [external user test](FIRST_EXTERNAL_TEST.md)
+explains how to record an independent run on your own data.
 
 MNE is the main execution and certification reference backend. EEGLAB and FieldTrip
 provide cross-toolbox comparisons and selectable paths for the capabilities listed

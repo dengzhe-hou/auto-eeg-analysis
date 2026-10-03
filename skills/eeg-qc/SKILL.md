@@ -55,19 +55,20 @@ For each subject's continuous data at each present stage, write and execute a sc
 ### B.1 Amplitude / variance / flatline / high-amplitude
 
 - **Variance / RMS** per channel (`np.var`, `np.sqrt(np.mean(x**2))` on `raw.get_data(picks='eeg')`). Robust z-score each channel's log-variance against the across-channel median/MAD; `|z| > 3` flags a deviant channel (FASTER channel criterion, Nolan et al. 2010).
-- **Flatline detection**: channels whose peak-to-peak over the recording (or in ≥`bad_percent` of the data) is below a floor. Use MNE's amplitude annotator, which flags *both* flat and high-amplitude segments in one pass:
+- **Flatline / rapid-change detection**: MNE's amplitude annotator thresholds differences between **adjacent samples** for at least `min_duration`, rather than the peak-to-peak range of a sliding window:
   ```python
   from mne.preprocessing import annotate_amplitude
-  annots, flat_chs = annotate_amplitude(
-      raw, peak=dict(eeg=PEAK_V),   # high-amplitude segment threshold (e.g. 150e-6)
-      flat=dict(eeg=FLAT_V),        # flat threshold (e.g. 5e-7 = 0.5 µV ptp)
-      bad_percent=5.0,              # a channel flat/peaky in >5% of samples → bad channel
+  annots, amplitude_bads = annotate_amplitude(
+      raw, peak=dict(eeg=PEAK_V),   # adjacent-sample change threshold (e.g. 150e-6)
+      flat=dict(eeg=FLAT_V),        # adjacent-sample change floor (e.g. 5e-7)
+      bad_percent=5.0,              # either condition in >5% of recording -> bad channel
       min_duration=0.005)
-  # annots: mne.Annotations ('BAD_flat' / 'BAD_high'); flat_chs: persistently-flat channel names
-  raw.set_annotations(raw.annotations + annots)   # for the % bad-time metric below
+  # annots: 'BAD_flat' / 'BAD_peak'; amplitude_bads: channels exceeding either criterion
+  raw.set_annotations(raw.annotations + annots)
   ```
-  `flat_chs` are persistently dead channels (report as bad-channel candidates); the `BAD_*` annotations give the **percent of recording time** lost to flat/saturated segments (a per-subject metric, Phase D).
-- **High-amplitude / saturation**: the `peak=` side of the same call. Saturated/clipped channels (rail-to-rail) appear as both high variance and many `BAD_high` segments.
+  `amplitude_bads` includes persistently flat **or rapidly changing** channels; report them as candidates with the triggering metric. The `BAD_*` annotations mark shorter qualifying spans. Record sampling frequency with these thresholds because an adjacent-sample difference depends on it.
+- **Known negative-control failure**: at 250 Hz, the example `flat=5e-7`, `bad_percent=5`, `min_duration=.005` marks two of three artifact-free 20 µV, 10 Hz sinusoids as bad channels and produces 100 `BAD_flat` spans in the retained 10 s fixture. This check is not sufficient evidence that a channel is dead. The thresholds are unchanged pending the user's decision; see `tools/validation/library_numerics_2026-10-03.json`.
+- **High amplitude / saturation**: `peak=` detects sustained large *adjacent-sample changes*. It does not generally detect slowly varying high-amplitude waves or a constant clipped plateau. Assess those with the separately reported amplitude/range metrics and waveform inspection; do not describe `BAD_peak` as comprehensive saturation detection.
 
 ### B.2 PSD-based bad-channel and line-noise detection
 
@@ -147,7 +148,7 @@ Write `qc-stage/<sub>/stage_snr_delta.json`.
 Aggregate the channel table into subject-level numbers (these drive the gates in Phase F):
 
 - `n_bad_channels` and `pct_bad_channels` (flagged by ≥2 detectors), with the channel list in 10-20 names.
-- `pct_bad_time` — fraction of recording in `BAD_flat`/`BAD_high` annotations (from B.1).
+- `pct_bad_time` — fraction of recording in `BAD_flat`/`BAD_peak` annotations (from B.1).
 - `median_line_ratio`, `median_emg_ratio`, `median_snr`, `median_hurst` (or `not_computed`).
 - **Head-motion / drift index** — RMS of the very-low-frequency band (e.g. <1 Hz, computed before the high-pass on a raw copy, or from the slow-drift residual) and the count of large all-channel excursions. Big synchronous low-frequency swings across all channels = head movement, which is **uncorrectable** and must be rejected as bad segments, not ICA'd (Luck 2014; see `eeg-preprocess` artifact table). Report the count and total bad-time.
 - **EMG/muscle index** — subject-median high-frequency ratio and the count/time of muscle bursts. Peri-auricular muscle is ICA-resistant — high residual EMG after ICA is a real warn, not a pipeline bug.

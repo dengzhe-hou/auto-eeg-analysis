@@ -1,8 +1,7 @@
 """Cold-start deployability: does a fresh checkout of this repo actually work?
 
-"External adoption = 0" is the project's binding gap, and it cannot be closed from inside. What
-*can* be checked from inside is its precondition: if AEA does not work from a clean clone on this
-machine, it certainly will not work for anyone else.
+These checks originated before the external Windows runs recorded in
+docs/FIRST_EXTERNAL_TEST.md. A clean clone remains a precondition for external use.
 
 These tests lock in two defects a cold-start deployment test found that the rest of the suite
 could not, because the rest of the suite runs in the developer's own checkout where the missing
@@ -244,6 +243,15 @@ def test_deploy_report_honours_an_explicit_interpreter():
         assert "AEA_PYTHON is set to" in src, f"{f} does not honour an explicit AEA_PYTHON"
 
 
+def _open_mode(call):
+    """Return the mode expression for open(path, mode) or Path.open(mode)."""
+    for keyword in call.keywords:
+        if keyword.arg == "mode":
+            return keyword.value
+    index = 0 if isinstance(call.func, ast.Attribute) else 1
+    return call.args[index] if len(call.args) > index else ast.Constant(value="r")
+
+
 # --- three defects found by a real Windows run of main, all the same shape ---------------------
 # Each is "a name that exists is not the thing you meant", or "a default that differs by platform".
 # None could be reproduced on the developer's Linux box; all three broke the external-test path.
@@ -272,7 +280,7 @@ def test_text_io_declares_an_encoding(path):
         if any(k.arg == "encoding" for k in n.keywords):
             continue
         if name == "open":
-            mode = n.args[1] if len(n.args) > 1 else None
+            mode = _open_mode(n)
             if isinstance(mode, ast.Constant) and "b" in str(mode.value):
                 continue                       # binary mode takes no encoding
             if mode is not None and not isinstance(mode, ast.Constant):
@@ -349,7 +357,7 @@ def test_text_reads_tolerate_a_bom(path):
         name = getattr(n.func, "attr", None) or getattr(n.func, "id", None)
         is_read = name == "read_text"
         if name == "open":
-            mode = n.args[1] if len(n.args) > 1 else None
+            mode = _open_mode(n)
             m = mode.value if isinstance(mode, ast.Constant) else "r"
             if "b" in str(m):
                 continue

@@ -79,17 +79,29 @@ The flagship skill. Takes a recipe slug + a data directory, produces a paper-rea
 
 ### D. Run pipeline
 
-For each stage declared in the recipe, including `[bids?, preprocess, ica, epoch?, erp?, tfr?, spectral?, connectivity?, complexity?, microstate?, source?, stats, figure, report]`:
+Choose a new `<run-dir>` under `<project-dir>/results/` and copy the approved
+plan, dataset brief and environment probe there. Each child skill receives this
+run directory as its study root; every stage output goes beneath it. Save each
+scientific program, local helpers and explicit configuration in
+`<project-dir>/analysis/` before executing it once. Record its actual command in
+`analysis/run.json` as described in `docs/REPLAY.md`, with `{data}` pointing to raw
+data and `{out}` to `<run-dir>`. Preserve seeds, subject lists, rejection settings
+and recipe parameters. Model-based audit and narrative generation remain outside
+this manifest. After scientific computation, capture these files and replay into
+a second output directory; compare against the first run using the plan's
+numerical tolerances. Never regenerate code as a substitute for replay.
+
+For each stage declared in the recipe, including `[bids?, preprocess, ica, epoch?, erp?, tfr?, spectral?, connectivity?, complexity?, microstate?, source?, stats, figure]` (report and audit follow in Phases E/G):
 - Invoke the matching skill through the client's skill mechanism (`complexity` → `eeg-complexity`). If no child-skill invocation tool is available, read `skills/eeg-<stage>/SKILL.md` directly and follow it. Keep the repository root as the working directory.
-- Pass recipe parameters as overrides to the skill (e.g., bandpass from recipe).
+- Pass `<run-dir>` and recipe parameters to the skill (e.g., bandpass from recipe). Execute its saved program once from `analysis/`, using the manifest arguments.
 - **Continuous vs event-locked routing.** Read the recipe's data requirements and pipeline, not an exact `paradigm` string. A continuous recording with no required per-trial markers (for example, `required_markers: []` and `min_duration_s`) does not require event epoching or ERP analysis. Run its declared spectral, connectivity, complexity, or microstate stages using its own segmentation settings. Use fixed-length windows only where the recipe specifies them; microstate fitting may use the continuous record directly. Preserve any block-level state labels.
 - After each stage completes, append summary to `<project-dir>/RECIPE_RUN_LOG.md`.
 
 ### E. Methods text + citation receipt
 
-1. Invoke `eeg-methods-text` to generate COBIDAS-MEEG paragraph.
-2. Copy `recipes/<slug>/citation.bib` to `<project-dir>/report-stage/citation.bib`.
-3. Append to the report: "If you use this analysis in a publication, cite: <recipe references>".
+1. Invoke `eeg-methods-text` on `<run-dir>` to generate COBIDAS-MEEG paragraph.
+2. Copy `recipes/<slug>/citation.bib` to `<run-dir>/report-stage/citation.bib`.
+3. Invoke `eeg-report` on `<run-dir>`, then append: "If you use this analysis in a publication, cite: <recipe references>".
 
 ### F. Figure comparison (generated vs reference)
 
@@ -101,7 +113,7 @@ If the recipe has a `validation_dataset` and reference figures:
    - If reference exists, compare:
      - **Visual layout**: same axes, same channel selection, same time window.
      - **Quantitative**: if both have associated JSON data, compare peak latencies and amplitudes (within tolerance).
-   - Write comparison to `<project-dir>/FIGURE_COMPARISON.md`:
+   - Write comparison to `<run-dir>/FIGURE_COMPARISON.md`:
      ```markdown
      ## C1: N170 ERP
      - Generated: figure-stage/C1_erp_topo.png
@@ -114,7 +126,7 @@ If the recipe has a `validation_dataset` and reference figures:
 
 ### G. Audit
 
-Unless `--skip-audit`, invoke `eeg-audit`. For pre-submission, ask the reviewer to use an adversarial perspective in the audit prompt. Configure its reviewer connection as described in that skill.
+Unless `--skip-audit`, invoke `eeg-audit` on `<run-dir>`. For pre-submission, ask the reviewer to use an adversarial perspective in the audit prompt. Configure its reviewer connection as described in that skill.
 
 ### H. Recipe versioning
 
@@ -155,12 +167,15 @@ Track recipe version history in `RECIPE_VERSION.json`:
 
 ### I. Reproducibility receipt
 
-Write `<project-dir>/report-stage/REPRO_RECEIPT.md`:
+Write `<run-dir>/report-stage/REPRO_RECEIPT.md`:
 - Recipe slug + version + commit SHA at run time.
 - All RNG seeds.
 - Backend versions from `ENVIRONMENT.json`.
 - SHA256 hashes of input raw files and every stage output.
 - Full `ANALYSIS_PLAN.md` (instantiated from the recipe).
+- Saved replay bundle and exact execution command, output `execution.json`, and
+  numerical comparison with a second run using the plan's tolerances. Record a
+  failed or unperformed repeat explicitly; never infer reproducibility from exit 0.
 
 ## State-tracking recipe class (continuous, windowed)
 

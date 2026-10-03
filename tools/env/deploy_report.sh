@@ -143,13 +143,15 @@ if [ -n "$MISSING" ]; then
   echo "BLOCKED: missing $MISSING"
   echo "  $PY -m pip install $MISSING"
   echo "Report written anyway: $ROOT/$OUT"
-  exit 0
+  exit 2
 fi
 
 # ---------------------------------------------------------------- step 1: env probe
 section "1. Environment probe"
+PROBE_OK=0
 if bash tools/env/check_env.sh "$TMP/ENVIRONMENT.json" > "$TMP/probe.log" 2>&1; then
   if $PY -c "import json,sys; json.load(open('$TMP/ENVIRONMENT.json'))" 2>/dev/null; then
+    PROBE_OK=1
     echo "**PASS** — wrote a valid \`ENVIRONMENT.json\`." >> "$OUT"
   else
     echo "**FAIL** — the probe ran but its output is not valid JSON. Every skill reads this file first." >> "$OUT"
@@ -174,8 +176,10 @@ fi
 
 # ---------------------------------------------------------------- step 2: backend resolution
 section "2. Backend resolution"
+RESOLVE_OK=0
 if $PY tools/env/resolve_backend.py --capability erp.preprocess_average \
       --env "$TMP/ENVIRONMENT.json" --out "$TMP/BACKEND_RESOLUTION.md" > "$TMP/resolve.log" 2>&1; then
+  RESOLVE_OK=1
   echo "**PASS** — resolved a backend and wrote the record." >> "$OUT"
 elif grep -q "^Traceback" "$TMP/resolve.log"; then
   # A crash and a refusal both exit non-zero. Reporting a crash as "a legitimate outcome" is the
@@ -248,11 +252,15 @@ fi
 
 # ---------------------------------------------------------------- verdict
 section "Verdict"
+OVERALL_RC=1
+if [ "$PROBE_OK" -eq 1 ] && [ "$RESOLVE_OK" -eq 1 ] && [ "$RC" -eq 0 ]; then
+  OVERALL_RC=0
+fi
 {
-  if [ "$RC" -eq 0 ]; then
-    echo "AEA starts from a clean checkout on this machine."
+  if [ "$OVERALL_RC" -eq 0 ]; then
+    echo "**PASS** — environment probe, backend resolution, and test suite completed."
   else
-    echo "AEA does **not** start cleanly on this machine — see section 3."
+    echo "**NOT READY** — one or more stages failed or declined; see sections 1–3."
   fi
   echo
   echo "Please send back this file (\`$OUT\`) and, if anything failed, say what you expected"
@@ -272,5 +280,5 @@ fi
 
 echo
 echo "Done. Send back: $ROOT/$OUT"
-[ "$RC" -eq 0 ] && echo "Result: PASS ($SUMMARY)" || echo "Result: FAIL ($SUMMARY)"
-exit 0
+[ "$OVERALL_RC" -eq 0 ] && echo "Result: PASS ($SUMMARY)" || echo "Result: NOT READY (see report)"
+exit "$OVERALL_RC"

@@ -144,7 +144,7 @@ if ($missing.Count -gt 0) {
   Write-Host ""
   Write-Host ("BLOCKED: missing " + ($missing -join " "))
   Write-Host "Report written anyway: $root\$Out"
-  exit 0
+  exit 2
 }
 
 # The scratch directory is created only AFTER the BLOCKED early-exit above. Creating it earlier
@@ -167,13 +167,16 @@ if (-not (Get-Command $psExe -ErrorAction SilentlyContinue)) {
   $psExe = @('pwsh','powershell') | Where-Object { Get-Command $_ -ErrorAction SilentlyContinue } | Select-Object -First 1
 }
 $probeLog = & $psExe -NoProfile -File (Join-Path $root "tools\env\check_env.ps1") $envJson 2>&1 | Out-String
+$probeExit = $LASTEXITCODE
 $probeOk = Test-Path $envJson
 $jsonOk = $false
 if ($probeOk) {
   try { Get-Content $envJson -Raw | ConvertFrom-Json | Out-Null; $jsonOk = $true } catch { $jsonOk = $false }
 }
-if ($jsonOk) {
+if ($probeExit -eq 0 -and $jsonOk) {
   Add-Out "**PASS**  -  wrote a valid ``ENVIRONMENT.json``."
+} elseif ($probeExit -ne 0) {
+  Add-Out "**FAIL**  -  the probe exited non-zero."
 } elseif ($probeOk) {
   Add-Out "**FAIL**  -  the probe ran but its output is not valid JSON. Every skill reads this file first."
 } else {
@@ -193,9 +196,11 @@ if ($probeOk) {
 # ---------------------------------------------------------------- 2. backend resolution
 Add-Out "`n## 2. Backend resolution`n"
 $brMd = Join-Path $tmp "BACKEND_RESOLUTION.md"
+$resolveOk = $false
 $resolveLog = & $py "tools\env\resolve_backend.py" --capability erp.preprocess_average `
   --env $envJson --out $brMd 2>&1 | Out-String
 if ($LASTEXITCODE -eq 0) {
+  $resolveOk = $true
   Add-Out "**PASS**  -  resolved a backend and wrote the record."
 } elseif ($resolveLog -match '(?m)^Traceback') {
   # A crash and a refusal both exit non-zero. Labelling a crash "a legitimate outcome" is the same
@@ -234,10 +239,11 @@ if ($rc -ne 0) {
 
 # ---------------------------------------------------------------- verdict
 Add-Out "`n## Verdict`n"
-if ($rc -eq 0) {
-  Add-Out "AEA starts from a clean checkout on this machine."
+$overallOk = $probeExit -eq 0 -and $jsonOk -and $resolveOk -and $rc -eq 0
+if ($overallOk) {
+  Add-Out "**PASS**  -  environment probe, backend resolution, and test suite completed."
 } else {
-  Add-Out "AEA does **not** start cleanly on this machine  -  see section 3."
+  Add-Out "**NOT READY**  -  one or more stages failed or declined; see sections 1-3."
 }
 Add-Out "`nPlease send back this file (``$Out``) and, if anything failed, say what you expected to happen. A failure here is the useful result: it is a defect on a machine that is not the developer's, which is exactly what this report exists to find."
 
@@ -248,4 +254,9 @@ Remove-Item -Recurse -Force $tmp -ErrorAction SilentlyContinue
 Assert-NoLeak $Out
 Write-Host ""
 Write-Host "Done. Send back: $root\$Out"
-if ($rc -eq 0) { Write-Host "Result: PASS ($summary)" } else { Write-Host "Result: FAIL ($summary)" }
+if ($overallOk) {
+  Write-Host "Result: PASS ($summary)"
+  exit 0
+}
+Write-Host "Result: NOT READY (see report)"
+exit 1

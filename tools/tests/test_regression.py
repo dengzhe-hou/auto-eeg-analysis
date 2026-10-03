@@ -4,7 +4,13 @@ Run::
 
     pytest tools/tests/test_regression.py -v
 
-The first run downloads the MNE sample dataset (~1.5 GB, cached afterwards).
+Without cached MNE sample data, the tests skip by default. To fetch the dataset
+(~1.5 GB, cached afterwards) and require the full core suite, run::
+
+    AEA_FETCH_DATA=1 pytest tools/tests/test_regression.py -v
+
+CI uses this mode: download failures and missing ICA dependencies are errors,
+not skipped tests.
 
 These tests turn AEA's "reproducible / validated" claim into something
 *falsifiable*: if an MNE / NumPy / SciPy upgrade silently shifts an ERP
@@ -29,10 +35,8 @@ VALID_ICLABEL = {
     "line noise", "channel noise", "other",
 }
 
-# These tests need the MNE sample dataset (~1.5 GB). On a machine that does not already have it,
-# every one of them used to fail with a raw FileNotFoundError -- so anyone trying AEA for the first
-# time saw a wall of red and could reasonably conclude the project was broken. Skip cleanly
-# instead, and make fetching an explicit opt-in.
+# Local runs can omit the sample dataset. CI opts in to downloading it and must
+# execute the complete core suite, including the ICA / ICLabel smoke test.
 FETCH = os.environ.get("AEA_FETCH_DATA") == "1"
 
 
@@ -40,12 +44,12 @@ def _sample_present() -> bool:
     try:
         resolve_raw_path(download=False)
         return True
-    except Exception:                       # noqa: BLE001 — absent, unreadable, either way: skip
+    except FileNotFoundError:
         return False
 
 
 pytestmark = pytest.mark.skipif(
-    not (_sample_present() or FETCH),
+    not FETCH and not _sample_present(),
     reason="MNE sample dataset (~1.5 GB) not present. Set AEA_FETCH_DATA=1 to download and run.",
 )
 
@@ -114,16 +118,18 @@ def test_ica_iclabel_smoke():
     API breaking (the failure mode the strict numeric test cannot see because it
     excludes ICA on purpose).
     """
-    pytest.importorskip("onnxruntime", reason="onnxruntime required by mne-icalabel")
-    # onnxruntime is a popular standalone package, so having it does not imply mne-icalabel.
-    pytest.importorskip("mne_icalabel")
+    if FETCH:
+        import onnxruntime  # noqa: F401 — required in the full core suite
+    else:
+        pytest.importorskip("onnxruntime", reason="onnxruntime required by mne-icalabel")
+        pytest.importorskip("mne_icalabel")
     import mne
     from mne_icalabel import label_components
 
     mne.set_log_level("ERROR")
     from regression_pipeline import resolve_raw_path
 
-    raw = mne.io.read_raw_fif(resolve_raw_path(), preload=True)
+    raw = mne.io.read_raw_fif(resolve_raw_path(download=FETCH), preload=True)
     raw.pick_types(meg=False, eeg=True, exclude="bads")
     raw.crop(tmax=60.0)  # keep the smoke test fast
     raw.set_eeg_reference("average", projection=False)

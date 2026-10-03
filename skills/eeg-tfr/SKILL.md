@@ -64,32 +64,32 @@ MNE has **no default** `n_cycles`; it is a first-class scientific choice, not a 
 
 ```
 sigma_t = n_cycles / (2 * pi * f)        # seconds (Gaussian std)
-sigma_f = f / (2 * pi * n_cycles)        # Hz   (spectral std; sigma_t*sigma_f = 1/(4*pi))
+sigma_f = f / n_cycles                   # Hz (amplitude-envelope std; sigma_t*sigma_f = 1/(2*pi))
 ```
 
-The **effective temporal support** (where the wavelet has non-negligible amplitude) is `~ n_cycles / f` seconds — it *shrinks with frequency* for a fixed `n_cycles`. Worked table for a fixed `n_cycles = 3`:
+The **characteristic cycle duration** is `n_cycles / f` seconds; it shrinks with frequency for fixed `n_cycles`. This is not MNE's full sampled wavelet support, which extends to approximately ±5 Gaussian standard deviations (see the padding rule below). Worked table for fixed `n_cycles = 3`:
 
-| f (Hz) | support `n_cycles/f` (s) | sigma_t (ms) | sigma_f (Hz) |
+| f (Hz) | cycle duration `n_cycles/f` (s) | sigma_t (ms) | sigma_f (Hz) |
 |---|---|---|---|
-| 1  | 3.00 | 477 | 0.05 |
-| 2  | 1.50 | 239 | 0.11 |
-| 4  | 0.75 | 119 | 0.21 |
-| 10 | 0.30 | 48  | 0.53 |
-| 30 | 0.10 | 16  | 1.59 |
+| 1  | 3.00 | 477 | 0.33 |
+| 2  | 1.50 | 239 | 0.67 |
+| 4  | 0.75 | 119 | 1.33 |
+| 10 | 0.30 | 48  | 3.33 |
+| 30 | 0.10 | 16  | 10.00 |
 
-Reading the table: a small fixed `n_cycles` (e.g. 3) buys sharp **temporal** localization (good for transient ERD/ERS onsets) at the cost of poor **frequency** resolution; raising it (e.g. 7) reverses the trade. The AEA default `n_cycles = freqs / 2` is the adaptive compromise — it fixes `sigma_t` and `sigma_f` to *constant fractions of a cycle* at every frequency (constant relative resolution), so low frequencies automatically get fewer cycles (better timing) and high frequencies more (better frequency separation). Choose a small fixed value only when your hypothesis is about transient timing and you want identical temporal smoothing across the whole band.
+Reading the table: a small fixed `n_cycles` (e.g. 3) buys sharp **temporal** localization (good for transient ERD/ERS onsets) at the cost of poor **frequency** resolution; raising it (e.g. 7) reverses the trade. The AEA default `n_cycles = freqs / 2` gives constant absolute widths: `sigma_t = 1/(4*pi)` seconds and `sigma_f = 2` Hz at every frequency. A fixed cycle count instead gives frequency-dependent temporal smoothing and constant relative frequency resolution. Choose the cycle schedule according to the temporal and frequency resolution required by the hypothesis.
 
-4. **Check the cone-of-influence (COI) / edge-artifact margin** — quantitative guard:
-   - Each epoch edge is contaminated inward by **one half-wavelet**: `half_support = n_cycles[f] / (2 * f)` seconds. This is *largest at the lowest frequency*, where the cone is widest.
-   - **Required padding rule**: the epoch handed to the TFR must extend at least `n_cycles_min / (2 * f_min)` seconds beyond the *reporting* window on **both** sides. Worked number: 3 cycles at `f_min = 2 Hz` → `3/(2*2) = 0.75 s` buffer per side.
-   - **Crop after computing, do not trust padded edges.** MNE implicitly zero-pads for the FFT (`use_fft=True`), and zero-padding *biases edge power downward*. So compute on the wide epoch, then `power.crop(tmin_report, tmax_report)` to discard the cone before plotting/stats.
-   - **Validation warning**: emit a warning (and record it in `TFR_SUMMARY.md`) if the requested baseline window OR any effect time window falls within `n_cycles[f_min] / (2 * f_min)` of the epoch edge at the lowest frequency — those values are inside the COI and are not interpretable.
-   - If padding is insufficient: raise `f_min`, lower the minimum `n_cycles`, or explicitly trim the reporting window.
+4. **Check the finite-wavelet edge margin**:
+   - MNE samples each Morlet wavelet to approximately ±`5*sigma_t`, so `half_support[f] ≈ 5*n_cycles[f]/(2*pi*f)` seconds, rounded down to the included sample. Exact sampled half-support is `(len(wavelet)-1)/(2*sfreq)`. This is a full finite-kernel padding bound, not a separately defined analytical cone-of-influence threshold.
+   - **Required padding rule**: extend the input epoch beyond both sides of the reporting window by the **maximum sampled half-support across frequencies**. For 3 cycles at 2 Hz this is approximately `15/(4*pi) = 1.194 s` per side. For the released `n_cycles=f/2`, it is approximately `5/(4*pi) = 0.398 s` at every frequency; the lowest frequency is not uniquely widest.
+   - **Crop after computing.** If the convolution requires samples outside the epoch, MNE uses zeros there, so the resulting edge coefficients depend on padding. Compute on the wide epoch and then crop to the reporting window.
+   - **Validation warning**: record a warning in `TFR_SUMMARY.md` if any requested baseline or effect window enters that frequency's sampled half-support from either epoch edge. Apply the maximum margin when retaining a common time window across frequencies.
+   - If padding is insufficient, record the required margin and obtain wider input epochs or a user-approved change to the analysis window/cycle schedule. Raising `f_min` reduces the maximum support only if the resolved `n_cycles/f` decreases; it does not help with the released `n_cycles=f/2` schedule.
 5. Resolve baseline window and mode:
-   - `logratio` (default): `10 * log10(power / baseline_mean)` — units are dB, symmetric around zero. **Preferred** (Grandchamp & Delorme 2011).
-   - `db`: same as logratio in MNE (`10 * log10`).
+   - `logratio` (default): `log10(power / baseline_mean)` — dimensionless, symmetric around zero. **Preferred** (Grandchamp & Delorme 2011).
+   - `db`: `10 * log10(power / baseline_mean)`, in dB. Apply MNE `logratio`, then multiply by 10; `db` is not a valid MNE baseline mode.
    - `zscore`: `(power - baseline_mean) / baseline_std` — useful when absolute power differences matter.
-   - `percent`: `(power - baseline_mean) / baseline_mean * 100` — **avoid**: asymmetric, inflates increases relative to decreases (Grandchamp & Delorme 2011).
+   - `percent`: `(power - baseline_mean) / baseline_mean * 100` in percent. MNE returns the fractional change for `mode="percent"`; multiply it by 100 before labeling the output %. **Avoid**: asymmetric, inflates increases relative to decreases (Grandchamp & Delorme 2011).
    - `mean`: subtract baseline mean — removes absolute power but retains scale differences across frequencies.
    - Baseline window must fall entirely within the pre-stimulus period. Verify against epoch `tmin`.
 
@@ -113,7 +113,7 @@ All TFR methods sit on the time-frequency uncertainty curve; pick by whether the
 
 | Method | Freq resolution | Time resolution | Effective freq res | Best for | MNE call |
 |---|---|---|---|---|---|
-| **Morlet** (default) | constant *relative* (per-octave) | scales with f | `≈ f / n_cycles` (Hz) | general ERSP/ITC, broadband | `tfr_morlet` / `tfr_array_morlet` |
+| **Morlet** (default) | constant absolute for `n_cycles=f/2`; relative for fixed cycles | constant for `n_cycles=f/2`; scales with f for fixed cycles | `≈ f / n_cycles` (Hz) | general ERSP/ITC, broadband | `tfr_morlet` / `tfr_array_morlet` |
 | **Multitaper** | constant *absolute*, tunable | fixed by window | set by `time_bandwidth`/window | narrowband, low-variance power | `tfr_multitaper(..., time_bandwidth=4.0)` |
 | **Stockwell (S-transform)** | freq-dependent (auto) | freq-dependent (auto) | automatic | broadband, no n_cycles to tune | `tfr_stockwell(fmin, fmax)` |
 | **STFT (fixed window)** | constant *absolute* | constant | `≈ Fs / n_window_points` (Hz) | when one freq res across band is desired | `scipy.signal.spectrogram` / `mne.time_frequency.stft` |
@@ -122,7 +122,7 @@ All TFR methods sit on the time-frequency uncertainty curve; pick by whether the
 
 Key contrasts to remember:
 - **STFT / multitaper** use a window length *fixed across frequencies* → **constant absolute** Hz resolution (`Fs / window_points`), but capture more cycles at high f (poor low-f timing).
-- **Morlet** window length `= n_cycles / f` is *adaptive* → **constant relative** resolution (good freq res at low f, good time res at high f), but is least friendly at the extremes of each axis.
+- **Morlet** has temporal width proportional to `n_cycles / f` and frequency width proportional to `f / n_cycles`. Fixed cycles give constant relative frequency resolution; this skill's `n_cycles=f/2` gives constant absolute widths.
 - **Hilbert** trades almost all frequency resolution for time resolution; it requires band-pass filtering into a band *first* and yields an instantaneous amplitude/phase envelope (the high-time-resolution path to band power and the foundation of band-limited PLV/ITC).
 
 ## Phase C — Per-Subject TFR Computation
@@ -144,19 +144,26 @@ n_cycles = freqs / 2.0
 # Average power (ERSP equivalent)
 power = mne.time_frequency.tfr_morlet(
     epochs, freqs=freqs, n_cycles=n_cycles,
-    return_itc=False, average=True, decim=4,
+    return_itc=False, average=True, decim=4, zero_mean=True,
     n_jobs=-1, verbose=True
 )
 
 # Inter-trial coherence (requires single-trial)
 power_st, itc = mne.time_frequency.tfr_morlet(
     epochs, freqs=freqs, n_cycles=n_cycles,
-    return_itc=True, average=True, decim=4,
+    return_itc=True, average=True, decim=4, zero_mean=True,
     n_jobs=-1
 )
 
-# Apply baseline correction
-power.apply_baseline(baseline=(-0.5, -0.1), mode='logratio')
+# Apply the resolved baseline mode and keep its output units explicit.
+baseline_mode = 'logratio'  # resolved from user input; default remains logratio
+mne_mode = 'logratio' if baseline_mode == 'db' else baseline_mode
+power.apply_baseline(baseline=(-0.5, -0.1), mode=mne_mode)
+if baseline_mode == 'db':
+    power.data *= 10       # log10 ratio -> dB
+elif baseline_mode == 'percent':
+    power.data *= 100      # MNE fractional change -> percent
+# Label default logratio as log10 power ratio, never dB.
 
 # Save
 power.save(output_path, overwrite=True)  # .h5 format
@@ -198,7 +205,7 @@ To compute ITC or per-trial power from arrays, request complex coefficients (`tf
 from mne.time_frequency import tfr_array_morlet
 coefs = tfr_array_morlet(epochs.get_data(), sfreq=epochs.info['sfreq'],
                          freqs=freqs, n_cycles=n_cycles,
-                         output='complex', n_jobs=-1)   # (n_epochs, n_ch, n_freqs, n_times)
+                         output='complex', zero_mean=True, n_jobs=-1)   # (n_epochs, n_ch, n_freqs, n_times)
 itc = np.abs(np.mean(np.exp(1j * np.angle(coefs)), axis=0))   # (n_ch, n_freqs, n_times), in [0,1]
 power_st = (np.abs(coefs) ** 2)                                # single-trial power
 ```
@@ -211,9 +218,9 @@ Apply baseline correction to all TFR outputs:
 
 1. Verify baseline window `[t_start, t_end]` falls entirely within the epoch.
 2. Apply chosen mode:
-   - `logratio` / `db`: `10 * log10(power / mean(power_baseline))` — **recommended default**.
+   - `logratio` (default): `log10(power / mean(power_baseline))`, dimensionless. For requested `db`, multiply that result by 10 and label it dB.
    - `zscore`: `(power - mean(power_baseline)) / std(power_baseline)`.
-   - `percent`: `100 * (power - mean(power_baseline)) / mean(power_baseline)` — **avoid** unless reproducing legacy analysis.
+   - `percent`: `100 * (power - mean(power_baseline)) / mean(power_baseline)`. Multiply the MNE `percent` result by 100 to obtain these percentage units. **Avoid** unless reproducing legacy analysis.
 3. If no pre-stimulus period exists (e.g., resting-state): skip baseline, use raw power or log-transform. Document this in `TFR_PARAMS.json`.
 4. For condition contrasts: apply baseline to each condition separately, then subtract. Do NOT compute contrast on raw power then baseline — this introduces bias (Cohen 2014, Section 18.5).
 
@@ -245,7 +252,7 @@ from mne.time_frequency import tfr_array_morlet
 # ---- ITPC via the high-level API (recommended, returns AverageTFR) ----
 power, itc = epochs.compute_tfr(
     method='morlet', freqs=freqs, n_cycles=n_cycles,
-    return_itc=True, average=True, decim=4, n_jobs=-1,
+    return_itc=True, average=True, decim=4, zero_mean=True, n_jobs=-1,
 )
 # itc is an AverageTFR; itc.data is in [0, 1], shape (n_ch, n_freqs, n_times).
 # This is unit-phasor ITPC = |mean_trials exp(i*phase)| — amplitude is discarded.
@@ -253,7 +260,7 @@ power, itc = epochs.compute_tfr(
 # ---- ITPC and ITLC from complex coefficients (pure numpy, single-channel) ----
 F = tfr_array_morlet(epochs.get_data(), sfreq=epochs.info['sfreq'],
                      freqs=freqs, n_cycles=n_cycles,
-                     output='complex', n_jobs=-1)        # (n_trials, n_ch, n_freqs, n_times)
+                     output='complex', zero_mean=True, n_jobs=-1)        # (n_trials, n_ch, n_freqs, n_times)
 N = F.shape[0]                                            # trial count
 
 # ITPC (== itc.data above): average of unit phasors
@@ -400,13 +407,13 @@ Prepare the per-subject array for `eeg-stats` **after** baseline correction and 
 
 - **Never** use `percent` baseline mode without explicit user request and documented justification. `logratio`/`db` is the field standard (Grandchamp & Delorme 2011).
 - **Never** baseline-correct a condition contrast — baseline each condition separately first, then subtract.
-- **Never** ignore edge artifacts. If the epoch is shorter than the lowest-frequency wavelet, either raise the minimum frequency, reduce `n_cycles`, or explicitly trim the output time axis.
+- **Never** ignore edge artifacts. Check the longest sampled wavelet against epoch length, and check the reporting/baseline margins against its half-support. Record insufficient input support before changing any resolved analysis parameter.
 - **Never** compute ITC on averaged data — ITC requires single-trial complex estimates.
 - **Never** interpret ITC magnitude without considering trial count — ITC is biased upward with fewer trials. Report trial count alongside ITC.
 - **Never** describe ITPC/ITLC as connectivity or as power. ITPC/ITLC is **single-channel, across-trial** phase consistency (evoked phase-locking / phase resetting): it collapses the *trial* axis of *one* channel and discards (ITPC) or amplitude-weights (ITLC) magnitude. Inter-channel phase coupling (PLV/PLI/wPLI/coherence) is a different measure — see `eeg-connectivity` — and power is the squared magnitude, not a phase quantity.
 - **Never** set `n_cycles` too high for low frequencies (e.g., 10 cycles at 2 Hz = 5 s wavelet — longer than most epochs).
 - **Never** change `DECIM` after computation to match a claim's time resolution — recompute if needed.
-- **Never** report or run statistics on TFR values inside the cone-of-influence. Crop `n_cycles[f_min] / (2 * f_min)` seconds from each epoch edge after computation; padded/zero-padded edges bias power downward and are not data.
+- **Never** report or run statistics on TFR coefficients that require samples outside the input epoch. Crop the maximum sampled half-support, approximately `max(5*n_cycles/(2*pi*freqs))` seconds, from each edge for a common analysis window; use the exact sample count where available.
 - **Never** apply `apply_hilbert` to broadband data — the analytic signal is only meaningful after band-pass filtering into a single band.
 - **Never** present an uncorrected pixel-wise p-map as a result; it is a visualization aid only — correct via cluster permutation or FDR.
 - **Never** report induced gamma/high-frequency (>30 Hz) power without an eye-tracker/radial-EOG microsaccade reject and a HF-topography QC — the saccadic spike potential and cranial EMG survive standard ICA and masquerade as induced gamma (Yuval-Greenberg et al. 2008; Hipp & Siegel 2013).
@@ -436,7 +443,7 @@ Prepare the per-subject array for `eeg-stats` **after** baseline correction and 
 ### Better baselines for TFR (Grandchamp & Delorme 2011, Front. Psychol.)
 
 - **Percent change** (`percent`) is asymmetric: a 50% decrease and 200% increase are not symmetric around zero. This distorts visualization and statistics.
-- **dB / logratio** (`10 * log10(power/baseline)`) is symmetric in log space: −3 dB and +3 dB represent the same ratio. **Preferred for statistical comparisons.**
+- **Logratio** is `log10(power/baseline)`; **dB** is ten times that value. They are symmetric in log space: −3 dB and +3 dB represent reciprocal power ratios. **Preferred for statistical comparisons.**
 - **Z-score** normalizes by baseline variability, useful when comparing across frequency bands with different power levels.
 - **Subtraction** (mean removal) is acceptable but retains 1/f scaling across frequencies.
 - When in doubt, use `logratio`/`db`.
@@ -445,9 +452,9 @@ Prepare the per-subject array for `eeg-stats` **after** baseline correction and 
 ### STFT vs wavelet: fixed vs adaptive windows and unit conventions (Cohen 2014, Ch. 11; Welch 1967)
 
 - **STFT** uses a single window length for all frequencies → **constant absolute** frequency resolution `≈ Fs / n_window_points`, but the number of cycles captured grows with frequency (½ cycle at 1 Hz, 5 cycles at 10 Hz for a 0.5 s window) — poor timing at low f.
-- **Morlet** window length `= n_cycles / f` is adaptive → **constant relative** resolution `≈ f / n_cycles` (Hz).
+- **Morlet** widths scale as `n_cycles / f` in time and `f / n_cycles` in frequency. Fixed cycles give constant relative frequency resolution; the released `n_cycles=f/2` gives constant absolute widths.
 - Use a **tapered** window (Hann/Hamming/DPSS), never a boxcar, to control spectral leakage; **detrend each segment** (`detrend='linear'` in `scipy.signal.spectrogram`) before the FFT so DC and slow drift do not leak into low-frequency bins; normalize by window energy so power is comparable across window lengths/types.
-- Specify window length in **seconds** (convert to samples internally) and warn if `winsize * Fs < ~11` samples. MNE's `psd_array_welch` / `tfr_*` already return PSD with the Fs and window normalization applied — do **not** re-apply the single-sided `2/N` amplitude factor on top of MNE PSD output.
+- Specify window length in **seconds** (convert to samples internally) and warn if `winsize * Fs < ~11` samples. MNE's `psd_array_welch` returns power spectral density (V²/Hz for EEG); Morlet `tfr_*` power uses wavelet normalization and is not a V²/Hz PSD. Do **not** apply a single-sided `2/N` amplitude factor to either output.
 - Cite: Cohen, M. X. (2014). *Analyzing Neural Time Series Data*, MIT Press, Ch. 11; Welch, P. (1967). The use of fast Fourier transform for the estimation of power spectra. IEEE Trans. Audio Electroacoust., 15(2), 70–73.
 
 ### Inter-trial phase-locking: ITPC and ITLC (Tallon-Baudry & Bertrand 1996, J. Neurosci.)
@@ -500,7 +507,7 @@ For TFR analyses, the methods section must report:
 | ITC values all near zero | Expected for induced (non-phase-locked) responses. Verify phase-locked responses (ERPs) exist before interpreting. |
 | Extremely large H5 files (> 2 GB) | Increase `decim`, reduce frequency resolution, or save only frequency bands of interest. |
 | Different trial counts across conditions | Warn. ITC is biased by trial count — equalize by subsampling if comparing ITC across conditions. |
-| Effect/baseline window inside the COI at f_min | Stop or warn. Widen the epoch by `n_cycles[f_min]/(2*f_min)` s per side and recompute, or raise `f_min`. Values in the cone are not interpretable. |
+| Effect/baseline window enters the sampled wavelet edge margin | Stop or warn. Widen input epochs by the maximum sampled half-support, approximately `max(5*n_cycles/(2*pi*freqs))` s per side, and recompute. With `n_cycles=f/2`, raising `f_min` does not reduce that margin. |
 | `apply_hilbert` gives noisy/meaningless envelope | The input was not band-pass filtered. Filter into a single band first (`epochs.filter(lo, hi)`), then `apply_hilbert`. |
 | Stockwell TFR very slow / memory-heavy | Expected for broadband `tfr_stockwell`. Narrow `fmin/fmax`, increase `decim`, or switch to Morlet. |
 | ITC looks high but trial count is small | Positive bias at low N. Report N; compare against a shuffled-phase permutation null instead of the raw magnitude. |

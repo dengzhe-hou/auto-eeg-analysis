@@ -64,6 +64,7 @@ Maintain `PIPELINE_STATE.json` throughout the run for crash recovery:
 {
   "pipeline_version": "1.0",
   "project_dir": "/path/to/project",
+  "run_dir": "/path/to/project/results/run-001",
   "started_at": "2026-05-22T10:00:00Z",
   "updated_at": "2026-05-22T10:15:00Z",
   "resolved_stages": ["bids", "preprocess", "ica", "epoch", "erp", "stats", "figure", "report", "audit"],
@@ -82,6 +83,8 @@ Maintain `PIPELINE_STATE.json` throughout the run for crash recovery:
 
 **Update rules**:
 - Write `PIPELINE_STATE.json` at the start of the pipeline with `resolved_stages`.
+- Record `run_dir` before executing any stage. Resume and `— from:` reuse that
+  directory and its prerequisite artifacts; never assign them a new empty root.
 - Before each stage: update `current_stage` and `current_stage_started_at`.
 - After each stage: append to `completed_stages` with timing, update `updated_at`.
 - On failure: append to `failed_stages` with error message.
@@ -89,11 +92,29 @@ Maintain `PIPELINE_STATE.json` throughout the run for crash recovery:
 
 ### C. Stage chain
 
-For each stage in resolved list, in order:
+For a new complete analysis, choose a new `<run-dir>` such as
+`<project-dir>/results/run-001` and record it in `PIPELINE_STATE.json`. For resume
+or `— from:`, reuse the recorded run directory. If an older state lacks that path,
+identify the existing directory containing its prerequisite stage outputs before
+continuing; do not infer that an empty new directory contains completed stages. Copy the
+approved plan, dataset brief and environment probe there. All child skills use
+this run directory as their study root, with stage folders beneath it; raw data
+remain at their original location.
+
+Before executing each scientific stage, save its program, local helpers and
+configuration in `<project-dir>/analysis/`. Add its exact argument list to
+`analysis/run.json` following `docs/REPLAY.md`: `{data}` is the raw-data location,
+`{out}` is this run directory. Read the child skill to prepare the code, then run
+that saved program once with these substitutions from the `analysis/` directory.
+Do not execute a second copy through inline code. Preserve the normal stage
+checkpoints below. Record seeds and all scientific settings in the saved files.
+Model-based review and interpretation stay outside the computational manifest.
+
+For each scientific stage in the resolved list, in order (methods/report/audit run in Phase D):
 
 1. **Update state**: Write `current_stage` to `PIPELINE_STATE.json`.
 2. **Record start time**: `stage_start = now()`.
-3. **Invoke skill**: Use the client's skill mechanism or read the matching `skills/eeg-<stage>/SKILL.md` directly, passing `[project-dir]` + relevant overrides. Keep the repository root as the working directory.
+3. **Invoke skill**: Use the client's skill mechanism or read the matching `skills/eeg-<stage>/SKILL.md` directly, passing `<run-dir>` + relevant overrides. The agent stays at the repository root; saved programs execute from `analysis/` as specified above.
 4. **Record end time**: `stage_end = now()`. Compute `duration_s = stage_end - stage_start`.
 5. **Progress report**: Print to user:
    ```
@@ -106,7 +127,13 @@ For each stage in resolved list, in order:
 ### D. Audit + finalize
 
 After all stages:
-1. Invoke `eeg-audit`. Surface the audit verdict to the user.
+0. Capture the actually executed `analysis/` with `tools/replay.py capture`, then
+   replay it into a second, new output directory. Compare that repeat against the
+   first run's scientific outputs using the approved plan's tolerances. Retain the
+   fieldwise comparison. Do not regenerate programs between these runs; record a
+   failed or missing comparison without calling it reproducible.
+1. Invoke methods-text/report and `eeg-audit` on the original `<run-dir>`, where the
+   copied plan and first run's stage outputs live. Surface the audit verdict.
 2. Do not declare the pipeline complete unless the audit produces verdict `pass` or `pass-with-caveats`.
 3. **Final timing report**: Print a summary table of all stage durations:
    ```
@@ -122,7 +149,7 @@ After all stages:
 
 ## Resume semantics
 
-- `— from: <stage>` skips earlier stages, reading their existing artifacts. Overrides `PIPELINE_STATE.json` resume point.
+- `— from: <stage>` skips earlier stages, reading their existing artifacts from the recorded `run_dir`. Overrides the resume point, not the result directory.
 - `— skip: <stage1>,<stage2>` skips specific stages entirely. They appear in `skipped_stages` in the state file.
 - If `PIPELINE_STATE.json` exists and no `— from:` override, auto-resume from the last incomplete stage.
 - The pipeline is **idempotent on re-run** for any stage as long as inputs haven't changed.

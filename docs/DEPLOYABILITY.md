@@ -1,5 +1,10 @@
 # Cold-start deployability
 
+Historical record from before the first external Windows run on **2026-07-29**;
+the original cold-start run date was not recorded. Counts and platform limitations
+below describe that snapshot. See [the current external-use protocol and recorded
+Windows results](FIRST_EXTERNAL_TEST.md) for subsequent evidence.
+
 **The question.** "External adoption = 0" is AEA's binding gap and cannot be closed from inside the
 project. What *can* be checked from inside is its **precondition**: if AEA does not work from a
 clean clone, it certainly will not work for anyone else.
