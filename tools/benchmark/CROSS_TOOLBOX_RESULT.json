@@ -1,0 +1,529 @@
+[
+  {
+    "component": "ERN",
+    "reject_mode": "none",
+    "n_shared": 14,
+    "n_eeglab": 14,
+    "n_certified": 14,
+    "grand_mean_eeglab_uV": -5.4278,
+    "grand_mean_certified_uV": -5.4462,
+    "grand_mean_abs_diff_uV": 0.0184,
+    "max_abs_diff_uV": 0.2102,
+    "mean_abs_diff_uV": 0.0563,
+    "max_abs_diff_pct_of_grand": 3.86,
+    "mean_abs_diff_pct_of_grand": 1.03,
+    "grand_mean_diff_pct": 0.338,
+    "ccc": 0.999676,
+    "pearson_r": 0.9997,
+    "spearman_rho": 0.9956,
+    "within_0p1uV": 12,
+    "subjects_with_differing_trial_counts": 0,
+    "conclusion_eeglab": {
+      "t": -6.313,
+      "p": 2.6901541795829293e-05
+    },
+    "conclusion_certified": {
+      "t": -6.308,
+      "p": 2.7117043237403758e-05
+    },
+    "same_conclusion": true,
+    "worst_subject": "sub-002",
+    "source": "eeglab_ERN.json"
+  },
+  {
+    "component": "MMN",
+    "reject_mode": "abs",
+    "n_shared": 38,
+    "n_eeglab": 39,
+    "n_certified": 38,
+    "grand_mean_eeglab_uV": -0.8657,
+    "grand_mean_certified_uV": -0.8398,
+    "grand_mean_abs_diff_uV": 0.0259,
+    "max_abs_diff_uV": 0.2365,
+    "mean_abs_diff_uV": 0.0886,
+    "max_abs_diff_pct_of_grand": 28.16,
+    "mean_abs_diff_pct_of_grand": 10.55,
+    "grand_mean_diff_pct": 3.08,
+    "ccc": 0.984548,
+    "pearson_r": 0.9859,
+    "spearman_rho": 0.9676,
+    "within_0p1uV": 22,
+    "subjects_with_differing_trial_counts": 38,
+    "conclusion_eeglab": {
+      "t": -8.39,
+      "p": 4.3674501706737663e-10
+    },
+    "conclusion_certified": {
+      "t": -7.871,
+      "p": 2.0281041848833626e-09
+    },
+    "same_conclusion": true,
+    "worst_subject": "sub-034",
+    "source": "eeglab_MMN_abs.json"
+  },
+  {
+    "component": "MMN",
+    "reject_mode": "p2p",
+    "n_shared": 38,
+    "n_eeglab": 39,
+    "n_certified": 38,
+    "grand_mean_eeglab_uV": -0.8553,
+    "grand_mean_certified_uV": -0.8398,
+    "grand_mean_abs_diff_uV": 0.0155,
+    "max_abs_diff_uV": 0.233,
+    "mean_abs_diff_uV": 0.0396,
+    "max_abs_diff_pct_of_grand": 27.74,
+    "mean_abs_diff_pct_of_grand": 4.71,
+    "grand_mean_diff_pct": 1.844,
+    "ccc": 0.995329,
+    "pearson_r": 0.9965,
+    "spearman_rho": 0.9912,
+    "within_0p1uV": 33,
+    "subjects_with_differing_trial_counts": 32,
+    "conclusion_eeglab": {
+      "t": -7.684,
+      "p": 3.5475120678938362e-09
+    },
+    "conclusion_certified": {
+      "t": -7.871,
+      "p": 2.0281041848833626e-09
+    },
+    "same_conclusion": true,
+    "worst_subject": "sub-030",
+    "source": "eeglab_MMN_p2p.json"
+  },
+  {
+    "component": "N170",
+    "reject_mode": "none",
+    "n_shared": 20,
+    "n_eeglab": 20,
+    "n_certified": 20,
+    "grand_mean_eeglab_uV": -1.2204,
+    "grand_mean_certified_uV": -1.1812,
+    "grand_mean_abs_diff_uV": 0.0392,
+    "max_abs_diff_uV": 0.1608,
+    "mean_abs_diff_uV": 0.0568,
+    "max_abs_diff_pct_of_grand": 13.61,
+    "mean_abs_diff_pct_of_grand": 4.81,
+    "grand_mean_diff_pct": 3.32,
+    "ccc": 0.9979,
+    "pearson_r": 0.9985,
+    "spearman_rho": 0.9959,
+    "within_0p1uV": 16,
+    "subjects_with_differing_trial_counts": 0,
+    "conclusion_eeglab": {
+      "t": -4.634,
+      "p": 0.00018101790094964164
+    },
+    "conclusion_certified": {
+      "t": -4.451,
+      "p": 0.00027414799290333066
+    },
+    "same_conclusion": true,
+    "worst_subject": "sub-007",
+    "source": "eeglab_N170.json"
+  },
+  {
+    "component": "N400",
+    "reject_mode": "none",
+    "n_shared": 20,
+    "n_eeglab": 20,
+    "n_certified": 20,
+    "grand_mean_eeglab_uV": -2.9723,
+    "grand_mean_certified_uV": -2.9572,
+    "grand_mean_abs_diff_uV": 0.0151,
+    "max_abs_diff_uV": 0.0688,
+    "mean_abs_diff_uV": 0.0241,
+    "max_abs_diff_pct_of_grand": 2.33,
+    "mean_abs_diff_pct_of_grand": 0.81,
+    "grand_mean_diff_pct": 0.512,
+    "ccc": 0.999886,
+    "pearson_r": 0.9999,
+    "spearman_rho": 1.0,
+    "within_0p1uV": 20,
+    "subjects_with_differing_trial_counts": 0,
+    "conclusion_eeglab": {
+      "t": -6.378,
+      "p": 4.065186572351438e-06
+    },
+    "conclusion_certified": {
+      "t": -6.342,
+      "p": 4.377166115954283e-06
+    },
+    "same_conclusion": true,
+    "worst_subject": "sub-005",
+    "source": "eeglab_N400.json"
+  },
+  {
+    "component": "P3",
+    "reject_mode": "none",
+    "n_shared": 20,
+    "n_eeglab": 20,
+    "n_certified": 20,
+    "grand_mean_eeglab_uV": 1.6739,
+    "grand_mean_certified_uV": 1.6826,
+    "grand_mean_abs_diff_uV": 0.0087,
+    "max_abs_diff_uV": 0.0503,
+    "mean_abs_diff_uV": 0.0223,
+    "max_abs_diff_pct_of_grand": 2.99,
+    "mean_abs_diff_pct_of_grand": 1.33,
+    "grand_mean_diff_pct": 0.52,
+    "ccc": 0.99988,
+    "pearson_r": 0.9999,
+    "spearman_rho": 0.997,
+    "within_0p1uV": 20,
+    "subjects_with_differing_trial_counts": 0,
+    "conclusion_eeglab": {
+      "t": 4.137,
+      "p": 0.0005605618125728033
+    },
+    "conclusion_certified": {
+      "t": 4.15,
+      "p": 0.0005439087829863424
+    },
+    "same_conclusion": true,
+    "worst_subject": "sub-004",
+    "source": "eeglab_P3.json"
+  },
+  {
+    "component": "ERN",
+    "reject_mode": "none",
+    "n_shared": 14,
+    "n_eeglab": 14,
+    "n_certified": 14,
+    "grand_mean_eeglab_uV": -5.3223,
+    "grand_mean_certified_uV": -5.4462,
+    "grand_mean_abs_diff_uV": 0.1239,
+    "max_abs_diff_uV": 0.3658,
+    "mean_abs_diff_uV": 0.1831,
+    "max_abs_diff_pct_of_grand": 6.72,
+    "mean_abs_diff_pct_of_grand": 3.36,
+    "grand_mean_diff_pct": 2.275,
+    "ccc": 0.997852,
+    "pearson_r": 0.9989,
+    "spearman_rho": 0.9824,
+    "within_0p1uV": 3,
+    "subjects_with_differing_trial_counts": 0,
+    "conclusion_eeglab": {
+      "t": -6.294,
+      "p": 2.7730220278491347e-05
+    },
+    "conclusion_certified": {
+      "t": -6.308,
+      "p": 2.7117043237403758e-05
+    },
+    "same_conclusion": true,
+    "worst_subject": "sub-011",
+    "source": "fieldtrip_ERN.json"
+  },
+  {
+    "component": "ERN",
+    "reject_mode": "none",
+    "n_shared": 14,
+    "n_eeglab": 14,
+    "n_certified": 14,
+    "grand_mean_eeglab_uV": -5.4404,
+    "grand_mean_certified_uV": -5.4462,
+    "grand_mean_abs_diff_uV": 0.0058,
+    "max_abs_diff_uV": 0.0697,
+    "mean_abs_diff_uV": 0.0244,
+    "max_abs_diff_pct_of_grand": 1.28,
+    "mean_abs_diff_pct_of_grand": 0.45,
+    "grand_mean_diff_pct": 0.107,
+    "ccc": 0.999943,
+    "pearson_r": 0.9999,
+    "spearman_rho": 1.0,
+    "within_0p1uV": 14,
+    "subjects_with_differing_trial_counts": 0,
+    "conclusion_eeglab": {
+      "t": -6.281,
+      "p": 2.828080863961941e-05
+    },
+    "conclusion_certified": {
+      "t": -6.308,
+      "p": 2.7117043237403758e-05
+    },
+    "same_conclusion": true,
+    "worst_subject": "sub-003",
+    "source": "fieldtrip_ERN_cutmatch.json"
+  },
+  {
+    "component": "MMN",
+    "reject_mode": "p2p",
+    "n_shared": 38,
+    "n_eeglab": 39,
+    "n_certified": 38,
+    "grand_mean_eeglab_uV": -0.8497,
+    "grand_mean_certified_uV": -0.8398,
+    "grand_mean_abs_diff_uV": 0.0099,
+    "max_abs_diff_uV": 0.1888,
+    "mean_abs_diff_uV": 0.0567,
+    "max_abs_diff_pct_of_grand": 22.48,
+    "mean_abs_diff_pct_of_grand": 6.75,
+    "grand_mean_diff_pct": 1.177,
+    "ccc": 0.993947,
+    "pearson_r": 0.9944,
+    "spearman_rho": 0.9882,
+    "within_0p1uV": 30,
+    "subjects_with_differing_trial_counts": 34,
+    "conclusion_eeglab": {
+      "t": -7.755,
+      "p": 2.8664840319225904e-09
+    },
+    "conclusion_certified": {
+      "t": -7.871,
+      "p": 2.0281041848833626e-09
+    },
+    "same_conclusion": true,
+    "worst_subject": "sub-003",
+    "source": "fieldtrip_MMN.json"
+  },
+  {
+    "component": "MMN",
+    "reject_mode": "p2p",
+    "n_shared": 38,
+    "n_eeglab": 39,
+    "n_certified": 38,
+    "grand_mean_eeglab_uV": -0.8503,
+    "grand_mean_certified_uV": -0.8398,
+    "grand_mean_abs_diff_uV": 0.0105,
+    "max_abs_diff_uV": 0.1838,
+    "mean_abs_diff_uV": 0.0345,
+    "max_abs_diff_pct_of_grand": 21.89,
+    "mean_abs_diff_pct_of_grand": 4.11,
+    "grand_mean_diff_pct": 1.247,
+    "ccc": 0.99628,
+    "pearson_r": 0.9971,
+    "spearman_rho": 0.9943,
+    "within_0p1uV": 34,
+    "subjects_with_differing_trial_counts": 29,
+    "conclusion_eeglab": {
+      "t": -7.686,
+      "p": 3.52472871901779e-09
+    },
+    "conclusion_certified": {
+      "t": -7.871,
+      "p": 2.0281041848833626e-09
+    },
+    "same_conclusion": true,
+    "worst_subject": "sub-005",
+    "source": "fieldtrip_MMN_cutmatch.json"
+  },
+  {
+    "component": "N170",
+    "reject_mode": "none",
+    "n_shared": 20,
+    "n_eeglab": 20,
+    "n_certified": 20,
+    "grand_mean_eeglab_uV": -1.1648,
+    "grand_mean_certified_uV": -1.1812,
+    "grand_mean_abs_diff_uV": 0.0164,
+    "max_abs_diff_uV": 0.117,
+    "mean_abs_diff_uV": 0.0391,
+    "max_abs_diff_pct_of_grand": 9.91,
+    "mean_abs_diff_pct_of_grand": 3.31,
+    "grand_mean_diff_pct": 1.385,
+    "ccc": 0.99902,
+    "pearson_r": 0.9991,
+    "spearman_rho": 0.9966,
+    "within_0p1uV": 18,
+    "subjects_with_differing_trial_counts": 0,
+    "conclusion_eeglab": {
+      "t": -4.391,
+      "p": 0.00031415937838406914
+    },
+    "conclusion_certified": {
+      "t": -4.451,
+      "p": 0.00027414799290333066
+    },
+    "same_conclusion": true,
+    "worst_subject": "sub-011",
+    "source": "fieldtrip_N170.json"
+  },
+  {
+    "component": "N170",
+    "reject_mode": "none",
+    "n_shared": 20,
+    "n_eeglab": 20,
+    "n_certified": 20,
+    "grand_mean_eeglab_uV": -1.1579,
+    "grand_mean_certified_uV": -1.1812,
+    "grand_mean_abs_diff_uV": 0.0233,
+    "max_abs_diff_uV": 0.0993,
+    "mean_abs_diff_uV": 0.0311,
+    "max_abs_diff_pct_of_grand": 8.41,
+    "mean_abs_diff_pct_of_grand": 2.63,
+    "grand_mean_diff_pct": 1.972,
+    "ccc": 0.999382,
+    "pearson_r": 0.9996,
+    "spearman_rho": 0.9996,
+    "within_0p1uV": 20,
+    "subjects_with_differing_trial_counts": 0,
+    "conclusion_eeglab": {
+      "t": -4.362,
+      "p": 0.00033569590499261454
+    },
+    "conclusion_certified": {
+      "t": -4.451,
+      "p": 0.00027414799290333066
+    },
+    "same_conclusion": true,
+    "worst_subject": "sub-016",
+    "source": "fieldtrip_N170_cutmatch.json"
+  },
+  {
+    "component": "N400",
+    "reject_mode": "none",
+    "n_shared": 20,
+    "n_eeglab": 20,
+    "n_certified": 20,
+    "grand_mean_eeglab_uV": -2.9815,
+    "grand_mean_certified_uV": -2.9572,
+    "grand_mean_abs_diff_uV": 0.0243,
+    "max_abs_diff_uV": 0.2287,
+    "mean_abs_diff_uV": 0.106,
+    "max_abs_diff_pct_of_grand": 7.73,
+    "mean_abs_diff_pct_of_grand": 3.58,
+    "grand_mean_diff_pct": 0.823,
+    "ccc": 0.998194,
+    "pearson_r": 0.9983,
+    "spearman_rho": 0.985,
+    "within_0p1uV": 10,
+    "subjects_with_differing_trial_counts": 0,
+    "conclusion_eeglab": {
+      "t": -6.455,
+      "p": 3.462445916978897e-06
+    },
+    "conclusion_certified": {
+      "t": -6.342,
+      "p": 4.377166115954283e-06
+    },
+    "same_conclusion": true,
+    "worst_subject": "sub-005",
+    "source": "fieldtrip_N400.json"
+  },
+  {
+    "component": "N400",
+    "reject_mode": "none",
+    "n_shared": 20,
+    "n_eeglab": 20,
+    "n_certified": 20,
+    "grand_mean_eeglab_uV": -2.9595,
+    "grand_mean_certified_uV": -2.9572,
+    "grand_mean_abs_diff_uV": 0.0023,
+    "max_abs_diff_uV": 0.05,
+    "mean_abs_diff_uV": 0.015,
+    "max_abs_diff_pct_of_grand": 1.69,
+    "mean_abs_diff_pct_of_grand": 0.51,
+    "grand_mean_diff_pct": 0.077,
+    "ccc": 0.999959,
+    "pearson_r": 1.0,
+    "spearman_rho": 0.9985,
+    "within_0p1uV": 20,
+    "subjects_with_differing_trial_counts": 0,
+    "conclusion_eeglab": {
+      "t": -6.33,
+      "p": 4.4892749658240835e-06
+    },
+    "conclusion_certified": {
+      "t": -6.342,
+      "p": 4.377166115954283e-06
+    },
+    "same_conclusion": true,
+    "worst_subject": "sub-001",
+    "source": "fieldtrip_N400_cutmatch.json"
+  },
+  {
+    "component": "P3",
+    "reject_mode": "none",
+    "n_shared": 20,
+    "n_eeglab": 20,
+    "n_certified": 20,
+    "grand_mean_eeglab_uV": 1.7462,
+    "grand_mean_certified_uV": 1.6826,
+    "grand_mean_abs_diff_uV": 0.0636,
+    "max_abs_diff_uV": 0.7214,
+    "mean_abs_diff_uV": 0.1385,
+    "max_abs_diff_pct_of_grand": 42.87,
+    "mean_abs_diff_pct_of_grand": 8.23,
+    "grand_mean_diff_pct": 3.779,
+    "ccc": 0.992787,
+    "pearson_r": 0.9939,
+    "spearman_rho": 0.9865,
+    "within_0p1uV": 10,
+    "subjects_with_differing_trial_counts": 0,
+    "conclusion_eeglab": {
+      "t": 4.434,
+      "p": 0.00028513600077774746
+    },
+    "conclusion_certified": {
+      "t": 4.15,
+      "p": 0.0005439087829863424
+    },
+    "same_conclusion": true,
+    "worst_subject": "sub-006",
+    "source": "fieldtrip_P3.json"
+  },
+  {
+    "component": "P3",
+    "reject_mode": "none",
+    "n_shared": 20,
+    "n_eeglab": 20,
+    "n_certified": 20,
+    "grand_mean_eeglab_uV": 1.6855,
+    "grand_mean_certified_uV": 1.6826,
+    "grand_mean_abs_diff_uV": 0.0029,
+    "max_abs_diff_uV": 0.0496,
+    "mean_abs_diff_uV": 0.0139,
+    "max_abs_diff_pct_of_grand": 2.95,
+    "mean_abs_diff_pct_of_grand": 0.83,
+    "grand_mean_diff_pct": 0.17,
+    "ccc": 0.999943,
+    "pearson_r": 1.0,
+    "spearman_rho": 1.0,
+    "within_0p1uV": 20,
+    "subjects_with_differing_trial_counts": 0,
+    "conclusion_eeglab": {
+      "t": 4.128,
+      "p": 0.0005724381255437228
+    },
+    "conclusion_certified": {
+      "t": 4.15,
+      "p": 0.0005439087829863424
+    },
+    "same_conclusion": true,
+    "worst_subject": "sub-009",
+    "source": "fieldtrip_P3_cutmatch.json"
+  },
+  {
+    "component": "P3",
+    "reject_mode": "none",
+    "n_shared": 20,
+    "n_eeglab": 20,
+    "n_certified": 20,
+    "grand_mean_eeglab_uV": 1.7472,
+    "grand_mean_certified_uV": 1.6826,
+    "grand_mean_abs_diff_uV": 0.0646,
+    "max_abs_diff_uV": 0.8023,
+    "mean_abs_diff_uV": 0.1604,
+    "max_abs_diff_pct_of_grand": 47.68,
+    "mean_abs_diff_pct_of_grand": 9.53,
+    "grand_mean_diff_pct": 3.84,
+    "ccc": 0.99074,
+    "pearson_r": 0.9918,
+    "spearman_rho": 0.9835,
+    "within_0p1uV": 10,
+    "subjects_with_differing_trial_counts": 0,
+    "conclusion_eeglab": {
+      "t": 4.43,
+      "p": 0.00028736008511973793
+    },
+    "conclusion_certified": {
+      "t": 4.15,
+      "p": 0.0005439087829863424
+    },
+    "same_conclusion": true,
+    "worst_subject": "sub-006",
+    "source": "fieldtrip_P3_df0.1.json"
+  }
+]

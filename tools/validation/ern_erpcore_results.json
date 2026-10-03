@@ -1,0 +1,116 @@
+{
+  "dataset": "ERP CORE ERN (Kappenman 2021), error - correct, response-locked",
+  "n_subjects": 14,
+  "roi": [
+    "FCz",
+    "Fz",
+    "Cz"
+  ],
+  "ern_window_s": [
+    0.0,
+    0.1
+  ],
+  "grand_mean_ern_uV": -5.446,
+  "ern_sem_uV": 0.863,
+  "one_sample_t": -6.31,
+  "one_sample_p": 2.7117043237403758e-05,
+  "cohens_dz": -1.686,
+  "second_level_cluster": {
+    "n_clusters": 1,
+    "n_significant": 1,
+    "min_p": 0.0004,
+    "significant": [
+      [
+        0,
+        0.0004
+      ]
+    ]
+  },
+  "PASS": true,
+  "per_subject": [
+    {
+      "subject": "sub-001",
+      "ern_uV": -4.697,
+      "n_dev": 56,
+      "n_std": 346
+    },
+    {
+      "subject": "sub-002",
+      "ern_uV": -2.929,
+      "n_dev": 18,
+      "n_std": 384
+    },
+    {
+      "subject": "sub-003",
+      "ern_uV": -7.686,
+      "n_dev": 43,
+      "n_std": 356
+    },
+    {
+      "subject": "sub-004",
+      "ern_uV": -10.152,
+      "n_dev": 71,
+      "n_std": 331
+    },
+    {
+      "subject": "sub-006",
+      "ern_uV": -2.642,
+      "n_dev": 138,
+      "n_std": 250
+    },
+    {
+      "subject": "sub-008",
+      "ern_uV": -5.921,
+      "n_dev": 52,
+      "n_std": 351
+    },
+    {
+      "subject": "sub-010",
+      "ern_uV": -2.766,
+      "n_dev": 76,
+      "n_std": 325
+    },
+    {
+      "subject": "sub-011",
+      "ern_uV": -4.803,
+      "n_dev": 33,
+      "n_std": 369
+    },
+    {
+      "subject": "sub-012",
+      "ern_uV": -2.728,
+      "n_dev": 74,
+      "n_std": 329
+    },
+    {
+      "subject": "sub-013",
+      "ern_uV": -2.225,
+      "n_dev": 75,
+      "n_std": 326
+    },
+    {
+      "subject": "sub-015",
+      "ern_uV": -10.874,
+      "n_dev": 51,
+      "n_std": 351
+    },
+    {
+      "subject": "sub-016",
+      "ern_uV": -11.193,
+      "n_dev": 47,
+      "n_std": 356
+    },
+    {
+      "subject": "sub-017",
+      "ern_uV": -3.385,
+      "n_dev": 21,
+      "n_std": 381
+    },
+    {
+      "subject": "sub-018",
+      "ern_uV": -4.246,
+      "n_dev": 63,
+      "n_std": 340
+    }
+  ]
+}

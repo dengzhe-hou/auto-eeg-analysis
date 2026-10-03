@@ -1,0 +1,137 @@
+{
+  "tool": "mne-bids-pipeline",
+  "dataset": "ERP CORE ERN, error - correct (response-locked), harmonized",
+  "roi": [
+    "FCz",
+    "Fz",
+    "Cz"
+  ],
+  "ern_window_s": [
+    0.0,
+    0.1
+  ],
+  "n_subjects": 20,
+  "grand_mean_ern_uV": -5.283,
+  "per_subject": [
+    {
+      "subject": "sub-001",
+      "ern_uV": -4.704,
+      "n_dev": 56,
+      "n_std": 346
+    },
+    {
+      "subject": "sub-002",
+      "ern_uV": -2.924,
+      "n_dev": 18,
+      "n_std": 384
+    },
+    {
+      "subject": "sub-003",
+      "ern_uV": -7.718,
+      "n_dev": 43,
+      "n_std": 356
+    },
+    {
+      "subject": "sub-004",
+      "ern_uV": -10.132,
+      "n_dev": 71,
+      "n_std": 331
+    },
+    {
+      "subject": "sub-005",
+      "ern_uV": -4.054,
+      "n_dev": 2,
+      "n_std": 398
+    },
+    {
+      "subject": "sub-006",
+      "ern_uV": -2.637,
+      "n_dev": 138,
+      "n_std": 250
+    },
+    {
+      "subject": "sub-007",
+      "ern_uV": -6.625,
+      "n_dev": 14,
+      "n_std": 388
+    },
+    {
+      "subject": "sub-008",
+      "ern_uV": -5.908,
+      "n_dev": 52,
+      "n_std": 351
+    },
+    {
+      "subject": "sub-009",
+      "ern_uV": -5.426,
+      "n_dev": 9,
+      "n_std": 394
+    },
+    {
+      "subject": "sub-010",
+      "ern_uV": -2.774,
+      "n_dev": 76,
+      "n_std": 325
+    },
+    {
+      "subject": "sub-011",
+      "ern_uV": -4.801,
+      "n_dev": 33,
+      "n_std": 369
+    },
+    {
+      "subject": "sub-012",
+      "ern_uV": -2.726,
+      "n_dev": 74,
+      "n_std": 329
+    },
+    {
+      "subject": "sub-013",
+      "ern_uV": -2.224,
+      "n_dev": 75,
+      "n_std": 326
+    },
+    {
+      "subject": "sub-014",
+      "ern_uV": -2.261,
+      "n_dev": 13,
+      "n_std": 388
+    },
+    {
+      "subject": "sub-015",
+      "ern_uV": -10.875,
+      "n_dev": 51,
+      "n_std": 351
+    },
+    {
+      "subject": "sub-016",
+      "ern_uV": -11.199,
+      "n_dev": 47,
+      "n_std": 356
+    },
+    {
+      "subject": "sub-017",
+      "ern_uV": -3.387,
+      "n_dev": 21,
+      "n_std": 381
+    },
+    {
+      "subject": "sub-018",
+      "ern_uV": -4.24,
+      "n_dev": 63,
+      "n_std": 340
+    },
+    {
+      "subject": "sub-019",
+      "ern_uV": -3.619,
+      "n_dev": 14,
+      "n_std": 388
+    },
+    {
+      "subject": "sub-020",
+      "ern_uV": -7.42,
+      "n_dev": 10,
+      "n_std": 392
+    }
+  ]
+}

@@ -1,0 +1,577 @@
+{
+  "evaluation": "BENCHMARK.md \u00a76f \u2014 LLM recipe-generation vs the certified benchmark",
+  "reference": "tools/validation/mmn_group_results.json",
+  "reference_grand_mean_uV": -0.84,
+  "tolerance_uV": 0.1,
+  "conditions": {
+    "A": "recipe spec only (spec sufficiency)",
+    "B": "pinned harmonized-minimal config (code-generation correctness)"
+  },
+  "per_generation": {
+    "A1": {
+      "n_common": 38,
+      "n_analyzed_gen": 40,
+      "excluded_gen": [],
+      "grand_mean_gen": -0.822176,
+      "max_abs_delta_uV": 0.2449,
+      "mean_abs_delta_uV": 0.0549,
+      "median_abs_delta_uV": 0.0257,
+      "pearson_r": 0.99173,
+      "n_within_tol": 30,
+      "frac_within_tol": 0.789,
+      "PASS": false,
+      "choices": {
+        "resample_hz": 256,
+        "ica": "no",
+        "ransac": "yes",
+        "notes": "EVENTS: taken from the BIDS events.tsv `onset` column (seconds), keeping only value==80 (standard) and value==70 (deviant); value==180 (first-stream standards) and the STATUS marker (value==1) are excluded. Onsets are attached as MNE Annotations so timing stays exact in seconds across the resample; verified against the .set file's own annotations (identical counts, max onset difference 5e-5 s). CHANNELS: the three EOG channels (HEOG_left/HEOG_right/VEOG_lower) are typed EEG in the .set file, so they are dropped by name before any referencing; montage standard_1020 with match_case=False. ORDER: bandpass 0.1-30 Hz zero-phase FIR (firwin/hamming) -> resample 1024->256 Hz -> average reference -> RANSAC -> interpolate bads (spherical spline, mode='accurate') -> re-apply average reference (the mean changes once bad channels carry interpolated data) -> epoch. RANSAC: autoreject.Ransac at its defaults (n_resample=50, min_corr=0.75, min_channels=0.25, unbroken_time=0.4, random_state=42), fit on unrejected -0.2..0.5 s epochs. min_channels was checked rather than assumed: an injected-artefact test on two subjects RANSAC called clean (sub-002/sub-005) showed the 0.25 default catches noise/drift corruptions in 12/12 cases with no false positives, whereas min_channels=0.50 missed most of them AND misattributed the artefact to neighbouring channels (flagging CPz/FCz when Cz was corrupted), i.e. a larger consensus subset lowers RANSAC's breakdown point. The same test showed RANSAC is blind to flat and pure-gain channels (its criterion is a scale-invariant correlation), so an explicit flat-channel guard (SD < 1e-9 V) was added; it fired for no subject in this dataset. REJECTION: the recipe's '+-100 uV' is implemented as MNE's peak-to-peak criterion reject=dict(eeg=100e-6) over the full -0.2..0.5 s epoch on scalp EEG. This reading is not load-bearing: re-running with an absolute |amplitude| > 100 uV rule instead gives a grand mean of -0.803 uV vs -0.822 uV, per-subject r = 0.963, and zero exclusions either way. ICA: not used. The task is a passive oddball (participants watched a silent video), the recipe explicitly permits amplitude rejection alone for ERP CORE MMN, and trial retention stayed high, so no ICA/ICLabel stage was run. MEASURE: standard and deviant trial counts are NOT equalized (the recipe does not ask for it). Difference wave = deviant-average minus standard-average; the reported value is the mean of that difference over the 100-250 ms samples and over Fz, FCz, Cz jointly, in uV. OUTCOME: RANSAC flagged >=1 bad channel in 28/40 subjects (union: C3, C4, C5, C6, F7, F8, FC4, FP1, FP2, O1, Oz, P10, P4, P7, P8, PO3, PO4, PO8); median trials retained after rejection 84.6%; every subject cleared the >=50 deviant / >=150 standard rule (worst case 80 deviants, 331 standards), so nothing was excluded. SANITY CHECKS: the grand-average difference wave has a flat pre-stimulus baseline and a negative peak of -1.60 uV at 191 ms at Fz/FCz/Cz, is most negative at Fz, and inverts polarity at the mastoid-adjacent sites (P9 +1.16 uV, P10 +0.96 uV) -- the expected MMN signature for a supratemporal generator under an average reference. Across subjects t(39) = -7.84, p = 1.5e-9, Cohen's d = -1.24."
+      }
+    },
+    "A2": {
+      "n_common": 38,
+      "n_analyzed_gen": 40,
+      "excluded_gen": [],
+      "grand_mean_gen": -0.8222,
+      "max_abs_delta_uV": 0.2449,
+      "mean_abs_delta_uV": 0.0549,
+      "median_abs_delta_uV": 0.0257,
+      "pearson_r": 0.99173,
+      "n_within_tol": 30,
+      "frac_within_tol": 0.789,
+      "PASS": false,
+      "choices": {
+        "resample_hz": 256,
+        "ica": "no",
+        "ransac": "yes",
+        "notes": "Order: drop the 3 EOG channels by name (they are typed EEG in the .set) -> standard_1020 montage (match_case=False) -> 0.1-30 Hz zero-phase FIR (firwin/hamming, MNE 'auto' transition bands) -> resample 1024->256 Hz -> average reference over the 30 scalp channels -> autoreject.Ransac bad-channel detection on the -0.2..0.5 s epochs -> spherical-spline interpolation of bads -> average re-reference -> epoch -0.2..0.5 s, baseline (-0.2, 0), reject peak-to-peak > 100 uV. Events read from *_events.tsv 'onset' (seconds) x 'value'; only value==80 (standard) and value==70 (deviant) kept -- value==180 first-stream standards and STATUS markers excluded. Difference wave = deviant-average minus standard-average (mne.combine_evoked weights [1,-1]); measure = mean over Fz/FCz/Cz x 100-250 ms, in uV. No ICA: passive-listening ERP CORE MMN is clean and the recipe permits the simple +-100 uV epoch reject. JUDGMENT CALLS: (a) '+-100 uV' implemented as MNE's peak-to-peak reject=dict(eeg=100e-6) -- the stricter reading; the looser reading (+-100 uV absolute == 200 uV peak-to-peak) gives grand mean -0.7730 uV, so the measure is insensitive to this choice. (b) resample rate 256 Hz = largest integer divisor of 1024 Hz above the 200 Hz floor. (c) RANSAC run after the first average reference, following the recipe's literal 'reference -> RANSAC -> interpolate -> re-reference' ordering (this is algebraically equivalent to referencing after interpolation, since the first reference is common-mode and cancels in the second). autoreject.Ransac defaults were used (n_resample=50, min_channels=0.25, min_corr=0.75, unbroken_time=0.4, random_state=42); on this sparse 30-ch montage it tends to flag peripheral sites (F7, FP1, Oz, O1, C5/C6), median 1 channel per subject, max 6. Disabling RANSAC entirely changes the grand mean only to -0.8399 uV, but drops sub-007 and sub-012 below the min-trial rule (a single noisy channel blows the 100 uV peak-to-peak criterion on most epochs), so RANSAC mainly buys trial retention here. (d) Baseline correction applied at epoching rather than as a separate step. (e) All 40 subjects met the >=50 deviant / >=150 standard rule, so none were excluded. SANITY CHECK: the grand-average difference wave over Fz/FCz/Cz is flat pre-stimulus and peaks negative at ~195 ms (-1.48 uV), the expected MMN morphology; the effect is reliable across subjects (37/40 negative, one-sample t(39) = -7.84, p = 1.5e-09)."
+      }
+    },
+    "B1": {
+      "n_common": 38,
+      "n_analyzed_gen": 38,
+      "excluded_gen": [
+        "sub-007",
+        "sub-012"
+      ],
+      "grand_mean_gen": -0.83991,
+      "max_abs_delta_uV": 0.0005,
+      "mean_abs_delta_uV": 0.0003,
+      "median_abs_delta_uV": 0.0003,
+      "pearson_r": 1.0,
+      "n_within_tol": 38,
+      "frac_within_tol": 1.0,
+      "PASS": true,
+      "choices": {
+        "notes": "Harmonized minimal config, executed exactly as specified. Events read from the BIDS *_events.tsv 'value' column (80=standard, 70=deviant); value==180 (first stream) and the non-stimulus STATUS rows were excluded. Event samples computed as round(onset_sec * 256) after resampling (raw.first_samp==0). Order: drop EOG -> standard_1020 (match_case=False) -> FIR bandpass 0.1-30 Hz (MNE defaults: firwin, zero phase, auto transition bandwidths) -> resample 256 Hz -> average reference over the 30 scalp channels -> epoch -0.2..0.5 s, baseline (-0.2, 0) -> reject peak-to-peak > 100 uV. No ICA, no RANSAC / interpolation, no AutoReject. Rejection is applied by MNE after baseline correction, on the 30 EEG channels only. Measure = mean of (deviant-average minus standard-average) over channels Fz, FCz, Cz and over all samples with 0.100 <= t <= 0.250 s, in microvolts. Subject excluded if <50 deviants or <150 standards survive rejection.",
+        "judgment_calls": [
+          "Window edges: at 256 Hz the sample grid does not land exactly on 100 ms, so the inclusive mask 0.100 <= t <= 0.250 spans t = 0.1016 .. 0.2500 s (39 samples). The nearest sample below (0.0977 s) is excluded. Including it would change each subject's value only marginally (1/39 of the window).",
+          "sub-002 has a shorter event stream in its events.tsv (167 deviants / 653 standards instead of 200 / 785); all available trials were used and it still clears the minimums.",
+          "Duplicate event sample indices after resampling to 256 Hz were de-duplicated (none actually occurred in this dataset).",
+          "The .set file types the EOG channels as EEG, so they were dropped by name before the montage/reference; the average reference therefore uses exactly the 30 scalp channels."
+        ],
+        "n_subjects_attempted": 40,
+        "diagnostics": {
+          "sub-001": {
+            "value": -0.7239511606741758,
+            "excluded": false,
+            "reason": null,
+            "n_channels": 30,
+            "n_events_standard": 785,
+            "n_events_deviant": 200,
+            "n_kept_standard": 479,
+            "n_kept_deviant": 117,
+            "n_times_in_window": 39
+          },
+          "sub-002": {
+            "value": -1.5590267250721648,
+            "excluded": false,
+            "reason": null,
+            "n_channels": 30,
+            "n_events_standard": 653,
+            "n_events_deviant": 167,
+            "n_kept_standard": 644,
+            "n_kept_deviant": 165,
+            "n_times_in_window": 39
+          },
+          "sub-003": {
+            "value": -0.09135832629136978,
+            "excluded": false,
+            "reason": null,
+            "n_channels": 30,
+            "n_events_standard": 785,
+            "n_events_deviant": 200,
+            "n_kept_standard": 471,
+            "n_kept_deviant": 114,
+            "n_times_in_window": 39
+          },
+          "sub-004": {
+            "value": -0.6384769617506393,
+            "excluded": false,
+            "reason": null,
+            "n_channels": 30,
+            "n_events_standard": 785,
+            "n_events_deviant": 200,
+            "n_kept_standard": 669,
+            "n_kept_deviant": 168,
+            "n_times_in_window": 39
+          },
+          "sub-005": {
+            "value": -1.3191101430979346,
+            "excluded": false,
+            "reason": null,
+            "n_channels": 30,
+            "n_events_standard": 785,
+            "n_events_deviant": 200,
+            "n_kept_standard": 359,
+            "n_kept_deviant": 80,
+            "n_times_in_window": 39
+          },
+          "sub-006": {
+            "value": -0.5837530905741338,
+            "excluded": false,
+            "reason": null,
+            "n_channels": 30,
+            "n_events_standard": 785,
+            "n_events_deviant": 200,
+            "n_kept_standard": 642,
+            "n_kept_deviant": 158,
+            "n_times_in_window": 39
+          },
+          "sub-007": {
+            "value": null,
+            "excluded": true,
+            "reason": "too few trials (dev=11, std=45)",
+            "n_channels": 30,
+            "n_events_standard": 785,
+            "n_events_deviant": 200,
+            "n_kept_standard": 45,
+            "n_kept_deviant": 11
+          },
+          "sub-008": {
+            "value": 0.34185726967010654,
+            "excluded": false,
+            "reason": null,
+            "n_channels": 30,
+            "n_events_standard": 785,
+            "n_events_deviant": 200,
+            "n_kept_standard": 449,
+            "n_kept_deviant": 96,
+            "n_times_in_window": 39
+          },
+          "sub-009": {
+            "value": -1.2491244573434281,
+            "excluded": false,
+            "reason": null,
+            "n_channels": 30,
+            "n_events_standard": 785,
+            "n_events_deviant": 200,
+            "n_kept_standard": 533,
+            "n_kept_deviant": 134,
+            "n_times_in_window": 39
+          },
+          "sub-010": {
+            "value": -1.2178462309784948,
+            "excluded": false,
+            "reason": null,
+            "n_channels": 30,
+            "n_events_standard": 785,
+            "n_events_deviant": 200,
+            "n_kept_standard": 541,
+            "n_kept_deviant": 131,
+            "n_times_in_window": 39
+          },
+          "sub-011": {
+            "value": -0.5439455545111861,
+            "excluded": false,
+            "reason": null,
+            "n_channels": 30,
+            "n_events_standard": 785,
+            "n_events_deviant": 200,
+            "n_kept_standard": 732,
+            "n_kept_deviant": 182,
+            "n_times_in_window": 39
+          },
+          "sub-012": {
+            "value": null,
+            "excluded": true,
+            "reason": "too few trials (dev=47, std=207)",
+            "n_channels": 30,
+            "n_events_standard": 785,
+            "n_events_deviant": 200,
+            "n_kept_standard": 207,
+            "n_kept_deviant": 47
+          },
+          "sub-013": {
+            "value": -0.3198931364058831,
+            "excluded": false,
+            "reason": null,
+            "n_channels": 30,
+            "n_events_standard": 785,
+            "n_events_deviant": 200,
+            "n_kept_standard": 737,
+            "n_kept_deviant": 183,
+            "n_times_in_window": 39
+          },
+          "sub-014": {
+            "value": -0.6152162076737278,
+            "excluded": false,
+            "reason": null,
+            "n_channels": 30,
+            "n_events_standard": 785,
+            "n_events_deviant": 200,
+            "n_kept_standard": 561,
+            "n_kept_deviant": 136,
+            "n_times_in_window": 39
+          },
+          "sub-015": {
+            "value": -0.5923816044174003,
+            "excluded": false,
+            "reason": null,
+            "n_channels": 30,
+            "n_events_standard": 785,
+            "n_events_deviant": 200,
+            "n_kept_standard": 677,
+            "n_kept_deviant": 172,
+            "n_times_in_window": 39
+          },
+          "sub-016": {
+            "value": -1.1099726716391978,
+            "excluded": false,
+            "reason": null,
+            "n_channels": 30,
+            "n_events_standard": 785,
+            "n_events_deviant": 200,
+            "n_kept_standard": 651,
+            "n_kept_deviant": 169,
+            "n_times_in_window": 39
+          },
+          "sub-017": {
+            "value": -0.13167781819364618,
+            "excluded": false,
+            "reason": null,
+            "n_channels": 30,
+            "n_events_standard": 785,
+            "n_events_deviant": 200,
+            "n_kept_standard": 457,
+            "n_kept_deviant": 127,
+            "n_times_in_window": 39
+          },
+          "sub-018": {
+            "value": -0.7172863964606601,
+            "excluded": false,
+            "reason": null,
+            "n_channels": 30,
+            "n_events_standard": 785,
+            "n_events_deviant": 200,
+            "n_kept_standard": 556,
+            "n_kept_deviant": 124,
+            "n_times_in_window": 39
+          },
+          "sub-019": {
+            "value": -0.5756818253338857,
+            "excluded": false,
+            "reason": null,
+            "n_channels": 30,
+            "n_events_standard": 785,
+            "n_events_deviant": 200,
+            "n_kept_standard": 784,
+            "n_kept_deviant": 200,
+            "n_times_in_window": 39
+          },
+          "sub-020": {
+            "value": -0.9062973835934767,
+            "excluded": false,
+            "reason": null,
+            "n_channels": 30,
+            "n_events_standard": 785,
+            "n_events_deviant": 200,
+            "n_kept_standard": 718,
+            "n_kept_deviant": 183,
+            "n_times_in_window": 39
+          },
+          "sub-021": {
+            "value": -1.3233614458501144,
+            "excluded": false,
+            "reason": null,
+            "n_channels": 30,
+            "n_events_standard": 785,
+            "n_events_deviant": 200,
+            "n_kept_standard": 594,
+            "n_kept_deviant": 142,
+            "n_times_in_window": 39
+          },
+          "sub-022": {
+            "value": -0.5217887706923551,
+            "excluded": false,
+            "reason": null,
+            "n_channels": 30,
+            "n_events_standard": 785,
+            "n_events_deviant": 200,
+            "n_kept_standard": 686,
+            "n_kept_deviant": 167,
+            "n_times_in_window": 39
+          },
+          "sub-023": {
+            "value": 0.05883048659987148,
+            "excluded": false,
+            "reason": null,
+            "n_channels": 30,
+            "n_events_standard": 785,
+            "n_events_deviant": 200,
+            "n_kept_standard": 458,
+            "n_kept_deviant": 112,
+            "n_times_in_window": 39
+          },
+          "sub-024": {
+            "value": -1.1843685371620383,
+            "excluded": false,
+            "reason": null,
+            "n_channels": 30,
+            "n_events_standard": 785,
+            "n_events_deviant": 200,
+            "n_kept_standard": 685,
+            "n_kept_deviant": 171,
+            "n_times_in_window": 39
+          },
+          "sub-025": {
+            "value": -0.3232668907578294,
+            "excluded": false,
+            "reason": null,
+            "n_channels": 30,
+            "n_events_standard": 785,
+            "n_events_deviant": 200,
+            "n_kept_standard": 686,
+            "n_kept_deviant": 174,
+            "n_times_in_window": 39
+          },
+          "sub-026": {
+            "value": -0.5927400180797467,
+            "excluded": false,
+            "reason": null,
+            "n_channels": 30,
+            "n_events_standard": 785,
+            "n_events_deviant": 200,
+            "n_kept_standard": 697,
+            "n_kept_deviant": 182,
+            "n_times_in_window": 39
+          },
+          "sub-027": {
+            "value": -0.5151513697361846,
+            "excluded": false,
+            "reason": null,
+            "n_channels": 30,
+            "n_events_standard": 785,
+            "n_events_deviant": 200,
+            "n_kept_standard": 658,
+            "n_kept_deviant": 176,
+            "n_times_in_window": 39
+          },
+          "sub-028": {
+            "value": -0.08979966659745131,
+            "excluded": false,
+            "reason": null,
+            "n_channels": 30,
+            "n_events_standard": 785,
+            "n_events_deviant": 200,
+            "n_kept_standard": 672,
+            "n_kept_deviant": 173,
+            "n_times_in_window": 39
+          },
+          "sub-029": {
+            "value": -1.4463783564623238,
+            "excluded": false,
+            "reason": null,
+            "n_channels": 30,
+            "n_events_standard": 785,
+            "n_events_deviant": 200,
+            "n_kept_standard": 591,
+            "n_kept_deviant": 156,
+            "n_times_in_window": 39
+          },
+          "sub-030": {
+            "value": -2.8943672502490387,
+            "excluded": false,
+            "reason": null,
+            "n_channels": 30,
+            "n_events_standard": 785,
+            "n_events_deviant": 200,
+            "n_kept_standard": 299,
+            "n_kept_deviant": 85,
+            "n_times_in_window": 39
+          },
+          "sub-031": {
+            "value": -0.8854493286756763,
+            "excluded": false,
+            "reason": null,
+            "n_channels": 30,
+            "n_events_standard": 785,
+            "n_events_deviant": 200,
+            "n_kept_standard": 677,
+            "n_kept_deviant": 171,
+            "n_times_in_window": 39
+          },
+          "sub-032": {
+            "value": -0.45673633152211723,
+            "excluded": false,
+            "reason": null,
+            "n_channels": 30,
+            "n_events_standard": 785,
+            "n_events_deviant": 200,
+            "n_kept_standard": 373,
+            "n_kept_deviant": 91,
+            "n_times_in_window": 39
+          },
+          "sub-033": {
+            "value": -0.8033941378476773,
+            "excluded": false,
+            "reason": null,
+            "n_channels": 30,
+            "n_events_standard": 785,
+            "n_events_deviant": 200,
+            "n_kept_standard": 782,
+            "n_kept_deviant": 199,
+            "n_times_in_window": 39
+          },
+          "sub-034": {
+            "value": -1.3606694366464347,
+            "excluded": false,
+            "reason": null,
+            "n_channels": 30,
+            "n_events_standard": 785,
+            "n_events_deviant": 200,
+            "n_kept_standard": 733,
+            "n_kept_deviant": 190,
+            "n_times_in_window": 39
+          },
+          "sub-035": {
+            "value": -0.5863688420657305,
+            "excluded": false,
+            "reason": null,
+            "n_channels": 30,
+            "n_events_standard": 785,
+            "n_events_deviant": 200,
+            "n_kept_standard": 509,
+            "n_kept_deviant": 142,
+            "n_times_in_window": 39
+          },
+          "sub-036": {
+            "value": -0.49812147776558385,
+            "excluded": false,
+            "reason": null,
+            "n_channels": 30,
+            "n_events_standard": 785,
+            "n_events_deviant": 200,
+            "n_kept_standard": 594,
+            "n_kept_deviant": 152,
+            "n_times_in_window": 39
+          },
+          "sub-037": {
+            "value": -1.9700568466203419,
+            "excluded": false,
+            "reason": null,
+            "n_channels": 30,
+            "n_events_standard": 785,
+            "n_events_deviant": 200,
+            "n_kept_standard": 626,
+            "n_kept_deviant": 154,
+            "n_times_in_window": 39
+          },
+          "sub-038": {
+            "value": -1.883536946004951,
+            "excluded": false,
+            "reason": null,
+            "n_channels": 30,
+            "n_events_standard": 785,
+            "n_events_deviant": 200,
+            "n_kept_standard": 712,
+            "n_kept_deviant": 177,
+            "n_times_in_window": 39
+          },
+          "sub-039": {
+            "value": -2.0035058485825785,
+            "excluded": false,
+            "reason": null,
+            "n_channels": 30,
+            "n_events_standard": 785,
+            "n_events_deviant": 200,
+            "n_kept_standard": 360,
+            "n_kept_deviant": 97,
+            "n_times_in_window": 39
+          },
+          "sub-040": {
+            "value": -0.08321253533912493,
+            "excluded": false,
+            "reason": null,
+            "n_channels": 30,
+            "n_events_standard": 785,
+            "n_events_deviant": 200,
+            "n_kept_standard": 492,
+            "n_kept_deviant": 125,
+            "n_times_in_window": 39
+          }
+        }
+      }
+    },
+    "B2": {
+      "n_common": 38,
+      "n_analyzed_gen": 38,
+      "excluded_gen": [
+        "sub-007",
+        "sub-012"
+      ],
+      "grand_mean_gen": -0.83991,
+      "max_abs_delta_uV": 0.0005,
+      "mean_abs_delta_uV": 0.0003,
+      "median_abs_delta_uV": 0.0003,
+      "pearson_r": 1.0,
+      "n_within_tol": 38,
+      "frac_within_tol": 1.0,
+      "PASS": true,
+      "choices": {
+        "notes": "Harmonized minimal MMN config, executed exactly as specified. Events taken from the BIDS *_events.tsv `onset` column (seconds), converted to sample indices at the post-resample rate via round(onset*256); only value==80 (standard) and value==70 (deviant) were kept, value==180 (first-stream) and the STATUS marker (value==1) were dropped. EOG dropped by name (HEOG_left/HEOG_right/VEOG_lower) because the .set types them as EEG. Montage standard_1020 with match_case=False resolves the file's FP1/FP2 naming to Fp1/Fp2. Order followed the recipe literally: filter -> resample -> average reference -> epoch. Filter is MNE's default zero-phase FIR (firwin, hamming, auto-length). Peak-to-peak rejection applied at epoching via reject=dict(eeg=100e-6) on the 30 scalp channels; reject_by_annotation=False so only the p2p criterion drops epochs. Difference wave = deviant - standard per subject (mne.combine_evoked weights [1,-1]); measure is the mean of the difference wave over channels Fz/FCz/Cz and over the 100-250 ms window via Evoked.crop(0.100, 0.250) (MNE-inclusive endpoints), reported in microvolts. Grand mean is the unweighted mean across included subjects. No ICA, no RANSAC/interpolation, no AutoReject.",
+        "measurement_window_s": [
+          0.1,
+          0.25
+        ],
+        "roi_channels": [
+          "Fz",
+          "FCz",
+          "Cz"
+        ],
+        "sfreq_hz": 256.0,
+        "bandpass_hz": [
+          0.1,
+          30.0
+        ],
+        "reject_p2p_uV": 100.0,
+        "min_trials": {
+          "deviant": 50,
+          "standard": 150
+        },
+        "per_subject_detail_file": "per_subject_detail.json"
+      }
+    }
+  },
+  "generation_reproducibility": {
+    "A": {
+      "pair": [
+        "A1",
+        "A2"
+      ],
+      "n": 40,
+      "max_abs_delta_uV": 0.0,
+      "mean_abs_delta_uV": 0.0,
+      "identical": false
+    },
+    "B": {
+      "pair": [
+        "B1",
+        "B2"
+      ],
+      "n": 38,
+      "max_abs_delta_uV": 0.0,
+      "mean_abs_delta_uV": 0.0,
+      "identical": true
+    }
+  }
+}

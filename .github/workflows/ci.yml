@@ -1,0 +1,49 @@
+name: CI
+
+# Numerical-regression gate: every push / PR rebuilds the env, probes
+# capabilities, and re-runs the deterministic sample-data pipeline against the
+# committed baseline (tools/baselines/sample_pipeline.json). Catches silent
+# MNE / NumPy / SciPy drift before it reaches a paper.
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  regression:
+    name: Regression (ubuntu)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -el {0}
+    steps:
+      - uses: actions/checkout@v4
+
+      # MNE sample dataset (~1.5 GB) — download once, then restore from cache.
+      - name: Cache MNE sample data
+        uses: actions/cache@v4
+        with:
+          path: ~/mne_data
+          key: mne-sample-data-v1
+
+      - name: Set up aeais environment
+        uses: mamba-org/setup-micromamba@v2
+        with:
+          environment-file: environment.yml
+          cache-environment: true
+          cache-downloads: true
+
+      - name: Environment capability probe
+        run: micromamba run -n aeais bash tools/env/check_env.sh
+
+      - name: Numerical regression tests
+        # tools/tests: deterministic sample-data baseline (runs every CI).
+        # recipes/*/tests: per-recipe gates (skip when their dataset is absent,
+        # e.g. ERP CORE is not auto-downloadable).
+        run: micromamba run -n aeais python -m pytest tools/tests/ recipes/ -v

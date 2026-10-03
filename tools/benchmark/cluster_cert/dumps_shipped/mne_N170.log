@@ -1,0 +1,3 @@
+N170: 1 clusters, 1 significant
+   t_sum=    -645.142  n=  166  p=0.0002  *
+wrote tools/benchmark/cluster_cert/mne_N170_shipped.json

@@ -1,0 +1,153 @@
+{
+  "dataset": "ERP CORE N170 (Kappenman 2021), face - car (occipito-temporal)",
+  "n_subjects": 20,
+  "roi": [
+    "PO7",
+    "PO8",
+    "P7",
+    "P8"
+  ],
+  "n170_window_s": [
+    0.13,
+    0.2
+  ],
+  "grand_mean_n170_uV": -1.181,
+  "n170_sem_uV": 0.265,
+  "one_sample_t": -4.45,
+  "one_sample_p": 0.00027414799290333066,
+  "cohens_dz": -0.995,
+  "second_level_cluster": {
+    "n_clusters": 1,
+    "n_significant": 1,
+    "min_p": 0.0002,
+    "significant": [
+      [
+        0,
+        0.0002
+      ]
+    ]
+  },
+  "PASS": true,
+  "per_subject": [
+    {
+      "subject": "sub-001",
+      "n170_uV": -1.794,
+      "n_dev": 80,
+      "n_std": 80
+    },
+    {
+      "subject": "sub-002",
+      "n170_uV": -2.199,
+      "n_dev": 80,
+      "n_std": 80
+    },
+    {
+      "subject": "sub-003",
+      "n170_uV": 1.433,
+      "n_dev": 80,
+      "n_std": 80
+    },
+    {
+      "subject": "sub-004",
+      "n170_uV": 0.172,
+      "n_dev": 80,
+      "n_std": 80
+    },
+    {
+      "subject": "sub-005",
+      "n170_uV": -0.67,
+      "n_dev": 80,
+      "n_std": 80
+    },
+    {
+      "subject": "sub-006",
+      "n170_uV": -1.583,
+      "n_dev": 80,
+      "n_std": 80
+    },
+    {
+      "subject": "sub-007",
+      "n170_uV": -1.166,
+      "n_dev": 80,
+      "n_std": 80
+    },
+    {
+      "subject": "sub-008",
+      "n170_uV": 0.163,
+      "n_dev": 80,
+      "n_std": 80
+    },
+    {
+      "subject": "sub-009",
+      "n170_uV": -0.95,
+      "n_dev": 80,
+      "n_std": 80
+    },
+    {
+      "subject": "sub-010",
+      "n170_uV": -1.497,
+      "n_dev": 80,
+      "n_std": 80
+    },
+    {
+      "subject": "sub-011",
+      "n170_uV": -2.275,
+      "n_dev": 80,
+      "n_std": 80
+    },
+    {
+      "subject": "sub-012",
+      "n170_uV": -1.294,
+      "n_dev": 80,
+      "n_std": 80
+    },
+    {
+      "subject": "sub-013",
+      "n170_uV": -1.747,
+      "n_dev": 80,
+      "n_std": 80
+    },
+    {
+      "subject": "sub-014",
+      "n170_uV": -3.646,
+      "n_dev": 80,
+      "n_std": 80
+    },
+    {
+      "subject": "sub-015",
+      "n170_uV": -2.564,
+      "n_dev": 80,
+      "n_std": 80
+    },
+    {
+      "subject": "sub-016",
+      "n170_uV": -1.497,
+      "n_dev": 80,
+      "n_std": 80
+    },
+    {
+      "subject": "sub-017",
+      "n170_uV": -0.259,
+      "n_dev": 80,
+      "n_std": 80
+    },
+    {
+      "subject": "sub-018",
+      "n170_uV": 0.367,
+      "n_dev": 80,
+      "n_std": 80
+    },
+    {
+      "subject": "sub-019",
+      "n170_uV": -0.47,
+      "n_dev": 80,
+      "n_std": 80
+    },
+    {
+      "subject": "sub-020",
+      "n170_uV": -2.148,
+      "n_dev": 80,
+      "n_std": 80
+    }
+  ]
+}

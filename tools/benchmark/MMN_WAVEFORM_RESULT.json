@@ -1,0 +1,252 @@
+{
+  "comparison": "AEA vs MNE-BIDS-Pipeline 1.10.1 \u2014 full MMN difference waveform",
+  "component": "MMN",
+  "roi": [
+    "Fz",
+    "FCz",
+    "Cz"
+  ],
+  "scope": "all 30 EEG channels x every sample",
+  "n_subjects": 38,
+  "waveform_rmse_allch_nV": {
+    "median": 10.79,
+    "mean": 16.137,
+    "max": 137.687,
+    "worst_subject": "sub-030"
+  },
+  "waveform_maxabs_allch_nV": {
+    "mean": 93.835,
+    "max": 800.989,
+    "worst_subject": "sub-030"
+  },
+  "per_subject": [
+    {
+      "subject": "sub-001",
+      "rmse_allch_nV": 5.985,
+      "maxabs_allch_nV": 55.743,
+      "scalar_delta_nV": 0.656
+    },
+    {
+      "subject": "sub-002",
+      "rmse_allch_nV": 0.0,
+      "maxabs_allch_nV": 0.0,
+      "scalar_delta_nV": -0.0
+    },
+    {
+      "subject": "sub-003",
+      "rmse_allch_nV": 28.574,
+      "maxabs_allch_nV": 135.854,
+      "scalar_delta_nV": 1.383
+    },
+    {
+      "subject": "sub-004",
+      "rmse_allch_nV": 12.138,
+      "maxabs_allch_nV": 101.401,
+      "scalar_delta_nV": -2.481
+    },
+    {
+      "subject": "sub-005",
+      "rmse_allch_nV": 7.01,
+      "maxabs_allch_nV": 34.077,
+      "scalar_delta_nV": -0.623
+    },
+    {
+      "subject": "sub-006",
+      "rmse_allch_nV": 17.144,
+      "maxabs_allch_nV": 74.091,
+      "scalar_delta_nV": -0.311
+    },
+    {
+      "subject": "sub-008",
+      "rmse_allch_nV": 20.034,
+      "maxabs_allch_nV": 72.92,
+      "scalar_delta_nV": -1.701
+    },
+    {
+      "subject": "sub-009",
+      "rmse_allch_nV": 10.038,
+      "maxabs_allch_nV": 70.991,
+      "scalar_delta_nV": 1.888
+    },
+    {
+      "subject": "sub-010",
+      "rmse_allch_nV": 14.464,
+      "maxabs_allch_nV": 91.642,
+      "scalar_delta_nV": 0.972
+    },
+    {
+      "subject": "sub-011",
+      "rmse_allch_nV": 6.931,
+      "maxabs_allch_nV": 35.492,
+      "scalar_delta_nV": 1.224
+    },
+    {
+      "subject": "sub-013",
+      "rmse_allch_nV": 10.928,
+      "maxabs_allch_nV": 63.442,
+      "scalar_delta_nV": -1.554
+    },
+    {
+      "subject": "sub-014",
+      "rmse_allch_nV": 11.713,
+      "maxabs_allch_nV": 96.045,
+      "scalar_delta_nV": 1.575
+    },
+    {
+      "subject": "sub-015",
+      "rmse_allch_nV": 16.004,
+      "maxabs_allch_nV": 93.47,
+      "scalar_delta_nV": 2.241
+    },
+    {
+      "subject": "sub-016",
+      "rmse_allch_nV": 18.516,
+      "maxabs_allch_nV": 104.099,
+      "scalar_delta_nV": 0.231
+    },
+    {
+      "subject": "sub-017",
+      "rmse_allch_nV": 27.405,
+      "maxabs_allch_nV": 213.11,
+      "scalar_delta_nV": 0.234
+    },
+    {
+      "subject": "sub-018",
+      "rmse_allch_nV": 7.7,
+      "maxabs_allch_nV": 31.867,
+      "scalar_delta_nV": 0.459
+    },
+    {
+      "subject": "sub-019",
+      "rmse_allch_nV": 6.468,
+      "maxabs_allch_nV": 29.398,
+      "scalar_delta_nV": 0.278
+    },
+    {
+      "subject": "sub-020",
+      "rmse_allch_nV": 13.761,
+      "maxabs_allch_nV": 92.674,
+      "scalar_delta_nV": 0.567
+    },
+    {
+      "subject": "sub-021",
+      "rmse_allch_nV": 8.338,
+      "maxabs_allch_nV": 43.048,
+      "scalar_delta_nV": 0.639
+    },
+    {
+      "subject": "sub-022",
+      "rmse_allch_nV": 11.618,
+      "maxabs_allch_nV": 67.53,
+      "scalar_delta_nV": 0.077
+    },
+    {
+      "subject": "sub-023",
+      "rmse_allch_nV": 9.558,
+      "maxabs_allch_nV": 70.866,
+      "scalar_delta_nV": 1.3
+    },
+    {
+      "subject": "sub-024",
+      "rmse_allch_nV": 8.174,
+      "maxabs_allch_nV": 43.494,
+      "scalar_delta_nV": -1.131
+    },
+    {
+      "subject": "sub-025",
+      "rmse_allch_nV": 7.514,
+      "maxabs_allch_nV": 50.03,
+      "scalar_delta_nV": 1.349
+    },
+    {
+      "subject": "sub-026",
+      "rmse_allch_nV": 9.576,
+      "maxabs_allch_nV": 41.421,
+      "scalar_delta_nV": 1.205
+    },
+    {
+      "subject": "sub-027",
+      "rmse_allch_nV": 4.716,
+      "maxabs_allch_nV": 23.335,
+      "scalar_delta_nV": -0.022
+    },
+    {
+      "subject": "sub-028",
+      "rmse_allch_nV": 21.73,
+      "maxabs_allch_nV": 153.149,
+      "scalar_delta_nV": 1.619
+    },
+    {
+      "subject": "sub-029",
+      "rmse_allch_nV": 35.975,
+      "maxabs_allch_nV": 207.241,
+      "scalar_delta_nV": -4.979
+    },
+    {
+      "subject": "sub-030",
+      "rmse_allch_nV": 137.687,
+      "maxabs_allch_nV": 800.989,
+      "scalar_delta_nV": 89.903
+    },
+    {
+      "subject": "sub-031",
+      "rmse_allch_nV": 10.332,
+      "maxabs_allch_nV": 59.29,
+      "scalar_delta_nV": -1.909
+    },
+    {
+      "subject": "sub-032",
+      "rmse_allch_nV": 5.055,
+      "maxabs_allch_nV": 27.631,
+      "scalar_delta_nV": -0.431
+    },
+    {
+      "subject": "sub-033",
+      "rmse_allch_nV": 8.07,
+      "maxabs_allch_nV": 30.464,
+      "scalar_delta_nV": -0.451
+    },
+    {
+      "subject": "sub-034",
+      "rmse_allch_nV": 5.193,
+      "maxabs_allch_nV": 26.615,
+      "scalar_delta_nV": -0.431
+    },
+    {
+      "subject": "sub-035",
+      "rmse_allch_nV": 10.194,
+      "maxabs_allch_nV": 49.147,
+      "scalar_delta_nV": 1.67
+    },
+    {
+      "subject": "sub-036",
+      "rmse_allch_nV": 14.957,
+      "maxabs_allch_nV": 64.197,
+      "scalar_delta_nV": -0.055
+    },
+    {
+      "subject": "sub-037",
+      "rmse_allch_nV": 14.706,
+      "maxabs_allch_nV": 73.236,
+      "scalar_delta_nV": 2.793
+    },
+    {
+      "subject": "sub-038",
+      "rmse_allch_nV": 10.652,
+      "maxabs_allch_nV": 46.698,
+      "scalar_delta_nV": 0.567
+    },
+    {
+      "subject": "sub-039",
+      "rmse_allch_nV": 21.735,
+      "maxabs_allch_nV": 194.505,
+      "scalar_delta_nV": 0.387
+    },
+    {
+      "subject": "sub-040",
+      "rmse_allch_nV": 22.628,
+      "maxabs_allch_nV": 96.54,
+      "scalar_delta_nV": 0.379
+    }
+  ]
+}

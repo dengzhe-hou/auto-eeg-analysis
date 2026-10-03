@@ -1,0 +1,94 @@
+{
+  "check": "kernel independence \u2014 MNE DSP vs independent SciPy DSP (same data, same spec, reject=None)",
+  "component": "MMN",
+  "roi": [
+    "Fz",
+    "FCz",
+    "Cz"
+  ],
+  "window_s": [
+    0.1,
+    0.25
+  ],
+  "n_subjects": 12,
+  "mne_grand_mean_uV": -0.723,
+  "scipy_grand_mean_uV": -0.711,
+  "group_mean_delta_uV": -0.011,
+  "per_subject_max_abs_uV": 0.047,
+  "per_subject_mean_abs_uV": 0.019,
+  "pearson_r": 0.9993,
+  "per_subject": [
+    {
+      "subject": "sub-001",
+      "mne_uV": -0.897,
+      "scipy_uV": -0.857,
+      "delta_uV": -0.04
+    },
+    {
+      "subject": "sub-002",
+      "mne_uV": -1.549,
+      "scipy_uV": -1.565,
+      "delta_uV": 0.017
+    },
+    {
+      "subject": "sub-003",
+      "mne_uV": -0.438,
+      "scipy_uV": -0.428,
+      "delta_uV": -0.01
+    },
+    {
+      "subject": "sub-004",
+      "mne_uV": -0.393,
+      "scipy_uV": -0.395,
+      "delta_uV": 0.002
+    },
+    {
+      "subject": "sub-005",
+      "mne_uV": -0.85,
+      "scipy_uV": -0.847,
+      "delta_uV": -0.003
+    },
+    {
+      "subject": "sub-006",
+      "mne_uV": -1.538,
+      "scipy_uV": -1.508,
+      "delta_uV": -0.03
+    },
+    {
+      "subject": "sub-007",
+      "mne_uV": -0.85,
+      "scipy_uV": -0.846,
+      "delta_uV": -0.004
+    },
+    {
+      "subject": "sub-008",
+      "mne_uV": 0.264,
+      "scipy_uV": 0.311,
+      "delta_uV": -0.047
+    },
+    {
+      "subject": "sub-009",
+      "mne_uV": -0.952,
+      "scipy_uV": -0.93,
+      "delta_uV": -0.022
+    },
+    {
+      "subject": "sub-010",
+      "mne_uV": -1.168,
+      "scipy_uV": -1.166,
+      "delta_uV": -0.002
+    },
+    {
+      "subject": "sub-011",
+      "mne_uV": -0.427,
+      "scipy_uV": -0.454,
+      "delta_uV": 0.027
+    },
+    {
+      "subject": "sub-012",
+      "mne_uV": 0.126,
+      "scipy_uV": 0.15,
+      "delta_uV": -0.025
+    }
+  ]
+}

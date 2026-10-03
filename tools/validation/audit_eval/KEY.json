@@ -1,0 +1,15 @@
+{
+  "description": "Ground-truth seeded defect per case for the eeg-audit detection evaluation.",
+  "checklist_source": "skills/eeg-audit/SKILL.md audit checklist",
+  "cases": {
+    "C0": {"seeded_defect": null, "checklist_item": "CLEAN control — no major flaw; auditor should NOT raise a fabricated critical concern"},
+    "C1": {"seeded_defect": "circular analysis / double dipping (electrode+window chosen from the effect, then tested there)", "checklist_item": "circular analysis (Luck & Gaspelin 2017)"},
+    "C2": {"seeded_defect": "no multiple-comparisons correction (pointwise uncorrected tests over 64ch x 500 samples)", "checklist_item": "multiple comparisons handled"},
+    "C3": {"seeded_defect": "post-hoc subject exclusion based on the result (no pre-registered criteria)", "checklist_item": "post-hoc exclusion"},
+    "C4": {"seeded_defect": "high-pass filter 1.0 Hz distorts a slow N400 component (should be <=0.1 Hz)", "checklist_item": "bandpass filter appropriate for the time window"},
+    "C5": {"seeded_defect": "no baseline correction", "checklist_item": "epoch duration and baseline correction"},
+    "C6": {"seeded_defect": "cluster test underspecified: no threshold, adjacency, permutation count, seed, or tail", "checklist_item": "cluster-forming threshold + adjacency definition"},
+    "C7": {"seeded_defect": "artifact rejection rates omitted + large unequal N per condition (180 vs 55) unacknowledged", "checklist_item": "artifact rejection criteria and rejection rates"},
+    "C8": {"seeded_defect": "EEG reference (online/offline) never reported", "checklist_item": "reference disclosure"}
+  }
+}

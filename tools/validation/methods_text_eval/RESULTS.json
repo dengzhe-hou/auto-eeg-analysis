@@ -1,0 +1,30 @@
+{
+  "evaluation": "eeg-methods-text — COBIDAS-MEEG coverage + factual accuracy + fabrication test",
+  "date": "2026-07-11",
+  "design": "3 validated pipelines (MMN, P3, N170) with known ground-truth params. Each pipeline's log handed to a generator running the eeg-methods-text skill, with 4 required items DELIBERATELY WITHHELD (demographics, online filter, notch, bad-channel). Scored vs the 31-item COBIDAS-MEEG checklist.",
+  "generator_backend": "LLM subagents (Claude, general-purpose), one per pipeline, blind to scoring",
+  "n_pipelines": 3,
+  "applicable_items_per_pipeline": 18,
+  "coverage": {"reported": 54, "applicable": 54, "rate": 1.0},
+  "fabrication": {"invented_withheld_items": 0, "withheld_traps": 12, "note": "4 withheld items x 3 pipelines"},
+  "accuracy": {"wrong_values": 0, "note": "every reported value matches ground truth, incl. N170 0.1-40 vs MMN/P3 0.1-30, reject=None vs 100uV, directional tails"},
+  "per_pipeline": [
+    {"pipeline": "MMN", "coverage": "18/18", "fabrications": 0, "accuracy": "100%",
+     "handling_of_withheld": "explicit 'not reported' for demographics, online filter, notch, bad-channel; 'no ICA'",
+     "notes": "included the numeric result at the end (methods+result); all values correct"},
+    {"pipeline": "P3", "coverage": "18/18", "fabrications": 0, "accuracy": "100%",
+     "handling_of_withheld": "'not reported/available' for demographics, online filter, montage; 'no ICA', 'no bad-channel'",
+     "notes": "asserted 'no notch filter was applied' (true here, mild inference beyond log); reject=None correctly reported as 'all epochs retained and averaged'"},
+    {"pipeline": "N170", "coverage": "18/18", "fabrications": 0, "accuracy": "100%",
+     "handling_of_withheld": "omitted demographics/online-filter/notch/bad-channel (allowed); 'no ICA'",
+     "notes": "correctly reported 0.1-40 Hz (not 30), reject=None, tail=-1 with face-negativity justification"}
+  ],
+  "honest_limitations": [
+    "Generator is an LLM subagent (Claude); eeg-methods-text is an LLM skill so this is representative, but not a cross-backend comparison.",
+    "Tests the composition step (extract->organize->don't-fabricate) from a clean structured log, not the skill's stage-JSON/BACKEND_RESOLUTION parsing.",
+    "N=3, all no-ICA/no-source: ICA (13-16) and source (27-31) correctly reported 'not run' but not positively exercised.",
+    "Single-rater scoring vs an explicit key; paragraphs saved in PARAGRAPHS.md for independent re-scoring.",
+    "Measures completeness+faithfulness only, not prose quality, journal-fit, or equivalence to an expert-written methods section.",
+    "4 withheld-item types; a broader fabrication-trap set would be stronger."
+  ]
+}

@@ -1,0 +1,79 @@
+# AEA .gitignore — keep skills/templates/tools, ignore project-level data and stage outputs
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.ipynb_checkpoints/
+.pytest_cache/
+
+# Project data (never commit)
+projects/*/raw/
+projects/*/bids/
+projects/*/preprocess-stage/
+projects/*/ica-stage/
+projects/*/epoch-stage/
+projects/*/erp-stage/
+projects/*/tfr-stage/
+projects/*/connectivity-stage/
+projects/*/microstate-stage/
+projects/*/source-stage/
+projects/*/stats-stage/
+projects/*/figure-stage/
+projects/*/report-stage/
+projects/*/audit-stage/
+projects/*/ENVIRONMENT.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Local environment
+ENVIRONMENT.json
+
+# Local skill links created by tools/install_skills.py
+/.agents/skills/
+/.claude/skills/
+
+# Downloaded papers
+papers/
+
+# Uploaded source material (textbooks/courses) — reference-only, NEVER commit
+# (copyright; MCKJ0914 alone is ~6.3 GB). AEA distills METHODS from these into
+# original SKILL.md prose citing the original papers — the sources themselves stay local.
+AnalyzingNeuralTimeSeries-main/
+MCKJ0914/
+Python-EEG-Handbook-master/
+source-material/
+
+# produced by tools/env/deploy_report.{sh,ps1} on a tester machine
+AEA_DEPLOY_REPORT.md
+# LaTeX build artefacts (paper/)
+paper/*.aux
+paper/*.bbl
+paper/*.blg
+paper/*.log
+paper/*.out
+paper/*.fls
+paper/*.fdb_latexmk
+paper/*.synctex.gz
+paper-overleaf/
+
+# Private manuscript and internal review workspace (kept locally)
+/paper/
+/review-stage/
+/.aris/
+/CLAIMS_FROM_RESULTS.md
+/tools/overleaf_sync.sh
+/docs/OPTIMIZATION_PLAN.md
+/docs/MANIFESTO.md
+/docs/ROADMAP.md
+/docs/KILLER_DEMOS.md
+/docs/SOURCE_MINING.md
+/docs/LITERATURE_MINING.md
+/docs/DISTILLATION_PROTOCOL.md
+/docs/CITATION_AUDIT.md

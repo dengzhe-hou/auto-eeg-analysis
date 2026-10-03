@@ -1,0 +1,58 @@
+{
+  "check": "non-ERP band power (resting eegbci eyes-closed): MNE Welch vs (B) independent from-scratch Welch, (C) MNE multitaper",
+  "bands": {
+    "delta": [
+      1,
+      4
+    ],
+    "theta": [
+      4,
+      8
+    ],
+    "alpha": [
+      8,
+      13
+    ],
+    "beta": [
+      13,
+      30
+    ]
+  },
+  "n_subjects": 12,
+  "implementation_independence_A_vs_B": {
+    "delta": {
+      "max_rel_err": 4.473316527900473e-16,
+      "pearson_r": 1.0
+    },
+    "theta": {
+      "max_rel_err": 4.432058959614177e-16,
+      "pearson_r": 1.0
+    },
+    "alpha": {
+      "max_rel_err": 4.758021081605611e-16,
+      "pearson_r": 1.0
+    },
+    "beta": {
+      "max_rel_err": 5.157314539200267e-16,
+      "pearson_r": 1.0
+    }
+  },
+  "estimator_sensitivity_A_vs_C_multitaper": {
+    "delta": {
+      "median_rel_diff": 0.0576,
+      "max_rel_diff": 0.1586
+    },
+    "theta": {
+      "median_rel_diff": 0.0196,
+      "max_rel_diff": 0.0357
+    },
+    "alpha": {
+      "median_rel_diff": 0.0168,
+      "max_rel_diff": 0.0474
+    },
+    "beta": {
+      "median_rel_diff": 0.008,
+      "max_rel_diff": 0.0193
+    }
+  }
+}

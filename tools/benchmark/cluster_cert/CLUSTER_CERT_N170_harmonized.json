@@ -1,0 +1,20 @@
+{
+  "component": "N170",
+  "toolbox_a": "MNE-Python",
+  "toolbox_b": "FieldTrip/Octave",
+  "n_subjects": 20,
+  "n_permutations": 5000,
+  "t_obs_checksum_rel_diff": 0.0,
+  "t_obs_min_rel_diff": 0.0,
+  "leading_cluster_tsum_a": -584.3781,
+  "leading_cluster_tsum_b": -584.3781,
+  "leading_cluster_tsum_rel_diff": 0.0,
+  "leading_cluster_extent_a": 198,
+  "leading_cluster_extent_b": 198,
+  "leading_cluster_p_a": 0.0124,
+  "leading_cluster_p_b": 0.012797,
+  "p_diff_in_monte_carlo_se": 0.24975729995370824,
+  "n_significant_a": 2,
+  "n_significant_b": 2,
+  "same_conclusion": true
+}

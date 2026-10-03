@@ -1,0 +1,144 @@
+{
+  "comparison": "AEA vs MNE-BIDS-Pipeline 1.10.1 \u2014 full N400 difference waveform",
+  "component": "N400",
+  "roi": [
+    "CPz",
+    "Cz",
+    "Pz"
+  ],
+  "scope": "all 30 EEG channels x every sample",
+  "n_subjects": 20,
+  "waveform_rmse_allch_nV": {
+    "median": 0.0,
+    "mean": 13.456,
+    "max": 211.824,
+    "worst_subject": "sub-001"
+  },
+  "waveform_maxabs_allch_nV": {
+    "mean": 99.047,
+    "max": 1565.365,
+    "worst_subject": "sub-001"
+  },
+  "per_subject": [
+    {
+      "subject": "sub-001",
+      "rmse_allch_nV": 211.824,
+      "maxabs_allch_nV": 1565.365,
+      "scalar_delta_nV": -1.796
+    },
+    {
+      "subject": "sub-002",
+      "rmse_allch_nV": 0.0,
+      "maxabs_allch_nV": 0.001,
+      "scalar_delta_nV": -0.0
+    },
+    {
+      "subject": "sub-003",
+      "rmse_allch_nV": 0.0,
+      "maxabs_allch_nV": 0.006,
+      "scalar_delta_nV": -0.0
+    },
+    {
+      "subject": "sub-004",
+      "rmse_allch_nV": 57.286,
+      "maxabs_allch_nV": 415.51,
+      "scalar_delta_nV": 6.573
+    },
+    {
+      "subject": "sub-005",
+      "rmse_allch_nV": 0.0,
+      "maxabs_allch_nV": 0.008,
+      "scalar_delta_nV": -0.0
+    },
+    {
+      "subject": "sub-006",
+      "rmse_allch_nV": 0.0,
+      "maxabs_allch_nV": 0.002,
+      "scalar_delta_nV": 0.0
+    },
+    {
+      "subject": "sub-007",
+      "rmse_allch_nV": 0.0,
+      "maxabs_allch_nV": 0.005,
+      "scalar_delta_nV": 0.0
+    },
+    {
+      "subject": "sub-008",
+      "rmse_allch_nV": 0.0,
+      "maxabs_allch_nV": 0.006,
+      "scalar_delta_nV": -0.0
+    },
+    {
+      "subject": "sub-009",
+      "rmse_allch_nV": 0.0,
+      "maxabs_allch_nV": 0.006,
+      "scalar_delta_nV": 0.0
+    },
+    {
+      "subject": "sub-010",
+      "rmse_allch_nV": 0.0,
+      "maxabs_allch_nV": 0.004,
+      "scalar_delta_nV": 0.0
+    },
+    {
+      "subject": "sub-011",
+      "rmse_allch_nV": 0.0,
+      "maxabs_allch_nV": 0.002,
+      "scalar_delta_nV": -0.0
+    },
+    {
+      "subject": "sub-012",
+      "rmse_allch_nV": 0.0,
+      "maxabs_allch_nV": 0.001,
+      "scalar_delta_nV": -0.0
+    },
+    {
+      "subject": "sub-013",
+      "rmse_allch_nV": 0.0,
+      "maxabs_allch_nV": 0.003,
+      "scalar_delta_nV": -0.0
+    },
+    {
+      "subject": "sub-014",
+      "rmse_allch_nV": 0.0,
+      "maxabs_allch_nV": 0.002,
+      "scalar_delta_nV": -0.0
+    },
+    {
+      "subject": "sub-015",
+      "rmse_allch_nV": 0.0,
+      "maxabs_allch_nV": 0.001,
+      "scalar_delta_nV": -0.0
+    },
+    {
+      "subject": "sub-016",
+      "rmse_allch_nV": 0.0,
+      "maxabs_allch_nV": 0.001,
+      "scalar_delta_nV": 0.0
+    },
+    {
+      "subject": "sub-017",
+      "rmse_allch_nV": 0.0,
+      "maxabs_allch_nV": 0.003,
+      "scalar_delta_nV": 0.0
+    },
+    {
+      "subject": "sub-018",
+      "rmse_allch_nV": 0.0,
+      "maxabs_allch_nV": 0.005,
+      "scalar_delta_nV": -0.0
+    },
+    {
+      "subject": "sub-019",
+      "rmse_allch_nV": 0.0,
+      "maxabs_allch_nV": 0.001,
+      "scalar_delta_nV": -0.0
+    },
+    {
+      "subject": "sub-020",
+      "rmse_allch_nV": 0.0,
+      "maxabs_allch_nV": 0.003,
+      "scalar_delta_nV": -0.0
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+# AEA optional dependencies
+# -------------------------
+# The core environment (environment.yml) covers the main pipeline: preprocess, ICA,
+# epoch, ERP, TFR, spectral, stats, connectivity, microstate, source, decoding.
+# The packages below power OPTIONAL skills/recipes. Every skill that uses one checks
+# availability first and degrades explicitly (logs to the stage JSON + AUDIT) if absent
+# — so AEA runs without them, you just lose that specific capability.
+#
+# Install (in the activated env):
+#     conda run -n aeais python -m pip install -r requirements-optional.txt
+#
+# Windows note: install with the env ACTIVATED (or via `conda run -n aeais`) so the
+# conda MKL BLAS stays on the DLL path; do not let pip pull scipy/numpy from PyPI on
+# top of the conda builds (keep scipy/numpy conda-managed).
+
+# --- eeg-complexity (nonlinear / entropy / criticality) ---
+antropy>=0.1.6        # Lempel-Ziv, sample/approximate/permutation/spectral entropy, DFA, Hjorth
+neurokit2>=0.2.7      # entropy with explicit tolerance r, RQA, multiscale entropy, complexity suite
+EntropyHub>=2.0       # comprehensive entropy estimators (Sample/Approx/Perm/Dispersion/...)
+nolds>=0.5.2          # DFA, Hurst, Lyapunov, correlation dimension
+                      #   NOTE: nolds 0.6.3 can fail to import on Python 3.11
+                      #   ("'nolds.datasets' is not a package"). DFA/Hurst are also covered by
+                      #   antropy.detrended_fluctuation; nolds is only needed for corr_dim/lyap_r.
+                      #   eeg-complexity's check_backend attempts the real import, so a broken
+                      #   nolds degrades gracefully instead of crashing.
+EMD-signal>=1.0       # empirical mode decomposition / Hilbert-Huang (import name: PyEMD)
+
+# --- eeg-spectral / eeg-complexity / resting-spectral-connectivity (1/f parameterization) ---
+specparam>=2.0.0rc6   # separate periodic peaks from the aperiodic 1/f exponent (FOOOF 2.x)
+                      #   NOTE: specparam 2.x is still pre-release on PyPI (2.0.0rcN only, no
+                      #   final 2.0.0). A bare `specparam>=2.0` is UNSATISFIABLE (2.0.0rcN <
+                      #   2.0.0 under PEP 440); pinning the rc lets pip install it without --pre.
+                      #   the skills import `from specparam import SpectralModel`.
+                      #   Legacy `fooof` (1.x, import `from fooof import FOOOF`) also works —
+                      #   eeg-complexity Phase F tries specparam then falls back to fooof.
+
+# --- eeg-bids (writing EEG → BIDS as BrainVision) ---
+pybv>=0.7.3           # mne-bids requires pybv to write EEG to the BrainVision BIDS format
+
+# --- recipe data fetching (OpenNeuro) ---
+openneuro-py>=2024.1  # fetch public OpenNeuro datasets (e.g. ds000117 for the n170-faces recipe)
+
+# --- eeg-connectivity: phase-amplitude coupling (Phase G comodulogram) ---
+tensorpac>=0.6.5      # comodulogram, preferred-phase, surrogate schemes (eeg-connectivity PAC)
+# pactools>=0.3.1     # alternative PAC backend (Comodulogram); either tensorpac OR pactools
+# (the circular Rayleigh preferred-phase test is implemented in pure numpy — no dep needed)
+
+# --- eeg-spectral: optional richer parametric (AR) spectral estimators ---
+# AR/Yule-Walker PSD uses statsmodels (listed above); `spectrum` adds pyule/pyburg/pcovar:
+# spectrum>=0.8.1     # optional: spectrum.pyule / spectrum.pyburg parametric PSD
+
+
+# --- eeg-decoding (tabular feature decoding + RSA) ---
+mne-features>=0.3     # univariate/bivariate feature extraction for MVPA pipelines
+mne-rsa>=0.9          # cross-validated representational similarity analysis (optional)
+
+# --- eeg-behavior / eeg-stats (mixed-effects, factorial models) ---
+statsmodels>=0.14     # linear mixed-effects models (single-trial EEG~behavior), formula ANOVA

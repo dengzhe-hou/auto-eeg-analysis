@@ -1,0 +1,264 @@
+{
+  "complexity_ica_sensitivity": {
+    "with_ICA (committed, from resting_results.json)": {
+      "lzc_median": {
+        "ec": 0.4731,
+        "eo": 0.5197,
+        "p": 4.15e-05,
+        "note": "EO>EC, clean"
+      }
+    },
+    "without_ICA": {
+      "lzc_median": {
+        "ec": 0.4701,
+        "eo": 0.4776,
+        "diff_ec_minus_eo": -0.0074,
+        "t": -0.54,
+        "p": 0.5925867906127563,
+        "dz": -0.12
+      },
+      "lzc_mean": {
+        "ec": 0.4696,
+        "eo": 0.4745,
+        "diff_ec_minus_eo": -0.0049,
+        "t": -0.34,
+        "p": 0.7391034303326478,
+        "dz": -0.08
+      },
+      "pe": {
+        "ec": 0.7781,
+        "eo": 0.808,
+        "diff_ec_minus_eo": -0.0298,
+        "t": -6.29,
+        "p": 4.858939638799282e-06,
+        "dz": -1.41
+      }
+    },
+    "interpretation": "compare with vs without ICA to gauge artifact dependence"
+  },
+  "alpha_topography": {
+    "t_posterior_mean": 3.29,
+    "t_anterior_mean": 3.4,
+    "t_max_channel": "TP8",
+    "t_max": 4.51
+  },
+  "microstate_stability_native160_physical_smoothing": {
+    "native_sfreq": 160,
+    "smoothing": "physical-unit (30 ms half-window)",
+    "dur_median_ms_mean": 116.1,
+    "dur_median_ms_range": [
+      96.0,
+      146.9
+    ],
+    "gev_mean": 0.631,
+    "split_half_map_abscorr_mean": 0.866,
+    "n_subjects": 10,
+    "seeds": [
+      42,
+      7,
+      123
+    ]
+  },
+  "microstate_per_subject": [
+    {
+      "subject": 1,
+      "sfreq": 160.0,
+      "half_window_ms": 30,
+      "seeds": {
+        "42": {
+          "gev": 0.788,
+          "dur_median_ms": 120.3
+        },
+        "7": {
+          "gev": 0.788,
+          "dur_median_ms": 120.3
+        },
+        "123": {
+          "gev": 0.788,
+          "dur_median_ms": 120.4
+        }
+      },
+      "split_half_map_abscorr_mean": 0.976
+    },
+    {
+      "subject": 2,
+      "sfreq": 160.0,
+      "half_window_ms": 30,
+      "seeds": {
+        "42": {
+          "gev": 0.768,
+          "dur_median_ms": 146.1
+        },
+        "7": {
+          "gev": 0.768,
+          "dur_median_ms": 146.1
+        },
+        "123": {
+          "gev": 0.768,
+          "dur_median_ms": 146.9
+        }
+      },
+      "split_half_map_abscorr_mean": 0.902
+    },
+    {
+      "subject": 3,
+      "sfreq": 160.0,
+      "half_window_ms": 30,
+      "seeds": {
+        "42": {
+          "gev": 0.721,
+          "dur_median_ms": 96.0
+        },
+        "7": {
+          "gev": 0.721,
+          "dur_median_ms": 96.0
+        },
+        "123": {
+          "gev": 0.721,
+          "dur_median_ms": 96.0
+        }
+      },
+      "split_half_map_abscorr_mean": 0.921
+    },
+    {
+      "subject": 4,
+      "sfreq": 160.0,
+      "half_window_ms": 30,
+      "seeds": {
+        "42": {
+          "gev": 0.781,
+          "dur_median_ms": 142.7
+        },
+        "7": {
+          "gev": 0.781,
+          "dur_median_ms": 142.1
+        },
+        "123": {
+          "gev": 0.781,
+          "dur_median_ms": 142.1
+        }
+      },
+      "split_half_map_abscorr_mean": 0.81
+    },
+    {
+      "subject": 5,
+      "sfreq": 160.0,
+      "half_window_ms": 30,
+      "seeds": {
+        "42": {
+          "gev": 0.263,
+          "dur_median_ms": 97.6
+        },
+        "7": {
+          "gev": 0.263,
+          "dur_median_ms": 99.2
+        },
+        "123": {
+          "gev": 0.263,
+          "dur_median_ms": 98.1
+        }
+      },
+      "split_half_map_abscorr_mean": 0.695
+    },
+    {
+      "subject": 6,
+      "sfreq": 160.0,
+      "half_window_ms": 30,
+      "seeds": {
+        "42": {
+          "gev": 0.46,
+          "dur_median_ms": 101.1
+        },
+        "7": {
+          "gev": 0.46,
+          "dur_median_ms": 101.6
+        },
+        "123": {
+          "gev": 0.46,
+          "dur_median_ms": 101.1
+        }
+      },
+      "split_half_map_abscorr_mean": 0.801
+    },
+    {
+      "subject": 7,
+      "sfreq": 160.0,
+      "half_window_ms": 30,
+      "seeds": {
+        "42": {
+          "gev": 0.778,
+          "dur_median_ms": 115.0
+        },
+        "7": {
+          "gev": 0.778,
+          "dur_median_ms": 119.6
+        },
+        "123": {
+          "gev": 0.778,
+          "dur_median_ms": 119.6
+        }
+      },
+      "split_half_map_abscorr_mean": 0.929
+    },
+    {
+      "subject": 8,
+      "sfreq": 160.0,
+      "half_window_ms": 30,
+      "seeds": {
+        "42": {
+          "gev": 0.696,
+          "dur_median_ms": 124.7
+        },
+        "7": {
+          "gev": 0.696,
+          "dur_median_ms": 122.5
+        },
+        "123": {
+          "gev": 0.696,
+          "dur_median_ms": 122.0
+        }
+      },
+      "split_half_map_abscorr_mean": 0.883
+    },
+    {
+      "subject": 9,
+      "sfreq": 160.0,
+      "half_window_ms": 30,
+      "seeds": {
+        "42": {
+          "gev": 0.356,
+          "dur_median_ms": 103.1
+        },
+        "7": {
+          "gev": 0.356,
+          "dur_median_ms": 101.6
+        },
+        "123": {
+          "gev": 0.356,
+          "dur_median_ms": 102.5
+        }
+      },
+      "split_half_map_abscorr_mean": 0.792
+    },
+    {
+      "subject": 10,
+      "sfreq": 160.0,
+      "half_window_ms": 30,
+      "seeds": {
+        "42": {
+          "gev": 0.7,
+          "dur_median_ms": 113.5
+        },
+        "7": {
+          "gev": 0.7,
+          "dur_median_ms": 112.0
+        },
+        "123": {
+          "gev": 0.7,
+          "dur_median_ms": 112.0
+        }
+      },
+      "split_half_map_abscorr_mean": 0.95
+    }
+  ]
+}

@@ -1,0 +1,137 @@
+{
+  "tool": "mne-bids-pipeline",
+  "dataset": "ERP CORE N400, unrelated - related, harmonized",
+  "roi": [
+    "CPz",
+    "Cz",
+    "Pz"
+  ],
+  "n400_window_s": [
+    0.3,
+    0.5
+  ],
+  "n_subjects": 20,
+  "grand_mean_n400_uV": -2.957,
+  "per_subject": [
+    {
+      "subject": "sub-001",
+      "n400_uV": -0.924,
+      "n_dev": 60,
+      "n_std": 60
+    },
+    {
+      "subject": "sub-002",
+      "n400_uV": -4.63,
+      "n_dev": 60,
+      "n_std": 60
+    },
+    {
+      "subject": "sub-003",
+      "n400_uV": -5.974,
+      "n_dev": 60,
+      "n_std": 60
+    },
+    {
+      "subject": "sub-004",
+      "n400_uV": -4.545,
+      "n_dev": 60,
+      "n_std": 60
+    },
+    {
+      "subject": "sub-005",
+      "n400_uV": -1.615,
+      "n_dev": 60,
+      "n_std": 60
+    },
+    {
+      "subject": "sub-006",
+      "n400_uV": -1.731,
+      "n_dev": 60,
+      "n_std": 60
+    },
+    {
+      "subject": "sub-007",
+      "n400_uV": -5.657,
+      "n_dev": 60,
+      "n_std": 60
+    },
+    {
+      "subject": "sub-008",
+      "n400_uV": -1.614,
+      "n_dev": 60,
+      "n_std": 60
+    },
+    {
+      "subject": "sub-009",
+      "n400_uV": 0.26,
+      "n_dev": 60,
+      "n_std": 60
+    },
+    {
+      "subject": "sub-010",
+      "n400_uV": -3.216,
+      "n_dev": 60,
+      "n_std": 60
+    },
+    {
+      "subject": "sub-011",
+      "n400_uV": -4.899,
+      "n_dev": 60,
+      "n_std": 60
+    },
+    {
+      "subject": "sub-012",
+      "n400_uV": -5.692,
+      "n_dev": 60,
+      "n_std": 60
+    },
+    {
+      "subject": "sub-013",
+      "n400_uV": -1.691,
+      "n_dev": 60,
+      "n_std": 60
+    },
+    {
+      "subject": "sub-014",
+      "n400_uV": -2.174,
+      "n_dev": 60,
+      "n_std": 60
+    },
+    {
+      "subject": "sub-015",
+      "n400_uV": -3.09,
+      "n_dev": 60,
+      "n_std": 60
+    },
+    {
+      "subject": "sub-016",
+      "n400_uV": -4.547,
+      "n_dev": 60,
+      "n_std": 60
+    },
+    {
+      "subject": "sub-017",
+      "n400_uV": -0.254,
+      "n_dev": 60,
+      "n_std": 60
+    },
+    {
+      "subject": "sub-018",
+      "n400_uV": 0.845,
+      "n_dev": 60,
+      "n_std": 60
+    },
+    {
+      "subject": "sub-019",
+      "n400_uV": -4.815,
+      "n_dev": 60,
+      "n_std": 60
+    },
+    {
+      "subject": "sub-020",
+      "n400_uV": -3.185,
+      "n_dev": 60,
+      "n_std": 60
+    }
+  ]
+}

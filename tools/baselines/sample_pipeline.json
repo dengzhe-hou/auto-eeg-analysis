@@ -1,0 +1,44 @@
+{
+  "dataset": "mne.datasets.sample (sample_audvis_filt-0-40_raw.fif)",
+  "config": {
+    "roi": [
+      "EEG 003",
+      "EEG 004",
+      "EEG 005",
+      "EEG 010",
+      "EEG 011",
+      "EEG 012"
+    ],
+    "n100_window_s": [
+      0.08,
+      0.15
+    ],
+    "stats_window_s": [
+      0.05,
+      0.2
+    ],
+    "reject_uV": 150.0,
+    "seed": 42,
+    "n_permutations": 1000
+  },
+  "n_eeg_channels": 59,
+  "n_epochs": {
+    "auditory": 144,
+    "visual": 143,
+    "paired": 143
+  },
+  "erp": {
+    "aud_n100_uV": -2.693,
+    "vis_n100_uV": -1.6065,
+    "diff_uV": -1.0865,
+    "aud_peak_latency_ms": 93.2
+  },
+  "stats": {
+    "threshold_t": 1.9768,
+    "n_clusters": 3,
+    "n_significant": 1,
+    "min_cluster_p": 0.012,
+    "max_abs_t_sum": 97.06,
+    "cohens_d": -0.0978
+  }
+}

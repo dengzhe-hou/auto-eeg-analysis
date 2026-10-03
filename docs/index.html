@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AEA | Automated EEG Analysis</title>
+  <meta name="description" content="An open library of EEG analysis skills for MNE-Python, with executable specifications and a numerically certified core. Explore 22 skills, 10 recipes, and the evidence behind them.">
+  <meta name="theme-color" content="#f6f8f5">
+  <link rel="canonical" href="https://dengzhe-hou.github.io/auto-eeg-analysis/">
+  <link rel="stylesheet" href="assets/site.css">
+  <script src="assets/site.js" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="#" aria-label="AEA home">
+      <svg viewBox="0 0 40 40" width="36" height="36" aria-hidden="true"><rect width="40" height="40" rx="11" fill="currentColor"/><path d="M7 21h7l3-9 5 17 3-8h8" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>AEA<span class="brand-detail">Automated EEG Analysis</span></span>
+    </a>
+    <nav aria-label="Main navigation">
+      <a href="#workflows">Workflows</a><a href="#library">Library</a><a href="#evidence">Evidence</a><a class="nav-cta" href="#get-started">Get started <span aria-hidden="true">↗</span></a>
+    </nav>
+  </div>
+</header>
+<main id="main">
+  <section class="hero container" aria-labelledby="hero-title">
+    <div class="hero-copy">
+      <p class="eyebrow"><span class="status-dot"></span> Shareable EEG analysis skills</p>
+      <h1 id="hero-title">EEG analysis,<br>written to be <em>reused.</em></h1>
+      <p class="hero-description">An open library of EEG analysis skills for <strong>MNE-Python</strong>, with executable specifications and a numerically certified core.</p>
+      <p class="hero-detail">Share the method. Run it on your data. Keep the plan, code, figures, methods, and review together.</p>
+      <div class="button-row"><a class="button button-primary" href="#get-started">Start with a recipe <span aria-hidden="true">↗</span></a><a class="button button-light" href="#evidence">See the evidence <span aria-hidden="true">↓</span></a></div>
+      <p class="hero-footnote">Works with Codex CLI and Claude Code.<br>EEGLAB and FieldTrip provide independent comparisons and selected alternative paths.</p>
+    </div>
+    <div class="run-preview" aria-label="Illustrated AEA workflow: data and specification, skills executed with MNE, then recorded outputs">
+      <div class="preview-top"><span class="small-label">A shared method. A traceable run.</span><span class="file-dot" aria-hidden="true">● ● ●</span></div>
+      <div class="input-pair"><div><span class="mini-icon" aria-hidden="true">↳</span><strong>Your EEG data</strong><span>Channels · events · conditions</span></div><div><span class="mini-icon" aria-hidden="true">≡</span><strong>A recipe</strong><span>Parameters · contrasts · claims</span></div></div>
+      <div class="flow-connector" aria-hidden="true">↓</div>
+      <div class="plan-line"><span class="step-index">01</span><div><strong>Agree on the analysis plan</strong><span>Check the data and confirm the method</span></div></div>
+      <div class="flow-connector" aria-hidden="true">↓</div>
+      <div class="execution-block"><div><span class="small-label">02 · Execute the specified stages</span><span class="backend-label">MNE-Python</span></div><div class="pipeline-chips"><span>Preprocess</span><span>Analyze</span><span>Statistics</span></div><p>The agent reads the skills and runs analysis code in your environment.</p></div>
+      <div class="flow-connector" aria-hidden="true">↓</div>
+      <div class="output-row"><span>Figures</span><span>Methods</span><span>Audit</span><span>Receipt</span></div>
+      <div class="preview-bottom"><span class="status-dot"></span> Specification → execution → evidence</div>
+    </div>
+  </section>
+
+  <div class="container"><div class="facts-strip" aria-label="Library at a glance"><div><strong>22</strong><span>composable skills</span></div><div><strong>10</strong><span>analysis recipes</span></div><div><strong>MNE</strong><span>primary execution backend</span></div><div><strong>4 levels</strong><span>of documented evidence</span></div></div></div>
+
+  <section class="section container" id="get-started" aria-labelledby="start-title">
+    <div class="section-heading"><div><p class="eyebrow">Start here</p><h2 id="start-title">From checkout to your first recipe.</h2></div><a class="text-link" href="GETTING_STARTED.html">Read the full setup guide <span aria-hidden="true">↗</span></a></div>
+    <div class="setup-grid">
+      <div class="setup-copy"><h3>Choose your analysis client.</h3><p>You need Git, Conda, and a signed-in agent client. The installer makes the original skills visible to that client inside the repository.</p><ol class="setup-steps"><li><span>1</span><div><strong>Install the environment and skills</strong><p>Run the terminal commands alongside.</p></div></li><li><span>2</span><div><strong>Prepare your study</strong><p>Put compatible data in <code>projects/my-study/raw/</code>. Keep the repository root as your working directory.</p></div></li><li><span>3</span><div><strong>Open your client and select a recipe</strong><p>Review the detected data and confirm the analysis plan before execution.</p></div></li></ol><p class="setup-note">Default audits use a separate, fresh Codex CLI process. <a href="GETTING_STARTED.html#configure-the-reviewer">Set up the reviewer</a> before running an audited workflow.</p><p class="access-note"><strong>Open-source release</strong><br>AEA v0.3.2 is available under the MIT licence. <a href="https://github.com/dengzhe-hou/auto-eeg-analysis/releases/tag/v0.3.2">View the release</a>.</p></div>
+      <div class="terminal-card">
+        <div class="client-tabs" role="tablist" aria-label="Analysis client"><button id="tab-codex" type="button" role="tab" aria-selected="true" aria-controls="panel-codex" tabindex="0">Codex CLI</button><button id="tab-claude" type="button" role="tab" aria-selected="false" aria-controls="panel-claude" tabindex="-1">Claude Code</button></div>
+        <div id="panel-codex" role="tabpanel" aria-labelledby="tab-codex" tabindex="0">
+          <div class="code-heading"><span>01 / In your terminal</span><button class="copy-button" type="button" data-copy="install-codex" aria-label="Copy Codex installation commands">Copy</button></div>
+          <pre><code id="install-codex">git clone https://github.com/dengzhe-hou/auto-eeg-analysis.git
+cd auto-eeg-analysis
+conda env create -f environment.yml
+conda activate aeais
+python tools/install_skills.py --agent codex
+codex</code></pre>
+          <div class="code-heading"><span>02 / Inside Codex</span><button class="copy-button" type="button" data-copy="prompt-codex" aria-label="Copy Codex recipe prompt">Copy</button></div><pre class="prompt"><code id="prompt-codex">$eeg-recipe ern-flankers --data projects/my-study</code></pre>
+        </div>
+        <div id="panel-claude" role="tabpanel" aria-labelledby="tab-claude" tabindex="0" hidden>
+          <div class="code-heading"><span>01 / In your terminal</span><button class="copy-button" type="button" data-copy="install-claude" aria-label="Copy Claude installation commands">Copy</button></div>
+          <pre><code id="install-claude">git clone https://github.com/dengzhe-hou/auto-eeg-analysis.git
+cd auto-eeg-analysis
+conda env create -f environment.yml
+conda activate aeais
+python tools/install_skills.py --agent claude
+claude</code></pre>
+          <div class="code-heading"><span>02 / Inside Claude Code</span><button class="copy-button" type="button" data-copy="prompt-claude" aria-label="Copy Claude recipe prompt">Copy</button></div><pre class="prompt"><code id="prompt-claude">/eeg-recipe ern-flankers --data projects/my-study</code></pre>
+        </div>
+        <p class="terminal-note">Example: compatible Flankers data. <a href="PLATFORM_SUPPORT.html">Platform setup</a> covers environment checks, Windows, and optional dependencies.</p><p id="copy-status" class="copy-status" role="status" aria-live="polite"></p>
+      </div>
+    </div>
+    <noscript><p class="setup-note">JavaScript enables client switching and copy buttons. For Claude Code, use <code>--agent claude</code>, launch <code>claude</code>, and invoke <code>/eeg-recipe</code>. All steps are also in the <a href="GETTING_STARTED.html">setup guide</a>.</p></noscript>
+  </section>
+
+  <section class="section section-tinted" id="workflows" aria-labelledby="workflow-title"><div class="container">
+    <div class="section-heading"><div><p class="eyebrow">Three ways to work</p><h2 id="workflow-title">Start from a method, a question, or a result.</h2></div></div>
+    <div class="workflow-grid">
+      <article class="workflow"><span class="workflow-number">01 / Recipe</span><h3>Run a published analysis.</h3><p>Choose a recipe that matches your paradigm. Check its data requirements, confirm the plan, and run the specified analysis.</p><code>eeg-recipe</code><a class="text-link" href="#recipes">Explore the recipes <span aria-hidden="true">↗</span></a></article>
+      <article class="workflow"><span class="workflow-number">02 / Pipeline</span><h3>Build around your question.</h3><p>Define the claims, contrasts, and design. Compose the relevant skills into an analysis with a frozen plan and recorded outputs.</p><code>eeg-pipeline</code><a class="text-link" href="GETTING_STARTED.html#w2-design-a-custom-analysis">Plan a custom analysis <span aria-hidden="true">↗</span></a></article>
+      <article class="workflow"><span class="workflow-number">03 / Audit</span><h3>Put the evidence under review.</h3><p>A fresh reviewer checks the plan, statistics, figures, and methods. The default is gpt-6-astra at max effort in a read-only Codex CLI process.</p><code>eeg-audit</code><a class="text-link" href="GETTING_STARTED.html#w3-audit-an-existing-analysis">Set up an audit <span aria-hidden="true">↗</span></a></article>
+    </div>
+  </div></section>
+
+  <section class="section container" id="library" aria-labelledby="library-title">
+    <div class="section-heading"><div><p class="eyebrow">The library</p><h2 id="library-title">Methods you can read, compose, and share.</h2></div><p class="heading-note">Plain Markdown specifications, executable code paths, reporting requirements, and documented failure modes.</p></div>
+    <div class="skill-overview"><div><span class="large-number">22</span><h3>Composable skills</h3><p>From filtering and ICA through ERP, spectral analysis, decoding, connectivity, and source localization to figures and reporting.</p></div><div class="skill-flow" aria-label="Analysis stages"><span>Prepare</span><i aria-hidden="true">→</i><span>Analyze</span><i aria-hidden="true">→</i><span>Test</span><i aria-hidden="true">→</i><span>Report &amp; review</span></div></div>
+    <details class="skills-disclosure"><summary>Explore all 22 skills <span class="expand-mark" aria-hidden="true">+</span></summary><div class="skills-grid">
+      <div><code>eeg-preprocess</code><span>Filter, reference, bad channels · L3</span></div><div><code>eeg-ica</code><span>ICA and component labeling · L0</span></div><div><code>eeg-epoch</code><span>Segmentation and artifact rejection · L3</span></div><div><code>eeg-erp</code><span>ERPs and component measures · L3</span></div><div><code>eeg-tfr</code><span>Time-frequency analysis · L0</span></div><div><code>eeg-spectral</code><span>Power spectra and spectral parameters · L2</span></div><div><code>eeg-stats</code><span>Statistical inference · L3 for cluster test</span></div><div><code>eeg-decoding</code><span>MVPA and temporal generalization · L0</span></div><div><code>eeg-behavior</code><span>Behavioral and trial-level associations · L0</span></div><div><code>eeg-connectivity</code><span>Functional and directed connectivity · L0</span></div><div><code>eeg-microstate</code><span>Maps and temporal dynamics · L0</span></div><div><code>eeg-complexity</code><span>Entropy and complexity measures · L0</span></div><div><code>eeg-source</code><span>Source localization · L0</span></div><div><code>eeg-bids</code><span>BIDS-EEG conversion · L0</span></div><div><code>eeg-qc</code><span>Data-quality checks · L0</span></div><div><code>eeg-group-compare</code><span>Group comparisons and effect sizes · L0</span></div><div><code>eeg-figure</code><span>Figures and data-fidelity checks · L1</span></div><div><code>eeg-methods-text</code><span>COBIDAS-MEEG methods text · L1</span></div><div><code>eeg-audit</code><span>Independent model review · L1</span></div><div><code>eeg-report</code><span>Reports and reproducibility receipts · L0</span></div><div><code>eeg-pipeline</code><span>Analysis orchestration · L0</span></div><div><code>eeg-recipe</code><span>Recipe execution and version tracking · L0</span></div>
+    </div><p class="table-note">Levels apply to the evaluated outputs and configurations. <a href="CERTIFICATION_LEVELS.html">Read the per-skill evidence.</a></p></details>
+    <div class="recipe-heading" id="recipes"><div><span class="eyebrow">10 recipes</span><h3>A starting point for your paradigm.</h3></div><p>Declared recipe status and available validation are separate. Follow each recipe's configuration when reproducing a result.</p></div>
+    <div class="table-wrap"><table class="recipe-table"><caption class="sr-only">All ten recipes and their declared statuses</caption><thead><tr><th scope="col">Recipe</th><th scope="col">Analysis</th><th scope="col">Declared status</th></tr></thead><tbody>
+      <tr><th scope="row"><code>ern-flankers</code></th><td>N2, response-related negativity, frontal theta</td><td><span class="badge">Validated</span></td></tr>
+      <tr><th scope="row"><code>mmn-oddball</code></th><td>Auditory mismatch negativity</td><td><span class="badge">Validated</span></td></tr>
+      <tr><th scope="row"><code>p300-oddball</code></th><td>P300 to rare targets</td><td><span class="badge badge-experimental">Experimental</span><small>Group-validation results recorded</small></td></tr>
+      <tr><th scope="row"><code>n170-faces</code></th><td>Faces versus non-face controls</td><td><span class="badge">Validated</span></td></tr>
+      <tr><th scope="row"><code>n170-face-inversion</code></th><td>Upright versus inverted faces</td><td><span class="badge badge-experimental">Experimental</span></td></tr>
+      <tr><th scope="row"><code>n400-semantic</code></th><td>Semantic priming</td><td><span class="badge">Validated</span></td></tr>
+      <tr><th scope="row"><code>alpha-attention-cueing</code></th><td>Posterior alpha modulation</td><td><span class="badge badge-experimental">Experimental</span></td></tr>
+      <tr><th scope="row"><code>resting-microstate</code></th><td>Resting microstate maps and dynamics</td><td><span class="badge">Validated</span></td></tr>
+      <tr><th scope="row"><code>resting-spectral-connectivity</code></th><td>Power spectra, aperiodic fits, connectivity</td><td><span class="badge">Validated</span></td></tr>
+      <tr><th scope="row"><code>complexity-anesthesia</code></th><td>Continuous complexity and entropy</td><td><span class="badge">Validated</span><small>Awake-state check; anesthesia untested here</small></td></tr>
+    </tbody></table></div>
+    <p class="table-note">Recipe files and source references are in <code>recipes/</code>. <a href="https://github.com/dengzhe-hou/auto-eeg-analysis/tree/main/recipes">Open the source catalogue ↗</a></p>
+  </section>
+
+  <section class="section evidence-section" id="evidence" aria-labelledby="evidence-title"><div class="container">
+    <div class="section-heading"><div><p class="eyebrow">A numerically certified core</p><h2 id="evidence-title">Evidence, with its scope attached.</h2></div><a class="text-link" href="CERTIFICATION_LEVELS.html">Full certification record <span aria-hidden="true">↗</span></a></div>
+    <p class="section-intro">Independent numerical comparisons certify specified outputs. Behavioural evaluations and API tests cover other parts of the library. These are the existing evidence levels, with their measured configurations documented.</p>
+    <div class="evidence-levels"><div class="evidence-row"><span class="level-mark">L3</span><div><h3>Cross-toolbox certified</h3><p>Preprocessing, epoching, ERP amplitudes, and the cluster test within the evaluated configurations.</p></div><span class="level-count">4 <small>skills</small></span></div><div class="evidence-row"><span class="level-mark">L2</span><div><h3>Cross-implementation certified</h3><p>Spectral band power checked against an independent Welch implementation.</p></div><span class="level-count">1 <small>skill</small></span></div><div class="evidence-row"><span class="level-mark">L1</span><div><h3>Behaviourally evaluated</h3><p>Audit defect detection, methods coverage, and figure-to-data fidelity.</p></div><span class="level-count">3 <small>skills</small></span></div><div class="evidence-row"><span class="level-mark">L0</span><div><h3>API and interface tested</h3><p>Documented interfaces, synthetic-data checks, or orchestration. See individual records for the exact check.</p></div><span class="level-count">14 <small>skills</small></span></div></div>
+    <div class="evidence-footer"><p>MNE-Python is the primary backend. EEGLAB and FieldTrip comparisons test selected capabilities and numerical conventions.</p><a class="text-link" href="BENCHMARK.html">Read the benchmark record <span aria-hidden="true">↗</span></a></div>
+    <div class="methods-note"><strong>Methods text from the run.</strong><p>Reads pipeline logs and writes a COBIDAS-MEEG paragraph. Every number from disk, not memory. <span id="methods-priority-claim">No other EEG tool does this.</span></p></div>
+  </div></section>
+
+  <section class="section container" id="examples" aria-labelledby="examples-title">
+    <div class="section-heading"><div><p class="eyebrow">From the analysis record</p><h2 id="examples-title">See what a run produces.</h2></div><p class="heading-note">Historical case studies alongside later group validations. The two examples below are single-subject demonstrations.</p></div>
+    <article class="case-study"><div class="case-heading"><span class="eyebrow">ERP CORE · Subject-001</span><h3>Conflict processing, from raw EEG to a figure.</h3><p>N2, response-related negativity, and frontal theta, with Bonferroni correction. Two of the three planned claims were supported in this N=1 demonstration.</p></div><figure><a href="assets/flankers-case-study.png" aria-label="Open the full-size Flankers case-study figure"><img src="assets/flankers-case-study.png" alt="Six-panel ERP CORE Flankers figure showing N2, response-related negativity, and frontal theta results for one participant" loading="lazy" decoding="async" width="1963" height="1397"></a><figcaption>Original output from the ERP CORE full case study. Open the figure to inspect it at full size.</figcaption></figure><div class="case-metrics"><div><strong>2 / 3</strong><span>planned claims supported</span></div><div><strong>6 panels</strong><span>ERP and time-frequency outputs</span></div><div><strong>94.6 s</strong><span>recorded demonstration runtime</span></div><div><strong>N = 1</strong><span>single-subject evidence</span></div></div><p class="table-note">The N2 claim was not supported after correction. ERN: d = −0.23; theta: d = 0.20. The recorded runtime describes this historical run, not a general performance guarantee.</p></article>
+    <details class="case-disclosure"><summary><span>MNE sample <strong>Auditory versus visual N100</strong></span><span class="expand-mark" aria-hidden="true">+</span></summary><div class="case-details"><p>One participant, trial-level inference. Cluster permutation used 5,000 permutations. This historical audit used GPT-5.4; the current default reviewer is configured separately.</p><figure><a href="assets/n100-case-study.png" aria-label="Open the full-size N100 case-study figure"><img src="assets/n100-case-study.png" alt="MNE sample auditory versus visual N100 case-study figure" loading="lazy" decoding="async" width="1890" height="586"></a><figcaption>Original MNE sample output, following the recorded audit corrections.</figcaption></figure><div class="case-metrics"><div><strong>p = .0002</strong><span>cluster permutation</span></div><div><strong>d = −0.46</strong><span>Cohen's d</span></div><div><strong>90.3%</strong><span>epoch retention · 289 / 320</span></div><div><strong class="verdict">Pass with caveats</strong><span>final audit after 9 fixes</span></div></div><p class="table-note">The original review found 4 critical and 9 major issues. The final recorded verdict was PASS-WITH-CAVEATS.</p></div></details>
+  </section>
+
+  <section class="section closing-section"><div class="container closing-inner"><div><p class="eyebrow">Built to be shared</p><h2>A method is more useful<br>when someone else can run it.</h2><p>AEA builds on the ARIS architecture and EEG domain knowledge, with MNE-Python for computation. AEA is to MNE what HuggingFace is to PyTorch.</p></div><div><a class="button button-primary" href="GETTING_STARTED.html">Read the getting-started guide <span aria-hidden="true">↗</span></a><p class="contributor-note">Contribute a recipe or skill. Significant contributors are invited as co-authors on the AEA paper. <a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/CONTRIBUTING.md">Contribution guide ↗</a>.</p></div></div></section>
+</main>
+<footer><div class="container footer-inner"><a class="brand footer-brand" href="#">AEA <span>Automated EEG Analysis</span></a><div><a href="https://github.com/dengzhe-hou/auto-eeg-analysis">GitHub</a><a href="https://github.com/wanshuiyin/Auto-claude-code-research-in-sleep">Built on ARIS</a><span>MIT · Recipe metadata: CC BY 4.0</span></div></div></footer>
+</body>
+</html>

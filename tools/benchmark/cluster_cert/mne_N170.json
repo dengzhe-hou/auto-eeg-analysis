@@ -1,0 +1,151 @@
+{
+  "toolbox": "MNE-Python",
+  "component": "N170",
+  "n_subjects": 20,
+  "n_channels": 30,
+  "n_times": 180,
+  "threshold_t": -2.093024,
+  "df": 19,
+  "tail": -1,
+  "n_permutations": 5000,
+  "seed": 42,
+  "n_clusters": 19,
+  "n_significant": 2,
+  "clusters": [
+    {
+      "rank": 0,
+      "t_sum": -584.3781,
+      "n_points": 198,
+      "p": 0.0124,
+      "significant": true
+    },
+    {
+      "rank": 1,
+      "t_sum": -536.9635,
+      "n_points": 116,
+      "p": 0.0152,
+      "significant": true
+    },
+    {
+      "rank": 2,
+      "t_sum": -246.5325,
+      "n_points": 80,
+      "p": 0.0954,
+      "significant": false
+    },
+    {
+      "rank": 3,
+      "t_sum": -227.4541,
+      "n_points": 83,
+      "p": 0.1116,
+      "significant": false
+    },
+    {
+      "rank": 4,
+      "t_sum": -135.0311,
+      "n_points": 43,
+      "p": 0.2442,
+      "significant": false
+    },
+    {
+      "rank": 5,
+      "t_sum": -39.2555,
+      "n_points": 13,
+      "p": 0.8226,
+      "significant": false
+    },
+    {
+      "rank": 6,
+      "t_sum": -28.3814,
+      "n_points": 12,
+      "p": 0.9148,
+      "significant": false
+    },
+    {
+      "rank": 7,
+      "t_sum": -16.8288,
+      "n_points": 7,
+      "p": 0.9826,
+      "significant": false
+    },
+    {
+      "rank": 8,
+      "t_sum": -13.0256,
+      "n_points": 4,
+      "p": 0.9946,
+      "significant": false
+    },
+    {
+      "rank": 9,
+      "t_sum": -12.2151,
+      "n_points": 5,
+      "p": 0.996,
+      "significant": false
+    },
+    {
+      "rank": 10,
+      "t_sum": -6.964,
+      "n_points": 3,
+      "p": 0.9998,
+      "significant": false
+    },
+    {
+      "rank": 11,
+      "t_sum": -4.8432,
+      "n_points": 2,
+      "p": 0.9998,
+      "significant": false
+    },
+    {
+      "rank": 12,
+      "t_sum": -4.4814,
+      "n_points": 2,
+      "p": 1.0,
+      "significant": false
+    },
+    {
+      "rank": 13,
+      "t_sum": -4.4652,
+      "n_points": 2,
+      "p": 1.0,
+      "significant": false
+    },
+    {
+      "rank": 14,
+      "t_sum": -4.3008,
+      "n_points": 2,
+      "p": 1.0,
+      "significant": false
+    },
+    {
+      "rank": 15,
+      "t_sum": -2.1515,
+      "n_points": 1,
+      "p": 1.0,
+      "significant": false
+    },
+    {
+      "rank": 16,
+      "t_sum": -2.1359,
+      "n_points": 1,
+      "p": 1.0,
+      "significant": false
+    },
+    {
+      "rank": 17,
+      "t_sum": -2.1281,
+      "n_points": 1,
+      "p": 1.0,
+      "significant": false
+    },
+    {
+      "rank": 18,
+      "t_sum": -2.1029,
+      "n_points": 1,
+      "p": 1.0,
+      "significant": false
+    }
+  ],
+  "t_obs_checksum": 7926.130031,
+  "t_obs_min": -9.213628
+}

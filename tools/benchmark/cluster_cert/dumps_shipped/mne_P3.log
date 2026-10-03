@@ -1,0 +1,4 @@
+P3: 2 clusters, 1 significant
+   t_sum=    1368.893  n=  415  p=0.0002  *
+   t_sum=       8.885  n=    4  p=0.9438
+wrote tools/benchmark/cluster_cert/mne_P3_shipped.json

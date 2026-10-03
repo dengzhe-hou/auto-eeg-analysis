@@ -1,0 +1,545 @@
+{
+  "dataset": "PhysioNet eegbci (R01 eyes-open / R02 eyes-closed, 64ch, 160 Hz, ~61 s/run)",
+  "n_subjects": 20,
+  "spectral_recipe": {
+    "sanity": "eyes-closed > eyes-open posterior alpha",
+    "posterior_alpha_EC_vs_EO": {
+      "ec_mean": 6.72918693478087e-11,
+      "eo_mean": 8.45269877253218e-12,
+      "diff_ec_minus_eo": 5.883917057527653e-11,
+      "t": 3.605,
+      "p": 0.0018861396005033914,
+      "cohens_dz": 0.806,
+      "n": 20
+    },
+    "second_level_spatial_cluster": {
+      "n_clusters": 1,
+      "n_significant": 1,
+      "min_p": 0.0002,
+      "max_cluster_size": 62,
+      "significant": [
+        [
+          0,
+          0.0002
+        ]
+      ]
+    },
+    "PASS": true
+  },
+  "complexity_recipe": {
+    "sanity": "eyes-open > eyes-closed complexity",
+    "PASS": true,
+    "lzc_EC_vs_EO": {
+      "ec_mean": 0.47313,
+      "eo_mean": 0.51967,
+      "diff_ec_minus_eo": -0.04653,
+      "t": -5.293,
+      "p": 4.1489545058374434e-05,
+      "cohens_dz": -1.184,
+      "n": 20
+    },
+    "perm_entropy_EC_vs_EO": {
+      "ec_mean": 0.77632,
+      "eo_mean": 0.81247,
+      "diff_ec_minus_eo": -0.03615,
+      "t": -7.916,
+      "p": 1.9589900788676962e-07,
+      "cohens_dz": -1.77,
+      "n": 20
+    }
+  },
+  "microstate_recipe": {
+    "sanity": "~4 maps, ~70% total GEV, durations 70-120 ms (EC)",
+    "gev_total_mean": 0.6619614267599704,
+    "gev_total_std": 0.11988855017277235,
+    "duration_ms_median": 102.78204462895692,
+    "duration_ms_iqr": [
+      94.03180184403813,
+      112.93712411153638
+    ],
+    "PASS": true
+  },
+  "per_subject": [
+    {
+      "subject": 1,
+      "ec_alpha": 2.561606938696824e-10,
+      "eo_alpha": 1.7963890413254243e-11,
+      "ec_complexity": {
+        "lzc": 0.43620270124844707,
+        "perm_entropy": 0.7477527269901665,
+        "spectral_entropy": 0.5974573809855593
+      },
+      "eo_complexity": {
+        "lzc": 0.4459131804967641,
+        "perm_entropy": 0.7932088833688402,
+        "spectral_entropy": 0.6098639429785714
+      },
+      "microstate_ec": {
+        "gev_total": 0.7917650381695112,
+        "durations_ms": [
+          99.66101694915255,
+          110.07092198581557,
+          123.8709677419355,
+          124.27826086956523
+        ]
+      }
+    },
+    {
+      "subject": 2,
+      "ec_alpha": 9.398150046788965e-11,
+      "eo_alpha": 1.0296207930101073e-11,
+      "ec_complexity": {
+        "lzc": 0.5267436653834148,
+        "perm_entropy": 0.7650293774252346,
+        "spectral_entropy": 0.614613659736027
+      },
+      "eo_complexity": {
+        "lzc": 0.6133975901711824,
+        "perm_entropy": 0.8087546801585013,
+        "spectral_entropy": 0.7398391099008796
+      },
+      "microstate_ec": {
+        "gev_total": 0.7789992648672434,
+        "durations_ms": [
+          125.15702479338844,
+          149.70212765957447,
+          149.73584905660377,
+          152.1980198019802
+        ]
+      }
+    },
+    {
+      "subject": 3,
+      "ec_alpha": 2.0522088093167212e-10,
+      "eo_alpha": 7.183171691577345e-12,
+      "ec_complexity": {
+        "lzc": 0.4145890538892898,
+        "perm_entropy": 0.757789561379465,
+        "spectral_entropy": 0.5543964157101757
+      },
+      "eo_complexity": {
+        "lzc": 0.40194549733136375,
+        "perm_entropy": 0.7935034194897266,
+        "spectral_entropy": 0.5990631744871714
+      },
+      "microstate_ec": {
+        "gev_total": 0.7213839048432525,
+        "durations_ms": [
+          78.52849740932643,
+          88.4607329842932,
+          91.04294478527606,
+          142.1935483870968
+        ]
+      }
+    },
+    {
+      "subject": 4,
+      "ec_alpha": 4.0545931380506134e-11,
+      "eo_alpha": 9.81153160596855e-13,
+      "ec_complexity": {
+        "lzc": 0.42441343905254303,
+        "perm_entropy": 0.7483925896256298,
+        "spectral_entropy": 0.5676643529250128
+      },
+      "eo_complexity": {
+        "lzc": 0.4377973840575548,
+        "perm_entropy": 0.8090176460483981,
+        "spectral_entropy": 0.6160699131811445
+      },
+      "microstate_ec": {
+        "gev_total": 0.8018575107473362,
+        "durations_ms": [
+          139.54166666666669,
+          149.79591836734696,
+          150.83229813664602,
+          286.00000000000006
+        ]
+      }
+    },
+    {
+      "subject": 5,
+      "ec_alpha": 4.2828045991522244e-12,
+      "eo_alpha": 2.655562210217764e-12,
+      "ec_complexity": {
+        "lzc": 0.4628424471041672,
+        "perm_entropy": 0.7961974865917134,
+        "spectral_entropy": 0.6240213922698858
+      },
+      "eo_complexity": {
+        "lzc": 0.4858087272031928,
+        "perm_entropy": 0.8053779340269318,
+        "spectral_entropy": 0.6347748838389821
+      },
+      "microstate_ec": {
+        "gev_total": 0.2770846572186543,
+        "durations_ms": [
+          89.93006993006992,
+          91.62886597938146,
+          95.02857142857144,
+          96.06857142857142
+        ]
+      }
+    },
+    {
+      "subject": 6,
+      "ec_alpha": 1.2713019244153256e-12,
+      "eo_alpha": 9.875413194915404e-13,
+      "ec_complexity": {
+        "lzc": 0.605139411338303,
+        "perm_entropy": 0.8186882426450923,
+        "spectral_entropy": 0.7299415477984518
+      },
+      "eo_complexity": {
+        "lzc": 0.5837820522877523,
+        "perm_entropy": 0.8162042925615869,
+        "spectral_entropy": 0.7133451942302982
+      },
+      "microstate_ec": {
+        "gev_total": 0.4919892268851591,
+        "durations_ms": [
+          90.05714285714285,
+          94.46913580246913,
+          97.60526315789474,
+          111.82500000000002
+        ]
+      }
+    },
+    {
+      "subject": 7,
+      "ec_alpha": 1.169533654677609e-10,
+      "eo_alpha": 3.536650834248785e-11,
+      "ec_complexity": {
+        "lzc": 0.42936834635227084,
+        "perm_entropy": 0.705143463166497,
+        "spectral_entropy": 0.5886503276108759
+      },
+      "eo_complexity": {
+        "lzc": 0.5096720163823414,
+        "perm_entropy": 0.771116203351893,
+        "spectral_entropy": 0.6509328036463692
+      },
+      "microstate_ec": {
+        "gev_total": 0.7792900471690942,
+        "durations_ms": [
+          91.66666666666663,
+          106.41269841269842,
+          118.21333333333332,
+          119.73170731707319
+        ]
+      }
+    },
+    {
+      "subject": 8,
+      "ec_alpha": 2.5413183926074266e-11,
+      "eo_alpha": 2.4427311107386153e-12,
+      "ec_complexity": {
+        "lzc": 0.46398150625352996,
+        "perm_entropy": 0.8010104496564143,
+        "spectral_entropy": 0.6306300434539243
+      },
+      "eo_complexity": {
+        "lzc": 0.5258039415851907,
+        "perm_entropy": 0.8281489019908064,
+        "spectral_entropy": 0.6733815296103469
+      },
+      "microstate_ec": {
+        "gev_total": 0.6819916137715103,
+        "durations_ms": [
+          90.2060606060606,
+          102.58536585365854,
+          107.0,
+          112.40000000000002
+        ]
+      }
+    },
+    {
+      "subject": 9,
+      "ec_alpha": 2.5274637967479022e-11,
+      "eo_alpha": 7.415486015430381e-12,
+      "ec_complexity": {
+        "lzc": 0.6503600595680022,
+        "perm_entropy": 0.8398858407929758,
+        "spectral_entropy": 0.7575044503836041
+      },
+      "eo_complexity": {
+        "lzc": 0.6592304826936641,
+        "perm_entropy": 0.8450732107411858,
+        "spectral_entropy": 0.7680667884431357
+      },
+      "microstate_ec": {
+        "gev_total": 0.4860512208528203,
+        "durations_ms": [
+          83.17557251908396,
+          91.66233766233765,
+          100.8813559322034,
+          112.48101265822784
+        ]
+      }
+    },
+    {
+      "subject": 10,
+      "ec_alpha": 2.1924840804159783e-10,
+      "eo_alpha": 1.3359004719373223e-11,
+      "ec_complexity": {
+        "lzc": 0.33439928977415545,
+        "perm_entropy": 0.73397995844827,
+        "spectral_entropy": 0.5486959645778526
+      },
+      "eo_complexity": {
+        "lzc": 0.35399110714319393,
+        "perm_entropy": 0.8000563373557534,
+        "spectral_entropy": 0.5304291969999166
+      },
+      "microstate_ec": {
+        "gev_total": 0.7029823694341358,
+        "durations_ms": [
+          103.85507246376811,
+          105.21739130434783,
+          109.56164383561644,
+          114.135593220339
+        ]
+      }
+    },
+    {
+      "subject": 11,
+      "ec_alpha": 3.7451601028478676e-11,
+      "eo_alpha": 2.251438212175179e-12,
+      "ec_complexity": {
+        "lzc": 0.38597019276155187,
+        "perm_entropy": 0.7599428950584878,
+        "spectral_entropy": 0.5793450632603844
+      },
+      "eo_complexity": {
+        "lzc": 0.40301336528389126,
+        "perm_entropy": 0.8093649052284564,
+        "spectral_entropy": 0.5446216428121429
+      },
+      "microstate_ec": {
+        "gev_total": 0.6950038005358614,
+        "durations_ms": [
+          104.3030303030303,
+          108.62500000000003,
+          120.23357664233578,
+          124.99248120300753
+        ]
+      }
+    },
+    {
+      "subject": 12,
+      "ec_alpha": 2.3397384296244725e-12,
+      "eo_alpha": 4.796481455782442e-13,
+      "ec_complexity": {
+        "lzc": 0.4378258605362889,
+        "perm_entropy": 0.8030475099134096,
+        "spectral_entropy": 0.6162420398415134
+      },
+      "eo_complexity": {
+        "lzc": 0.5679633683509777,
+        "perm_entropy": 0.8250334594906634,
+        "spectral_entropy": 0.7049313293943531
+      },
+      "microstate_ec": {
+        "gev_total": 0.654774536865394,
+        "durations_ms": [
+          81.08333333333334,
+          88.67096774193548,
+          88.86046511627907,
+          111.86666666666669
+        ]
+      }
+    },
+    {
+      "subject": 13,
+      "ec_alpha": 2.8253053400914876e-11,
+      "eo_alpha": 1.1235742961953083e-11,
+      "ec_complexity": {
+        "lzc": 0.49876552502719346,
+        "perm_entropy": 0.7674242813157879,
+        "spectral_entropy": 0.6788023056453814
+      },
+      "eo_complexity": {
+        "lzc": 0.5532125523667306,
+        "perm_entropy": 0.8017665066113107,
+        "spectral_entropy": 0.7024639421627938
+      },
+      "microstate_ec": {
+        "gev_total": 0.6290999422912659,
+        "durations_ms": [
+          92.992,
+          94.0506329113924,
+          98.58823529411762,
+          100.90173410404623
+        ]
+      }
+    },
+    {
+      "subject": 14,
+      "ec_alpha": 6.321702031752538e-11,
+      "eo_alpha": 9.874663250724629e-12,
+      "ec_complexity": {
+        "lzc": 0.438281484196034,
+        "perm_entropy": 0.7603943676875511,
+        "spectral_entropy": 0.5941216894812169
+      },
+      "eo_complexity": {
+        "lzc": 0.5143149704830324,
+        "perm_entropy": 0.8160977572271992,
+        "spectral_entropy": 0.6577774295724197
+      },
+      "microstate_ec": {
+        "gev_total": 0.6973314844575094,
+        "durations_ms": [
+          103.2280701754386,
+          132.13008130081303,
+          132.47457627118646,
+          136.48000000000002
+        ]
+      }
+    },
+    {
+      "subject": 15,
+      "ec_alpha": 1.1245033621790486e-10,
+      "eo_alpha": 3.349114453997072e-11,
+      "ec_complexity": {
+        "lzc": 0.5245794529996257,
+        "perm_entropy": 0.7708905736176321,
+        "spectral_entropy": 0.6760021811208016
+      },
+      "eo_complexity": {
+        "lzc": 0.5526145463133153,
+        "perm_entropy": 0.7971627723367807,
+        "spectral_entropy": 0.7017802260441622
+      },
+      "microstate_ec": {
+        "gev_total": 0.6998481107907817,
+        "durations_ms": [
+          97.92805755395683,
+          102.97872340425532,
+          106.57831325301206,
+          107.82608695652173
+        ]
+      }
+    },
+    {
+      "subject": 16,
+      "ec_alpha": 3.004194106681026e-12,
+      "eo_alpha": 2.8018633794309774e-13,
+      "ec_complexity": {
+        "lzc": 0.5375362508236265,
+        "perm_entropy": 0.7837562770814045,
+        "spectral_entropy": 0.6930316504764809
+      },
+      "eo_complexity": {
+        "lzc": 0.6016937574114807,
+        "perm_entropy": 0.8193012200931727,
+        "spectral_entropy": 0.7471751006440536
+      },
+      "microstate_ec": {
+        "gev_total": 0.7207403571285623,
+        "durations_ms": [
+          94.17322834645671,
+          101.93464052287582,
+          103.86666666666665,
+          115.86928104575165
+        ]
+      }
+    },
+    {
+      "subject": 17,
+      "ec_alpha": 7.491869827529865e-11,
+      "eo_alpha": 3.91852371056345e-12,
+      "ec_complexity": {
+        "lzc": 0.5450398029700534,
+        "perm_entropy": 0.8250667411285275,
+        "spectral_entropy": 0.6729411157461429
+      },
+      "eo_complexity": {
+        "lzc": 0.6328612633859176,
+        "perm_entropy": 0.8491187683927912,
+        "spectral_entropy": 0.7284886551575447
+      },
+      "microstate_ec": {
+        "gev_total": 0.6423495587241514,
+        "durations_ms": [
+          93.43283582089552,
+          99.39285714285715,
+          108.83221476510067,
+          112.53763440860216
+        ]
+      }
+    },
+    {
+      "subject": 18,
+      "ec_alpha": 6.541981644946741e-12,
+      "eo_alpha": 1.2430321759493106e-12,
+      "ec_complexity": {
+        "lzc": 0.4649212300517542,
+        "perm_entropy": 0.7923958691046247,
+        "spectral_entropy": 0.6557692884499355
+      },
+      "eo_complexity": {
+        "lzc": 0.5128186672824558,
+        "perm_entropy": 0.8254764508758415,
+        "spectral_entropy": 0.6710518110400122
+      },
+      "microstate_ec": {
+        "gev_total": 0.67635034352408,
+        "durations_ms": [
+          82.07317073170731,
+          93.97530864197532,
+          98.625,
+          102.17499999999998
+        ]
+      }
+    },
+    {
+      "subject": 19,
+      "ec_alpha": 8.758177428625198e-12,
+      "eo_alpha": 5.52796134753318e-12,
+      "ec_complexity": {
+        "lzc": 0.5054432592903324,
+        "perm_entropy": 0.7895605514880264,
+        "spectral_entropy": 0.681047640413341
+      },
+      "eo_complexity": {
+        "lzc": 0.5842091994687633,
+        "perm_entropy": 0.8098976971659739,
+        "spectral_entropy": 0.7194768527200996
+      },
+      "microstate_ec": {
+        "gev_total": 0.6333412136274268,
+        "durations_ms": [
+          88.35036496350364,
+          92.12269938650309,
+          92.93714285714286,
+          95.69060773480663
+        ]
+      }
+    },
+    {
+      "subject": 20,
+      "ec_alpha": 2.0549877529944277e-11,
+      "eo_alpha": 2.100377854983797e-12,
+      "ec_complexity": {
+        "lzc": 0.37623123703450073,
+        "perm_entropy": 0.7601265230991563,
+        "spectral_entropy": 0.5631159018493508
+      },
+      "eo_complexity": {
+        "lzc": 0.45327435024952056,
+        "perm_entropy": 0.8257658880584486,
+        "spectral_entropy": 0.6039931100405297
+      },
+      "microstate_ec": {
+        "gev_total": 0.6769943332956577,
+        "durations_ms": [
+          97.93258426966293,
+          99.89403973509933,
+          102.35443037974682,
+          106.42105263157896
+        ]
+      }
+    }
+  ],
+  "_labels_note": "ec_mean/eo_mean are eyes-closed/eyes-open; diff_ec_minus_eo=EC-EO. Spectral expects >0 (EC>EO alpha); complexity expects <0 (EO>EC)."
+}

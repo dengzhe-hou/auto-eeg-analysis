@@ -1,0 +1,14 @@
+# Keep shell scripts LF regardless of the committer's platform. A CRLF .sh reaches a Linux
+# tester as `\r: command not found` -- the first thing they run, broken before it starts.
+*.sh text eol=lf
+*.py text eol=lf
+
+# PowerShell 5.1 decodes a BOM-less UTF-8 .ps1 as ANSI, so a non-ASCII byte breaks PARSING,
+# not just display. Keep them CRLF (native) and ASCII-only; tools/tests/test_deployability.py
+# enforces the ASCII half.
+*.ps1 text eol=crlf
+
+# git archive substitutes the commit into this file, so a tarball (which has no .git)
+# can still say which version it is. Without it the report reads "not a git checkout" and the
+# maintainer cannot tell whether the tester ran the package they were sent.
+tools/env/ARCHIVE_VERSION export-subst

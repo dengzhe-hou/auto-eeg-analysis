@@ -1,0 +1,16 @@
+{
+  "component": "N400",
+  "tail": -1,
+  "tmap_shape": [
+    257,
+    30
+  ],
+  "tmap_bit_identical": false,
+  "tmap_max_abs_diff": 1.7763568394002505e-15,
+  "tmap_max_rel_diff": 4.347022977627717e-16,
+  "tmap_within_rtol_1e-6": true,
+  "n_clusters_mne": 14,
+  "n_clusters_fieldtrip": 14,
+  "partitions_identical": true,
+  "supported_wording": "equal within tolerance"
+}

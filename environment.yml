@@ -1,0 +1,24 @@
+name: aeais
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - numpy
+  - scipy
+  - matplotlib
+  - pandas
+  - h5py
+  - jupyterlab
+  - pip
+  - pip:
+      - mne[hdf5]>=1.7
+      - mne-bids>=0.14
+      - mne-icalabel>=0.6
+      - onnxruntime>=1.16     # required by mne-icalabel (ICLabel ONNX model)
+      - autoreject>=0.4
+      - pycrostates>=0.5
+      - mne-connectivity>=0.7
+      - pyprep>=0.4           # RANSAC bad-channel detection
+      - mffpy                 # EGI MFF format support (optional)
+      - eeglabio              # round-trip with EEGLAB .set
+      - pytest>=7.0           # numerical regression tests (tools/tests/)

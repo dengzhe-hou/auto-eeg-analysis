@@ -1,0 +1,108 @@
+{
+  "comparison": "AEA vs MNE-BIDS-Pipeline 1.10.1 \u2014 full ERN difference waveform",
+  "component": "ERN",
+  "roi": [
+    "FCz",
+    "Fz",
+    "Cz"
+  ],
+  "scope": "all 30 EEG channels x every sample",
+  "n_subjects": 14,
+  "waveform_rmse_allch_nV": {
+    "median": 29.484,
+    "mean": 40.147,
+    "max": 136.912,
+    "worst_subject": "sub-001"
+  },
+  "waveform_maxabs_allch_nV": {
+    "mean": 283.974,
+    "max": 1034.651,
+    "worst_subject": "sub-001"
+  },
+  "per_subject": [
+    {
+      "subject": "sub-001",
+      "rmse_allch_nV": 136.912,
+      "maxabs_allch_nV": 1034.651,
+      "scalar_delta_nV": 7.091
+    },
+    {
+      "subject": "sub-002",
+      "rmse_allch_nV": 16.297,
+      "maxabs_allch_nV": 64.883,
+      "scalar_delta_nV": -4.593
+    },
+    {
+      "subject": "sub-003",
+      "rmse_allch_nV": 83.793,
+      "maxabs_allch_nV": 632.158,
+      "scalar_delta_nV": 31.786
+    },
+    {
+      "subject": "sub-004",
+      "rmse_allch_nV": 44.166,
+      "maxabs_allch_nV": 332.777,
+      "scalar_delta_nV": -19.464
+    },
+    {
+      "subject": "sub-006",
+      "rmse_allch_nV": 8.759,
+      "maxabs_allch_nV": 45.933,
+      "scalar_delta_nV": -4.77
+    },
+    {
+      "subject": "sub-008",
+      "rmse_allch_nV": 56.052,
+      "maxabs_allch_nV": 351.013,
+      "scalar_delta_nV": -13.358
+    },
+    {
+      "subject": "sub-010",
+      "rmse_allch_nV": 38.119,
+      "maxabs_allch_nV": 303.905,
+      "scalar_delta_nV": 7.875
+    },
+    {
+      "subject": "sub-011",
+      "rmse_allch_nV": 36.549,
+      "maxabs_allch_nV": 337.174,
+      "scalar_delta_nV": -1.954
+    },
+    {
+      "subject": "sub-012",
+      "rmse_allch_nV": 22.419,
+      "maxabs_allch_nV": 148.052,
+      "scalar_delta_nV": -1.695
+    },
+    {
+      "subject": "sub-013",
+      "rmse_allch_nV": 21.773,
+      "maxabs_allch_nV": 105.579,
+      "scalar_delta_nV": -1.724
+    },
+    {
+      "subject": "sub-015",
+      "rmse_allch_nV": 12.393,
+      "maxabs_allch_nV": 86.812,
+      "scalar_delta_nV": 1.544
+    },
+    {
+      "subject": "sub-016",
+      "rmse_allch_nV": 15.602,
+      "maxabs_allch_nV": 80.21,
+      "scalar_delta_nV": 5.181
+    },
+    {
+      "subject": "sub-017",
+      "rmse_allch_nV": 13.81,
+      "maxabs_allch_nV": 122.198,
+      "scalar_delta_nV": 2.053
+    },
+    {
+      "subject": "sub-018",
+      "rmse_allch_nV": 55.41,
+      "maxabs_allch_nV": 330.295,
+      "scalar_delta_nV": -6.21
+    }
+  ]
+}

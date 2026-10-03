@@ -1,0 +1,74 @@
+{
+  "toolbox": "MNE-Python",
+  "component": "ERN",
+  "n_subjects": 14,
+  "n_channels": 30,
+  "n_times": 257,
+  "threshold_t": -2.160369,
+  "df": 13,
+  "tail": -1,
+  "n_permutations": 5000,
+  "seed": 42,
+  "n_clusters": 8,
+  "n_significant": 1,
+  "clusters": [
+    {
+      "rank": 0,
+      "t_sum": -3714.0887,
+      "n_points": 1175,
+      "p": 0.0004,
+      "significant": true
+    },
+    {
+      "rank": 1,
+      "t_sum": -355.468,
+      "n_points": 105,
+      "p": 0.2026,
+      "significant": false
+    },
+    {
+      "rank": 2,
+      "t_sum": -191.0205,
+      "n_points": 65,
+      "p": 0.354,
+      "significant": false
+    },
+    {
+      "rank": 3,
+      "t_sum": -40.4973,
+      "n_points": 15,
+      "p": 0.8646,
+      "significant": false
+    },
+    {
+      "rank": 4,
+      "t_sum": -33.4496,
+      "n_points": 13,
+      "p": 0.9056,
+      "significant": false
+    },
+    {
+      "rank": 5,
+      "t_sum": -22.2691,
+      "n_points": 9,
+      "p": 0.9608,
+      "significant": false
+    },
+    {
+      "rank": 6,
+      "t_sum": -21.6021,
+      "n_points": 9,
+      "p": 0.9628,
+      "significant": false
+    },
+    {
+      "rank": 7,
+      "t_sum": -2.3477,
+      "n_points": 1,
+      "p": 1.0,
+      "significant": false
+    }
+  ],
+  "t_obs_checksum": 14055.216099,
+  "t_obs_min": -7.473079
+}

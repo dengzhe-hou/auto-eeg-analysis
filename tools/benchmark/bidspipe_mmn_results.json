@@ -1,0 +1,257 @@
+{
+  "tool": "mne-bids-pipeline",
+  "dataset": "ERP CORE MMN, deviant(70) - standard(80), harmonized config",
+  "roi": [
+    "Fz",
+    "FCz",
+    "Cz"
+  ],
+  "mmn_window_s": [
+    0.1,
+    0.25
+  ],
+  "n_subjects": 40,
+  "grand_mean_mmn_uV": -0.727,
+  "per_subject": [
+    {
+      "subject": "sub-001",
+      "mmn_uV": -0.725,
+      "n_dev": 117,
+      "n_std": 479
+    },
+    {
+      "subject": "sub-002",
+      "mmn_uV": -1.559,
+      "n_dev": 165,
+      "n_std": 644
+    },
+    {
+      "subject": "sub-003",
+      "mmn_uV": -0.093,
+      "n_dev": 114,
+      "n_std": 471
+    },
+    {
+      "subject": "sub-004",
+      "mmn_uV": -0.636,
+      "n_dev": 168,
+      "n_std": 669
+    },
+    {
+      "subject": "sub-005",
+      "mmn_uV": -1.318,
+      "n_dev": 80,
+      "n_std": 359
+    },
+    {
+      "subject": "sub-006",
+      "mmn_uV": -0.583,
+      "n_dev": 158,
+      "n_std": 642
+    },
+    {
+      "subject": "sub-007",
+      "mmn_uV": 2.785,
+      "n_dev": 11,
+      "n_std": 45
+    },
+    {
+      "subject": "sub-008",
+      "mmn_uV": 0.344,
+      "n_dev": 96,
+      "n_std": 449
+    },
+    {
+      "subject": "sub-009",
+      "mmn_uV": -1.251,
+      "n_dev": 134,
+      "n_std": 533
+    },
+    {
+      "subject": "sub-010",
+      "mmn_uV": -1.219,
+      "n_dev": 131,
+      "n_std": 541
+    },
+    {
+      "subject": "sub-011",
+      "mmn_uV": -0.545,
+      "n_dev": 182,
+      "n_std": 732
+    },
+    {
+      "subject": "sub-012",
+      "mmn_uV": 0.168,
+      "n_dev": 47,
+      "n_std": 207
+    },
+    {
+      "subject": "sub-013",
+      "mmn_uV": -0.318,
+      "n_dev": 183,
+      "n_std": 737
+    },
+    {
+      "subject": "sub-014",
+      "mmn_uV": -0.617,
+      "n_dev": 136,
+      "n_std": 561
+    },
+    {
+      "subject": "sub-015",
+      "mmn_uV": -0.595,
+      "n_dev": 172,
+      "n_std": 677
+    },
+    {
+      "subject": "sub-016",
+      "mmn_uV": -1.11,
+      "n_dev": 169,
+      "n_std": 651
+    },
+    {
+      "subject": "sub-017",
+      "mmn_uV": -0.132,
+      "n_dev": 127,
+      "n_std": 457
+    },
+    {
+      "subject": "sub-018",
+      "mmn_uV": -0.718,
+      "n_dev": 124,
+      "n_std": 556
+    },
+    {
+      "subject": "sub-019",
+      "mmn_uV": -0.576,
+      "n_dev": 200,
+      "n_std": 784
+    },
+    {
+      "subject": "sub-020",
+      "mmn_uV": -0.907,
+      "n_dev": 183,
+      "n_std": 718
+    },
+    {
+      "subject": "sub-021",
+      "mmn_uV": -1.324,
+      "n_dev": 142,
+      "n_std": 594
+    },
+    {
+      "subject": "sub-022",
+      "mmn_uV": -0.522,
+      "n_dev": 167,
+      "n_std": 686
+    },
+    {
+      "subject": "sub-023",
+      "mmn_uV": 0.058,
+      "n_dev": 112,
+      "n_std": 458
+    },
+    {
+      "subject": "sub-024",
+      "mmn_uV": -1.183,
+      "n_dev": 171,
+      "n_std": 685
+    },
+    {
+      "subject": "sub-025",
+      "mmn_uV": -0.325,
+      "n_dev": 174,
+      "n_std": 686
+    },
+    {
+      "subject": "sub-026",
+      "mmn_uV": -0.594,
+      "n_dev": 182,
+      "n_std": 697
+    },
+    {
+      "subject": "sub-027",
+      "mmn_uV": -0.515,
+      "n_dev": 176,
+      "n_std": 658
+    },
+    {
+      "subject": "sub-028",
+      "mmn_uV": -0.091,
+      "n_dev": 173,
+      "n_std": 672
+    },
+    {
+      "subject": "sub-029",
+      "mmn_uV": -1.441,
+      "n_dev": 156,
+      "n_std": 591
+    },
+    {
+      "subject": "sub-030",
+      "mmn_uV": -2.984,
+      "n_dev": 86,
+      "n_std": 299
+    },
+    {
+      "subject": "sub-031",
+      "mmn_uV": -0.884,
+      "n_dev": 171,
+      "n_std": 677
+    },
+    {
+      "subject": "sub-032",
+      "mmn_uV": -0.456,
+      "n_dev": 91,
+      "n_std": 373
+    },
+    {
+      "subject": "sub-033",
+      "mmn_uV": -0.803,
+      "n_dev": 199,
+      "n_std": 782
+    },
+    {
+      "subject": "sub-034",
+      "mmn_uV": -1.36,
+      "n_dev": 190,
+      "n_std": 733
+    },
+    {
+      "subject": "sub-035",
+      "mmn_uV": -0.588,
+      "n_dev": 142,
+      "n_std": 509
+    },
+    {
+      "subject": "sub-036",
+      "mmn_uV": -0.498,
+      "n_dev": 152,
+      "n_std": 594
+    },
+    {
+      "subject": "sub-037",
+      "mmn_uV": -1.973,
+      "n_dev": 154,
+      "n_std": 626
+    },
+    {
+      "subject": "sub-038",
+      "mmn_uV": -1.884,
+      "n_dev": 177,
+      "n_std": 712
+    },
+    {
+      "subject": "sub-039",
+      "mmn_uV": -2.004,
+      "n_dev": 97,
+      "n_std": 360
+    },
+    {
+      "subject": "sub-040",
+      "mmn_uV": -0.084,
+      "n_dev": 125,
+      "n_std": 492
+    }
+  ]
+}

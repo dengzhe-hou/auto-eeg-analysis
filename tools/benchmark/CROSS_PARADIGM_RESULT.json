@@ -1,0 +1,992 @@
+{
+  "evaluation": "cross-paradigm L0 baseline (no recipe)",
+  "note": "see CROSS_PARADIGM_BASELINE.md",
+  "certified": {
+    "P3": 1.683,
+    "N170": -1.181,
+    "MMN": -0.84
+  },
+  "generations": {
+    "P3_L0_1": {
+      "n_analyzed": 11,
+      "grand_mean_uV": 5.475,
+      "choices": {
+        "notes": "ERP CORE P3 visual oddball. Per subject: target-minus-standard difference wave, mean amplitude 300-500 ms averaged over Fz, Cz, Pz, CPz, in uV. Reference: offline average of P9 and P10 (the recording reference is Biosemi CMS, so re-referencing is required; P9/P10 is the ERP CORE choice for the P3 and preserves the midline P3b). Band-pass 0.1-30 Hz zero-phase FIR (firwin) applied to EEG and EOG; FP1/FP2 renamed to Fp1/Fp2; HEOG_left/HEOG_right/VEOG_lower re-typed as EOG and excluded from the ERP; standard_1005 montage. Epochs -200 to 800 ms with -200 to 0 ms baseline correction. Trials taken from events.tsv onsets (seconds x 1024 Hz): codes 11-55, TARGET iff tens digit == units digit, otherwise STANDARD; response codes 201/202 ignored. No ICA: artifact control is peak-to-peak rejection at 100 uV on the 30 scalp EEG channels (drops blink-contaminated epochs, which matters because Fz is in the ROI), plus MNE's BAD_ annotation rejection. All trials are used regardless of behavioural accuracy. A subject is excluded only if the data are unreadable, a required channel is missing, or fewer than 10 clean epochs survive in either condition. Grand mean is the unweighted average across analysed subjects. Values rounded to 3 decimals.",
+        "reference": "average of P9 and P10",
+        "filter_hz": [
+          0.1,
+          30.0
+        ],
+        "filter_design": "zero-phase FIR, firwin",
+        "epoch_s": [
+          -0.2,
+          0.8
+        ],
+        "baseline_s": [
+          -0.2,
+          0.0
+        ],
+        "measurement_window_s": [
+          0.3,
+          0.5
+        ],
+        "roi": [
+          "Fz",
+          "Cz",
+          "Pz",
+          "CPz"
+        ],
+        "artifact_rejection": "peak-to-peak 100 uV on EEG channels, no ICA",
+        "min_epochs_per_condition": 10,
+        "condition_rule": "target iff tens digit == units digit of code 11-55",
+        "sampling_rate_hz": 1024,
+        "software": "mne 1.11.0",
+        "per_subject_diagnostics": {
+          "sub-001": {
+            "n_target_kept": 27,
+            "n_standard_kept": 103,
+            "n_target_presented": 40,
+            "n_standard_presented": 160,
+            "pct_epochs_rejected": 35.0,
+            "target_uV": 11.451,
+            "standard_uV": 3.45
+          },
+          "sub-002": {
+            "n_target_kept": 30,
+            "n_standard_kept": 148,
+            "n_target_presented": 40,
+            "n_standard_presented": 160,
+            "pct_epochs_rejected": 11.0,
+            "target_uV": 27.893,
+            "standard_uV": 11.519
+          },
+          "sub-003": {
+            "excluded_reason": "too few clean epochs (target=8, standard=37, minimum=10)"
+          },
+          "sub-004": {
+            "excluded_reason": "too few clean epochs (target=1, standard=1, minimum=10)"
+          },
+          "sub-005": {
+            "excluded_reason": "too few clean epochs (target=8, standard=17, minimum=10)"
+          },
+          "sub-006": {
+            "excluded_reason": "too few clean epochs (target=8, standard=30, minimum=10)"
+          },
+          "sub-007": {
+            "n_target_kept": 29,
+            "n_standard_kept": 34,
+            "n_target_presented": 40,
+            "n_standard_presented": 160,
+            "pct_epochs_rejected": 68.5,
+            "target_uV": 17.525,
+            "standard_uV": 8.792
+          },
+          "sub-008": {
+            "excluded_reason": "too few clean epochs (target=5, standard=26, minimum=10)"
+          },
+          "sub-009": {
+            "excluded_reason": "too few clean epochs (target=0, standard=0, minimum=10)"
+          },
+          "sub-010": {
+            "n_target_kept": 16,
+            "n_standard_kept": 60,
+            "n_target_presented": 40,
+            "n_standard_presented": 160,
+            "pct_epochs_rejected": 62.0,
+            "target_uV": 6.094,
+            "standard_uV": 3.637
+          },
+          "sub-011": {
+            "excluded_reason": "too few clean epochs (target=2, standard=6, minimum=10)"
+          },
+          "sub-012": {
+            "n_target_kept": 37,
+            "n_standard_kept": 146,
+            "n_target_presented": 40,
+            "n_standard_presented": 160,
+            "pct_epochs_rejected": 8.5,
+            "target_uV": 15.766,
+            "standard_uV": 9.391
+          },
+          "sub-013": {
+            "n_target_kept": 17,
+            "n_standard_kept": 78,
+            "n_target_presented": 40,
+            "n_standard_presented": 160,
+            "pct_epochs_rejected": 52.5,
+            "target_uV": 9.192,
+            "standard_uV": 6.828
+          },
+          "sub-014": {
+            "n_target_kept": 20,
+            "n_standard_kept": 56,
+            "n_target_presented": 40,
+            "n_standard_presented": 160,
+            "pct_epochs_rejected": 62.0,
+            "target_uV": 6.753,
+            "standard_uV": 4.389
+          },
+          "sub-015": {
+            "n_target_kept": 30,
+            "n_standard_kept": 126,
+            "n_target_presented": 40,
+            "n_standard_presented": 160,
+            "pct_epochs_rejected": 22.0,
+            "target_uV": 2.605,
+            "standard_uV": 1.438
+          },
+          "sub-016": {
+            "n_target_kept": 30,
+            "n_standard_kept": 109,
+            "n_target_presented": 40,
+            "n_standard_presented": 160,
+            "pct_epochs_rejected": 30.5,
+            "target_uV": 14.956,
+            "standard_uV": 12.269
+          },
+          "sub-017": {
+            "excluded_reason": "too few clean epochs (target=3, standard=31, minimum=10)"
+          },
+          "sub-018": {
+            "excluded_reason": "too few clean epochs (target=1, standard=12, minimum=10)"
+          },
+          "sub-019": {
+            "n_target_kept": 34,
+            "n_standard_kept": 139,
+            "n_target_presented": 40,
+            "n_standard_presented": 160,
+            "pct_epochs_rejected": 13.5,
+            "target_uV": 18.225,
+            "standard_uV": 10.355
+          },
+          "sub-020": {
+            "n_target_kept": 22,
+            "n_standard_kept": 113,
+            "n_target_presented": 40,
+            "n_standard_presented": 160,
+            "pct_epochs_rejected": 32.5,
+            "target_uV": 2.758,
+            "standard_uV": 0.925
+          }
+        }
+      },
+      "per_subject": {
+        "sub-001": 8.001,
+        "sub-002": 16.374,
+        "sub-007": 8.733,
+        "sub-010": 2.456,
+        "sub-012": 6.375,
+        "sub-013": 2.364,
+        "sub-014": 2.364,
+        "sub-015": 1.167,
+        "sub-016": 2.687,
+        "sub-019": 7.87,
+        "sub-020": 1.833
+      }
+    },
+    "P3_L0_2": {
+      "n_analyzed": 18,
+      "grand_mean_uV": 4.978,
+      "choices": {
+        "notes": "ERP CORE P3 visual oddball. TARGET = tens digit == units digit of the 2-digit stimulus code (11/22/33/44/55), STANDARD = all other stimulus codes 11-55; response codes 201/202 ignored and no accuracy-based trial screening applied. Reference: BioSemi data are recorded against CMS, so the scalp EEG was re-referenced offline to the average of P9 and P10 (the mastoid-equivalent linked reference used by ERP CORE for the P3). FP1/FP2 renamed Fp1/Fp2 and a standard_1005 montage applied. HEOG derived bipolarly as HEOG_left - HEOG_right; VEOG_lower kept as the blink channel; all three retyped as EOG so they are excluded from the scalp average and from epoch rejection. Zero-phase FIR band-pass 0.1-30 Hz, then resampled 1024 -> 256 Hz. Ocular artifacts corrected with FastICA (15 components, fit on a 1 Hz high-passed copy) removing components correlated with VEOG/HEOG at |z| > 3 (max 3 components). Epochs -200 to 800 ms, baseline-corrected on -200 to 0 ms, rejected at 100 uV peak-to-peak across the 30 scalp channels. Difference wave = target-average minus standard-average. P3b = mean amplitude of the difference wave averaged over Fz, Cz, Pz, CPz and over 300-500 ms. No manual bad-channel interpolation. A subject is excluded if either condition retains fewer than 10 artifact-free trials or if loading fails.",
+        "reference": "average of P9 and P10 (offline re-reference from CMS)",
+        "filter_hz": [
+          0.1,
+          30.0
+        ],
+        "filter_design": "zero-phase FIR (firwin), applied to EEG and EOG",
+        "resample_hz": 256.0,
+        "artifact_correction": "FastICA n_components=15, EOG-correlation |z|>3.0, max 3 components removed",
+        "epoch_s": [
+          -0.2,
+          0.8
+        ],
+        "baseline_s": [
+          -0.2,
+          0.0
+        ],
+        "rejection_uV_p2p": 100,
+        "roi": [
+          "Fz",
+          "Cz",
+          "Pz",
+          "CPz"
+        ],
+        "window_ms": [
+          300,
+          500
+        ],
+        "measure": "mean amplitude of the target-minus-standard difference wave",
+        "target_rule": "tens digit == units digit (11, 22, 33, 44, 55)",
+        "min_trials_per_condition": 10,
+        "exclusion_reasons": {
+          "sub-003": "RuntimeError: too few surviving trials (target=0, standard=2; minimum 10 per condition)",
+          "sub-009": "RuntimeError: too few surviving trials (target=2, standard=6; minimum 10 per condition)"
+        },
+        "per_subject_details": {
+          "sub-001": {
+            "n_target": 27,
+            "n_standard": 103,
+            "n_presented": 200,
+            "ica_components_removed": 0
+          },
+          "sub-002": {
+            "n_target": 31,
+            "n_standard": 148,
+            "n_presented": 200,
+            "ica_components_removed": 1
+          },
+          "sub-004": {
+            "n_target": 39,
+            "n_standard": 157,
+            "n_presented": 200,
+            "ica_components_removed": 2
+          },
+          "sub-005": {
+            "n_target": 37,
+            "n_standard": 148,
+            "n_presented": 200,
+            "ica_components_removed": 2
+          },
+          "sub-006": {
+            "n_target": 17,
+            "n_standard": 58,
+            "n_presented": 200,
+            "ica_components_removed": 1
+          },
+          "sub-007": {
+            "n_target": 40,
+            "n_standard": 159,
+            "n_presented": 200,
+            "ica_components_removed": 2
+          },
+          "sub-008": {
+            "n_target": 33,
+            "n_standard": 132,
+            "n_presented": 200,
+            "ica_components_removed": 2
+          },
+          "sub-010": {
+            "n_target": 33,
+            "n_standard": 142,
+            "n_presented": 200,
+            "ica_components_removed": 2
+          },
+          "sub-011": {
+            "n_target": 25,
+            "n_standard": 93,
+            "n_presented": 200,
+            "ica_components_removed": 2
+          },
+          "sub-012": {
+            "n_target": 37,
+            "n_standard": 146,
+            "n_presented": 200,
+            "ica_components_removed": 1
+          },
+          "sub-013": {
+            "n_target": 40,
+            "n_standard": 159,
+            "n_presented": 200,
+            "ica_components_removed": 1
+          },
+          "sub-014": {
+            "n_target": 20,
+            "n_standard": 56,
+            "n_presented": 200,
+            "ica_components_removed": 0
+          },
+          "sub-015": {
+            "n_target": 31,
+            "n_standard": 126,
+            "n_presented": 200,
+            "ica_components_removed": 1
+          },
+          "sub-016": {
+            "n_target": 30,
+            "n_standard": 109,
+            "n_presented": 200,
+            "ica_components_removed": 1
+          },
+          "sub-017": {
+            "n_target": 39,
+            "n_standard": 156,
+            "n_presented": 200,
+            "ica_components_removed": 2
+          },
+          "sub-018": {
+            "n_target": 39,
+            "n_standard": 156,
+            "n_presented": 200,
+            "ica_components_removed": 2
+          },
+          "sub-019": {
+            "n_target": 36,
+            "n_standard": 139,
+            "n_presented": 200,
+            "ica_components_removed": 1
+          },
+          "sub-020": {
+            "n_target": 40,
+            "n_standard": 159,
+            "n_presented": 200,
+            "ica_components_removed": 2
+          }
+        }
+      },
+      "per_subject": {
+        "sub-001": 7.929,
+        "sub-002": 16.129,
+        "sub-004": 3.604,
+        "sub-005": 3.889,
+        "sub-006": 5.251,
+        "sub-007": 5.336,
+        "sub-008": 5.069,
+        "sub-010": 1.98,
+        "sub-011": 5.599,
+        "sub-012": 6.186,
+        "sub-013": 2.025,
+        "sub-014": 2.323,
+        "sub-015": 1.456,
+        "sub-016": 2.645,
+        "sub-017": 4.763,
+        "sub-018": 6.078,
+        "sub-019": 7.546,
+        "sub-020": 1.8
+      }
+    },
+    "N170_L0_1": {
+      "n_analyzed": 20,
+      "grand_mean_uV": -1.202,
+      "choices": {
+        "reference": "Common average reference over the 30 scalp EEG electrodes (EOG channels excluded), applied after ocular ICA correction.",
+        "montage": "standard_1005; FP1/FP2 renamed to Fp1/Fp2 for montage matching",
+        "channel_types": "['HEOG_left', 'HEOG_right', 'VEOG_lower'] re-typed from EEG to EOG",
+        "filter": "FIR (firwin) zero-phase band-pass 0.1-30.0 Hz on EEG and EOG channels",
+        "resample_hz": 256.0,
+        "artifact_correction": "Extended-Infomax ICA (n_components=0.99 explained variance, random_state=97) fitted on a 1.0 Hz high-passed copy; components correlating with HEOG_left / HEOG_right / VEOG_lower (z > 3) removed",
+        "epoch_window_s": [
+          -0.2,
+          0.5
+        ],
+        "baseline_s": [
+          -0.2,
+          0.0
+        ],
+        "artifact_rejection": "peak-to-peak > 100 uV on any EEG channel; flat < 0.1 uV",
+        "conditions": "face = event value 1-40; car = event value 41-80",
+        "ignored_events": "101-180 (scrambled), 201/202 (responses)",
+        "contrast": "difference wave = ERP(face) - ERP(car), computed per subject",
+        "roi": [
+          "PO7",
+          "PO8",
+          "P7",
+          "P8"
+        ],
+        "measurement": "mean amplitude of the difference wave averaged over the ROI channels and the 130-200 ms window (inclusive), reported in uV",
+        "exclusion_rule": "subject excluded if a file is unreadable or if either condition retains < 10 artifact-free epochs",
+        "grand_mean_definition": "unweighted mean across analyzed subjects",
+        "grand_sd_uV": 1.0,
+        "grand_sem_uV": 0.224,
+        "software": "mne 1.11.0",
+        "exclusion_reasons": {},
+        "per_subject_diagnostics": {
+          "sub-001": {
+            "subject": "sub-001",
+            "amplitude_uV": -2.685,
+            "n_face": 30,
+            "n_car": 31,
+            "n_face_presented": 80,
+            "n_car_presented": 80,
+            "pct_trials_rejected": 61.875,
+            "n_ica_components_removed": 1,
+            "n_window_samples": 19
+          },
+          "sub-002": {
+            "subject": "sub-002",
+            "amplitude_uV": -2.064,
+            "n_face": 77,
+            "n_car": 80,
+            "n_face_presented": 80,
+            "n_car_presented": 80,
+            "pct_trials_rejected": 1.875,
+            "n_ica_components_removed": 0,
+            "n_window_samples": 19
+          },
+          "sub-003": {
+            "subject": "sub-003",
+            "amplitude_uV": -0.641,
+            "n_face": 35,
+            "n_car": 29,
+            "n_face_presented": 80,
+            "n_car_presented": 80,
+            "pct_trials_rejected": 60.0,
+            "n_ica_components_removed": 1,
+            "n_window_samples": 19
+          },
+          "sub-004": {
+            "subject": "sub-004",
+            "amplitude_uV": -0.137,
+            "n_face": 77,
+            "n_car": 79,
+            "n_face_presented": 80,
+            "n_car_presented": 80,
+            "pct_trials_rejected": 2.5,
+            "n_ica_components_removed": 1,
+            "n_window_samples": 19
+          },
+          "sub-005": {
+            "subject": "sub-005",
+            "amplitude_uV": -1.15,
+            "n_face": 80,
+            "n_car": 77,
+            "n_face_presented": 80,
+            "n_car_presented": 80,
+            "pct_trials_rejected": 1.875,
+            "n_ica_components_removed": 1,
+            "n_window_samples": 19
+          },
+          "sub-006": {
+            "subject": "sub-006",
+            "amplitude_uV": -1.304,
+            "n_face": 78,
+            "n_car": 79,
+            "n_face_presented": 80,
+            "n_car_presented": 80,
+            "pct_trials_rejected": 1.875,
+            "n_ica_components_removed": 1,
+            "n_window_samples": 19
+          },
+          "sub-007": {
+            "subject": "sub-007",
+            "amplitude_uV": -0.785,
+            "n_face": 79,
+            "n_car": 79,
+            "n_face_presented": 80,
+            "n_car_presented": 80,
+            "pct_trials_rejected": 1.25,
+            "n_ica_components_removed": 1,
+            "n_window_samples": 19
+          },
+          "sub-008": {
+            "subject": "sub-008",
+            "amplitude_uV": 0.63,
+            "n_face": 79,
+            "n_car": 80,
+            "n_face_presented": 80,
+            "n_car_presented": 80,
+            "pct_trials_rejected": 0.625,
+            "n_ica_components_removed": 1,
+            "n_window_samples": 19
+          },
+          "sub-009": {
+            "subject": "sub-009",
+            "amplitude_uV": -0.937,
+            "n_face": 79,
+            "n_car": 79,
+            "n_face_presented": 80,
+            "n_car_presented": 80,
+            "pct_trials_rejected": 1.25,
+            "n_ica_components_removed": 2,
+            "n_window_samples": 19
+          },
+          "sub-010": {
+            "subject": "sub-010",
+            "amplitude_uV": -1.392,
+            "n_face": 76,
+            "n_car": 77,
+            "n_face_presented": 80,
+            "n_car_presented": 80,
+            "pct_trials_rejected": 4.375,
+            "n_ica_components_removed": 1,
+            "n_window_samples": 19
+          },
+          "sub-011": {
+            "subject": "sub-011",
+            "amplitude_uV": -1.415,
+            "n_face": 73,
+            "n_car": 72,
+            "n_face_presented": 80,
+            "n_car_presented": 80,
+            "pct_trials_rejected": 9.375,
+            "n_ica_components_removed": 1,
+            "n_window_samples": 19
+          },
+          "sub-012": {
+            "subject": "sub-012",
+            "amplitude_uV": -1.313,
+            "n_face": 74,
+            "n_car": 77,
+            "n_face_presented": 80,
+            "n_car_presented": 80,
+            "pct_trials_rejected": 5.625,
+            "n_ica_components_removed": 0,
+            "n_window_samples": 19
+          },
+          "sub-013": {
+            "subject": "sub-013",
+            "amplitude_uV": -1.757,
+            "n_face": 80,
+            "n_car": 79,
+            "n_face_presented": 80,
+            "n_car_presented": 80,
+            "pct_trials_rejected": 0.625,
+            "n_ica_components_removed": 1,
+            "n_window_samples": 19
+          },
+          "sub-014": {
+            "subject": "sub-014",
+            "amplitude_uV": -3.302,
+            "n_face": 80,
+            "n_car": 80,
+            "n_face_presented": 80,
+            "n_car_presented": 80,
+            "pct_trials_rejected": 0.0,
+            "n_ica_components_removed": 1,
+            "n_window_samples": 19
+          },
+          "sub-015": {
+            "subject": "sub-015",
+            "amplitude_uV": -2.419,
+            "n_face": 78,
+            "n_car": 78,
+            "n_face_presented": 80,
+            "n_car_presented": 80,
+            "pct_trials_rejected": 2.5,
+            "n_ica_components_removed": 0,
+            "n_window_samples": 19
+          },
+          "sub-016": {
+            "subject": "sub-016",
+            "amplitude_uV": -1.633,
+            "n_face": 71,
+            "n_car": 79,
+            "n_face_presented": 80,
+            "n_car_presented": 80,
+            "pct_trials_rejected": 6.25,
+            "n_ica_components_removed": 0,
+            "n_window_samples": 19
+          },
+          "sub-017": {
+            "subject": "sub-017",
+            "amplitude_uV": -0.417,
+            "n_face": 80,
+            "n_car": 79,
+            "n_face_presented": 80,
+            "n_car_presented": 80,
+            "pct_trials_rejected": 0.625,
+            "n_ica_components_removed": 1,
+            "n_window_samples": 19
+          },
+          "sub-018": {
+            "subject": "sub-018",
+            "amplitude_uV": 0.611,
+            "n_face": 78,
+            "n_car": 76,
+            "n_face_presented": 80,
+            "n_car_presented": 80,
+            "pct_trials_rejected": 3.75,
+            "n_ica_components_removed": 1,
+            "n_window_samples": 19
+          },
+          "sub-019": {
+            "subject": "sub-019",
+            "amplitude_uV": -0.473,
+            "n_face": 80,
+            "n_car": 80,
+            "n_face_presented": 80,
+            "n_car_presented": 80,
+            "pct_trials_rejected": 0.0,
+            "n_ica_components_removed": 0,
+            "n_window_samples": 19
+          },
+          "sub-020": {
+            "subject": "sub-020",
+            "amplitude_uV": -1.458,
+            "n_face": 80,
+            "n_car": 79,
+            "n_face_presented": 80,
+            "n_car_presented": 80,
+            "pct_trials_rejected": 0.625,
+            "n_ica_components_removed": 1,
+            "n_window_samples": 19
+          }
+        },
+        "notes": "Standard ERP-CORE-style N170 pipeline. Data are re-referenced to the common average of the 30 scalp electrodes; the ocular leads are typed as EOG and used only to identify blink/saccade ICA components, so they never enter the reference or the ERP. Epochs are baseline-corrected on the 200 ms pre-stimulus interval and screened with a 100 uV peak-to-peak criterion. The face-selectivity measure is the mean (not peak) amplitude of the face-minus-car difference wave over the bilateral occipito-temporal ROI (PO7, PO8, P7, P8) in 130-200 ms, which is the conventional N170 latency range; a negative value means faces elicit a more negative response than cars, i.e. the expected N170 face effect. All values rounded to 3 decimal places."
+      },
+      "per_subject": {
+        "sub-001": -2.685,
+        "sub-002": -2.064,
+        "sub-003": -0.641,
+        "sub-004": -0.137,
+        "sub-005": -1.15,
+        "sub-006": -1.304,
+        "sub-007": -0.785,
+        "sub-008": 0.63,
+        "sub-009": -0.937,
+        "sub-010": -1.392,
+        "sub-011": -1.415,
+        "sub-012": -1.313,
+        "sub-013": -1.757,
+        "sub-014": -3.302,
+        "sub-015": -2.419,
+        "sub-016": -1.633,
+        "sub-017": -0.417,
+        "sub-018": 0.611,
+        "sub-019": -0.473,
+        "sub-020": -1.458
+      }
+    },
+    "N170_L0_2": {
+      "n_analyzed": 19,
+      "grand_mean_uV": -1.226,
+      "choices": {
+        "notes": "Reference: average of the 30 scalp electrodes (EOG channels re-typed to EOG first so they are excluded from the average). Preprocessing: zero-phase FIR band-pass 0.1-30 Hz on the 1024 Hz data (no resampling, so events.tsv onsets map exactly onto samples); ocular artefacts removed with extended-infomax ICA (Picard, 20 components) fitted on a 1-30 Hz / 256 Hz copy, excluding components whose correlation with HEOG_left, HEOG_right or VEOG_lower exceeded z=3; then average reference. Epochs -200 to +800 ms, baseline -200 to 0 ms, epochs rejected at 100 uV peak-to-peak (or flat below 0.1 uV) on any scalp electrode. Faces = events.tsv value 1-40, cars = 41-80; scrambled (101-180) and responses (201/202) ignored. Conditions averaged separately, difference wave = face - car, and the measure is the mean amplitude of that difference wave averaged over PO7, PO8, P7, P8 and over 130-200 ms (endpoints inclusive), in microvolts. Bad-channel interpolation was not performed (no protocol-defined bad-channel list). A subject is excluded if fewer than 20 clean epochs remain in either condition.",
+        "reference": "average reference over the 30 scalp EEG channels",
+        "eog_channels_retyped": [
+          "HEOG_left",
+          "HEOG_right",
+          "VEOG_lower"
+        ],
+        "filter": {
+          "l_freq_hz": 0.1,
+          "h_freq_hz": 30.0,
+          "method": "FIR, firwin/Hamming, zero-phase (non-causal)"
+        },
+        "resampling": "none (analysis kept at the native 1024 Hz)",
+        "artifact_correction": {
+          "method": "ICA (Picard, extended infomax), fallback extended infomax",
+          "n_components": 20,
+          "fit_on": "copy high-passed at 1.0 Hz and resampled to 256.0 Hz",
+          "component_selection": "find_bads_eog z-score threshold 3.0",
+          "random_state": 97
+        },
+        "epoching": {
+          "tmin_s": -0.2,
+          "tmax_s": 0.8,
+          "baseline_s": [
+            -0.2,
+            0.0
+          ],
+          "reject_peak_to_peak_uV": 100.0,
+          "flat_peak_to_peak_uV": 0.1
+        },
+        "conditions": {
+          "face": "events.tsv value 1-40",
+          "car": "events.tsv value 41-80",
+          "ignored": "101-180 (scrambled), 201/202 (responses)"
+        },
+        "contrast": "face-minus-car difference wave (face average - car average)",
+        "roi": [
+          "PO7",
+          "PO8",
+          "P7",
+          "P8"
+        ],
+        "time_window_ms": [
+          130.0,
+          200.0
+        ],
+        "measure": "mean amplitude across ROI channels and time window, in uV",
+        "exclusion_rule": "missing/unreadable data, or < 20 clean epochs in either condition",
+        "exclusion_reasons": {
+          "sub-003": "RuntimeError: too few clean epochs (face=1, car=2; minimum 20 per condition)"
+        },
+        "software": {
+          "mne": "1.11.0",
+          "numpy": "2.4.3",
+          "pandas": "3.0.1"
+        },
+        "per_subject_diagnostics": {
+          "sub-001": {
+            "n_face": 25,
+            "n_car": 26,
+            "n_events_face": 80,
+            "n_events_car": 80,
+            "n_ica_removed": 1,
+            "roi_used": [
+              "PO7",
+              "PO8",
+              "P7",
+              "P8"
+            ],
+            "n_window_samples": 73
+          },
+          "sub-002": {
+            "n_face": 71,
+            "n_car": 77,
+            "n_events_face": 80,
+            "n_events_car": 80,
+            "n_ica_removed": 0,
+            "roi_used": [
+              "PO7",
+              "PO8",
+              "P7",
+              "P8"
+            ],
+            "n_window_samples": 73
+          },
+          "sub-004": {
+            "n_face": 75,
+            "n_car": 79,
+            "n_events_face": 80,
+            "n_events_car": 80,
+            "n_ica_removed": 1,
+            "roi_used": [
+              "PO7",
+              "PO8",
+              "P7",
+              "P8"
+            ],
+            "n_window_samples": 73
+          },
+          "sub-005": {
+            "n_face": 80,
+            "n_car": 76,
+            "n_events_face": 80,
+            "n_events_car": 80,
+            "n_ica_removed": 1,
+            "roi_used": [
+              "PO7",
+              "PO8",
+              "P7",
+              "P8"
+            ],
+            "n_window_samples": 73
+          },
+          "sub-006": {
+            "n_face": 77,
+            "n_car": 79,
+            "n_events_face": 80,
+            "n_events_car": 80,
+            "n_ica_removed": 1,
+            "roi_used": [
+              "PO7",
+              "PO8",
+              "P7",
+              "P8"
+            ],
+            "n_window_samples": 73
+          },
+          "sub-007": {
+            "n_face": 80,
+            "n_car": 80,
+            "n_events_face": 80,
+            "n_events_car": 80,
+            "n_ica_removed": 2,
+            "roi_used": [
+              "PO7",
+              "PO8",
+              "P7",
+              "P8"
+            ],
+            "n_window_samples": 73
+          },
+          "sub-008": {
+            "n_face": 78,
+            "n_car": 80,
+            "n_events_face": 80,
+            "n_events_car": 80,
+            "n_ica_removed": 1,
+            "roi_used": [
+              "PO7",
+              "PO8",
+              "P7",
+              "P8"
+            ],
+            "n_window_samples": 73
+          },
+          "sub-009": {
+            "n_face": 79,
+            "n_car": 78,
+            "n_events_face": 80,
+            "n_events_car": 80,
+            "n_ica_removed": 2,
+            "roi_used": [
+              "PO7",
+              "PO8",
+              "P7",
+              "P8"
+            ],
+            "n_window_samples": 73
+          },
+          "sub-010": {
+            "n_face": 72,
+            "n_car": 78,
+            "n_events_face": 80,
+            "n_events_car": 80,
+            "n_ica_removed": 2,
+            "roi_used": [
+              "PO7",
+              "PO8",
+              "P7",
+              "P8"
+            ],
+            "n_window_samples": 73
+          },
+          "sub-011": {
+            "n_face": 61,
+            "n_car": 61,
+            "n_events_face": 80,
+            "n_events_car": 80,
+            "n_ica_removed": 1,
+            "roi_used": [
+              "PO7",
+              "PO8",
+              "P7",
+              "P8"
+            ],
+            "n_window_samples": 73
+          },
+          "sub-012": {
+            "n_face": 64,
+            "n_car": 65,
+            "n_events_face": 80,
+            "n_events_car": 80,
+            "n_ica_removed": 1,
+            "roi_used": [
+              "PO7",
+              "PO8",
+              "P7",
+              "P8"
+            ],
+            "n_window_samples": 73
+          },
+          "sub-013": {
+            "n_face": 80,
+            "n_car": 79,
+            "n_events_face": 80,
+            "n_events_car": 80,
+            "n_ica_removed": 1,
+            "roi_used": [
+              "PO7",
+              "PO8",
+              "P7",
+              "P8"
+            ],
+            "n_window_samples": 73
+          },
+          "sub-014": {
+            "n_face": 79,
+            "n_car": 80,
+            "n_events_face": 80,
+            "n_events_car": 80,
+            "n_ica_removed": 1,
+            "roi_used": [
+              "PO7",
+              "PO8",
+              "P7",
+              "P8"
+            ],
+            "n_window_samples": 73
+          },
+          "sub-015": {
+            "n_face": 50,
+            "n_car": 55,
+            "n_events_face": 80,
+            "n_events_car": 80,
+            "n_ica_removed": 0,
+            "roi_used": [
+              "PO7",
+              "PO8",
+              "P7",
+              "P8"
+            ],
+            "n_window_samples": 73
+          },
+          "sub-016": {
+            "n_face": 60,
+            "n_car": 74,
+            "n_events_face": 80,
+            "n_events_car": 80,
+            "n_ica_removed": 0,
+            "roi_used": [
+              "PO7",
+              "PO8",
+              "P7",
+              "P8"
+            ],
+            "n_window_samples": 73
+          },
+          "sub-017": {
+            "n_face": 79,
+            "n_car": 78,
+            "n_events_face": 80,
+            "n_events_car": 80,
+            "n_ica_removed": 1,
+            "roi_used": [
+              "PO7",
+              "PO8",
+              "P7",
+              "P8"
+            ],
+            "n_window_samples": 73
+          },
+          "sub-018": {
+            "n_face": 76,
+            "n_car": 76,
+            "n_events_face": 80,
+            "n_events_car": 80,
+            "n_ica_removed": 1,
+            "roi_used": [
+              "PO7",
+              "PO8",
+              "P7",
+              "P8"
+            ],
+            "n_window_samples": 73
+          },
+          "sub-019": {
+            "n_face": 78,
+            "n_car": 76,
+            "n_events_face": 80,
+            "n_events_car": 80,
+            "n_ica_removed": 0,
+            "roi_used": [
+              "PO7",
+              "PO8",
+              "P7",
+              "P8"
+            ],
+            "n_window_samples": 73
+          },
+          "sub-020": {
+            "n_face": 79,
+            "n_car": 79,
+            "n_events_face": 80,
+            "n_events_car": 80,
+            "n_ica_removed": 1,
+            "roi_used": [
+              "PO7",
+              "PO8",
+              "P7",
+              "P8"
+            ],
+            "n_window_samples": 73
+          }
+        }
+      },
+      "per_subject": {
+        "sub-001": -2.695,
+        "sub-002": -2.316,
+        "sub-004": 0.201,
+        "sub-005": -1.091,
+        "sub-006": -1.14,
+        "sub-007": -0.933,
+        "sub-008": 0.736,
+        "sub-009": -0.93,
+        "sub-010": -1.416,
+        "sub-011": -0.851,
+        "sub-012": -1.502,
+        "sub-013": -1.757,
+        "sub-014": -3.39,
+        "sub-015": -2.56,
+        "sub-016": -1.85,
+        "sub-017": -0.514,
+        "sub-018": 0.658,
+        "sub-019": -0.354,
+        "sub-020": -1.583
+      }
+    }
+  }
+}

@@ -1,0 +1,260 @@
+{
+  "dataset": "ERP CORE MMN (mne erpcoremmn2021), deviant(70dB) - standard(80dB)",
+  "n_subjects": 38,
+  "roi": [
+    "Fz",
+    "FCz",
+    "Cz"
+  ],
+  "mmn_window_s": [
+    0.1,
+    0.25
+  ],
+  "grand_mean_mmn_uV": -0.84,
+  "mmn_sem_uV": 0.107,
+  "one_sample_t": -7.87,
+  "one_sample_p": 2.0281041848833626e-09,
+  "cohens_dz": -1.277,
+  "second_level_cluster": {
+    "n_clusters": 1,
+    "n_significant": 1,
+    "min_p": 0.0002,
+    "significant": [
+      [
+        0,
+        0.0002
+      ]
+    ]
+  },
+  "PASS": true,
+  "per_subject": [
+    {
+      "subject": "sub-001",
+      "mmn_uV": -0.724,
+      "n_dev": 117,
+      "n_std": 479
+    },
+    {
+      "subject": "sub-002",
+      "mmn_uV": -1.559,
+      "n_dev": 165,
+      "n_std": 644
+    },
+    {
+      "subject": "sub-003",
+      "mmn_uV": -0.091,
+      "n_dev": 114,
+      "n_std": 471
+    },
+    {
+      "subject": "sub-004",
+      "mmn_uV": -0.638,
+      "n_dev": 168,
+      "n_std": 669
+    },
+    {
+      "subject": "sub-005",
+      "mmn_uV": -1.319,
+      "n_dev": 80,
+      "n_std": 359
+    },
+    {
+      "subject": "sub-006",
+      "mmn_uV": -0.584,
+      "n_dev": 158,
+      "n_std": 642
+    },
+    {
+      "subject": "sub-008",
+      "mmn_uV": 0.342,
+      "n_dev": 96,
+      "n_std": 449
+    },
+    {
+      "subject": "sub-009",
+      "mmn_uV": -1.249,
+      "n_dev": 134,
+      "n_std": 533
+    },
+    {
+      "subject": "sub-010",
+      "mmn_uV": -1.218,
+      "n_dev": 131,
+      "n_std": 541
+    },
+    {
+      "subject": "sub-011",
+      "mmn_uV": -0.544,
+      "n_dev": 182,
+      "n_std": 732
+    },
+    {
+      "subject": "sub-013",
+      "mmn_uV": -0.32,
+      "n_dev": 183,
+      "n_std": 737
+    },
+    {
+      "subject": "sub-014",
+      "mmn_uV": -0.615,
+      "n_dev": 136,
+      "n_std": 561
+    },
+    {
+      "subject": "sub-015",
+      "mmn_uV": -0.592,
+      "n_dev": 172,
+      "n_std": 677
+    },
+    {
+      "subject": "sub-016",
+      "mmn_uV": -1.11,
+      "n_dev": 169,
+      "n_std": 651
+    },
+    {
+      "subject": "sub-017",
+      "mmn_uV": -0.132,
+      "n_dev": 127,
+      "n_std": 457
+    },
+    {
+      "subject": "sub-018",
+      "mmn_uV": -0.717,
+      "n_dev": 124,
+      "n_std": 556
+    },
+    {
+      "subject": "sub-019",
+      "mmn_uV": -0.576,
+      "n_dev": 200,
+      "n_std": 784
+    },
+    {
+      "subject": "sub-020",
+      "mmn_uV": -0.906,
+      "n_dev": 183,
+      "n_std": 718
+    },
+    {
+      "subject": "sub-021",
+      "mmn_uV": -1.323,
+      "n_dev": 142,
+      "n_std": 594
+    },
+    {
+      "subject": "sub-022",
+      "mmn_uV": -0.522,
+      "n_dev": 167,
+      "n_std": 686
+    },
+    {
+      "subject": "sub-023",
+      "mmn_uV": 0.059,
+      "n_dev": 112,
+      "n_std": 458
+    },
+    {
+      "subject": "sub-024",
+      "mmn_uV": -1.184,
+      "n_dev": 171,
+      "n_std": 685
+    },
+    {
+      "subject": "sub-025",
+      "mmn_uV": -0.323,
+      "n_dev": 174,
+      "n_std": 686
+    },
+    {
+      "subject": "sub-026",
+      "mmn_uV": -0.593,
+      "n_dev": 182,
+      "n_std": 697
+    },
+    {
+      "subject": "sub-027",
+      "mmn_uV": -0.515,
+      "n_dev": 176,
+      "n_std": 658
+    },
+    {
+      "subject": "sub-028",
+      "mmn_uV": -0.09,
+      "n_dev": 173,
+      "n_std": 672
+    },
+    {
+      "subject": "sub-029",
+      "mmn_uV": -1.446,
+      "n_dev": 156,
+      "n_std": 591
+    },
+    {
+      "subject": "sub-030",
+      "mmn_uV": -2.894,
+      "n_dev": 85,
+      "n_std": 299
+    },
+    {
+      "subject": "sub-031",
+      "mmn_uV": -0.885,
+      "n_dev": 171,
+      "n_std": 677
+    },
+    {
+      "subject": "sub-032",
+      "mmn_uV": -0.457,
+      "n_dev": 91,
+      "n_std": 373
+    },
+    {
+      "subject": "sub-033",
+      "mmn_uV": -0.803,
+      "n_dev": 199,
+      "n_std": 782
+    },
+    {
+      "subject": "sub-034",
+      "mmn_uV": -1.361,
+      "n_dev": 190,
+      "n_std": 733
+    },
+    {
+      "subject": "sub-035",
+      "mmn_uV": -0.586,
+      "n_dev": 142,
+      "n_std": 509
+    },
+    {
+      "subject": "sub-036",
+      "mmn_uV": -0.498,
+      "n_dev": 152,
+      "n_std": 594
+    },
+    {
+      "subject": "sub-037",
+      "mmn_uV": -1.97,
+      "n_dev": 154,
+      "n_std": 626
+    },
+    {
+      "subject": "sub-038",
+      "mmn_uV": -1.884,
+      "n_dev": 177,
+      "n_std": 712
+    },
+    {
+      "subject": "sub-039",
+      "mmn_uV": -2.004,
+      "n_dev": 97,
+      "n_std": 360
+    },
+    {
+      "subject": "sub-040",
+      "mmn_uV": -0.083,
+      "n_dev": 125,
+      "n_std": 492
+    }
+  ]
+}

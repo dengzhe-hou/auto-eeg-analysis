@@ -1,0 +1,152 @@
+{
+  "dataset": "ERP CORE N400 (Kappenman 2021), unrelated - related (target words)",
+  "n_subjects": 20,
+  "roi": [
+    "CPz",
+    "Cz",
+    "Pz"
+  ],
+  "n400_window_s": [
+    0.3,
+    0.5
+  ],
+  "grand_mean_n400_uV": -2.957,
+  "n400_sem_uV": 0.466,
+  "one_sample_t": -6.34,
+  "one_sample_p": 4.377166115954283e-06,
+  "cohens_dz": -1.418,
+  "second_level_cluster": {
+    "n_clusters": 1,
+    "n_significant": 1,
+    "min_p": 0.0002,
+    "significant": [
+      [
+        0,
+        0.0002
+      ]
+    ]
+  },
+  "PASS": true,
+  "per_subject": [
+    {
+      "subject": "sub-001",
+      "n400_uV": -0.926,
+      "n_dev": 60,
+      "n_std": 60
+    },
+    {
+      "subject": "sub-002",
+      "n400_uV": -4.63,
+      "n_dev": 60,
+      "n_std": 60
+    },
+    {
+      "subject": "sub-003",
+      "n400_uV": -5.974,
+      "n_dev": 60,
+      "n_std": 60
+    },
+    {
+      "subject": "sub-004",
+      "n400_uV": -4.539,
+      "n_dev": 60,
+      "n_std": 60
+    },
+    {
+      "subject": "sub-005",
+      "n400_uV": -1.615,
+      "n_dev": 60,
+      "n_std": 60
+    },
+    {
+      "subject": "sub-006",
+      "n400_uV": -1.731,
+      "n_dev": 60,
+      "n_std": 60
+    },
+    {
+      "subject": "sub-007",
+      "n400_uV": -5.657,
+      "n_dev": 60,
+      "n_std": 60
+    },
+    {
+      "subject": "sub-008",
+      "n400_uV": -1.614,
+      "n_dev": 60,
+      "n_std": 60
+    },
+    {
+      "subject": "sub-009",
+      "n400_uV": 0.26,
+      "n_dev": 60,
+      "n_std": 60
+    },
+    {
+      "subject": "sub-010",
+      "n400_uV": -3.216,
+      "n_dev": 60,
+      "n_std": 60
+    },
+    {
+      "subject": "sub-011",
+      "n400_uV": -4.899,
+      "n_dev": 60,
+      "n_std": 60
+    },
+    {
+      "subject": "sub-012",
+      "n400_uV": -5.692,
+      "n_dev": 60,
+      "n_std": 60
+    },
+    {
+      "subject": "sub-013",
+      "n400_uV": -1.691,
+      "n_dev": 60,
+      "n_std": 60
+    },
+    {
+      "subject": "sub-014",
+      "n400_uV": -2.174,
+      "n_dev": 60,
+      "n_std": 60
+    },
+    {
+      "subject": "sub-015",
+      "n400_uV": -3.09,
+      "n_dev": 60,
+      "n_std": 60
+    },
+    {
+      "subject": "sub-016",
+      "n400_uV": -4.547,
+      "n_dev": 60,
+      "n_std": 60
+    },
+    {
+      "subject": "sub-017",
+      "n400_uV": -0.254,
+      "n_dev": 60,
+      "n_std": 60
+    },
+    {
+      "subject": "sub-018",
+      "n400_uV": 0.845,
+      "n_dev": 60,
+      "n_std": 60
+    },
+    {
+      "subject": "sub-019",
+      "n400_uV": -4.815,
+      "n_dev": 60,
+      "n_std": 60
+    },
+    {
+      "subject": "sub-020",
+      "n400_uV": -3.185,
+      "n_dev": 60,
+      "n_std": 60
+    }
+  ]
+}

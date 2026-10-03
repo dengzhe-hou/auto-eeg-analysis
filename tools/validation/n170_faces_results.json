@@ -1,0 +1,293 @@
+{
+  "dataset": "OpenNeuro ds000117 (Wakeman & Henson 2015), EEG from MEG .fif, faces - scrambled",
+  "n_subjects": 16,
+  "n170_window_s": [
+    0.13,
+    0.2
+  ],
+  "roi_example": [
+    "EEG049",
+    "EEG050",
+    "EEG048",
+    "EEG060",
+    "EEG052",
+    "EEG051",
+    "EEG053",
+    "EEG066"
+  ],
+  "grand_mean_n170_uV": -0.641,
+  "n170_sem_uV": 0.251,
+  "one_sample_t": -2.56,
+  "one_sample_p": 0.02186916937258797,
+  "cohens_dz": -0.639,
+  "second_level_cluster": {
+    "n_clusters": 7,
+    "n_significant": 1,
+    "min_p": 0.0288,
+    "significant": [
+      [
+        6,
+        0.0288
+      ]
+    ]
+  },
+  "PASS": true,
+  "per_subject": [
+    {
+      "subject": "sub-01",
+      "n170_uV": -0.594,
+      "n_face": 96,
+      "n_scrambled": 50,
+      "roi": [
+        "EEG049",
+        "EEG050",
+        "EEG048",
+        "EEG060",
+        "EEG040",
+        "EEG052",
+        "EEG051",
+        "EEG053"
+      ]
+    },
+    {
+      "subject": "sub-02",
+      "n170_uV": -2.791,
+      "n_face": 97,
+      "n_scrambled": 48,
+      "roi": [
+        "EEG050",
+        "EEG049",
+        "EEG060",
+        "EEG065",
+        "EEG041",
+        "EEG040",
+        "EEG052",
+        "EEG051"
+      ]
+    },
+    {
+      "subject": "sub-03",
+      "n170_uV": -0.332,
+      "n_face": 99,
+      "n_scrambled": 46,
+      "roi": [
+        "EEG050",
+        "EEG049",
+        "EEG048",
+        "EEG060",
+        "EEG041",
+        "EEG040",
+        "EEG042",
+        "EEG052"
+      ]
+    },
+    {
+      "subject": "sub-04",
+      "n170_uV": -0.19,
+      "n_face": 86,
+      "n_scrambled": 42,
+      "roi": [
+        "EEG049",
+        "EEG050",
+        "EEG060",
+        "EEG065",
+        "EEG041",
+        "EEG040",
+        "EEG042",
+        "EEG052"
+      ]
+    },
+    {
+      "subject": "sub-05",
+      "n170_uV": -1.555,
+      "n_face": 94,
+      "n_scrambled": 48,
+      "roi": [
+        "EEG049",
+        "EEG048",
+        "EEG050",
+        "EEG060",
+        "EEG041",
+        "EEG040",
+        "EEG052",
+        "EEG051"
+      ]
+    },
+    {
+      "subject": "sub-06",
+      "n170_uV": 0.985,
+      "n_face": 97,
+      "n_scrambled": 49,
+      "roi": [
+        "EEG049",
+        "EEG050",
+        "EEG048",
+        "EEG065",
+        "EEG040",
+        "EEG052",
+        "EEG053",
+        "EEG051"
+      ]
+    },
+    {
+      "subject": "sub-07",
+      "n170_uV": -0.269,
+      "n_face": 99,
+      "n_scrambled": 49,
+      "roi": [
+        "EEG049",
+        "EEG048",
+        "EEG050",
+        "EEG060",
+        "EEG052",
+        "EEG051",
+        "EEG053",
+        "EEG066"
+      ]
+    },
+    {
+      "subject": "sub-08",
+      "n170_uV": 0.076,
+      "n_face": 79,
+      "n_scrambled": 42,
+      "roi": [
+        "EEG049",
+        "EEG060",
+        "EEG059",
+        "EEG065",
+        "EEG040",
+        "EEG052",
+        "EEG053",
+        "EEG051"
+      ]
+    },
+    {
+      "subject": "sub-09",
+      "n170_uV": 0.013,
+      "n_face": 97,
+      "n_scrambled": 47,
+      "roi": [
+        "EEG049",
+        "EEG048",
+        "EEG050",
+        "EEG060",
+        "EEG041",
+        "EEG042",
+        "EEG040",
+        "EEG052"
+      ]
+    },
+    {
+      "subject": "sub-10",
+      "n170_uV": 0.267,
+      "n_face": 97,
+      "n_scrambled": 47,
+      "roi": [
+        "EEG050",
+        "EEG049",
+        "EEG048",
+        "EEG065",
+        "EEG041",
+        "EEG040",
+        "EEG052",
+        "EEG051"
+      ]
+    },
+    {
+      "subject": "sub-11",
+      "n170_uV": -0.415,
+      "n_face": 77,
+      "n_scrambled": 45,
+      "roi": [
+        "EEG049",
+        "EEG050",
+        "EEG048",
+        "EEG060",
+        "EEG040",
+        "EEG052",
+        "EEG051",
+        "EEG053"
+      ]
+    },
+    {
+      "subject": "sub-12",
+      "n170_uV": -1.268,
+      "n_face": 93,
+      "n_scrambled": 46,
+      "roi": [
+        "EEG049",
+        "EEG050",
+        "EEG048",
+        "EEG060",
+        "EEG040",
+        "EEG052",
+        "EEG051",
+        "EEG053"
+      ]
+    },
+    {
+      "subject": "sub-13",
+      "n170_uV": -1.397,
+      "n_face": 96,
+      "n_scrambled": 48,
+      "roi": [
+        "EEG049",
+        "EEG050",
+        "EEG048",
+        "EEG060",
+        "EEG041",
+        "EEG042",
+        "EEG040",
+        "EEG052"
+      ]
+    },
+    {
+      "subject": "sub-14",
+      "n170_uV": -0.703,
+      "n_face": 96,
+      "n_scrambled": 46,
+      "roi": [
+        "EEG049",
+        "EEG050",
+        "EEG048",
+        "EEG060",
+        "EEG041",
+        "EEG040",
+        "EEG042",
+        "EEG052"
+      ]
+    },
+    {
+      "subject": "sub-15",
+      "n170_uV": -2.348,
+      "n_face": 99,
+      "n_scrambled": 46,
+      "roi": [
+        "EEG050",
+        "EEG049",
+        "EEG048",
+        "EEG060",
+        "EEG052",
+        "EEG051",
+        "EEG053",
+        "EEG001"
+      ]
+    },
+    {
+      "subject": "sub-16",
+      "n170_uV": 0.268,
+      "n_face": 52,
+      "n_scrambled": 25,
+      "roi": [
+        "EEG050",
+        "EEG060",
+        "EEG059",
+        "EEG065",
+        "EEG041",
+        "EEG042",
+        "EEG040",
+        "EEG052"
+      ]
+    }
+  ]
+}

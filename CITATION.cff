@@ -1,0 +1,29 @@
+cff-version: 1.2.0
+title: "auto-eeg-analysis (AEA)"
+message: "If you use this software in your research, please cite it as below. If you used a specific recipe, also cite the source paper declared in that recipe's citation.bib."
+type: software
+authors:
+  - family-names: Hou
+    given-names: Dengzhe
+    email: hou.dengzhe.t8@dc.tohoku.ac.jp
+    affiliation: Tohoku University
+repository-code: "https://github.com/dengzhe-hou/auto-eeg-analysis"
+abstract: >
+  AEA is an open library of EEG analysis skills for MNE-Python, with executable
+  specifications and a numerically certified core. It provides shareable
+  paradigm-specific recipes, automatic COBIDAS-MEEG methods-text generation,
+  and a pre-submission reviewer-anticipation audit. EEGLAB and FieldTrip provide
+  independent validation and selected alternative backend paths.
+keywords:
+  - EEG
+  - electroencephalography
+  - reproducibility
+  - LLM agent
+  - Claude Code
+  - automated analysis
+  - MNE-Python
+  - EEGLAB
+  - FieldTrip
+license: MIT
+version: 0.3.2
+date-released: 2026-10-03

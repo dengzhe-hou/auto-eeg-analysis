@@ -1,0 +1,274 @@
+{
+  "schema_version": "1",
+  "_doc": [
+    "Single machine-readable source of truth for backend selection.",
+    "",
+    "Each capability lists candidate backends in PREFERENCE ORDER. A backend is usable only if",
+    "every path in `requires` resolves to an object with .available == true in ENVIRONMENT.json.",
+    "",
+    "`agreement` records what was MEASURED against the certified MNE reference \u2014 not asserted.",
+    "Numbers come from tools/benchmark/CROSS_TOOLBOX_RESULT.json (see CROSS_TOOLBOX_EVAL.md).",
+    "Where nothing was measured the field says so; a resolver must not imply equivalence it",
+    "cannot cite.",
+    "",
+    "`pin` is the load-bearing field. Cross-toolbox agreement is NOT a property of the toolbox \u2014",
+    "it is a property of how completely the specification is pinned. Leaving any listed convention",
+    "to the toolbox default produced per-subject divergence of up to 43% of the group effect",
+    "(CROSS_TOOLBOX_EVAL.md sec 2). A backend must therefore never be selected without also",
+    "emitting its `pin` list into the generated code.",
+    "",
+    "Adding a backend requires: a probe entry in tools/env/check_env.{sh,ps1}, an entry here, and",
+    "either measured agreement or an explicit `\"measured\": false`. tools/tests/test_backends.py",
+    "enforces the first and third."
+  ],
+  "backends": {
+    "mne": {
+      "label": "MNE-Python",
+      "language": "python",
+      "requires": [
+        "python_packages.mne"
+      ],
+      "reference": true,
+      "notes": "The certified reference. All committed tools/validation/*_results.json were produced here."
+    },
+    "eeglab": {
+      "label": "EEGLAB (MATLAB or GNU Octave)",
+      "language": "matlab",
+      "requires": [
+        "eeglab",
+        "matlab_engine"
+      ],
+      "reference": false,
+      "notes": "Validated under Octave 10.3; MATLAB assumed equivalent but not verified."
+    },
+    "fieldtrip": {
+      "label": "FieldTrip (MATLAB or GNU Octave)",
+      "language": "matlab",
+      "requires": [
+        "fieldtrip",
+        "matlab_engine"
+      ],
+      "reference": false,
+      "notes": "Validated with FieldTrip 20170830 under Octave 10.3. Newer releases may change defaults."
+    }
+  },
+  "capabilities": {
+    "erp.preprocess_average": {
+      "description": "Filter, re-reference, epoch, baseline-correct and average an ERP contrast.",
+      "candidates": [
+        "mne",
+        "eeglab",
+        "fieldtrip"
+      ],
+      "agreement": {
+        "mne": {
+          "measured": true,
+          "role": "reference",
+          "evidence": "docs/BENCHMARK.md \u2014 5 components vs MNE-BIDS-Pipeline 1.10.1, CCC >= 0.9997"
+        },
+        "eeglab": {
+          "measured": true,
+          "n_components": 5,
+          "components": [
+            "MMN",
+            "P3",
+            "N170",
+            "ERN",
+            "N400"
+          ],
+          "worst_max_abs_diff_uV": 0.233,
+          "worst_mean_abs_diff_uV": 0.0568,
+          "min_ccc": 0.995329,
+          "worst_grand_mean_diff_pct": 3.32,
+          "group_conclusion_reproduced": "5/5",
+          "evidence": "tools/benchmark/CROSS_TOOLBOX_EVAL.md sec 1"
+        },
+        "fieldtrip": {
+          "measured": true,
+          "n_components": 5,
+          "components": [
+            "MMN",
+            "P3",
+            "N170",
+            "ERN",
+            "N400"
+          ],
+          "worst_max_abs_diff_uV": 0.7214,
+          "worst_mean_abs_diff_uV": 0.1831,
+          "min_ccc": 0.992787,
+          "worst_grand_mean_diff_pct": 3.779,
+          "group_conclusion_reproduced": "5/5",
+          "with_fully_pinned_spec": {
+            "component": "P3",
+            "max_abs_diff_uV": 0.0496,
+            "ccc": 0.999943,
+            "pearson_r": 1.0,
+            "note": "Pinning the FieldTrip filter specification (cutoff convention AND transition width together) took max|d| from 0.721 to 0.050 uV; the cutoff-convention-only step at a fixed 0.1 Hz transition width is 0.802 -> 0.050 uV. Staged comparison -- not attributable to one parameter alone."
+          },
+          "evidence": "tools/benchmark/CROSS_TOOLBOX_EVAL.md sec 1 and 2b"
+        }
+      },
+      "pin": [
+        {
+          "id": "filter.cutoff_convention",
+          "question": "Does the stated band edge name the passband edge or the -6 dB point?",
+          "mne": "passband edge; -6 dB sits half a transition band below",
+          "eeglab": "passband edge; -6 dB sits half a transition band below",
+          "fieldtrip": "the -6 dB point itself",
+          "consequence": "Unpinned, 'a 0.1 Hz high-pass' is a 2x different filter across toolboxes. Worst-case per-subject error 0.721 uV = 43% of the P3 group effect."
+        },
+        {
+          "id": "filter.transition_width",
+          "question": "How wide is the FIR transition band at each edge?",
+          "mne": "auto: max(l_freq*0.25, 2) capped at l_freq for the low edge; max(h_freq*0.25, 2) for the high edge",
+          "eeglab": "0.1 Hz at both edges by pop_eegfiltnew's heuristic",
+          "fieldtrip": "0.2 Hz at both edges",
+          "consequence": "Changes filter length ~2x. On its own it explained none of the observed P3 divergence, but it sets the -6 dB offset that cutoff_convention depends on, so the two must be pinned together."
+        },
+        {
+          "id": "reject.criterion",
+          "question": "Is the amplitude threshold peak-to-peak or absolute?",
+          "mne": "peak-to-peak (max - min within the epoch)",
+          "eeglab": "absolute amplitude, via pop_eegthresh",
+          "fieldtrip": "no idiomatic default; must be written explicitly",
+          "consequence": "Unpinned, the two retain different trial sets. Harmonizing it improved per-subject agreement 2.2x (mean |d| 0.089 -> 0.040 uV)."
+        },
+        {
+          "id": "resample.algorithm",
+          "question": "Which resampling algorithm?",
+          "mne": "FFT / polyphase",
+          "eeglab": "signal-package resample, or a cubic-spline fallback when Octave Forge signal is absent",
+          "fieldtrip": "ft_resampledata (needs Octave Forge signal); decimation is exact when the data are already band-limited below the new Nyquist",
+          "consequence": "Not isolated by any experiment. After the filter was fully pinned the residual P3 disagreement was 0.05 uV, which bounds this term without attributing it."
+        }
+      ]
+    },
+    "ica.label": {
+      "description": "Automatic labelling of ICA components.",
+      "candidates": [
+        "mne",
+        "eeglab"
+      ],
+      "agreement": {
+        "mne": {
+          "measured": true,
+          "role": "reference",
+          "evidence": "mne-icalabel ports the ICLabel network"
+        },
+        "eeglab": {
+          "measured": false,
+          "reason": "The ICLabel plugin implements the same published network as mne-icalabel, but AEA has not benchmarked them against each other. Do not present them as numerically interchangeable."
+        }
+      },
+      "pin": [
+        {
+          "id": "ica.reference_state",
+          "question": "Is the input average-referenced before ICLabel?",
+          "mne": "required \u2014 mne-icalabel expects average-referenced input",
+          "eeglab": "same requirement",
+          "consequence": "Non-average-referenced input silently degrades classification rather than erroring."
+        }
+      ]
+    },
+    "stats.cluster_permutation": {
+      "description": "Cluster-based permutation test over channels x time.",
+      "candidates": [
+        "mne",
+        "fieldtrip"
+      ],
+      "agreement": {
+        "mne": {
+          "measured": true,
+          "role": "reference",
+          "evidence": "used by every committed validation script"
+        },
+        "fieldtrip": {
+          "measured": true,
+          "n_permutations": 5000,
+          "observed_t_map_rel_diff": 0.0,
+          "clusters_identical_when_threshold_pinned": true,
+          "leading_cluster_tsum_rel_diff_pinned": 0.0,
+          "leading_cluster_tsum_rel_diff_unpinned": 0.063,
+          "same_conclusion": true,
+          "caveat": "FieldTrip's clusterstat needs spm_bwlabel, unavailable to Octave; a pure-Octave connected-component labeller verified against scipy.ndimage.label (12/12) is supplied. FieldTrip still contributes the statistic, threshold, permutation scheme and p-value.",
+          "evidence": "tools/benchmark/CLUSTER_CERT.md",
+          "components": [
+            "N400",
+            "P3",
+            "N170",
+            "ERN"
+          ],
+          "n_components": 4,
+          "tails_covered": [
+            -1,
+            1
+          ],
+          "off_floor_p_comparison": "N170: 0.0124 vs 0.0128 (~0.25 Monte Carlo SE at n=5000)",
+          "elementwise": {
+            "tmap_max_abs_diff": 1.8e-15,
+            "tmap_max_rel_diff": 4.4e-16,
+            "tmap_bit_identical": false,
+            "cluster_partitions_exactly_identical": true,
+            "supported_wording": "machine-precision-equal t-maps; exactly identical cluster partitions",
+            "evidence": "tools/benchmark/cluster_cert/ELEMENTWISE_*.json"
+          },
+          "shipped_configuration": {
+            "note": "certified at the validation scripts' own configuration: component window, one-sided default threshold (MNE threshold=None == FieldTrip clusteralpha 0.05 one-tailed)",
+            "components": [
+              "N400",
+              "ERN",
+              "N170",
+              "P3"
+            ],
+            "windows_s": {
+              "N400": [
+                0.3,
+                0.5
+              ],
+              "ERN": [
+                0.0,
+                0.1
+              ],
+              "N170": [
+                0.13,
+                0.2
+              ],
+              "P3": [
+                0.3,
+                0.5
+              ]
+            },
+            "partitions_identical": true,
+            "tmap_max_abs_diff": 1.8e-15,
+            "leading_tsum_identical_to_printed_precision": true,
+            "mne_reproduces_committed_validation_p_values": true,
+            "evidence": "tools/benchmark/cluster_cert/*_shipped.json, ELEMENTWISE_shipped_*.json, dumps_shipped/"
+          }
+        }
+      },
+      "pin": [
+        {
+          "id": "stats.cluster_forming_tail",
+          "question": "What exact cluster-forming threshold does 'alpha = 0.05, one-sided' become?",
+          "mne": "default (threshold=None) for tail=+/-1 is one-sided: t.ppf(0.95, df); a two-tailed critical value only when tail=0, or when the caller passes one explicitly",
+          "fieldtrip": "cfg.clusteralpha is one-tailed when cfg.tail is set: t.ppf(alpha, df) -- the same convention as MNE's one-sided default",
+          "consequence": "The toolboxes' defaults agree. The 18-vs-14 cluster discrepancy in CLUSTER_CERT.md arose because the certification script passed t.ppf(0.975, df) = 2.093 explicitly to MNE while FieldTrip used 1.729 -- an author-side reading of the phrase, not a toolbox default. With the threshold pinned the two implementations give exactly identical cluster partitions and machine-precision-equal t-maps (ELEMENTWISE_*.json). Always write the threshold as a number (or 'one-sided 0.95 quantile'), never as 'alpha = 0.05'."
+        },
+        {
+          "id": "stats.rng_seed",
+          "question": "What seed, and how many permutations?",
+          "mne": "explicit seed argument",
+          "fieldtrip": "cfg.randomseed",
+          "consequence": "Cluster p-values are not reproducible without both."
+        },
+        {
+          "id": "stats.cluster_threshold",
+          "question": "Cluster-forming threshold and adjacency definition.",
+          "mne": "t at p<0.05 for the actual df; channel adjacency from the montage",
+          "fieldtrip": "cfg.clusteralpha; cfg.neighbours",
+          "consequence": "Different adjacency graphs give different clusters from identical data."
+        }
+      ]
+    }
+  }
+}

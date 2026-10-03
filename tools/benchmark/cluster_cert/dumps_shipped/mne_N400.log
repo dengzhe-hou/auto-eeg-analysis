@@ -1,0 +1,3 @@
+N400: 1 clusters, 1 significant
+   t_sum=   -2102.713  n=  518  p=0.0002  *
+wrote tools/benchmark/cluster_cert/mne_N400_shipped.json
