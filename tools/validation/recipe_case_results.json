@@ -1,0 +1,207 @@
+{
+  "case": "n400-recipe-case",
+  "release": "v0.3.2",
+  "recipe": "recipes/n400-semantic/RECIPE.md",
+  "branch": "documented no-ICA, reject=None benchmark branch",
+  "cohort": "fixed cached ERP CORE sub-001 through sub-020",
+  "status": "complete",
+  "required_stages_complete": true,
+  "inference_domain": "CPz/Cz/Pz, 300-500 ms; different from historical all-channel validation",
+  "results": {
+    "n_subjects": 20,
+    "roi": [
+      "CPz",
+      "Cz",
+      "Pz"
+    ],
+    "window_s": [
+      0.3,
+      0.5
+    ],
+    "contrast": "unrelated - related",
+    "statistical_unit": "participant",
+    "n_permutations": 5000,
+    "seed": 42,
+    "tail": -1,
+    "cluster_forming_p": 0.05,
+    "threshold_t": -1.7291328115213682,
+    "df": 19,
+    "cluster_alpha": 0.05,
+    "grand_mean_uV": -2.957270325887518,
+    "sem_uV": 0.46629109705741617,
+    "clusters": [
+      {
+        "p": 0.0002,
+        "n_samples": 155,
+        "time_bounds_s": [
+          0.30078125,
+          0.5
+        ],
+        "channels": [
+          "CPz",
+          "Cz",
+          "Pz"
+        ]
+      }
+    ],
+    "n_significant_clusters": 1,
+    "min_cluster_p": 0.0002,
+    "hypothesis_supported": true
+  },
+  "retained_trials_per_subject": [
+    {
+      "subject": "sub-001",
+      "related": 60,
+      "unrelated": 60,
+      "n400_uV": -0.9256358210794687
+    },
+    {
+      "subject": "sub-002",
+      "related": 60,
+      "unrelated": 60,
+      "n400_uV": -4.6302090113875245
+    },
+    {
+      "subject": "sub-003",
+      "related": 60,
+      "unrelated": 60,
+      "n400_uV": -5.974066680439763
+    },
+    {
+      "subject": "sub-004",
+      "related": 60,
+      "unrelated": 60,
+      "n400_uV": -4.538807384325877
+    },
+    {
+      "subject": "sub-005",
+      "related": 60,
+      "unrelated": 60,
+      "n400_uV": -1.6153613172093055
+    },
+    {
+      "subject": "sub-006",
+      "related": 60,
+      "unrelated": 60,
+      "n400_uV": -1.7312511611809513
+    },
+    {
+      "subject": "sub-007",
+      "related": 60,
+      "unrelated": 60,
+      "n400_uV": -5.657475543143557
+    },
+    {
+      "subject": "sub-008",
+      "related": 60,
+      "unrelated": 60,
+      "n400_uV": -1.6142335508776826
+    },
+    {
+      "subject": "sub-009",
+      "related": 60,
+      "unrelated": 60,
+      "n400_uV": 0.25961452135799945
+    },
+    {
+      "subject": "sub-010",
+      "related": 60,
+      "unrelated": 60,
+      "n400_uV": -3.21595603872299
+    },
+    {
+      "subject": "sub-011",
+      "related": 60,
+      "unrelated": 60,
+      "n400_uV": -4.89882099322539
+    },
+    {
+      "subject": "sub-012",
+      "related": 60,
+      "unrelated": 60,
+      "n400_uV": -5.6923032601148735
+    },
+    {
+      "subject": "sub-013",
+      "related": 60,
+      "unrelated": 60,
+      "n400_uV": -1.6912912272037564
+    },
+    {
+      "subject": "sub-014",
+      "related": 60,
+      "unrelated": 60,
+      "n400_uV": -2.173900791519773
+    },
+    {
+      "subject": "sub-015",
+      "related": 60,
+      "unrelated": 60,
+      "n400_uV": -3.0897925979076213
+    },
+    {
+      "subject": "sub-016",
+      "related": 60,
+      "unrelated": 60,
+      "n400_uV": -4.54739864469035
+    },
+    {
+      "subject": "sub-017",
+      "related": 60,
+      "unrelated": 60,
+      "n400_uV": -0.2544466455981086
+    },
+    {
+      "subject": "sub-018",
+      "related": 60,
+      "unrelated": 60,
+      "n400_uV": 0.845463221424314
+    },
+    {
+      "subject": "sub-019",
+      "related": 60,
+      "unrelated": 60,
+      "n400_uV": -4.814554587479865
+    },
+    {
+      "subject": "sub-020",
+      "related": 60,
+      "unrelated": 60,
+      "n400_uV": -3.18497900442582
+    }
+  ],
+  "replay": {
+    "scope": "group statistics replay from saved participant evokeds",
+    "exact_equal": {
+      "t_obs": true,
+      "cluster_masks": true,
+      "p_values": true,
+      "h0": true,
+      "subject_uV": true,
+      "summary": true
+    },
+    "passed": true
+  },
+  "versions": {
+    "mne": "1.12.1",
+    "numpy": "2.4.6",
+    "scipy": "1.17.1",
+    "pandas": "2.3.3",
+    "matplotlib": "3.10.9"
+  },
+  "figures": [
+    "projects/n400-recipe-case/figure-stage/F1_n400_recipe.pdf",
+    "projects/n400-recipe-case/figure-stage/F1_n400_recipe.svg",
+    "projects/n400-recipe-case/figure-stage/F1_n400_recipe.png"
+  ],
+  "private_outputs": "projects/n400-recipe-case",
+  "figure_source_data": "tools/validation/recipe_case_figure_data.npz",
+  "limitations": [
+    "No ICA or amplitude-based artifact rejection in this documented benchmark branch.",
+    "The 20 cached participants are a worked-example cohort, not the full 40-person source cohort.",
+    "Peak topography is descriptive; cluster inference does not localize each electrode/time point.",
+    "No held-out benchmark, runtime performance, or clinical efficacy claim."
+  ],
+  "scope": "post-release supplement implementing the released recipe; not a v0.3.2 script",
+  "completed_utc": "2026-10-04T09:47:31.025477+00:00"
+}
