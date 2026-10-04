@@ -1,8 +1,9 @@
 # AEA numeric benchmark — does the recipe's pipeline match the gold standard?
 
-> **The one validation that COMPARISON.md says is missing.** Every AEA recipe today ships
-> a *self*-regression test (re-run → bitwise-identical output). That proves reproducibility,
-> not **correctness**. This document specifies — and runs — the missing test: does an AEA
+> This document records the numerical comparison introduced after the
+> [original comparison review](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/76202d6071070c27ad2813561e54272969cacb4b/docs/COMPARISON.md).
+> Self-regression tests establish reproducibility, not **correctness**.
+> The comparison asks: does an AEA
 > recipe compute the *same numbers* as an independent, community-standard pipeline
 > ([MNE-BIDS-Pipeline](https://mne.tools/mne-bids-pipeline/)) on the same public data?
 >
@@ -12,12 +13,19 @@
 
 Status: **MMN + P3 + N170 + ERN + N400 executed** (§4, §4c–§4f), **CI regression gate live** (§6e), **kernel-independence bounded** (§4g), **toolbox independence established in EEGLAB *and* FieldTrip for all five components** (§4i) and **extended beyond ERP to resting spectral band power** (§4h). **5 of ERP CORE's 7 components** (Kappenman 2021: N170, MMN, N2pc, N400, P3, LRP, ERN); N2pc + LRP remain (§6a). All benchmarks use a *harmonized minimal* pipeline (see §5).
 
+Historical evaluation reports, generated programs and rendered figures remain in the
+[public evidence snapshot](https://github.com/dengzhe-hou/auto-eeg-analysis/tree/76202d6071070c27ad2813561e54272969cacb4b/tools/benchmark).
+Links below pin that commit where an artifact is archived. Numerical result files,
+comparison code and regression tests remain in the current library; the archive retains
+the original failures, limitations and generation records. See [worked examples](EXAMPLES.md)
+for the separate case-study records.
+
 ---
 
 ## 1. Why this is the load-bearing test
 
 AEA is a method/orchestration layer over MNE-Python — *"to MNE what HuggingFace Transformers
-is to PyTorch"* ([README](../README.md), [COMPARISON.md](COMPARISON.md)). An upper layer earns
+is to PyTorch"* ([README](../README.md), [COMPARISON.md](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/76202d6071070c27ad2813561e54272969cacb4b/docs/COMPARISON.md)). An upper layer earns
 trust by one thing above all: **the code it generates must compute what it claims, as well as the
 reference implementation does.** A recipe that runs and produces a plausible figure is not enough —
 the figure has to carry the *right numbers*.
@@ -146,7 +154,7 @@ surviving epochs for every subject but one. **Pass criterion met** (max |Δ| ≤
 > **−0.840 µV** ([recipes/mmn-oddball/RECIPE.md](../recipes/mmn-oddball/RECIPE.md), "Validated results")
 > from a wholly separate codebase — so it doubles as an external audit of that published number.
 
-![MMN benchmark](../tools/benchmark/figures/mmn_benchmark.png)
+![MMN benchmark](https://raw.githubusercontent.com/dengzhe-hou/auto-eeg-analysis/76202d6071070c27ad2813561e54272969cacb4b/tools/benchmark/figures/mmn_benchmark.png)
 
 ### 4b. Per-sample waveform agreement (not just the window mean)
 
@@ -170,7 +178,7 @@ sets match (it is broadband, not filter-edge-concentrated). At **~0.01 µV it re
 ~10–100 nV resolution of any ERP measurement**, so the correctness conclusion holds at the per-sample
 level, not just for the summary statistic.
 
-![MMN waveform agreement](../tools/benchmark/figures/mmn_waveform.png)
+![MMN waveform agreement](https://raw.githubusercontent.com/dengzhe-hou/auto-eeg-analysis/76202d6071070c27ad2813561e54272969cacb4b/tools/benchmark/figures/mmn_waveform.png)
 
 The waveform check now runs for **all five** components (`compare_waveform.py --component X`,
 committed `*_WAVEFORM_RESULT.json`) — full deviant/difference waveform, all 30 channels × every sample:
@@ -212,7 +220,7 @@ the recipe's full ICA + AutoReject artifact handling.)
   floor — *tighter* than MMN, whose only >5 nV cases came from epoch-rejection differences that reject=None
   removes here.
 
-![P3 benchmark](../tools/benchmark/figures/p3_benchmark.png)
+![P3 benchmark](https://raw.githubusercontent.com/dengzhe-hou/auto-eeg-analysis/76202d6071070c27ad2813561e54272969cacb4b/tools/benchmark/figures/p3_benchmark.png)
 
 ### 4d. Third component — N170 (face − car)
 
@@ -233,7 +241,7 @@ face (value 1–40) − car (41–80), ROI PO7/PO8/P7/P8, filter 0.1–40 Hz, re
   independent filter/resample implementations micro-differ. Still ~0.03 µV — ≪ the ~1 µV effect — and
   the measured ROI scalar agrees to 11 nV.
 
-![N170 benchmark](../tools/benchmark/figures/n170_benchmark.png)
+![N170 benchmark](https://raw.githubusercontent.com/dengzhe-hou/auto-eeg-analysis/76202d6071070c27ad2813561e54272969cacb4b/tools/benchmark/figures/n170_benchmark.png)
 
 ### 4e. Fourth component — ERN (error − correct), *response-locked*
 
@@ -257,7 +265,7 @@ baseline (−0.4,−0.2). N=14 (6 subjects excluded for <15 errors — they were
   Slightly looser than the stimulus-locked components (P3 ≤0.5 nV) — errors are sparse (~15–60 trials),
   so filter/resample micro-differences on the thin error average show a touch more — still 0.03 µV.
 
-![ERN benchmark](../tools/benchmark/figures/ern_benchmark.png)
+![ERN benchmark](https://raw.githubusercontent.com/dengzhe-hou/auto-eeg-analysis/76202d6071070c27ad2813561e54272969cacb4b/tools/benchmark/figures/ern_benchmark.png)
 
 **Takeaway:** numeric faithfulness holds across **four** ERPs spanning **both epoching modes** —
 stimulus-locked (MMN frontocentral −, P3b centro-parietal +, N170 occipito-temporal −) and
@@ -278,7 +286,7 @@ unrelated (value 221/222) − related (211/212), ROI CPz/Cz/Pz, N=20, reject=Non
 - **AEA effect is real:** N=20, t(19)=−6.34, **p = 4.4×10⁻⁶**, dz = −1.42, second-level cluster p=0.0002 (PASS).
 - **Cross-tool agreement:** per-subject **max \|Δ\| = 6 nV**, **CCC = 1.000**, **20/20 within ±0.1 µV**.
 
-![N400 benchmark](../tools/benchmark/figures/n400_benchmark.png)
+![N400 benchmark](https://raw.githubusercontent.com/dengzhe-hou/auto-eeg-analysis/76202d6071070c27ad2813561e54272969cacb4b/tools/benchmark/figures/n400_benchmark.png)
 
 **Takeaway:** the new-from-scratch recipe is *born faithful* — writing a recipe and getting the
 digit-by-digit agreement is now a repeatable ~1-hour loop.
@@ -435,7 +443,7 @@ the rest.
 | **6d** | **Default-divergence axis**: run each tool at its *own* recommended defaults (ICA/AutoReject) and quantify/explain the gap vs the harmonized minimal pipeline | Tells users how much pipeline choice (not bugs) moves the number |
 | ~~**6e**~~ ✅ | Benchmark wired into CI as a regression gate — `tools/tests/test_benchmark.py`: **done.** A CI-safe *consistency* gate asserts CCC ≥ 0.99, exact expected N, per-subject max \|Δ\| ≤ 0.1 µV, and waveform-RMSE bounds for all 5 components from the committed JSONs on every push (it does **not** rerun MNE-BIDS-Pipeline); a data-gated test reruns AEA's MMN pipeline on 2 subjects and checks it reproduces the committed µV (skips where raw data absent). | Locks in correctness against future recipe edits |
 | **6g** 🔶 | **Beyond ERP**: numeric validation of non-ERP measures. **Done: spectral band power** (§4h — independent Welch at floating-point precision once the window-periodicity and demeaning conventions are pinned; estimator sensitivity ~1–5%). **Remaining:** connectivity (mne-connectivity), complexity, and source (need a real MRI + independent tool). | Extends validation past ERP |
-| ~~**6f**~~ ✅ | **Recipe-generation eval — done.** 4 blind agents wrote MMN pipelines from the spec and ran them on real data. **Historical pilot (superseded 2026-09-13/14): 7 pinned-spec generation records PASS across MMN/P3/N170 and two generator backends (Claude + GPT/Codex), ≤0.5 nV, every subject in tolerance — but the generated programs and, except MMN B1, the per-subject vectors were not retained, so this does NOT certify the skill (`eeg-recipe` is L0); retained scores only.** Recipe-as-written → systematic 0.245 µV offset + n=40 vs 38, root-caused to an under-specified RANSAC step. [`RECIPE_GENERATION_EVAL.md`](../tools/benchmark/RECIPE_GENERATION_EVAL.md) | Historical pilot of the generation step (not a certification), not just the spec |
+| ~~**6f**~~ ✅ | **Recipe-generation eval — done.** 4 blind agents wrote MMN pipelines from the spec and ran them on real data. **Historical pilot (superseded 2026-09-13/14): 7 pinned-spec generation records PASS across MMN/P3/N170 and two generator backends (Claude + GPT/Codex), ≤0.5 nV, every subject in tolerance — but the generated programs and, except MMN B1, the per-subject vectors were not retained, so this does NOT certify the skill (`eeg-recipe` is L0); retained scores only.** Recipe-as-written → systematic 0.245 µV offset + n=40 vs 38, root-caused to an under-specified RANSAC step. [`RECIPE_GENERATION_EVAL.md`](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/76202d6071070c27ad2813561e54272969cacb4b/tools/benchmark/RECIPE_GENERATION_EVAL.md) | Historical pilot of the generation step (not a certification), not just the spec |
 
 ---
 

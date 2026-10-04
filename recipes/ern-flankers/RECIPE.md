@@ -67,7 +67,7 @@ The single-participant case uses ICA, 150 µV peak-to-peak rejection, and the na
 The separate N=14 canonical ERN group validation and cross-tool benchmark use the harmonized
 minimal configuration: no ICA, `reject=None`, and 256 Hz. These are different analyses.
 Use the pinned configuration to reproduce the cross-tool results; see
-[`tools/benchmark/SPEC_PRECISION_EVAL.md`](../../tools/benchmark/SPEC_PRECISION_EVAL.md).
+[`tools/benchmark/SPEC_PRECISION_EVAL.md`](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/76202d6071070c27ad2813561e54272969cacb4b/tools/benchmark/SPEC_PRECISION_EVAL.md).
 
 ### 3. Epoch
 - **Stimulus-locked:** −0.2 to 0.8 s relative to stimulus onset. Baseline: −0.2 to 0 s.
@@ -125,8 +125,8 @@ These are trial-level results for one participant. The reported p-values already
 over each claim's full cluster domain; compare them with 0.05/3 for the additional correction
 across claims. The tested arrays contain 154 times × 3 channels for C1, 103 × 3 for C2,
 and 77 times × 5 frequencies × 3 channels for C3. Full result and reproduction details are in
-[`projects/erp-core-full/REANALYSIS.md`](../../projects/erp-core-full/REANALYSIS.md) and
-[`REANALYSIS.json`](../../projects/erp-core-full/REANALYSIS.json).
+[`projects/erp-core-full/REANALYSIS.md`](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/76202d6071070c27ad2813561e54272969cacb4b/projects/erp-core-full/REANALYSIS.md) and
+[`REANALYSIS.json`](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/76202d6071070c27ad2813561e54272969cacb4b/projects/erp-core-full/REANALYSIS.json).
 
 ### Run the corrected example
 

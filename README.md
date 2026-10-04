@@ -34,6 +34,6 @@ Confirm the analysis plan before execution. The audit stage needs a [configured 
 
 Certification applies to the outputs and configurations in the [coverage record](docs/CERTIFICATION_LEVELS.md). EEGLAB and FieldTrip provide independent comparisons and selected alternative backend paths. Each [recipe](recipes/README.md#available-recipes) records its status and available evaluation.
 
-[Benchmarks](docs/BENCHMARK.md) · [Worked examples](projects/) · [Contributing](CONTRIBUTING.md) · [Citation](CITATION.cff)
+[Benchmarks](docs/BENCHMARK.md) · [Worked examples](docs/EXAMPLES.md) · [Contributing](CONTRIBUTING.md) · [Citation](CITATION.cff)
 
 Software uses the [MIT licence](LICENSE); recipe metadata uses CC BY 4.0. Built on [ARIS](https://github.com/wanshuiyin/Auto-claude-code-research-in-sleep).

@@ -109,7 +109,7 @@ Eyes-closed should show a clear posterior **alpha peak (~10 Hz)** and higher pos
 | Paired t-test (EC − EO), N=20 | t = 3.60, **p = 0.0019**, Cohen's dz = 0.81 |
 | **Second-level spatial cluster** (across-subject, 5000 perms) | **1 significant cluster, p = 0.0002**, 62/64 channels |
 
-Figure: `tools/validation/figures/resting_validation.png` (panel A). Run: `python tools/validation/validate_resting_recipes.py --subjects 20`.
+Figure: [archived figure](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/76202d6071070c27ad2813561e54272969cacb4b/tools/validation/figures/resting_validation.png) (panel A). Run: `python tools/validation/validate_resting_recipes.py --subjects 20`.
 
 > **Validation caveats (honest):** eegbci is natively **160 Hz (below this recipe's `min_sfreq: 250`)** and only **~61 s/run (below the recommended ≥120 s)**; data were resampled to 250 Hz and ICA-cleaned (ICLabel: eye/muscle/heart). The EC>EO alpha **power** effect is robust; the alpha-reactivity sanity check is what promotes `status: validated`. `specparam` 1/f was exercised at the API level only (`tools/tests/test_skill_apis.py`), not benchmarked.
 

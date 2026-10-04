@@ -97,7 +97,7 @@ MMN/ERN — expected here because only **run-01 of 6** was used (~96 faces/subje
 passes the group sanity check on the canonical public face dataset.
 
 The geometric posterior-lateral ROI is reported per run (transparent, not cherry-picked).
-Figure: `tools/validation/figures/n170_faces.png`. Run: `python tools/validation/validate_n170_faces.py --subjects 16`.
+Figure: [archived figure](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/76202d6071070c27ad2813561e54272969cacb4b/tools/validation/figures/n170_faces.png). Run: `python tools/validation/validate_n170_faces.py --subjects 16`.
 
 ### Second validation — ERP CORE N170 (server, 2026-06-24)
 

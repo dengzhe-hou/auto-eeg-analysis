@@ -44,7 +44,7 @@ QC adapts to whatever stages exist; at least one must be present.
 2. Probe backends and record availability — `pyprep` and `autoreject` are **core** deps (`environment.yml`), so expect them present, but still check and degrade rather than crash if a stripped env lacks one:
    - `pyprep` (core) — `NoisyChannels` for RANSAC + FASTER-style channel metrics, corroborates LOF.
    - `autoreject` (core) — `get_rejection_threshold` for a data-driven epoch-reject preview.
-   - `antropy` / `nolds` — **genuinely optional** (`requirements-optional.txt`), only needed for Hurst/DFA. If neither imports, Hurst degrades to a documented `not_computed` with a logged substitution; the rest of the dashboard is unaffected.
+   - `antropy` / `nolds` — **genuinely optional** (`tools/env/requirements-optional.txt`), only needed for Hurst/DFA. If neither imports, Hurst degrades to a documented `not_computed` with a logged substitution; the rest of the dashboard is unaffected.
 3. Discover which stages have data. For each present stage, list subjects.
 4. Write `qc-stage/QC_PLAN.json` (stages to run, subjects, line freq, band, gate preset, available optional backends) **and** `qc-stage/QC_GATES.json` (every pass/warn/fail threshold for the chosen preset). Print both. No metric below uses a threshold absent from `QC_GATES.json`.
 

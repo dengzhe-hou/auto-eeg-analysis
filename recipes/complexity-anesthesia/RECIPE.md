@@ -91,7 +91,7 @@ In an awake recording, **eyes-open complexity > eyes-closed** (sanity check). In
 | Lempel–Ziv complexity | **0.520** | 0.473 | t = 5.29, **p = 4.2 × 10⁻⁵**, dz = 1.18 |
 | Permutation entropy (order 3) | **0.812** | 0.776 | t = 7.92, **p = 2.0 × 10⁻⁷**, dz = 1.77 |
 
-Figure: `tools/validation/figures/resting_validation.png` (panel B). Run: `python tools/validation/validate_resting_recipes.py --subjects 20`.
+Figure: [archived figure](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/76202d6071070c27ad2813561e54272969cacb4b/tools/validation/figures/resting_validation.png) (panel B). Run: `python tools/validation/validate_resting_recipes.py --subjects 20`.
 
 > **What this validates — and what it does NOT.** The **awake eyes-open > eyes-closed** ordering (eyes-closed alpha makes the signal more regular → lower entropy) is confirmed, which is the recipe's stated gate for promotion. **Crucially, ICA matters:** without ICLabel eye/muscle removal the LZC contrast was noisy and direction-mixed (residual EOG/EMG inflates complexity, exactly as the recipe warns) — it became clean and significant only after ICA. The headline **anesthesia (awake→sedated→deep) contrast is NOT tested here** (no anesthesia data on the server); it remains literature-based (Schartner 2015, Zhang 2001). Spectral entropy did **not** separate the states cleanly (1/f-dominated) and is not headlined. eegbci is 160 Hz / ~61 s/run, resampled to 250 Hz.
 

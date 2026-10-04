@@ -121,7 +121,7 @@ NUMPY=$(probe_pkg numpy numpy)
 SCIPY=$(probe_pkg scipy scipy)
 SKLEARN=$(probe_pkg sklearn scikit-learn)
 MATPLOTLIB=$(probe_pkg matplotlib matplotlib)
-# Optional skill backends (requirements-optional.txt) — degrade explicitly if absent.
+# Optional skill backends (tools/env/requirements-optional.txt) — degrade explicitly if absent.
 SPECPARAM=$(probe_pkg specparam specparam)
 ANTROPY=$(probe_pkg antropy antropy)
 STATSMODELS=$(probe_pkg statsmodels statsmodels)

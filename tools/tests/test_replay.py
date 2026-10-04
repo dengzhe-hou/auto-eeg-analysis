@@ -2,6 +2,7 @@
 import importlib.util
 import json
 from pathlib import Path
+import shlex
 import sys
 
 import pytest
@@ -9,6 +10,10 @@ import pytest
 SPEC = importlib.util.spec_from_file_location("aea_replay", Path(__file__).parents[1] / "replay.py")
 replay = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(replay)
+
+RECEIPT_SPEC = importlib.util.spec_from_file_location("aea_receipt", Path(__file__).parents[1] / "gen_receipt.py")
+receipt = importlib.util.module_from_spec(RECEIPT_SPEC)
+RECEIPT_SPEC.loader.exec_module(receipt)
 
 
 @pytest.fixture
@@ -79,3 +84,32 @@ def test_existing_outputs_and_bundles_are_preserved(study, tmp_path):
     with pytest.raises(FileExistsError):
         replay.run(bundle, out)
     assert (out / "result.json").read_text(encoding="utf-8-sig") == "42"
+
+
+def test_receipt_rejects_missing_reproduction_source(tmp_path, monkeypatch, capsys):
+    project = tmp_path / "study"
+    monkeypatch.setattr(sys, "argv", ["gen_receipt.py", "--project", str(project)])
+    with pytest.raises(SystemExit) as error:
+        receipt.main()
+    assert error.value.code == 2
+    assert "--reproduce --bundle is required" in capsys.readouterr().err
+    assert not project.exists()
+
+
+@pytest.mark.parametrize("source", ["reproduce", "bundle"])
+def test_receipt_records_explicit_reproduction_source(study, monkeypatch, source):
+    project, _, bundle = study
+    command = "python analysis/pipeline.py --condition 'auditory left'\npython analysis/report.py"
+    value = command if source == "reproduce" else str(bundle)
+    monkeypatch.setattr(sys, "argv", ["gen_receipt.py", "--project", str(project), f"--{source}", value])
+    monkeypatch.setattr(receipt, "pkg_version", lambda _: "test")
+    receipt.main()
+    result = (project / "report-stage" / "REPRO_RECEIPT.md").read_text(encoding="utf-8-sig")
+    if source == "reproduce":
+        assert f"\n{command}\n```" in result
+        assert "tools/env/requirements-optional.txt" in result
+    else:
+        assert "python tools/replay.py run --bundle " + shlex.quote(str(bundle)) in result
+        saved = json.loads((bundle / "capture.json").read_text(encoding="utf-8-sig"))
+        assert f"# Captured AEA commit: {saved['aea_commit']}" in result
+    assert "tools/run_case_study.py" not in result

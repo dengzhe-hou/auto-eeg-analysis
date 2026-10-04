@@ -210,7 +210,7 @@ energy near the edge.
    the per-subject statistics use the 38 shared subjects, so the MMN grand means in Result 1 are not
    strictly like-for-like. (For ERN, all three arms independently arrived at the same 14.)
 7. **These runs test the reference implementations, not generated pipelines.** The generation step is
-   covered separately in [`RECIPE_GENERATION_EVAL.md`](RECIPE_GENERATION_EVAL.md).
+   covered separately in [`RECIPE_GENERATION_EVAL.md`](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/76202d6071070c27ad2813561e54272969cacb4b/tools/benchmark/RECIPE_GENERATION_EVAL.md).
 
 ---
 

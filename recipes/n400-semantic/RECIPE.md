@@ -90,7 +90,7 @@ CPz/Cz/Pz, 300–500 ms, 0.1–30 Hz, 256 Hz, average reference, reject=None.
 | Second-level spatiotemporal cluster | **1 significant cluster, p = 0.0002** |
 
 Run: `python tools/validation/validate_n400_erpcore_group.py --subjects 20`.
-Figure: `tools/validation/figures/n400_erpcore_group.png`.
+Figure: [archived figure](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/76202d6071070c27ad2813561e54272969cacb4b/tools/validation/figures/n400_erpcore_group.png).
 **Cross-tool benchmark:** reproduces MNE-BIDS-Pipeline's per-subject N400 to **≤ 6 nV (CCC = 1.000,
 20/20 within ±0.1 µV)** — see [docs/BENCHMARK.md §4f](../../docs/BENCHMARK.md).
 

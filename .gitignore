@@ -7,22 +7,8 @@ __pycache__/
 .ipynb_checkpoints/
 .pytest_cache/
 
-# Project data (never commit)
-projects/*/raw/
-projects/*/bids/
-projects/*/preprocess-stage/
-projects/*/ica-stage/
-projects/*/epoch-stage/
-projects/*/erp-stage/
-projects/*/tfr-stage/
-projects/*/connectivity-stage/
-projects/*/microstate-stage/
-projects/*/source-stage/
-projects/*/stats-stage/
-projects/*/figure-stage/
-projects/*/report-stage/
-projects/*/audit-stage/
-projects/*/ENVIRONMENT.json
+# User study workspaces stay local. Worked examples: docs/EXAMPLES.md
+/projects/
 
 # OS
 .DS_Store
@@ -77,3 +63,31 @@ paper-overleaf/
 /docs/LITERATURE_MINING.md
 /docs/DISTILLATION_PROTOCOL.md
 /docs/CITATION_AUDIT.md
+
+# Historical research records remain at public commit 76202d6; keep local copies.
+/tools/benchmark/generated_pipelines/
+/tools/benchmark/figures/
+/tools/validation/figures/
+/tools/validation/audit_eval/
+/tools/validation/methods_text_eval/
+/tools/benchmark/cluster_cert/dumps_shipped/*.log
+/tools/benchmark/reports/*.pdf
+/tools/benchmark/reports/fig1_chain.py
+/tools/benchmark/reports/latex_includes.tex
+/tools/benchmark/CONSEQUENCE_EVAL.md
+/tools/benchmark/OPEN_MODEL_EVAL.md
+/tools/benchmark/RECIPE_GENERATION_EVAL.md
+/tools/benchmark/SPEC_PRECISION_EVAL.md
+/tools/benchmark/CROSS_PARADIGM_BASELINE.md
+/tools/run_case_study.py
+/tools/run_stats_case.py
+/tools/run_tfr_case.py
+/tools/run_erp_core_validation.py
+/tools/skill_line_counts.py
+/docs/COMPARISON.md
+/docs/RELATED_WORK.md
+/docs/DEPLOYABILITY.md
+/docs/FIRST_EXTERNAL_TEST.md
+/docs/EXTERNAL_USE_REPORT_TEMPLATE.md
+/docs/assets/flankers-case-study.png
+/docs/assets/n100-case-study.png

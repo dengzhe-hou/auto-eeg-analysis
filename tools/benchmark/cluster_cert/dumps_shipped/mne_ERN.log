@@ -1,3 +1,0 @@
-ERN: 1 clusters, 1 significant
-   t_sum=   -1014.826  n=  257  p=0.0004  *
-wrote tools/benchmark/cluster_cert/mne_ERN_shipped.json

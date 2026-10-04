@@ -149,6 +149,7 @@ def main():
         ax[1].set(xlabel="subject", ylabel="N170 µV", title="B) Per-subject face−scrambled N170")
         ax[1].legend(fontsize=8)
         plt.tight_layout()
+        Path("tools/validation/figures/n170_faces.png").parent.mkdir(parents=True, exist_ok=True)
         plt.savefig("tools/validation/figures/n170_faces.png", dpi=140, bbox_inches="tight"); plt.close()
         print("Figure: tools/validation/figures/n170_faces.png")
     except Exception as e:

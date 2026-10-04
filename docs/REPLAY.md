@@ -87,6 +87,6 @@ may require the original OS/architecture. Platform differences are recorded and
 numerical agreement still needs checking. Editable installs, external executables
 and external model assets must be preserved separately when the analysis uses them.
 
-For a new Linux x86_64 installation, the repository's `environment-pinned.yml`
+For a new Linux x86_64 installation, the repository's `tools/env/environment-pinned.yml`
 provides a tested version snapshot. `environment.yml` remains the general setup
 specification. A study's own captured environment is the reference for its replay.

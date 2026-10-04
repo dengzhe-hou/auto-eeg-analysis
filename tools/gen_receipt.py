@@ -3,7 +3,11 @@
 General, project-parameterized: hashes the project's artifacts, records the git
 commit + introspected package versions + seeds, and writes a reproduce block.
 
-  python tools/gen_receipt.py                                  # default mne-sample-audvis
+Pass the project and its actual reproduce command or saved replay bundle explicitly.
+The command is recorded in the receipt; it is not executed by this tool.
+
+  python tools/gen_receipt.py --project projects/my-study \\
+      --bundle projects/my-study/runs/one
   python tools/gen_receipt.py --project projects/eegbci-resting \
       --reproduce "python tools/validation/validate_resting_recipes.py --subjects 20" \
       --claim "EC>EO posterior alpha (cluster p=0.0002)" \
@@ -38,15 +42,14 @@ def pkg_version(mod: str) -> str:
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--project", default="projects/mne-sample-audvis")
-    ap.add_argument("--reproduce", default=None, help="reproduce command line for the receipt")
-    ap.add_argument("--bundle", type=Path, help="saved tools/replay.py bundle for this run")
+    ap.add_argument("--project", required=True, help="project whose artifacts to record")
+    source = ap.add_mutually_exclusive_group(required=True)
+    source.add_argument("--reproduce", help="reproduce command line for the receipt")
+    source.add_argument("--bundle", type=Path, help="saved tools/replay.py bundle for this run")
     ap.add_argument("--claim", action="append", default=[], help="repeatable; one claim line")
     ap.add_argument("--seed", action="append", default=[], help="repeatable; STAGE=VALUE")
     ap.add_argument("--extra-hash", action="append", default=[], help="repeatable; extra file paths to hash")
     args = ap.parse_args()
-    if args.bundle and args.reproduce:
-        ap.error("choose --bundle or --reproduce")
 
     project = Path(args.project)
     name = project.name
@@ -63,11 +66,9 @@ def main():
 
     seeds = args.seed or ["ICA=42", "cluster permutation=42"]
     claims = args.claim or ["see ANALYSIS_PLAN.md"]
-    reproduce = args.reproduce or (
-        "conda env create -f environment.yml && conda activate aeais\n"
-        "bash tools/env/check_env.sh\npython tools/run_case_study.py")
+    reproduce = args.reproduce
     setup = ["conda env create -f environment.yml && conda activate aeais",
-             "pip install -r requirements-optional.txt   # complexity/specparam/microstate extras",
+             "pip install -r tools/env/requirements-optional.txt   # complexity/specparam/microstate extras",
              "bash tools/env/check_env.sh"]
     python_version = platform.python_version()
     os_version = f"{platform.system()} {platform.release()}"

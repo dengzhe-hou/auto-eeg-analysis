@@ -52,7 +52,7 @@ The P300 is a positive-going ERP component peaking 300–500 ms post-stimulus ov
 > without peak-to-peak rejection** (`reject=None`), resampled to 256 Hz — the *harmonized minimal*
 > configuration used for the cross-tool benchmark. Running the ICA step prescribed above is good
 > practice for real analyses but will **not** reproduce the certified numbers. To reproduce them, use
-> the pinned configuration. See [`tools/benchmark/SPEC_PRECISION_EVAL.md`](../../tools/benchmark/SPEC_PRECISION_EVAL.md).
+> the pinned configuration. See [`tools/benchmark/SPEC_PRECISION_EVAL.md`](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/76202d6071070c27ad2813561e54272969cacb4b/tools/benchmark/SPEC_PRECISION_EVAL.md).
 
 ### 3. Epoch
 - Window: −0.2 to 0.8 s.
@@ -98,7 +98,7 @@ target − standard (target = trials where the shown letter is the block target;
 | **Second-level spatiotemporal cluster** (5000 perms, seed 42, one-sided) | **1 significant cluster, p = 0.0002** |
 
 Run: `python tools/validation/validate_p3_group.py --subjects 20`. Figure:
-`tools/validation/figures/p3_group.png`. (The earlier `mne.datasets.eegbci` reference was
+[archived figure](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/76202d6071070c27ad2813561e54272969cacb4b/tools/validation/figures/p3_group.png). (The earlier `mne.datasets.eegbci` reference was
 **incorrect** — eegbci is a motor-imagery set with no oddball stream; this validation uses the
 correct ERP CORE P3 oddball.)
 

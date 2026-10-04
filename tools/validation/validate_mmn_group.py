@@ -144,6 +144,7 @@ def main():
         ax[1].legend(fontsize=8)
         plt.tight_layout()
         figp = "tools/validation/figures/mmn_group.png"
+        Path(figp).parent.mkdir(parents=True, exist_ok=True)
         plt.savefig(figp, dpi=140, bbox_inches="tight"); plt.close()
         results_fig = figp
         print(f"Figure: {figp}")

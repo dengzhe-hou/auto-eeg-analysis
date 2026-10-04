@@ -7,7 +7,7 @@
 # — so AEA runs without them, you just lose that specific capability.
 #
 # Install (in the activated env):
-#     conda run -n aeais python -m pip install -r requirements-optional.txt
+#     conda run -n aeais python -m pip install -r tools/env/requirements-optional.txt
 #
 # Windows note: install with the env ACTIVATED (or via `conda run -n aeais`) so the
 # conda MKL BLAS stays on the DLL path; do not let pip pull scipy/numpy from PyPI on

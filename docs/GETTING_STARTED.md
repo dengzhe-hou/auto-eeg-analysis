@@ -23,7 +23,7 @@ conda activate aeais
 ```
 
 On Linux x86_64, replace the environment creation command with
-`conda env create -f environment-pinned.yml` to use the tested package versions.
+`conda env create -f tools/env/environment-pinned.yml` to use the tested package versions.
 This snapshot has been rebuilt in a separate Linux environment; it is not a
 cross-platform lock. Other platforms can use `environment.yml`, then capture the
 installed environment with their [saved analysis](REPLAY.md).
@@ -242,7 +242,7 @@ and `audit-stage/`. The plan and run logs record what was requested and complete
 
 For a repeatable run, retain the generated program and configuration using the
 [saved-analysis replay workflow](REPLAY.md). It captures installed versions and
-runs the saved code without another model call. The [external user test](FIRST_EXTERNAL_TEST.md)
+runs the saved code without another model call. The [archived external-use protocol](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/76202d6071070c27ad2813561e54272969cacb4b/docs/FIRST_EXTERNAL_TEST.md)
 explains how to record an independent run on your own data.
 
 MNE is the main execution and certification reference backend. EEGLAB and FieldTrip

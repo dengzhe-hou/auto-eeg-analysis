@@ -64,7 +64,7 @@ the **population** level (N > 1), not just one subject.
 > subjects (**n = 40 instead of 38**) and shifts the grand mean to **−0.822 µV**. Both are defensible
 > analyses; they are **not the same number**. To reproduce the certified values, use the pinned
 > configuration: no RANSAC, no ICA, resample 256 Hz, peak-to-peak 100 µV, window edges inclusive
-> (`0.100 ≤ t ≤ 0.250`). See [`tools/benchmark/RECIPE_GENERATION_EVAL.md`](../../tools/benchmark/RECIPE_GENERATION_EVAL.md).
+> (`0.100 ≤ t ≤ 0.250`). See [`tools/benchmark/RECIPE_GENERATION_EVAL.md`](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/76202d6071070c27ad2813561e54272969cacb4b/tools/benchmark/RECIPE_GENERATION_EVAL.md).
 
 ### 2. ICA (optional for clean passive data)
 - For high-EOG datasets, extended Infomax + `mne-icalabel` (reject eye/muscle). ERP CORE MMN
@@ -110,7 +110,7 @@ The trial-count guard (≥ 50 deviants, ≥ 150 standards) matches the `## What 
 spec above; it drops the two subjects whose retained-deviant counts fall short (11 and 47).
 An independent cross-tool benchmark reproduces this −0.840 µV to ~3 nV — see [docs/BENCHMARK.md](../../docs/BENCHMARK.md).
 
-Figure: `tools/validation/figures/mmn_group.png`. Run: `python tools/validation/validate_mmn_group.py --subjects 40`.
+Figure: [archived figure](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/76202d6071070c27ad2813561e54272969cacb4b/tools/validation/figures/mmn_group.png). Run: `python tools/validation/validate_mmn_group.py --subjects 40`.
 
 ## Methods paragraph (for your paper)
 ```text

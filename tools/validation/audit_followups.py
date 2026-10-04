@@ -182,6 +182,7 @@ def main():
                         f"{complexity_noica['lzc_mean']['p']:.1e}/{complexity_noica['pe']['p']:.1e})")
         plt.tight_layout()
         figp = "tools/validation/figures/audit_followups.png"
+        Path(figp).parent.mkdir(parents=True, exist_ok=True)
         plt.savefig(figp, dpi=140, bbox_inches="tight"); plt.close()
         print(f"Figure: {figp}")
     except Exception as e:

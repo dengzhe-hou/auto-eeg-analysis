@@ -2,7 +2,7 @@
 # Generated with: conda env export -n aeais --no-builds
 # Restored into a separate environment on the same Linux host using provider caches.
 # Package versions are pinned; builds are not. This is not a cross-platform lock.
-# Create separately: conda env create -n aeais-pinned -f environment-pinned.yml
+# Create separately: conda env create -n aeais-pinned -f tools/env/environment-pinned.yml
 name: aeais
 channels:
   - conda-forge

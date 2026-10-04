@@ -127,7 +127,7 @@ On a clean ≥2-min eyes-closed adult recording the recipe should yield 4 maps e
 | Mean microstate duration (median over maps/subjects) | **103 ms** (IQR 94–113) | ~70–120 ms |
 | Maps | 4 (canonical K) | A–D |
 
-Figure: `tools/validation/figures/resting_validation.png` (panel C). Run: `python tools/validation/validate_resting_recipes.py --subjects 20`.
+Figure: [archived figure](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/76202d6071070c27ad2813561e54272969cacb4b/tools/validation/figures/resting_validation.png) (panel C). Run: `python tools/validation/validate_resting_recipes.py --subjects 20`.
 
 > **Validation caveats (honest):** eegbci is natively **160 Hz** and only **~61 s/run** — both **below** this recipe's `min_sfreq: 250` and the ≥120 s (ideally ≥2 min) Khanna-2014 reliability floor. Data were **resampled to 250 Hz** before fitting; at the native 160 Hz the sample-based smoothing params (`half_window_size=8`, `min_segment_length=5`) inflated durations to ~200 ms — a reminder that those params are sfreq-dependent and the recipe assumes ≥250 Hz. GEV (66%) sits at the low end of the 70% expectation, consistent with the short, upsampled segments. Per-subject (not group-template) maps were used.
 
