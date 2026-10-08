@@ -128,17 +128,17 @@ and 77 times × 5 frequencies × 3 channels for C3. Full result and reproduction
 [`projects/erp-core-full/REANALYSIS.md`](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/76202d6071070c27ad2813561e54272969cacb4b/projects/erp-core-full/REANALYSIS.md) and
 [`REANALYSIS.json`](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/76202d6071070c27ad2813561e54272969cacb4b/projects/erp-core-full/REANALYSIS.json).
 
-### Run the corrected example
+### Recorded corrected example
 
-The source project must contain the local converted FIF at `raw/sub-01.fif`. For the
-cached-epoch command below, it must also contain the saved stimulus and response FIFs under
+The recorded source project contains the local converted FIF at `raw/sub-01.fif`. The
+cached-epoch run also requires the saved stimulus and response FIFs under
 `epoch-stage/sub-01/`. Raw EEG and these cached FIFs are not distributed in the Git repository.
 
-```bash
-python tools/run_full_case_study.py --project projects/erp-core-full \
-  --reuse-epochs --out /tmp/aea-flankers-corrected
-python tools/gen_case_study_figures.py --run-dir /tmp/aea-flankers-corrected
-```
+The [recorded runner](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/7597b6aa2e82355d56703c81621979b3ff1d45c0/tools/run_full_case_study.py)
+and [figure generator](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/7597b6aa2e82355d56703c81621979b3ff1d45c0/tools/gen_case_study_figures.py)
+remain in that fixed source snapshot. They are historical example scripts;
+the current library keeps the complete [N400 worked example](../../docs/EXAMPLES.md)
+as its runnable tutorial.
 
 Choose a new or empty output directory for each run. Omit `--reuse-epochs` to run the
 original raw-FIF preprocessing, ICA and epoching configuration as well. The runner preserves

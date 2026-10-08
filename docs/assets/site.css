@@ -137,24 +137,13 @@ main > section > h2 { padding-bottom: 9px; border-bottom: 1px solid var(--border
 .intro-links { display: flex; flex-wrap: wrap; gap: 8px 24px; font-size: 14px; }
 .note { color: var(--muted); font-size: 14px; }
 
-.example-layout {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: 26px;
-  align-items: start;
-}
+.tutorial-steps { padding-left: 22px; margin: 0 0 18px; }
+.tutorial-steps li { margin: 8px 0; }
 
-.example-layout h3 { margin: 0 0 10px; }
-.example-layout p { font-size: 14px; line-height: 1.6; margin-bottom: 12px; }
-.example-layout figure { padding: 6px; border: 1px solid var(--border); }
-.example-layout details { font-size: 14px; }
-.example-layout details p { margin: 10px 0 0; }
-
-details { margin: 16px 0; }
+details { margin: 16px 0; font-size: 14px; }
 summary { cursor: pointer; color: var(--link); font-weight: 500; }
 details[open] > summary { margin-bottom: 14px; }
 .additional-example { font-size: 14px; border-top: 1px solid var(--border); padding-top: 12px; }
-.additional-example figure { margin: 16px 0; }
 .additional-example > p:last-child { margin-bottom: 0; }
 
 .installation-example {
@@ -276,7 +265,6 @@ footer {
 @media (max-width: 1000px) {
   .page-layout { grid-template-columns: 170px minmax(0, 1fr); gap: 28px; padding-left: 24px; padding-right: 24px; }
   .header-inner { padding-left: 24px; padding-right: 24px; }
-  .example-layout { gap: 20px; }
   .recipe-table { min-width: 650px; }
 }
 
@@ -294,10 +282,6 @@ footer {
   h2 { font-size: 23px; }
   .intro { font-size: 16px; }
   main > section { margin-top: 30px; }
-  .example-layout { grid-template-columns: 1fr; gap: 18px; }
-  .example-layout figure { max-width: 460px; }
-  .example-layout img { max-height: 250px; object-fit: contain; }
-  .example-layout p { font-size: 15px; }
   .skills-list { gap: 12px 18px; }
 }
 

@@ -27,10 +27,10 @@
     <aside class="sidebar">
       <nav class="page-nav" aria-label="On this page">
         <h2>On this page</h2>
-        <a href="#examples">Example</a>
         <a href="#get-started">Installation</a>
         <a href="#workflows">Usage</a>
         <a href="#library">Skills and recipes</a>
+        <a href="#examples">N400 tutorial</a>
         <a href="#evidence">Validation</a>
         <a href="#project">Project</a>
       </nav>
@@ -39,6 +39,7 @@
         <a href="GETTING_STARTED.html">Getting started</a>
         <a href="PLATFORM_SUPPORT.html">Platform support</a>
         <a href="REPLAY.html">Replay a saved analysis</a>
+        <a href="EXAMPLES.html">Worked examples</a>
         <a href="CERTIFICATION_LEVELS.html">Validation coverage</a>
         <a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/995f53d42cc74205b164e8711d4b289b8c2ad3a1/docs/BENCHMARK.md">Benchmarks</a>
         <a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/CONTRIBUTING.md">Contributing</a>
@@ -49,120 +50,31 @@
       <h1>Automated EEG Analysis</h1>
       <p class="intro">
         AEA is an open library of 22 EEG analysis skills and 10 recipes.
-        Use Codex CLI or Claude Code to generate and run analysis code with
-        <strong>MNE-Python</strong>, keeping the plan, code, results, figures,
-        methods text, and review together.
+        They give Codex CLI or Claude Code the domain instructions to generate
+        and run analysis code with <strong>MNE-Python</strong>.
+        You specify the study and approve the plan; the workflow keeps the code,
+        results, figures, methods text, and review together.
       </p>
       <p>
-        A <strong>skill</strong> provides reusable instructions for analysis, reporting,
-        or review. A <strong>recipe</strong> combines skills and parameters for a particular
-        paradigm, such as an oddball task. The library has a
+        Each <strong>skill</strong> specifies inputs, parameters, code templates,
+        outputs, and checks. A <strong>recipe</strong> combines skills for a particular
+        paradigm. The library has a
         <a href="#evidence">numerically certified core</a>; coverage depends on the
         output and configuration.
       </p>
       <p class="intro-links">
         <a href="#get-started">Install AEA</a>
         <a href="#recipes">Find a recipe</a>
-        <a href="GETTING_STARTED.html">Read the documentation</a>
+        <a href="#examples">Try the N400 tutorial</a>
       </p>
-
-      <section id="examples" aria-labelledby="examples-title">
-        <h2 id="examples-title">Example</h2>
-        <div class="example-layout">
-          <figure>
-            <a href="assets/flankers-case-study-corrected.png" aria-label="Open the full-size corrected Flankers case-study figure">
-              <img src="assets/flankers-case-study-corrected.png"
-                   alt="Corrected six-panel Flankers results: stimulus- and response-locked ERPs, scalp map, time-frequency difference, theta power, and power spectra"
-                   width="4251" height="3141" decoding="async">
-            </a>
-            <figcaption>
-              Corrected analysis, 4 October 2026.
-              <a href="https://raw.githubusercontent.com/dengzhe-hou/auto-eeg-analysis/546db87c2e7717ff2eeca83c6e4131294f14a97a/docs/assets/flankers-case-study-corrected.pdf">PDF</a> ·
-              <a href="https://raw.githubusercontent.com/dengzhe-hou/auto-eeg-analysis/546db87c2e7717ff2eeca83c6e4131294f14a97a/docs/assets/flankers-case-study-corrected.svg">SVG</a> ·
-              <a href="https://raw.githubusercontent.com/dengzhe-hou/auto-eeg-analysis/546db87c2e7717ff2eeca83c6e4131294f14a97a/docs/assets/flankers-case-study-corrected.caption.txt">Caption</a>
-            </figcaption>
-          </figure>
-          <div>
-            <h3>ERP CORE Flankers</h3>
-            <p>
-              Subject-001: stimulus-locked N2, response-locked conflict, and frontal
-              theta. Two of the three tests pass the Bonferroni-adjusted cluster
-              threshold (p &lt; .05 / 3).
-            </p>
-            <details>
-              <summary>Recorded results</summary>
-              <p>
-                Minimum cluster p values: N2 .0588 (d = −0.062), response-locked
-                conflict .0006 (d = −0.316), and theta .0002 (d = 0.295).
-                All retained trials enter the analysis; 5,000 label permutations
-                preserve block and target side. Theta uses joint frequency × time ×
-                electrode clusters.
-              </p>
-              <p>
-                The response contrast is incompatible minus compatible, separate
-                from the <a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/995f53d42cc74205b164e8711d4b289b8c2ad3a1/docs/BENCHMARK.md">14-participant error-minus-correct ERN benchmark</a>.
-                The <a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/76202d6071070c27ad2813561e54272969cacb4b/projects/erp-core-full/REANALYSIS.md">run record</a>
-                gives the trial counts, assumptions and results.
-              </p>
-              <p>
-                The original pipeline reported 94.6 s; the corrected downstream run
-                took 12.60 s from saved epochs. These measure different stages and
-                do not establish complete-pipeline or LLM-related speedup. The
-                <a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/76202d6071070c27ad2813561e54272969cacb4b/docs/assets/flankers-case-study.png">historical figure</a> remains available.
-              </p>
-            </details>
-          </div>
-        </div>
-        <details class="additional-example">
-          <summary>MNE sample: auditory versus visual N100</summary>
-          <p>
-            One participant, 61 complete stimulus cycles (244 trials). The analysis
-            pairs auditory and visual responses within each cycle and uses six
-            electrodes approximating the planned ROI, with 3–27 mm location differences.
-          </p>
-          <figure>
-            <a href="assets/n100-case-study-corrected.png" aria-label="Open the full-size corrected N100 case-study figure">
-              <img src="assets/n100-case-study-corrected.png"
-                   alt="Corrected N100 condition means and difference with cycle-level SEM, alongside measured and target ROI locations"
-                   width="4251" height="1889" loading="lazy" decoding="async">
-            </a>
-            <figcaption>
-              Corrected analysis, 4 October 2026. Shading shows ±1 SEM across cycles;
-              grey backgrounds mark the planned window.
-              <a href="https://raw.githubusercontent.com/dengzhe-hou/auto-eeg-analysis/546db87c2e7717ff2eeca83c6e4131294f14a97a/docs/assets/n100-case-study-corrected.pdf">PDF</a> ·
-              <a href="https://raw.githubusercontent.com/dengzhe-hou/auto-eeg-analysis/546db87c2e7717ff2eeca83c6e4131294f14a97a/docs/assets/n100-case-study-corrected.svg">SVG</a> ·
-              <a href="https://raw.githubusercontent.com/dengzhe-hou/auto-eeg-analysis/546db87c2e7717ff2eeca83c6e4131294f14a97a/docs/assets/n100-case-study-corrected.caption.txt">Caption</a>
-            </figcaption>
-          </figure>
-          <p>
-            Auditory minus visual: −1.54 µV, paired-cycle Cohen's d<sub>z</sub> = −0.462.
-            One cluster passed the p &lt; .05 threshold (p = .0004; 5,000 permutations).
-            The original target-epoch retention was 100% (289 / 289). The corrected
-            analysis excludes 45 target trials in incomplete cycles, separately from
-            artifact rejection.
-          </p>
-          <p>
-            The fixed presentation order confounds condition with position within a
-            cycle. The sign-flip test assumes independent, symmetric cycle differences;
-            it does not establish a population effect. See the
-            <a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/76202d6071070c27ad2813561e54272969cacb4b/projects/mne-sample-audvis/REANALYSIS.md">run record</a>.
-            The
-            <a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/76202d6071070c27ad2813561e54272969cacb4b/docs/assets/n100-case-study.png">historical figure</a> remains available.
-          </p>
-        </details>
-        <p class="note">
-          These single-participant corrections were made after v0.3.2. Group
-          validations are documented separately in the <a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/995f53d42cc74205b164e8711d4b289b8c2ad3a1/docs/BENCHMARK.md">benchmark record</a>.
-        </p>
-      </section>
 
       <section id="get-started" aria-labelledby="start-title">
         <h2 id="start-title">Installation</h2>
         <p>
           Install Git, Conda, and a signed-in Codex CLI or Claude Code client first.
           Choose a <a href="#recipes">recipe that matches your paradigm</a>.
-          The example below uses compatible Flankers data; replace
-          <code>ern-flankers</code> with the recipe for your study.
+          The example below uses compatible semantic-priming data; replace
+          <code>n400-semantic</code> with the recipe for your study.
         </p>
         <p>
           Keep the repository root as your working directory. Put your study's data
@@ -195,7 +107,7 @@ codex</code></pre>
               <button class="copy-button" type="button" data-copy="prompt-codex"
                       aria-label="Copy Codex recipe prompt">Copy</button>
             </div>
-            <pre><code id="prompt-codex">$eeg-recipe ern-flankers --data projects/my-study</code></pre>
+            <pre><code id="prompt-codex">$eeg-recipe n400-semantic --data projects/my-study</code></pre>
           </div>
           <div id="panel-claude" role="tabpanel" aria-labelledby="tab-claude" tabindex="0" hidden>
             <div class="code-heading">
@@ -214,7 +126,7 @@ claude</code></pre>
               <button class="copy-button" type="button" data-copy="prompt-claude"
                       aria-label="Copy Claude recipe prompt">Copy</button>
             </div>
-            <pre><code id="prompt-claude">/eeg-recipe ern-flankers --data projects/my-study</code></pre>
+            <pre><code id="prompt-claude">/eeg-recipe n400-semantic --data projects/my-study</code></pre>
           </div>
           <p id="copy-status" class="copy-status" role="status" aria-live="polite"></p>
         </div>
@@ -349,6 +261,51 @@ claude</code></pre>
           </table>
         </div>
         <p class="note">Recipe files and source references are in the <a href="https://github.com/dengzhe-hou/auto-eeg-analysis/tree/main/recipes">source catalogue</a>.</p>
+      </section>
+
+      <section id="examples" aria-labelledby="examples-title">
+        <h2 id="examples-title">N400 tutorial</h2>
+        <p>
+          Follow a complete <a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/recipes/n400-semantic/RECIPE.md">semantic-priming recipe</a>
+          with 20 ERP CORE participants. The runner saves the plan, program,
+          epochs, participant averages, statistics, figures, and methods text.
+          Replay recomputes group statistics from the saved averages.
+        </p>
+        <ol class="tutorial-steps">
+          <li><strong>Run.</strong> Supply an existing N400 BIDS dataset and a new output directory.</li>
+          <li><strong>Check.</strong> Inspect the results and the recorded configuration.</li>
+          <li><strong>Replay.</strong> Recompute group statistics without preprocessing again.</li>
+        </ol>
+        <p><a href="EXAMPLES.html#erp-core-complete-n400-recipe-case">Commands and data requirements</a> ·
+          <a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/tools/examples/n400/recipe_case_results.json">Saved numerical results</a></p>
+        <details>
+          <summary>Recorded results and scope</summary>
+          <p>
+            The CPz/Cz/Pz analysis at 300–500 ms retained 60 trials per condition
+            for each participant. Unrelated minus related amplitude was −2.957 µV
+            (SEM 0.466), with one cluster at p = .0002. In the saved run, replay
+            reproduced t maps, cluster masks, p values, and permutation null values
+            exactly. The figure can also be regenerated from the compact public arrays.
+          </p>
+          <p>
+            This documented branch omits ICA and amplitude rejection. The 20-person
+            worked-example cohort is smaller than the 40-person source cohort,
+            and its ROI test is separate from the historical all-channel certification.
+            Scalp maps are descriptive; clusters do not localize each electrode or
+            time point. This post-v0.3.2 example does not measure LLM success rate,
+            time savings, held-out performance, or clinical efficacy.
+          </p>
+        </details>
+        <details class="additional-example">
+          <summary>Earlier N100 and Flankers examples</summary>
+          <p>
+            These single-participant examples were corrected after v0.3.2.
+            Figures, scripts, original plans, positive and null results, and
+            correction records remain accessible through
+            <a href="EXAMPLES.html#earlier-examples">the historical examples</a>.
+            They do not establish population effects or LLM-related speedup.
+          </p>
+        </details>
       </section>
 
       <section id="evidence" aria-labelledby="evidence-title">

@@ -1,12 +1,9 @@
 # Worked examples
 
-The complete N400 case below includes current scripts and compact result arrays.
-Earlier examples link to full records in the [public evidence snapshot](https://github.com/dengzhe-hou/auto-eeg-analysis/tree/76202d6071070c27ad2813561e54272969cacb4b/projects),
-including the October 2026 corrections, original plans, positive and null results,
-historical errors and audits.
-Raw EEG and cached epochs are not distributed. `projects/` is your local workspace.
-Follow [Getting started](GETTING_STARTED.md), run from the repository root in the
-analysis environment, reuse data caches and choose a new output directory each time.
+The N400 tutorial includes runnable scripts and compact result arrays. Raw EEG and
+cached epochs are not distributed; `projects/` is your local workspace. Follow
+[Getting started](GETTING_STARTED.md), run from the repository root in the analysis
+environment, reuse data caches, and choose a new output directory each time.
 
 ## ERP CORE: complete N400 recipe case
 
@@ -17,6 +14,9 @@ CPz/Cz/Pz ROI and 300–500 ms window. All participants retained 60 trials per c
 the mean unrelated-minus-related amplitude was −2.957 µV (SEM 0.466), with one cluster
 at p = 0.0002. This ROI test is separate from the historical all-channel certification.
 See the [complete numerical record](../tools/examples/n400/recipe_case_results.json).
+
+Install Arial or Helvetica on your system before running the analysis or
+figure-rendering commands below.
 
 Use an existing ERP CORE N400 BIDS directory with sub-001 through sub-020 and a fresh
 output directory. The runner saves the brief, frozen plan, program, preprocessed EEG,
@@ -39,44 +39,58 @@ arrays, without the source EEG. Exports are PDF, editable SVG and 600 dpi PNG.
 python tools/examples/gen_recipe_case_figures.py --run-dir projects/n400-recipe-figure --figure-data tools/examples/n400/recipe_case_figure_data.npz --summary tools/examples/n400/recipe_case_results.json
 ```
 
-## MNE sample: auditory versus visual N100
+## Earlier examples
 
-The corrected example uses complete stimulus cycles from one participant; interrupted
-cycles are excluded and accounted for. Fixed stimulus order confounds condition with
-cycle position, and ROI electrode correspondences are approximate. See the
-[corrected record](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/76202d6071070c27ad2813561e54272969cacb4b/projects/mne-sample-audvis/REANALYSIS.md),
-[result JSON](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/76202d6071070c27ad2813561e54272969cacb4b/projects/mne-sample-audvis/REANALYSIS.json) and [figure](assets/n100-case-study-corrected.png) for results and assumptions.
+The examples below are historical records, rather than current tutorial commands.
+Their original plans, scripts, positive and null results, corrections and audits are
+retained in existing Git history.
 
-```bash
-python tools/prepare_sample_case.py --project projects/mne-sample-audvis
-python tools/run_fix_audit.py --project projects/mne-sample-audvis --out projects/mne-sample-audvis/runs/corrected-001
-python tools/gen_case_study_figures.py --run-dir projects/mne-sample-audvis/runs/corrected-001
-```
+### MNE sample: auditory versus visual N100
 
-Skip preparation when the historical raw data and epochs are available. Preparation
-reuses raw/preprocessed inputs, but refits ICA and writes new epochs; it fetches MNE
-sample data if absent. The published correction reused historical epochs. A new
-preparation run needs numerical comparison. Plotting requires Arial or Helvetica.
+The corrected single-participant analysis uses 61 complete stimulus cycles (244 trials)
+and six ROI electrodes with 3–27 mm location differences. Auditory minus visual
+amplitude was −1.54 µV, paired-cycle Cohen's d_z = −0.462, with one cluster at
+p = .0004 (5,000 permutations). Shading in the figure is ±1 SEM across cycles.
+Original target-epoch retention was 289/289; the correction separately excluded
+45 target trials in incomplete cycles, rather than rejecting them as artifacts.
+Fixed stimulus order confounds condition with cycle position. The sign-flip test
+assumes independent, symmetric cycle differences and does not establish a population effect.
 
-## ERP CORE: Flankers conflict processing
+[Corrected record](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/76202d6071070c27ad2813561e54272969cacb4b/projects/mne-sample-audvis/REANALYSIS.md) ·
+[result JSON](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/76202d6071070c27ad2813561e54272969cacb4b/projects/mne-sample-audvis/REANALYSIS.json) ·
+[corrected figure](https://raw.githubusercontent.com/dengzhe-hou/auto-eeg-analysis/7597b6aa2e82355d56703c81621979b3ff1d45c0/docs/assets/n100-case-study-corrected.png) ·
+[original figure](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/76202d6071070c27ad2813561e54272969cacb4b/docs/assets/n100-case-study.png) ·
+[historical instructions and commands](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/7597b6aa2e82355d56703c81621979b3ff1d45c0/docs/EXAMPLES.md#mne-sample-auditory-versus-visual-n100).
 
-The single-participant example retains all three planned contrasts, including the
-nonsignificant N2 result. Its response-locked compatibility contrast is separate from
-canonical error-minus-correct ERN. Restricted permutations assume exchangeability
-within block × target-side strata. See the [recipe](../recipes/ern-flankers/RECIPE.md),
-[corrected record](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/76202d6071070c27ad2813561e54272969cacb4b/projects/erp-core-full/REANALYSIS.md),
-[result JSON](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/76202d6071070c27ad2813561e54272969cacb4b/projects/erp-core-full/REANALYSIS.json) and [figure](assets/flankers-case-study-corrected.png).
+The [preparation](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/7597b6aa2e82355d56703c81621979b3ff1d45c0/tools/prepare_sample_case.py),
+[analysis](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/7597b6aa2e82355d56703c81621979b3ff1d45c0/tools/run_fix_audit.py), and
+[plotting](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/7597b6aa2e82355d56703c81621979b3ff1d45c0/tools/gen_case_study_figures.py)
+scripts remain in that snapshot. The published correction reused saved epochs;
+preparation refits ICA and requires numerical comparison before treating a new run as the same result.
 
-```bash
-python tools/run_full_case_study.py --project projects/erp-core-full --reuse-epochs --out projects/erp-core-full/runs/corrected-001
-python tools/gen_case_study_figures.py --run-dir projects/erp-core-full/runs/corrected-001
-```
+### ERP CORE: Flankers conflict processing
 
-Supply converted Subject-001 Flankers data at `projects/erp-core-full/raw/sub-01.fif`
-and saved stimulus/response epochs under that project's `epoch-stage/sub-01/`.
-Omit `--reuse-epochs` to prepare those epochs from
-raw FIF. The published correction reused epochs; its timing excludes upstream stages
-and figure rendering. Neither single-participant example supports population inference.
+The corrected Subject-001 example retains all three planned contrasts. Minimum
+cluster p values were N2 .0588 (d = −0.062), response-locked conflict .0006
+(d = −0.316), and theta .0002 (d = 0.295): two pass p < .05/3. All retained trials
+enter 5,000 permutations restricted by block × target side. Theta uses joint
+frequency × time × electrode clusters. The response contrast is incompatible minus
+compatible, separate from canonical error-minus-correct ERN. Restricted permutations
+assume exchangeability within strata; this single-participant result does not
+establish a population effect.
+
+[Recipe](../recipes/ern-flankers/RECIPE.md) ·
+[corrected record](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/76202d6071070c27ad2813561e54272969cacb4b/projects/erp-core-full/REANALYSIS.md) ·
+[result JSON](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/76202d6071070c27ad2813561e54272969cacb4b/projects/erp-core-full/REANALYSIS.json) ·
+[corrected figure](https://raw.githubusercontent.com/dengzhe-hou/auto-eeg-analysis/7597b6aa2e82355d56703c81621979b3ff1d45c0/docs/assets/flankers-case-study-corrected.png) ·
+[original figure](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/76202d6071070c27ad2813561e54272969cacb4b/docs/assets/flankers-case-study.png) ·
+[historical instructions and commands](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/7597b6aa2e82355d56703c81621979b3ff1d45c0/docs/EXAMPLES.md#erp-core-flankers-conflict-processing).
+
+The [analysis](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/7597b6aa2e82355d56703c81621979b3ff1d45c0/tools/run_full_case_study.py) and
+[plotting](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/7597b6aa2e82355d56703c81621979b3ff1d45c0/tools/gen_case_study_figures.py)
+scripts remain in the snapshot. The original pipeline reported 94.6 s; corrected
+analysis took 12.60 s from saved epochs, excluding upstream stages and rendering.
+These different stages do not establish complete-pipeline or LLM-related speedup.
 
 ## PhysioNet EEGBCI: resting-state recipes
 

@@ -4,14 +4,12 @@ from __future__ import annotations
 import argparse
 import json
 from pathlib import Path
-import sys
 
 import numpy as np
 
 ROOT = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(ROOT / "tools"))
-from gen_case_study_figures import (CONDITION_A, CONDITION_B, DIFFERENCE,
-                                   MM_PER_INCH, figure_style)
+from plot_style import (CONDITION_A, CONDITION_B, DIFFERENCE,
+                        MM_PER_INCH, figure_style)
 
 
 def render(run_dir: Path, figure_data: Path | None = None,

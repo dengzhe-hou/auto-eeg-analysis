@@ -115,61 +115,22 @@ installed and keep its inputs and outputs accessible to the analysis.
 - **Optional metrics**: `specparam`, `antropy`, `statsmodels`, and `tensorpac` are probed but are not installed by the core environment file. Install the packages needed by the selected analysis and rerun the probe.
 - **Template MRI**: the fsaverage source-localization path fetches template assets through MNE if they are not already cached. The environment probe does not download or validate those assets.
 
+## Windows environment activation
 
----
-
-## Windows: calling a conda environment's python directly
-
-**The trap.** `<env>\python.exe` invoked *directly* is not the same as activating the environment.
-Activation puts `<env>\Library\bin` on the DLL search path; calling the executable does not. NumPy
-registers its own DLL directory, so it imports and computes fine — and so does `import mne`. The
-process then **hard-crashes** the first time SciPy reaches LAPACK:
-
-```
-Windows fatal exception: 0xc06d007f
-```
-
-**Why it is hard to diagnose.** The failure is not where the cause is. Basic numerics work, imports
-succeed, and only the code path doing an SVD (PCA whitening inside ICA) dies — 6 of 7 tests passed
-before the crash on the machine that found it. The obvious suspects are all wrong: it is not
-duplicate OpenMP (`KMP_DUPLICATE_LIB_OK` changes nothing) and not a PyPI/conda BLAS mix (installing
-conda-forge's MKL build changes nothing). The cause is how the interpreter was invoked.
-
-**Fix.** Activate, or go through conda:
+Activate `aeais` or use `conda run`; do not invoke a conda environment's
+`python.exe` directly. Without activation, SciPy can fail at LAPACK/SVD with
+`Windows fatal exception: 0xc06d007f` even when NumPy and MNE import successfully.
+The deployment report probes an actual SVD operation before selecting Python.
 
 ```powershell
 conda run -n aeais python -m pytest tools/tests/
 ```
 
-**Why this is guarded and not merely documented.** `deploy_report.{sh,ps1}` pick an interpreter off
-PATH. Someone who has put a conda environment directory on PATH without activating it — common —
-would have that interpreter selected, pass the `import mne` check, and crash inside the test suite.
-The report would then record a defect in AEA that is really an activation problem. `Select-Python`
-therefore probes `scipy.linalg.svd` rather than an import: the operation that actually breaks.
+The PowerShell 7 branch has been inspected but not executed. Probe JSON is read with
+`utf-8-sig` to support both PowerShell 5.1 and 7 encodings. A Windows test count may
+be lower because a POSIX-shell test is skipped when only the WSL launcher is
+available; compare collected tests and skip reasons.
 
-This is the same class as the Microsoft Store `python3` stub — *present on PATH but not usable* —
-except that it fails much later, where the evidence points at the wrong thing.
-
----
-
-## Negative results worth recording
-
-Findings that cost time and produced nothing. They are here so nobody re-spends that time.
-
-**PowerShell 7 has no known breaking difference for `check_env.ps1`.** Checked against the
-documented 5.1 → 7 removals: `Get-WmiObject` (removed in 7) is not used — GPU is probed by shelling
-out to `nvidia-smi`, which behaves identically across versions; `Get-CimInstance`,
-`Send-MailMessage` and `New-WebServiceProxy` are not used either. The one real difference is
-`Out-File -Encoding UTF8`, which writes a BOM under 5.1 and none under 7 — already neutralised by
-reading with `utf-8-sig`. The `pwsh` branch has still never *run*, so this is not a guarantee; it
-does mean the residual risk is low rather than unknown.
-
-**`.sh` files carry no UTF-8 BOM** (a BOM would break the shebang on Linux), and
-`resolve_backend.py` imports only the standard library. Both were hypothesised as portability
-risks and disproved before being reported.
-
-**Test-count differences across platforms are skips, not failures.** A Windows run reporting
-`187 passed` against Linux's `188 passed` is the same 189 collected tests: Windows adds one skip,
-because `test_env_probe_emits_valid_json_when_optional_packages_are_missing` needs a POSIX shell and
-skips when only the WSL `bash.exe` launcher is present. Compare `--collect-only` totals, not pass
-counts.
+The [historical portability record](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/7597b6aa2e82355d56703c81621979b3ff1d45c0/docs/PLATFORM_SUPPORT.md#windows-calling-a-conda-environments-python-directly)
+retains the crash investigation, unsuccessful OpenMP/BLAS workarounds, PowerShell
+compatibility inspection and original cross-platform test counts.

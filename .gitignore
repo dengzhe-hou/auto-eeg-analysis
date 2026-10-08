@@ -154,3 +154,14 @@ paper-overleaf/
 /docs/BENCHMARK.md
 /tools/tests/test_benchmark_reports.py
 /tools/tests/test_trial_identity.py
+
+# Historical N100/Flankers demonstrations remain server-local.
+/docs/assets/n100-case-study-corrected.png
+/docs/assets/flankers-case-study-corrected.png
+/tools/prepare_sample_case.py
+/tools/run_fix_audit.py
+/tools/run_full_case_study.py
+/tools/case_study_stats.py
+/tools/gen_case_study_figures.py
+/tools/tests/test_case_study_inputs.py
+/tools/tests/test_case_study_stats.py
