@@ -61,7 +61,7 @@ The library contains **10 recipes**. The status column below reproduces each rec
 
 For face selectivity, use `n170-faces`. Face inversion is a different contrast and has its own `n170-face-inversion` recipe.
 
-Validation scripts and result JSON files live in [tools/validation/](../tools/validation/); numerical comparisons live in [tools/benchmark/](../tools/benchmark/). [Benchmark documentation](../docs/BENCHMARK.md) and [certification levels](../docs/CERTIFICATION_LEVELS.md) explain how those checks relate to the certified core. A recipe's status does not replace its configuration-specific validation notes.
+Recorded [validation scripts and results](https://github.com/dengzhe-hou/auto-eeg-analysis/tree/995f53d42cc74205b164e8711d4b289b8c2ad3a1/tools/validation) and [numerical comparisons](https://github.com/dengzhe-hou/auto-eeg-analysis/tree/995f53d42cc74205b164e8711d4b289b8c2ad3a1/tools/benchmark) remain in a fixed public snapshot. The [benchmark record](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/995f53d42cc74205b164e8711d4b289b8c2ad3a1/docs/BENCHMARK.md) and current [certification levels](../docs/CERTIFICATION_LEVELS.md) explain how those checks relate to the certified core. A recipe's status does not replace its configuration-specific validation notes.
 
 ## Anatomy of a recipe
 
@@ -73,7 +73,7 @@ recipes/<recipe-name>/
 └── citation.bib    # references for the analysis
 ```
 
-The `ern-flankers` recipe also has [a regression test](ern-flankers/tests/test_ern_flankers.py). Validation scripts, figures, and result JSON files are currently shared under `tools/validation/`, rather than bundled into each recipe directory. Raw validation datasets are obtained separately.
+The `ern-flankers` recipe also has [a regression test](ern-flankers/tests/test_ern_flankers.py). Historical validation scripts, figures, and result JSON files are linked from each recipe; they are not bundled into every recipe directory. Raw validation datasets are obtained separately. Current [worked examples](../docs/EXAMPLES.md) include executable case and replay helpers.
 
 For new recipes, start from the [recipe template](_template/RECIPE.md). A contribution can add `validation/README.md` with dataset access instructions, `reference_figures/` with its reference outputs, and `tests/` with a numerical regression check. These are contribution assets, not directories present in every existing recipe.
 

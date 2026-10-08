@@ -16,15 +16,15 @@ branch omits ICA and amplitude rejection. The primary cluster test uses the reci
 CPz/Cz/Pz ROI and 300–500 ms window. All participants retained 60 trials per condition;
 the mean unrelated-minus-related amplitude was −2.957 µV (SEM 0.466), with one cluster
 at p = 0.0002. This ROI test is separate from the historical all-channel certification.
-See the [complete numerical record](../tools/validation/recipe_case_results.json).
+See the [complete numerical record](../tools/examples/n400/recipe_case_results.json).
 
 Use an existing ERP CORE N400 BIDS directory with sub-001 through sub-020 and a fresh
 output directory. The runner saves the brief, frozen plan, program, preprocessed EEG,
 epochs, averages, statistics, figures and methods. It downloads nothing.
 
 ```bash
-python tools/validation/run_recipe_case.py --data-root /path/to/erpcore-N400 --run-dir projects/n400-recipe-case/runs/run-001
-python tools/validation/run_recipe_case.py --run-dir projects/n400-recipe-case/runs/run-001 --replay
+python tools/examples/run_recipe_case.py --data-root /path/to/erpcore-N400 --run-dir projects/n400-recipe-case/runs/run-001
+python tools/examples/run_recipe_case.py --run-dir projects/n400-recipe-case/runs/run-001 --replay
 ```
 
 Replay checks group statistics from saved participant averages, without repeating
@@ -36,7 +36,7 @@ The complete three-panel figure can also be regenerated from the compact public
 arrays, without the source EEG. Exports are PDF, editable SVG and 600 dpi PNG.
 
 ```bash
-python tools/validation/gen_recipe_case_figures.py --run-dir projects/n400-recipe-figure --figure-data tools/validation/recipe_case_figure_data.npz --summary tools/validation/recipe_case_results.json
+python tools/examples/gen_recipe_case_figures.py --run-dir projects/n400-recipe-figure --figure-data tools/examples/n400/recipe_case_figure_data.npz --summary tools/examples/n400/recipe_case_results.json
 ```
 
 ## MNE sample: auditory versus visual N100
@@ -88,9 +88,8 @@ depended on smoothing, and anesthesia was untested. [Original results](https://g
 and [follow-up results](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/546db87c2e7717ff2eeca83c6e4131294f14a97a/tools/validation/audit_followup_results.json) remain in the public snapshot;
 [certification coverage](CERTIFICATION_LEVELS.md) is recorded separately.
 
-```bash
-python tools/validation/validate_resting_recipes.py --subjects 20 --out projects/eegbci-resting/runs/resting-001/resting_results.json
-```
+The [recorded validation script](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/995f53d42cc74205b164e8711d4b289b8c2ad3a1/tools/validation/validate_resting_recipes.py)
+is available in the fixed public snapshot. Use the recipes above for a new analysis.
 
 ## Trial identities behind the reference comparison
 
@@ -103,11 +102,10 @@ resampled sample even when identity agrees. Original AEA counts and stored-preci
 amplitudes are reproduced. The check compares AEA with retained MNE-BIDS-Pipeline
 outputs; it does not add EEGLAB/FieldTrip trial identities.
 
-The command requires the original ERP CORE caches and retained reference derivative
+The [recorded identity-check script](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/995f53d42cc74205b164e8711d4b289b8c2ad3a1/tools/validation/validate_trial_identity.py)
+requires the original ERP CORE caches and retained reference derivative
 FIF files under `~/mne_data`. It regenerates original AEA subject processing and reads
 the reference files; it does not run group permutations or overwrite the published
 results. New records are written under `projects/trial-identity/`.
 
-```bash
-python tools/validation/validate_trial_identity.py --jobs 2
-```
+The script is available in the fixed public snapshot; it is not part of a new recipe run.

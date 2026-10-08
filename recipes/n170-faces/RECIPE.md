@@ -97,7 +97,7 @@ MMN/ERN — expected here because only **run-01 of 6** was used (~96 faces/subje
 passes the group sanity check on the canonical public face dataset.
 
 The geometric posterior-lateral ROI is reported per run (transparent, not cherry-picked).
-Figure: [archived figure](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/76202d6071070c27ad2813561e54272969cacb4b/tools/validation/figures/n170_faces.png). Run: `python tools/validation/validate_n170_faces.py --subjects 16`.
+Figure: [archived figure](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/76202d6071070c27ad2813561e54272969cacb4b/tools/validation/figures/n170_faces.png). [Recorded validation script](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/995f53d42cc74205b164e8711d4b289b8c2ad3a1/tools/validation/validate_n170_faces.py) (16 subjects).
 
 ### Second validation — ERP CORE N170 (server, 2026-06-24)
 
@@ -112,9 +112,9 @@ face (value 1–40) − car (41–80), PO7/PO8/P7/P8, 130–200 ms, 0.1–40 Hz,
 | Second-level spatiotemporal cluster | **1 significant cluster, p = 0.0002** |
 
 Stronger than the ds000117 run-01 result (dz −0.99 vs −0.64) — the car control and full trial count
-help. Run: `python tools/validation/validate_n170_erpcore_group.py --subjects 20`.
+help. [Recorded validation script](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/995f53d42cc74205b164e8711d4b289b8c2ad3a1/tools/validation/validate_n170_erpcore_group.py) (20 subjects).
 **Cross-tool benchmark:** reproduces MNE-BIDS-Pipeline's per-subject N170 to **≤ 11 nV (CCC = 1.000,
-20/20 within ±0.1 µV)** — see [docs/BENCHMARK.md §4d](../../docs/BENCHMARK.md).
+20/20 within ±0.1 µV)** — see the [benchmark record §4d](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/995f53d42cc74205b164e8711d4b289b8c2ad3a1/docs/BENCHMARK.md).
 
 ## Methods paragraph (for your paper)
 ```text

@@ -8,7 +8,7 @@ import pytest
 
 pd = pytest.importorskip("pandas")
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "validation"))
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "examples"))
 from run_recipe_case import (RELATED, ROI, UNRELATED, roi_adjacency, target_events,
                              validate_channels, validate_trial_counts, display_path,
                              prepare_run_directory, write_json)

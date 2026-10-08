@@ -10,7 +10,7 @@ import numpy as np
 import pytest
 import scipy.io
 
-DUMPS = Path(__file__).resolve().parents[1] / "benchmark" / "cluster_cert" / "dumps_shipped"
+DUMPS = Path(__file__).resolve().parent / "fixtures" / "certification" / "benchmark" / "cluster_cert" / "dumps_shipped"
 COMPONENTS = ["ERN", "N170", "N400", "P3"]
 RTOL = 1e-12
 

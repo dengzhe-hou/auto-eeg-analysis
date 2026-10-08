@@ -108,9 +108,9 @@ This is a population-level (N > 1) result: the MMN is significant across subject
 in one recording. ICA was not used (passive ERP CORE data is clean; ±100 µV reject sufficed).
 The trial-count guard (≥ 50 deviants, ≥ 150 standards) matches the `## What this recipe needs`
 spec above; it drops the two subjects whose retained-deviant counts fall short (11 and 47).
-An independent cross-tool benchmark reproduces this −0.840 µV to ~3 nV — see [docs/BENCHMARK.md](../../docs/BENCHMARK.md).
+An independent cross-tool benchmark reproduces this −0.840 µV to ~3 nV — see the [benchmark record](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/995f53d42cc74205b164e8711d4b289b8c2ad3a1/docs/BENCHMARK.md).
 
-Figure: [archived figure](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/76202d6071070c27ad2813561e54272969cacb4b/tools/validation/figures/mmn_group.png). Run: `python tools/validation/validate_mmn_group.py --subjects 40`.
+Figure: [archived figure](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/76202d6071070c27ad2813561e54272969cacb4b/tools/validation/figures/mmn_group.png). [Recorded validation script](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/995f53d42cc74205b164e8711d4b289b8c2ad3a1/tools/validation/validate_mmn_group.py) (40 subjects).
 
 ## Methods paragraph (for your paper)
 ```text

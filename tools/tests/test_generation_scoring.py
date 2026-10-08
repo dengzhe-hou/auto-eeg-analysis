@@ -10,8 +10,7 @@ from pathlib import Path
 
 import pytest
 
-ROOT = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(ROOT / "tools" / "benchmark"))
+sys.path.insert(0, str(Path(__file__).resolve().parent / "support"))
 
 
 @pytest.fixture
@@ -39,13 +38,3 @@ def test_full_cohort_with_agreement_passes(ref, tmp_path):
     r = _score(ref, dict(ref), tmp_path)
     assert r["cohort_complete"] is True and r["PASS"] is True
     assert r["grand_mean_gen_on_common_uV"] == pytest.approx(r["grand_mean_ref_on_common_uV"])
-
-
-def test_committed_manifest_flags_the_partial_cohort_record():
-    """The committed summaries predate the rule; the manifest must say which records it affects."""
-    m = json.loads((ROOT / "tools" / "benchmark" / "reports" / "run_manifest.json").read_text(encoding="utf-8-sig"))
-    assert "L0_6" in m["partial_cohort_runs"]
-    # 19 records analysed 39-40 subjects (no reference exclusions): covered the reference cohort
-    # but did not match it. Both notions must be recorded, separately.
-    assert "L0_1" in m["cohort_mismatch_runs"] and "L0_1" not in m["partial_cohort_runs"]
-    assert len(m["cohort_mismatch_runs"]) >= 19

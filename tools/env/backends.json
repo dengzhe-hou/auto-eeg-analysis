@@ -7,7 +7,7 @@
     "every path in `requires` resolves to an object with .available == true in ENVIRONMENT.json.",
     "",
     "`agreement` records what was MEASURED against the certified MNE reference \u2014 not asserted.",
-    "Numbers come from tools/benchmark/CROSS_TOOLBOX_RESULT.json (see CROSS_TOOLBOX_EVAL.md).",
+    "Numbers come from the fixed public snapshot: https://github.com/dengzhe-hou/auto-eeg-analysis/blob/995f53d42cc74205b164e8711d4b289b8c2ad3a1/tools/benchmark/CROSS_TOOLBOX_RESULT.json (see CROSS_TOOLBOX_EVAL.md in the same snapshot).",
     "Where nothing was measured the field says so; a resolver must not imply equivalence it",
     "cannot cite.",
     "",
@@ -29,7 +29,7 @@
         "python_packages.mne"
       ],
       "reference": true,
-      "notes": "The certified reference. All committed tools/validation/*_results.json were produced here."
+      "notes": "The certified reference. The recorded tools/validation/*_results.json in the fixed public snapshot were produced here."
     },
     "eeglab": {
       "label": "EEGLAB (MATLAB or GNU Octave)",
@@ -64,7 +64,7 @@
         "mne": {
           "measured": true,
           "role": "reference",
-          "evidence": "docs/BENCHMARK.md \u2014 5 components vs MNE-BIDS-Pipeline 1.10.1, CCC >= 0.9997"
+          "evidence": "https://github.com/dengzhe-hou/auto-eeg-analysis/blob/995f53d42cc74205b164e8711d4b289b8c2ad3a1/docs/BENCHMARK.md \u2014 5 components vs MNE-BIDS-Pipeline 1.10.1, CCC >= 0.9997"
         },
         "eeglab": {
           "measured": true,
@@ -81,7 +81,7 @@
           "min_ccc": 0.995329,
           "worst_grand_mean_diff_pct": 3.32,
           "group_conclusion_reproduced": "5/5",
-          "evidence": "tools/benchmark/CROSS_TOOLBOX_EVAL.md sec 1"
+          "evidence": "https://github.com/dengzhe-hou/auto-eeg-analysis/blob/995f53d42cc74205b164e8711d4b289b8c2ad3a1/tools/benchmark/CROSS_TOOLBOX_EVAL.md sec 1"
         },
         "fieldtrip": {
           "measured": true,
@@ -105,7 +105,7 @@
             "pearson_r": 1.0,
             "note": "Pinning the FieldTrip filter specification (cutoff convention AND transition width together) took max|d| from 0.721 to 0.050 uV; the cutoff-convention-only step at a fixed 0.1 Hz transition width is 0.802 -> 0.050 uV. Staged comparison -- not attributable to one parameter alone."
           },
-          "evidence": "tools/benchmark/CROSS_TOOLBOX_EVAL.md sec 1 and 2b"
+          "evidence": "https://github.com/dengzhe-hou/auto-eeg-analysis/blob/995f53d42cc74205b164e8711d4b289b8c2ad3a1/tools/benchmark/CROSS_TOOLBOX_EVAL.md sec 1 and 2b"
         }
       },
       "pin": [
@@ -180,7 +180,7 @@
         "mne": {
           "measured": true,
           "role": "reference",
-          "evidence": "used by every committed validation script"
+          "evidence": "used by every recorded validation script in the fixed public snapshot"
         },
         "fieldtrip": {
           "measured": true,
@@ -191,7 +191,7 @@
           "leading_cluster_tsum_rel_diff_unpinned": 0.063,
           "same_conclusion": true,
           "caveat": "FieldTrip's clusterstat needs spm_bwlabel, unavailable to Octave; a pure-Octave connected-component labeller verified against scipy.ndimage.label (12/12) is supplied. FieldTrip still contributes the statistic, threshold, permutation scheme and p-value.",
-          "evidence": "tools/benchmark/CLUSTER_CERT.md",
+          "evidence": "https://github.com/dengzhe-hou/auto-eeg-analysis/blob/995f53d42cc74205b164e8711d4b289b8c2ad3a1/tools/benchmark/CLUSTER_CERT.md",
           "components": [
             "N400",
             "P3",
@@ -242,7 +242,7 @@
             "tmap_max_abs_diff": 1.8e-15,
             "leading_tsum_identical_to_printed_precision": true,
             "mne_reproduces_committed_validation_p_values": true,
-            "evidence": "tools/benchmark/cluster_cert/*_shipped.json, ELEMENTWISE_shipped_*.json, dumps_shipped/"
+            "evidence": "https://github.com/dengzhe-hou/auto-eeg-analysis/tree/995f53d42cc74205b164e8711d4b289b8c2ad3a1/tools/benchmark/cluster_cert (*_shipped.json, ELEMENTWISE_shipped_*.json, dumps_shipped/)"
           }
         }
       },

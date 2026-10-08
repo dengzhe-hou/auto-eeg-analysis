@@ -13,7 +13,7 @@ These are what `eeg-preprocess` emits when `tools/env/resolve_backend.py` resolv
 Cross-toolbox agreement is a property of **how completely the specification is pinned**, not of the
 toolbox. Each template therefore forces you to state four conventions that a prose protocol leaves
 open, and that were measured to move the numbers
-([CROSS_TOOLBOX_EVAL.md](../../tools/benchmark/CROSS_TOOLBOX_EVAL.md)):
+([CROSS_TOOLBOX_EVAL.md](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/995f53d42cc74205b164e8711d4b289b8c2ad3a1/tools/benchmark/CROSS_TOOLBOX_EVAL.md)):
 
 | pin | the question a prose protocol does not answer |
 |---|---|

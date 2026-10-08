@@ -8,12 +8,10 @@ The command is recorded in the receipt; it is not executed by this tool.
 
   python tools/gen_receipt.py --project projects/my-study \\
       --bundle projects/my-study/runs/one
-  python tools/gen_receipt.py --project projects/eegbci-resting \
-      --reproduce "python tools/validation/validate_resting_recipes.py --subjects 20" \
-      --claim "EC>EO posterior alpha (cluster p=0.0002)" \
-      --claim "EO>EC complexity (LZC p=4e-5)" \
-      --claim "4 microstate maps, GEV 0.66, dur 103ms" \
-      --seed ICA=42 --seed ModKMeans=42 --seed cluster=42 --extra-hash tools/validation/resting_results.json
+  python tools/gen_receipt.py --project projects/n400-recipe-case/runs/run-001 \
+      --reproduce "python tools/examples/run_recipe_case.py --run-dir projects/n400-recipe-case/runs/run-001 --replay" \
+      --claim "Group statistics recomputed from saved participant averages" \
+      --seed cluster=42 --extra-hash tools/examples/n400/recipe_case_results.json
 """
 import argparse
 import hashlib

@@ -23,15 +23,7 @@ from pathlib import Path
 import pytest
 
 ROOT = Path(__file__).resolve().parents[2]
-VALIDATION = ROOT / "tools" / "validation"
-
-CERTIFIED = {
-    "validate_mmn_group.py": "mmn_group_results.json",
-    "validate_p3_group.py": "p3_group_results.json",
-    "validate_n170_erpcore_group.py": "n170_erpcore_results.json",
-    "validate_ern_erpcore_group.py": "ern_erpcore_results.json",
-    "validate_n400_erpcore_group.py": "n400_erpcore_results.json",
-}
+SUPPORT = Path(__file__).resolve().parent / "support"
 
 # Scripts and data that are reference artefacts of one particular run, not things a user executes.
 PATH_LEAK_EXEMPT = ("cross_toolbox_results/", "generated_pipelines/", "review-stage/",
@@ -70,24 +62,8 @@ def test_no_developer_home_paths_in_executable_sources():
     )
 
 
-@pytest.mark.parametrize("script,results", sorted(CERTIFIED.items()))
-def test_validation_scripts_guard_the_certified_baseline(script, results):
-    """A partial run must not be able to overwrite the file the CI gate certifies against.
-
-    Found by cold-start test: `validate_mmn_group.py --subjects 3` silently replaced a 38-subject
-    certified baseline with a 3-subject smoke run. test_benchmark.py then failed — but only after
-    the reference was already gone.
-    """
-    src = (VALIDATION / script).read_text(encoding="utf-8-sig")
-    assert "guard_certified_output" in src, f"{script} does not guard its --out default"
-    assert '"--force"' in src, f"{script} has no --force escape hatch for deliberate re-certification"
-    # the guard must run before the write, not after
-    assert src.index("guard_certified_output(args.out") < src.index("json.dump(results"), (
-        f"{script} guards after writing, which is too late")
-
-
 def test_guard_blocks_a_partial_run_and_allows_a_matching_one(tmp_path):
-    sys.path.insert(0, str(VALIDATION))
+    sys.path.insert(0, str(SUPPORT))
     from _certified_output import guard_certified_output
 
     baseline = tmp_path / "certified.json"
@@ -181,7 +157,7 @@ def test_no_unguarded_non_core_imports(path):
         and n.func.attr == "importorskip" and n.args and isinstance(n.args[0], ast.Constant)
     }
     # Local project modules resolved via sys.path manipulation are not third-party.
-    # This includes the figure builders in tools/benchmark/reports/.
+    # Reusable numerical and figure checks live under tools/tests/support/.
     local = {p.stem for p in (ROOT / "tools").rglob("*.py")}
     offenders = sorted({
         m for _, m in _module_roots(tree)

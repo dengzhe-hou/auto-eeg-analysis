@@ -147,3 +147,10 @@ paper-overleaf/
 /docs/assets/n100-case-study-corrected.pdf
 /docs/assets/n100-case-study-corrected.svg
 /docs/assets/n100-case-study-corrected.caption.txt
+
+# Paper reproduction material stays server-local; the default branch contains the library.
+/tools/benchmark/
+/tools/validation/
+/docs/BENCHMARK.md
+/tools/tests/test_benchmark_reports.py
+/tools/tests/test_trial_identity.py

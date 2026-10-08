@@ -64,7 +64,7 @@ The existing ERP, cluster and Welch evidence is unchanged.
 Run every check without downloading data:
 
 ```bash
-conda run -n aeais python tools/validation/library_numerics.py --out /tmp/library-numerics.json
+conda run -n aeais python tools/tests/support/library_numerics.py --out /tmp/library-numerics.json
 conda run -n aeais python -m pytest tools/tests/test_library_numerics.py -q
 ```
 
@@ -87,7 +87,7 @@ matched their known locations. A low-amplitude sine produced 100 warnings and no
 candidate. A [cached MNE sample injection check](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/546db87c2e7717ff2eeca83c6e4131294f14a97a/tools/validation/qc_sample_revision_2026-10-03.json)
 compares the original first 10 seconds of three EEG channels with known added faults. The
 original recording has no ground-truth clean/bad labels; this check measures injected-event
-localization and preservation of input data, not clinical sensitivity. The [executable checks](../tools/validation/library_numerics.py) and [pytest entry points](../tools/tests/test_library_numerics.py)
+localization and preservation of input data, not clinical sensitivity. The [executable checks](../tools/tests/support/library_numerics.py) and [pytest entry points](../tools/tests/test_library_numerics.py)
 are retained so these are rerunnable measurements, not just stored PASS labels.
 
 ### Objective specification corrections
@@ -105,5 +105,9 @@ observed cluster statistics, the independent Welch implementation, and the addit
 above support their respective measured outputs. A passing API check alone does not establish
 numerical correctness, and a known-source synthetic check does not establish biological validity.
 Full generated workflows and options outside these checks still need their own evidence before
-being described as certified. Current CI fixtures remain in `tools/benchmark/` and
-`tools/validation/`; the other versioned records remain accessible through the links above.
+being described as certified. Current CI fixtures are in
+[`tools/tests/fixtures/certification/`](../tools/tests/fixtures/certification/), with executable
+support in [`tools/tests/support/`](../tools/tests/support/). The
+[benchmark](https://github.com/dengzhe-hou/auto-eeg-analysis/tree/995f53d42cc74205b164e8711d4b289b8c2ad3a1/tools/benchmark) and
+[validation](https://github.com/dengzhe-hou/auto-eeg-analysis/tree/995f53d42cc74205b164e8711d4b289b8c2ad3a1/tools/validation)
+records remain in the fixed public snapshot; earlier records remain accessible through the links above.

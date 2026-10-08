@@ -23,8 +23,7 @@ matplotlib = pytest.importorskip("matplotlib")
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
 
-ROOT = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(ROOT / "tools" / "benchmark"))
+sys.path.insert(0, str(Path(__file__).resolve().parent / "support"))
 from figure_fidelity import (  # noqa: E402
     FigureFidelityError, check_axis_units, check_errorband_is, check_line, check_mask_matches,
 )

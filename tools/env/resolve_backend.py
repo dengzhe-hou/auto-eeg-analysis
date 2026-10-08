@@ -9,7 +9,7 @@ It exists because of a specific empirical result. Cross-toolbox agreement is **n
 the toolbox: run the same analysis in EEGLAB or FieldTrip under each toolbox's own defaults and
 per-subject amplitudes differ by up to 43% of the group effect, but pin the specification
 completely and the same three toolboxes land within 0.05 µV of each other with r = 1.0000
-(`tools/benchmark/CROSS_TOOLBOX_EVAL.md`). So a backend may never be selected without also
+(`https://github.com/dengzhe-hou/auto-eeg-analysis/blob/995f53d42cc74205b164e8711d4b289b8c2ad3a1/tools/benchmark/CROSS_TOOLBOX_EVAL.md`). So a backend may never be selected without also
 emitting the numerical conventions that selection commits you to.
 
 Three rules, all enforced here:

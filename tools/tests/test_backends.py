@@ -22,6 +22,7 @@ import pytest
 
 ROOT = Path(__file__).resolve().parents[2]
 ENV_DIR = ROOT / "tools" / "env"
+FIXTURES = Path(__file__).resolve().parent / "fixtures" / "certification" / "benchmark"
 sys.path.insert(0, str(ENV_DIR))
 
 from resolve_backend import ResolutionError, resolve  # noqa: E402
@@ -181,8 +182,8 @@ def test_every_capability_pins_at_least_one_convention():
 
 def test_measured_numbers_match_the_benchmark_results():
     """backends.json must not drift from the benchmark output it cites."""
-    rows = json.loads((ROOT / "tools" / "benchmark" / "CROSS_TOOLBOX_RESULT.json").read_text(encoding="utf-8-sig"))
-    div = json.loads((ROOT / "tools" / "benchmark" / "CROSS_TOOLBOX_DIVERGENCE.json").read_text(encoding="utf-8-sig"))
+    rows = json.loads((FIXTURES / "CROSS_TOOLBOX_RESULT.json").read_text(encoding="utf-8-sig"))
+    div = json.loads((FIXTURES / "CROSS_TOOLBOX_DIVERGENCE.json").read_text(encoding="utf-8-sig"))
     toolbox = {(d["component"], d["source"].split("/")[-1]): d["toolbox"] for d in div}
     label = {"eeglab": "EEGLAB/Octave", "fieldtrip": "FieldTrip/Octave"}
 

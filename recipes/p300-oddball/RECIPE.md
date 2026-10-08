@@ -97,14 +97,14 @@ target − standard (target = trials where the shown letter is the block target;
 | One-sample t (vs 0) | **t(19) = +4.15, p = 5.4 × 10⁻⁴**, Cohen's dz = +0.93 |
 | **Second-level spatiotemporal cluster** (5000 perms, seed 42, one-sided) | **1 significant cluster, p = 0.0002** |
 
-Run: `python tools/validation/validate_p3_group.py --subjects 20`. Figure:
+[Recorded validation script](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/995f53d42cc74205b164e8711d4b289b8c2ad3a1/tools/validation/validate_p3_group.py) (20 subjects). Figure:
 [archived figure](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/76202d6071070c27ad2813561e54272969cacb4b/tools/validation/figures/p3_group.png). (The earlier `mne.datasets.eegbci` reference was
 **incorrect** — eegbci is a motor-imagery set with no oddball stream; this validation uses the
 correct ERP CORE P3 oddball.)
 
 **Cross-tool numeric benchmark:** the recipe's reference implementation reproduces MNE-BIDS-Pipeline's per-subject
 P3b to **≤ 0.5 nV (CCC = 1.000, 20/20 within ±0.1 µV)** on the same data — see
-[docs/BENCHMARK.md §4c](../../docs/BENCHMARK.md). With all epochs averaged (reject=None) both tools
+[benchmark record §4c](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/995f53d42cc74205b164e8711d4b289b8c2ad3a1/docs/BENCHMARK.md). With all epochs averaged (reject=None) both tools
 average the identical trial set, so agreement is at the floating-point floor.
 
 ## Methods paragraph (for your paper)

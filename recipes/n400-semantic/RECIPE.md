@@ -89,10 +89,10 @@ CPz/Cz/Pz, 300–500 ms, 0.1–30 Hz, 256 Hz, average reference, reject=None.
 | One-sample t (vs 0) | **t(19) = −6.34, p = 4.4 × 10⁻⁶**, Cohen's dz = −1.42 |
 | Second-level spatiotemporal cluster | **1 significant cluster, p = 0.0002** |
 
-Run: `python tools/validation/validate_n400_erpcore_group.py --subjects 20`.
+[Recorded validation script](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/995f53d42cc74205b164e8711d4b289b8c2ad3a1/tools/validation/validate_n400_erpcore_group.py) (20 subjects).
 Figure: [archived figure](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/76202d6071070c27ad2813561e54272969cacb4b/tools/validation/figures/n400_erpcore_group.png).
 **Cross-tool benchmark:** reproduces MNE-BIDS-Pipeline's per-subject N400 to **≤ 6 nV (CCC = 1.000,
-20/20 within ±0.1 µV)** — see [docs/BENCHMARK.md §4f](../../docs/BENCHMARK.md).
+20/20 within ±0.1 µV)** — see the [benchmark record §4f](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/995f53d42cc74205b164e8711d4b289b8c2ad3a1/docs/BENCHMARK.md).
 
 ## Known limitations
 - The N400 is sensitive to word frequency, cloze probability, and repetition — the recipe tests

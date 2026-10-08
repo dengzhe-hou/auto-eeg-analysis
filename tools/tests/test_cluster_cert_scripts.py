@@ -11,16 +11,15 @@ from pathlib import Path
 
 import pytest
 
-ROOT = Path(__file__).resolve().parents[2]
-INPUT = ROOT / "tools" / "benchmark" / "cluster_cert" / "cluster_input_N170.mat"
+TESTS = Path(__file__).resolve().parent
+INPUT = TESTS / "fixtures" / "certification" / "benchmark" / "cluster_cert" / "cluster_input_N170.mat"
 pytest.importorskip("mne")
-pytestmark = pytest.mark.skipif(not INPUT.exists(), reason="cluster input not present")
 
 
 @pytest.mark.parametrize("mode,expected_abs", [("two-sided-0.975", 2.093), ("auto", 1.729)])
 def test_threshold_modes_run_and_record_the_threshold(mode, expected_abs, tmp_path):
     out = tmp_path / "res.json"
-    r = subprocess.run([sys.executable, str(ROOT / "tools" / "benchmark" / "cluster_cert_mne.py"),
+    r = subprocess.run([sys.executable, str(TESTS / "support" / "cluster_cert_mne.py"),
                         "--input", str(INPUT), "--tail", "-1", "--threshold", mode,
                         "--n-permutations", "8", "--out", str(out),
                         "--tmin", "0.1328125", "--tmax", "0.19921875"],

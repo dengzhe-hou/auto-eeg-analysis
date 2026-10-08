@@ -191,9 +191,9 @@ post-response, pre-response baseline (−0.4,−0.2), 0.1–30 Hz, 256 Hz, avera
 | One-sample t (vs 0) | **t(13) = −6.31, p = 2.7 × 10⁻⁵**, Cohen's dz = −1.69 |
 | Second-level spatiotemporal cluster | **1 significant cluster, p = 0.0004** |
 
-A large, robust ERN. Run: `python tools/validation/validate_ern_erpcore_group.py --subjects 20`.
+A large, robust ERN. [Recorded validation script](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/995f53d42cc74205b164e8711d4b289b8c2ad3a1/tools/validation/validate_ern_erpcore_group.py) (20 subjects).
 **Cross-tool benchmark** (the first *response-locked* one): reproduces MNE-BIDS-Pipeline's per-subject
-ERN to **≤ 32 nV (CCC = 1.000, 14/14 within ±0.1 µV)** — see [docs/BENCHMARK.md §4e](../../docs/BENCHMARK.md).
+ERN to **≤ 32 nV (CCC = 1.000, 14/14 within ±0.1 µV)** — see the [benchmark record §4e](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/995f53d42cc74205b164e8711d4b289b8c2ad3a1/docs/BENCHMARK.md).
 
 ## Methods paragraph (for your paper)
 

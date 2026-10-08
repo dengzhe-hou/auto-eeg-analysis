@@ -1,6 +1,6 @@
 """The Octave connected-component shim must agree with scipy on random inputs.
 
-The shim (tools/benchmark/octave_shims/spm_bwlabel.m) stands in for SPM's compiled MEX inside
+The shim (tools/tests/support/octave_shims/spm_bwlabel.m) stands in for SPM's compiled MEX inside
 FieldTrip's cluster statistics, so every FieldTrip cluster-certification number passes through it.
 Its header has always CLAIMED verification "by tools/tests/test_cluster_cert.py" — but that file
 did not exist: the 12/12 check had been run ad hoc and never committed. The acceptance-contract
@@ -17,8 +17,7 @@ from pathlib import Path
 import numpy as np
 import pytest
 
-ROOT = Path(__file__).resolve().parents[2]
-SHIM_DIR = ROOT / "tools" / "benchmark" / "octave_shims"
+SHIM_DIR = Path(__file__).resolve().parent / "support" / "octave_shims"
 
 
 def _octave() -> str | None:

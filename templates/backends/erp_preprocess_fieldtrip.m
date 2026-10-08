@@ -10,7 +10,8 @@
 % The cause was NOT the toolbox: FieldTrip reads a stated band edge as the -6 dB POINT while MNE
 % and EEGLAB read it as the PASSBAND EDGE, so "a 0.1 Hz high-pass" is a 2x different filter.
 % Pinning that one convention took the same FieldTrip code to 0.050 uV, CCC 0.999943, r = 1.0000 —
-% better agreement than EEGLAB. See tools/benchmark/CROSS_TOOLBOX_EVAL.md sec 2b.
+% better agreement than EEGLAB. See sec 2b of the recorded comparison:
+% https://github.com/dengzhe-hou/auto-eeg-analysis/blob/995f53d42cc74205b164e8711d4b289b8c2ad3a1/tools/benchmark/CROSS_TOOLBOX_EVAL.md.
 %
 % MEASURED AGREEMENT with the certified MNE reference, at FieldTrip's own defaults (5 components):
 %   worst-case per-subject |delta| 0.721 uV | min CCC 0.9928 | group conclusion reproduced 5/5

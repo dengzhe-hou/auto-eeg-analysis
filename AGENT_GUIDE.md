@@ -4,7 +4,7 @@ This file is the LLM-facing entry point. Read this *before* running any skill.
 
 ## What AEA is
 
-AEA is an open library of EEG analysis skills for MNE-Python, with executable specifications and a numerically certified core. The agent reads each `SKILL.md` and generates analysis code in the user's environment. The repository also includes utility tools, EEGLAB / FieldTrip backend templates, reference analysis scripts, validation results, and tests. You orchestrate; MNE-Python is the primary computation backend. Every step writes artifacts to disk so the pipeline survives compaction, crashes, and sleep.
+AEA is an open library of EEG analysis skills for MNE-Python, with executable specifications and a numerically certified core. The agent reads each `SKILL.md` and generates analysis code in the user's environment. The repository also includes utility tools, EEGLAB / FieldTrip backend templates, worked examples, and tests. [Certification coverage](docs/CERTIFICATION_LEVELS.md) links the retained comparison records. You orchestrate; MNE-Python is the primary computation backend. Every step writes artifacts to disk so the pipeline survives compaction, crashes, and sleep.
 
 ## Project layout you will encounter
 
@@ -84,7 +84,7 @@ If the user mentions Brainstorm / BrainVision Analyzer / Curry / Neuroscan, ask 
 **MNE-Python is the default and the reference backend.** EEGLAB and FieldTrip provide independent
 validation and are *selectable alternatives* for ERP preprocessing, validated
 against the reference on all five certified ERP CORE components
-([CROSS_TOOLBOX_EVAL.md](tools/benchmark/CROSS_TOOLBOX_EVAL.md): 10/10 runs reproduce the group
+([CROSS_TOOLBOX_EVAL.md](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/995f53d42cc74205b164e8711d4b289b8c2ad3a1/tools/benchmark/CROSS_TOOLBOX_EVAL.md): 10/10 runs reproduce the group
 conclusion).
 
 Never pick one by hand. Run `tools/env/resolve_backend.py`, which writes `BACKEND_RESOLUTION.md`,

@@ -250,4 +250,4 @@ provide cross-toolbox comparisons and selectable paths for the capabilities list
 in [the backend registry](../tools/env/backends.json). Availability, API tests, and
 numerical certification describe different evidence. See
 [certification coverage](CERTIFICATION_LEVELS.md) and the
-[benchmark record](BENCHMARK.md) for the measured configurations and tolerances.
+[benchmark record](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/995f53d42cc74205b164e8711d4b289b8c2ad3a1/docs/BENCHMARK.md) for the measured configurations and tolerances.

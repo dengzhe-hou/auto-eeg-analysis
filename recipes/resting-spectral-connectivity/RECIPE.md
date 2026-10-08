@@ -109,14 +109,14 @@ Eyes-closed should show a clear posterior **alpha peak (~10 Hz)** and higher pos
 | Paired t-test (EC − EO), N=20 | t = 3.60, **p = 0.0019**, Cohen's dz = 0.81 |
 | **Second-level spatial cluster** (across-subject, 5000 perms) | **1 significant cluster, p = 0.0002**, 62/64 channels |
 
-Figure: [archived figure](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/76202d6071070c27ad2813561e54272969cacb4b/tools/validation/figures/resting_validation.png) (panel A). Run: `python tools/validation/validate_resting_recipes.py --subjects 20`.
+Figure: [archived figure](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/76202d6071070c27ad2813561e54272969cacb4b/tools/validation/figures/resting_validation.png) (panel A). [Recorded validation script](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/995f53d42cc74205b164e8711d4b289b8c2ad3a1/tools/validation/validate_resting_recipes.py) (20 subjects).
 
 > **Validation caveats (honest):** eegbci is natively **160 Hz (below this recipe's `min_sfreq: 250`)** and only **~61 s/run (below the recommended ≥120 s)**; data were resampled to 250 Hz and ICA-cleaned (ICLabel: eye/muscle/heart). The EC>EO alpha **power** effect is robust; the alpha-reactivity sanity check is what promotes `status: validated`. `specparam` 1/f was exercised at the API level only (`tools/tests/test_skill_apis.py`), not benchmarked.
 
-> **wPLI connectivity benchmark (audit follow-up, `tools/validation/validate_connectivity.py`, N=15).** Posterior-posterior debiased wPLI (alpha 8–13 Hz) **trends in the expected direction** (eyes-closed 0.270 > eyes-open 0.193, diff +0.076, dz = 0.36) but is **NOT significant** (paired t = 1.40, p = 0.18). Connectivity is noisier and weaker than the power effect; at this N it is a **trend, not a confirmed effect** (a dz ≈ 0.36 needs N ≈ 60 for 80% power). So the recipe's *power* half is validated; its *connectivity* half runs correctly and trends right but is **not** group-significant here — treat wPLI claims as exploratory until run on a larger sample.
+> **wPLI connectivity benchmark (audit follow-up, [recorded script](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/995f53d42cc74205b164e8711d4b289b8c2ad3a1/tools/validation/validate_connectivity.py), N=15).** Posterior-posterior debiased wPLI (alpha 8–13 Hz) **trends in the expected direction** (eyes-closed 0.270 > eyes-open 0.193, diff +0.076, dz = 0.36) but is **NOT significant** (paired t = 1.40, p = 0.18). Connectivity is noisier and weaker than the power effect; at this N it is a **trend, not a confirmed effect** (a dz ≈ 0.36 needs N ≈ 60 for 80% power). So the recipe's *power* half is validated; its *connectivity* half runs correctly and trends right but is **not** group-significant here — treat wPLI claims as exploratory until run on a larger sample.
 
 > **Topography caveat (audit follow-up).** The per-channel EC−EO alpha t-map
-> (`tools/validation/audit_followups.py`, N=20) is **spatially diffuse, not posterior-specific**:
+> ([recorded audit script](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/995f53d42cc74205b164e8711d4b289b8c2ad3a1/tools/validation/audit_followups.py), N=20) is **spatially diffuse, not posterior-specific**:
 > posterior mean t = 3.29 vs anterior mean t = 3.40 (max at TP8). This is expected under an
 > **average reference** — eye-closure raises alpha broadly and the average reference
 > redistributes it — and explains why the second-level cluster spans 62/64 channels. The

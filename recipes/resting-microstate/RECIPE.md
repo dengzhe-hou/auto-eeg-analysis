@@ -80,7 +80,7 @@ params = segmentation.compute_parameters()    # NOT pycrostates.metrics (does no
 > 50/31 ms and inflate mean microstate durations to ~200 ms (validated: 160 Hz native →
 > 200 ms vs the canonical ~100 ms). Deriving the windows from `sfreq` (30/20 ms) fixes this
 > — on the eegbci validation at native 160 Hz the duration came to **116 ms** and split-half
-> map reproducibility was **|r| = 0.87** (`tools/validation/audit_followups.py`).
+> map reproducibility was **|r| = 0.87** ([recorded audit script](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/995f53d42cc74205b164e8711d4b289b8c2ad3a1/tools/validation/audit_followups.py)).
 
 - **Selecting K:** default K = 4 (canonical). If exploring, justify K by Global Explained Variance (GEV) elbow + cross-validation criterion across K = 3–7; report GEV.
 - **Polarity invariance:** microstate clustering ignores map polarity — never interpret the sign of a map.
@@ -127,7 +127,7 @@ On a clean ≥2-min eyes-closed adult recording the recipe should yield 4 maps e
 | Mean microstate duration (median over maps/subjects) | **103 ms** (IQR 94–113) | ~70–120 ms |
 | Maps | 4 (canonical K) | A–D |
 
-Figure: [archived figure](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/76202d6071070c27ad2813561e54272969cacb4b/tools/validation/figures/resting_validation.png) (panel C). Run: `python tools/validation/validate_resting_recipes.py --subjects 20`.
+Figure: [archived figure](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/76202d6071070c27ad2813561e54272969cacb4b/tools/validation/figures/resting_validation.png) (panel C). [Recorded validation script](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/995f53d42cc74205b164e8711d4b289b8c2ad3a1/tools/validation/validate_resting_recipes.py) (20 subjects).
 
 > **Validation caveats (honest):** eegbci is natively **160 Hz** and only **~61 s/run** — both **below** this recipe's `min_sfreq: 250` and the ≥120 s (ideally ≥2 min) Khanna-2014 reliability floor. Data were **resampled to 250 Hz** before fitting; at the native 160 Hz the sample-based smoothing params (`half_window_size=8`, `min_segment_length=5`) inflated durations to ~200 ms — a reminder that those params are sfreq-dependent and the recipe assumes ≥250 Hz. GEV (66%) sits at the low end of the 70% expectation, consistent with the short, upsampled segments. Per-subject (not group-template) maps were used.
 

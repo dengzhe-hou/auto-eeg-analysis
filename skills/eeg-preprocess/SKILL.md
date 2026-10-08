@@ -65,7 +65,7 @@ python tools/env/resolve_backend.py \
 
 `mne` is the default and the reference backend — every committed certified value was produced by
 it. `eeglab` and `fieldtrip` are selectable alternatives, validated on all five certified ERP CORE
-components ([CROSS_TOOLBOX_EVAL.md](../../tools/benchmark/CROSS_TOOLBOX_EVAL.md): 10/10 runs
+components ([CROSS_TOOLBOX_EVAL.md](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/995f53d42cc74205b164e8711d4b289b8c2ad3a1/tools/benchmark/CROSS_TOOLBOX_EVAL.md): 10/10 runs
 reproduce the group conclusion). Pass `--prefer eeglab` / `--prefer fieldtrip` when the user asks
 for one, or when MNE is unavailable.
 

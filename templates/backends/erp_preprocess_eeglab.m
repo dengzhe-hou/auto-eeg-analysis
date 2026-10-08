@@ -9,7 +9,7 @@
 % toolbox. Running this analysis under each toolbox's own defaults produced per-subject differences
 % of up to 43% of the group effect; pinning the specification brought three independently
 % implemented toolboxes within 0.05 uV of each other (r = 1.0000).
-% See tools/benchmark/CROSS_TOOLBOX_EVAL.md.
+% See https://github.com/dengzhe-hou/auto-eeg-analysis/blob/995f53d42cc74205b164e8711d4b289b8c2ad3a1/tools/benchmark/CROSS_TOOLBOX_EVAL.md.
 %
 % The four conventions below are the ones that were measured to matter. Do not delete them and do
 % not fall back on a toolbox default — an unstated convention is not a neutral choice, it is a

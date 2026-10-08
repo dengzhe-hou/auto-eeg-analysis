@@ -5,7 +5,7 @@
 #
 # MNE-Python is the DEFAULT and reference backend: every committed certified value was produced
 # by it. EEGLAB and FieldTrip are selectable alternatives, validated against the reference on all
-# five certified ERP CORE components (tools/benchmark/CROSS_TOOLBOX_EVAL.md), so schema 3 probes
+# five certified ERP CORE components (https://github.com/dengzhe-hou/auto-eeg-analysis/blob/995f53d42cc74205b164e8711d4b289b8c2ad3a1/tools/benchmark/CROSS_TOOLBOX_EVAL.md), so schema 3 probes
 # them. Availability alone does not make one usable: cross-toolbox agreement is a property of how
 # completely the specification is pinned, not of the toolbox. Resolve with
 # tools/env/resolve_backend.py and always emit its `pin` list.
@@ -99,7 +99,7 @@ $obj = [ordered]@{
   backend        = @{
     default   = "mne"
     reference = "mne"
-    note      = "MNE-Python produced every committed certified value. EEGLAB and FieldTrip are selectable alternatives with MEASURED agreement (tools/benchmark/CROSS_TOOLBOX_EVAL.md); resolve with tools/env/resolve_backend.py, which also emits the numerical conventions that must be pinned."
+    note      = "MNE-Python produced every committed certified value. EEGLAB and FieldTrip are selectable alternatives with MEASURED agreement (https://github.com/dengzhe-hou/auto-eeg-analysis/blob/995f53d42cc74205b164e8711d4b289b8c2ad3a1/tools/benchmark/CROSS_TOOLBOX_EVAL.md); resolve with tools/env/resolve_backend.py, which also emits the numerical conventions that must be pinned."
   }
   probed_at      = $ts
   os = @{

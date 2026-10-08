@@ -4,7 +4,7 @@ import sys
 
 import pytest
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "validation"))
+sys.path.insert(0, str(Path(__file__).resolve().parent / "support"))
 import library_numerics as numerics
 
 
