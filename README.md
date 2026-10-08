@@ -8,6 +8,10 @@ Your agent generates and runs analysis code in your environment. Outputs include
 
 [Website](https://dengzhe-hou.github.io/auto-eeg-analysis/) · [Getting started](docs/GETTING_STARTED.md) · [Recipes](recipes/README.md) · [Latest release](https://github.com/dengzhe-hou/auto-eeg-analysis/releases/latest)
 
+[![AEA workflow: skills and recipes guide an LLM coding agent, the researcher approves the plan, and MNE-Python executes the analysis.](docs/assets/library-overview.svg)](docs/assets/library-overview.svg)
+
+Skills and recipes specify the analysis; you approve the plan, the agent adapts the code, and MNE-Python produces inspectable outputs.
+
 ## Quick start
 
 Install Git, Conda, and a signed-in Codex CLI or Claude Code client first.
@@ -29,6 +33,12 @@ $eeg-recipe ern-flankers --data projects/my-study
 For Claude Code, install with `--agent claude`, start `claude`, and use `/eeg-recipe` instead of `$eeg-recipe`.
 
 Confirm the analysis plan before execution. The audit stage needs a [configured reviewer](docs/GETTING_STARTED.md#configure-the-reviewer). The [setup guide](docs/GETTING_STARTED.md) covers Windows, data formats, custom pipelines, and output files.
+
+## N400 example
+
+[![N400 results from 20 ERP CORE participants: ERP curves at CPz/Cz/Pz, a descriptive scalp map, and participant amplitude differences.](docs/assets/n400-example.png)](docs/assets/n400-example.png)
+
+Saved results from 20 ERP CORE participants: CPz/Cz/Pz ERPs with ±1 participant SEM, a descriptive difference scalp map, and each participant's 300–500 ms amplitude difference. [Run, inspect, and replay this example](docs/EXAMPLES.md#erp-core-complete-n400-recipe-case).
 
 ## Validation
 

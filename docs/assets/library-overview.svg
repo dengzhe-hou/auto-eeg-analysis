@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="510.23622pt" height="232.440945pt" viewBox="0 0 510.23622 232.440945" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-10-09T02:49:21.398173</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.10.9, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 232.440945 
+L 510.23622 232.440945 
+L 510.23622 0 
+L 0 0 
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 124.724409 59.527559 
+L 391.181102 59.527559 
+L 391.181102 11.338583 
+L 124.724409 11.338583 
+z
+" clip-path="url(#p4d7be86fc2)" style="fill: #f0f5fa; stroke: #0072b2; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_3">
+    <path d="M 11.338583 141.732283 
+L 136.062992 141.732283 
+L 136.062992 79.370079 
+L 11.338583 79.370079 
+z
+" clip-path="url(#p4d7be86fc2)" style="fill: #ffffff; stroke: #687780; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 195.590551 141.732283 
+L 320.314961 141.732283 
+L 320.314961 79.370079 
+L 195.590551 79.370079 
+z
+" clip-path="url(#p4d7be86fc2)" style="fill: #ffffff; stroke: #687780; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_5">
+    <path d="M 385.511811 141.732283 
+L 498.897638 141.732283 
+L 498.897638 79.370079 
+L 385.511811 79.370079 
+z
+" clip-path="url(#p4d7be86fc2)" style="fill: #ffffff; stroke: #687780; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_6">
+    <path d="M 195.590551 218.267717 
+L 498.897638 218.267717 
+L 498.897638 170.07874 
+L 195.590551 170.07874 
+z
+" clip-path="url(#p4d7be86fc2)" style="fill: #ffffff; stroke: #687780; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_7">
+    <path d="M 137.062142 110.551181 
+Q 165.828012 110.551181 193.475848 110.551181 
+" clip-path="url(#p4d7be86fc2)" style="fill: none; stroke: #687780; stroke-linecap: round"/>
+    <path d="M 190.675848 109.151181 
+L 193.475848 110.551181 
+L 190.675848 111.951181 
+z
+" clip-path="url(#p4d7be86fc2)" style="fill: #687780; stroke: #687780; stroke-linecap: round"/>
+   </g>
+   <g id="patch_8">
+    <path d="M 321.313765 110.551181 
+Q 352.9132 110.551181 383.394601 110.551181 
+" clip-path="url(#p4d7be86fc2)" style="fill: none; stroke: #687780; stroke-linecap: round"/>
+    <path d="M 380.594601 109.151181 
+L 383.394601 110.551181 
+L 380.594601 111.951181 
+z
+" clip-path="url(#p4d7be86fc2)" style="fill: #687780; stroke: #687780; stroke-linecap: round"/>
+   </g>
+   <g id="patch_9">
+    <path d="M 257.952756 60.530343 
+Q 257.952756 69.45116 257.952756 77.253943 
+" clip-path="url(#p4d7be86fc2)" style="fill: none; stroke: #687780; stroke-linecap: round"/>
+    <path d="M 259.352756 74.453943 
+L 257.952756 77.253943 
+L 256.552756 74.453943 
+z
+" clip-path="url(#p4d7be86fc2)" style="fill: #687780; stroke: #687780; stroke-linecap: round"/>
+   </g>
+   <g id="patch_10">
+    <path d="M 257.952756 142.732299 
+Q 257.952756 155.90646 257.952756 167.962588 
+" clip-path="url(#p4d7be86fc2)" style="fill: none; stroke: #687780; stroke-linecap: round"/>
+    <path d="M 259.352756 165.162588 
+L 257.952756 167.962588 
+L 256.552756 165.162588 
+z
+" clip-path="url(#p4d7be86fc2)" style="fill: #687780; stroke: #687780; stroke-linecap: round"/>
+   </g>
+   <g id="patch_11">
+    <path d="M 442.204724 142.732299 
+Q 442.204724 155.90646 442.204724 167.962588 
+" clip-path="url(#p4d7be86fc2)" style="fill: none; stroke: #687780; stroke-linecap: round"/>
+    <path d="M 443.604724 165.162588 
+L 442.204724 167.962588 
+L 440.804724 165.162588 
+z
+" clip-path="url(#p4d7be86fc2)" style="fill: #687780; stroke: #687780; stroke-linecap: round"/>
+   </g>
+   <g id="text_1">
+    <text style="font-weight: 700; font-size: 7.5px; font-family: 'Arial', sans-serif; text-anchor: middle; fill: #202b33" x="257.952756" y="27.739416" transform="rotate(-0 257.952756 27.739416)">AEA skills + recipes</text>
+   </g>
+   <g id="text_2">
+    <text style="font-size: 7px; font-family: 'Arial', sans-serif; text-anchor: middle; fill: #202b33" x="257.952756" y="42.106422" transform="rotate(-0 257.952756 42.106422)">Inputs · Parameters · Templates · Outputs · Checks</text>
+   </g>
+   <g id="text_3">
+    <text style="font-weight: 700; font-size: 7.5px; font-family: 'Arial', sans-serif; text-anchor: middle; fill: #202b33" x="73.700787" y="95.770912" transform="rotate(-0 73.700787 95.770912)">Researcher</text>
+   </g>
+   <g id="text_4">
+    <text style="font-size: 7px; font-family: 'Arial', sans-serif; text-anchor: middle; fill: #202b33" x="73.700787" y="110.094715" transform="rotate(-0 73.700787 110.094715)">Study design + data</text>
+   </g>
+   <g id="text_5">
+    <text style="font-size: 7px; font-family: 'Arial', sans-serif; text-anchor: middle; fill: #202b33" x="73.700787" y="122.807964" transform="rotate(-0 73.700787 122.807964)">Approves analysis plan</text>
+   </g>
+   <g id="text_6">
+    <text style="font-weight: 700; font-size: 7.5px; font-family: 'Arial', sans-serif; text-anchor: middle; fill: #202b33" x="257.952756" y="95.721694" transform="rotate(-0 257.952756 95.721694)">LLM coding client</text>
+   </g>
+   <g id="text_7">
+    <text style="font-size: 7px; font-family: 'Arial', sans-serif; text-anchor: middle; fill: #202b33" x="257.952756" y="110.093074" transform="rotate(-0 257.952756 110.093074)">Adapts code templates</text>
+   </g>
+   <g id="text_8">
+    <text style="font-size: 7px; font-family: 'Arial', sans-serif; text-anchor: middle; fill: #202b33" x="257.952756" y="122.848979" transform="rotate(-0 257.952756 122.848979)">Runs saved scripts</text>
+   </g>
+   <g id="text_9">
+    <text style="font-weight: 700; font-size: 7.5px; font-family: 'Arial', sans-serif; text-anchor: middle; fill: #202b33" x="442.204724" y="95.721694" transform="rotate(-0 442.204724 95.721694)">MNE-Python</text>
+   </g>
+   <g id="text_10">
+    <text style="font-size: 7px; font-family: 'Arial', sans-serif; text-anchor: middle; fill: #202b33" x="442.204724" y="110.13573" transform="rotate(-0 442.204724 110.13573)">Computes EEG results</text>
+   </g>
+   <g id="text_11">
+    <text style="font-size: 7px; font-family: 'Arial', sans-serif; text-anchor: middle; fill: #202b33" x="442.204724" y="122.807964" transform="rotate(-0 442.204724 122.807964)">Primary backend</text>
+   </g>
+   <g id="text_12">
+    <text style="font-weight: 700; font-size: 7.5px; font-family: 'Arial', sans-serif; text-anchor: middle; fill: #202b33" x="347.244094" y="186.479574" transform="rotate(-0 347.244094 186.479574)">Saved workflow artifacts</text>
+   </g>
+   <g id="text_13">
+    <text style="font-size: 7px; font-family: 'Arial', sans-serif; text-anchor: middle; fill: #202b33" x="347.244094" y="200.803376" transform="rotate(-0 347.244094 200.803376)">Code · Results · Figures · Methods · Review records</text>
+   </g>
+   <g id="text_14">
+    <text style="font-size: 5.8px; font-family: 'Arial', sans-serif; text-anchor: middle; fill: #202b33" x="165.826772" y="99.477171" transform="rotate(-0 165.826772 99.477171)">Approved plan</text>
+   </g>
+   <g id="text_15">
+    <text style="font-size: 5.8px; font-family: 'Arial', sans-serif; text-anchor: middle; fill: #202b33" x="352.913386" y="99.409203" transform="rotate(-0 352.913386 99.409203)">Analysis script</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p4d7be86fc2">
+   <rect x="0" y="0" width="510.23622" height="232.440945"/>
+  </clipPath>
+ </defs>
+</svg>

@@ -136,6 +136,8 @@ main > section > h2 { padding-bottom: 9px; border-bottom: 1px solid var(--border
 .intro { font-size: 17px; }
 .intro-links { display: flex; flex-wrap: wrap; gap: 8px 24px; font-size: 14px; }
 .note { color: var(--muted); font-size: 14px; }
+.library-figure { margin: 24px 0; }
+.library-figure img { width: 100%; height: auto; }
 
 .tutorial-steps { padding-left: 22px; margin: 0 0 18px; }
 .tutorial-steps li { margin: 8px 0; }

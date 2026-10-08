@@ -67,6 +67,17 @@
         <a href="#recipes">Find a recipe</a>
         <a href="#examples">Try the N400 tutorial</a>
       </p>
+      <figure class="library-figure">
+        <a href="assets/library-overview.svg" aria-label="Open the AEA workflow diagram at full size">
+          <img src="assets/library-overview.svg"
+               alt="AEA workflow: skills and recipes guide an LLM coding agent, the researcher approves the plan, and MNE-Python executes the analysis.">
+        </a>
+        <figcaption>
+          Skills and recipes specify the analysis; you approve the plan, the agent
+          adapts the code, and MNE-Python produces inspectable outputs.
+          <a href="assets/library-overview.svg">View full size</a>.
+        </figcaption>
+      </figure>
 
       <section id="get-started" aria-labelledby="start-title">
         <h2 id="start-title">Installation</h2>
@@ -271,6 +282,21 @@ claude</code></pre>
           epochs, participant averages, statistics, figures, and methods text.
           Replay recomputes group statistics from the saved averages.
         </p>
+        <figure class="library-figure">
+          <a href="assets/n400-example.png" aria-label="Open the N400 result figure at full size">
+            <img src="assets/n400-example.png" loading="lazy"
+                 alt="N400 results from 20 ERP CORE participants: related, unrelated, and difference ERPs at CPz/Cz/Pz, a descriptive scalp map, and all participant amplitude differences.">
+          </a>
+          <figcaption>
+            Saved results from 20 participants. (a) CPz/Cz/Pz ERPs; shading is
+            ±1 SEM across participants, and the grey window is 300–500 ms.
+            (b) Descriptive difference scalp map at the ROI peak in that window.
+            (c) Each participant's mean unrelated-minus-related amplitude in
+            300–500 ms; the line is the group mean.
+            <a href="assets/n400-example.png">View full size</a> ·
+            <a href="EXAMPLES.html#erp-core-complete-n400-recipe-case">Settings and replay scope</a>.
+          </figcaption>
+        </figure>
         <ol class="tutorial-steps">
           <li><strong>Run.</strong> Supply an existing N400 BIDS dataset and a new output directory.</li>
           <li><strong>Check.</strong> Inspect the results and the recorded configuration.</li>
