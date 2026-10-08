@@ -84,8 +84,8 @@ These known-effect checks cover alpha power, complexity and microstates. Read th
 [original findings](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/76202d6071070c27ad2813561e54272969cacb4b/projects/eegbci-resting/FINDINGS.md)
 with the [audit follow-ups](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/76202d6071070c27ad2813561e54272969cacb4b/projects/eegbci-resting/audit-stage/AUDIT_FOLLOWUP.md):
 alpha was spatially diffuse, LZC lost the contrast without ICA, microstate duration
-depended on smoothing, and anesthesia was untested. [Original results](../tools/validation/resting_results.json)
-and [follow-up results](../tools/validation/audit_followup_results.json) remain in the library;
+depended on smoothing, and anesthesia was untested. [Original results](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/546db87c2e7717ff2eeca83c6e4131294f14a97a/tools/validation/resting_results.json)
+and [follow-up results](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/546db87c2e7717ff2eeca83c6e4131294f14a97a/tools/validation/audit_followup_results.json) remain in the public snapshot;
 [certification coverage](CERTIFICATION_LEVELS.md) is recorded separately.
 
 ```bash
@@ -94,8 +94,8 @@ python tools/validation/validate_resting_recipes.py --subjects 20 --out projects
 
 ## Trial identities behind the reference comparison
 
-The [post-release identity check](../tools/validation/trial_identity_results.json) maps
-[original event rows, retention and sample positions](../tools/validation/trial_identity_event_ids.json)
+The [post-release identity check](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/546db87c2e7717ff2eeca83c6e4131294f14a97a/tools/validation/trial_identity_results.json) maps
+[original event rows, retention and sample positions](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/546db87c2e7717ff2eeca83c6e4131294f14a97a/tools/validation/trial_identity_event_ids.json)
 for all 120 original subject-component records, including the eight excluded records.
 Retained trial identities agree in 111 of the 112 certified common records; MMN
 sub-030 has one additional deviant in the reference. Event timing can differ by one

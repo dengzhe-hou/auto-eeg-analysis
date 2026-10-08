@@ -89,7 +89,7 @@ The N170 is a negative-going ERP component peaking around 150–200 ms post-stim
 > but both exercise the N170 face-selectivity the recipe rests on. The values below are
 > literature-derived predictions (Rossion et al. 2003), to be replaced with real numbers once
 > run. See the separate [face-selectivity recipe](../n170-faces/RECIPE.md) and its
-> [ds000117 validation results](../../tools/validation/n170_faces_results.json).
+> [ds000117 validation results](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/546db87c2e7717ff2eeca83c6e4131294f14a97a/tools/validation/n170_faces_results.json).
 
 - C1 (predicted): cluster p < 0.001, peak channel PO8, peak time 158–170 ms, Cohen's dz > 1.0.
 - C2 (predicted): cluster p < 0.05 in right hemisphere channels.

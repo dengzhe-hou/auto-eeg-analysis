@@ -15,8 +15,9 @@ Status: **MMN + P3 + N170 + ERN + N400 executed** (§4, §4c–§4f), **CI regre
 
 Historical evaluation reports, generated programs and rendered figures remain in the
 [public evidence snapshot](https://github.com/dengzhe-hou/auto-eeg-analysis/tree/76202d6071070c27ad2813561e54272969cacb4b/tools/benchmark).
-Links below pin that commit where an artifact is archived. Numerical result files,
-comparison code and regression tests remain in the current library; the archive retains
+Additional result records remain in the [versioned benchmark snapshot](https://github.com/dengzhe-hou/auto-eeg-analysis/tree/546db87c2e7717ff2eeca83c6e4131294f14a97a/tools/benchmark).
+Links below pin the corresponding snapshot. Numerical fixtures used by current CI,
+comparison code and regression tests remain in the library; the snapshots retain
 the original failures, limitations and generation records. See [worked examples](EXAMPLES.md)
 for the separate case-study records.
 
@@ -133,7 +134,7 @@ differ on these two low-trial subjects).
 peak-to-peak rejection (86 vs 85), and on a small-N average (≈85 deviants) one epoch moves the mean
 by ~0.09 µV. This is not a bug in either tool — it is a genuine, explainable single-epoch boundary
 difference, and the benchmark correctly *surfaces* it rather than hiding it. (Full per-subject table:
-`tools/benchmark/MMN_BENCHMARK_RESULT.json`.)
+[`tools/benchmark/MMN_BENCHMARK_RESULT.json`](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/546db87c2e7717ff2eeca83c6e4131294f14a97a/tools/benchmark/MMN_BENCHMARK_RESULT.json).)
 <!-- RESULT_TABLE_END -->
 
 The two pipelines agree to **~3 nanovolts on the group mean and ≤ 5 nanovolts per subject for
@@ -318,6 +319,9 @@ holds only *within* a fixed DSP kernel; across kernels, expect ~0.05–1 µV for
 
 *(This is an independent-**implementation** bound. The independent-**toolbox** result is §4i.)*
 
+Saved results: [MMN](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/546db87c2e7717ff2eeca83c6e4131294f14a97a/tools/benchmark/MMN_KERNEL_INDEP_RESULT.json),
+[P3](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/546db87c2e7717ff2eeca83c6e4131294f14a97a/tools/benchmark/P3_KERNEL_INDEP_RESULT.json).
+
 ### 4i. Toolbox independence — all five components in EEGLAB *and* FieldTrip
 
 Full write-up: [`tools/benchmark/CROSS_TOOLBOX_EVAL.md`](../tools/benchmark/CROSS_TOOLBOX_EVAL.md).
@@ -383,7 +387,11 @@ exact agreement is what correctness looks like here. (A vs C) swapping Welch for
 real sensitivity the ERP same-backend comparisons could not surface. Both are small relative to
 between-subject variation, but they set the honest resolution of a spectral claim.
 
-The certified run uses MNE's default Hamming taper, whereas the `eeg-spectral` skill and the resting recipe specify Hann as their default (external review, 2026-09-15). `independent_spectral.py --window hann` repeats the comparison with the Hann taper in both implementations: max relative error 5.2×10⁻¹⁶ across the four bands (`SPECTRAL_KERNEL_INDEP_RESULT_hann.json`), so the L2 certification covers the released default as well.
+The certified run uses MNE's default Hamming taper, whereas the `eeg-spectral` skill and the resting recipe specify Hann as their default (external review, 2026-09-15). `independent_spectral.py --window hann` repeats the comparison with the Hann taper in both implementations: max relative error 5.2×10⁻¹⁶ across the four bands ([`SPECTRAL_KERNEL_INDEP_RESULT_hann.json`](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/546db87c2e7717ff2eeca83c6e4131294f14a97a/tools/benchmark/SPECTRAL_KERNEL_INDEP_RESULT_hann.json)), so the L2 certification covers the released default as well.
+
+The [Hamming result](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/546db87c2e7717ff2eeca83c6e4131294f14a97a/tools/benchmark/SPECTRAL_KERNEL_INDEP_RESULT.json)
+and [original convention-gap result](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/546db87c2e7717ff2eeca83c6e4131294f14a97a/tools/benchmark/SPECTRAL_KERNEL_INDEP_RESULT_legacy_conventions.json)
+remain in the same snapshot. The reproduction commands below still generate fresh result files.
 
 ---
 

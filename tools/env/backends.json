@@ -210,7 +210,7 @@
             "tmap_bit_identical": false,
             "cluster_partitions_exactly_identical": true,
             "supported_wording": "machine-precision-equal t-maps; exactly identical cluster partitions",
-            "evidence": "tools/benchmark/cluster_cert/ELEMENTWISE_*.json"
+            "evidence": "https://github.com/dengzhe-hou/auto-eeg-analysis/tree/546db87c2e7717ff2eeca83c6e4131294f14a97a/tools/benchmark/cluster_cert (ELEMENTWISE_N400.json, ELEMENTWISE_P3.json, ELEMENTWISE_N170.json, ELEMENTWISE_ERN.json)"
           },
           "shipped_configuration": {
             "note": "certified at the validation scripts' own configuration: component window, one-sided default threshold (MNE threshold=None == FieldTrip clusteralpha 0.05 one-tailed)",

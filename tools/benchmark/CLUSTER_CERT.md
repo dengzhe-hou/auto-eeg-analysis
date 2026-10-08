@@ -62,7 +62,7 @@ Data: ERP CORE N400, 20 subjects × 30 channels × 257 samples, `reject=None`, 5
 | leading cluster extent | 1268 | **1419** points |
 | significant clusters | 1 | 1 |
 
-**The t-statistic agrees to machine precision (max |Δ| 1.8×10⁻¹⁵ — not bit-identical, see ELEMENTWISE_*.json). The clustering is not.**
+**The t-statistic agrees to machine precision (max |Δ| 1.8×10⁻¹⁵ — not bit-identical, see [ELEMENTWISE_*.json](https://github.com/dengzhe-hou/auto-eeg-analysis/tree/546db87c2e7717ff2eeca83c6e4131294f14a97a/tools/benchmark/cluster_cert)). The clustering is not.**
 
 ### The cause: "alpha = 0.05" does not say which tail
 
@@ -90,7 +90,7 @@ Both are defensible readings. They are not the same test.
 > observed t-maps equal to machine precision** (max |Δ| = 1.8×10⁻¹⁵ ≈ 2 ulp; the two toolboxes sum
 > in different orders, so the last floating-point bit differs) **and summed-t statistics agreeing
 > to every printed digit.** "Bit-identical" was the first draft's wording; the elementwise
-> evidence (ELEMENTWISE_*.json) shows machine-precision equality, which is the claim the data
+> evidence ([ELEMENTWISE_*.json](https://github.com/dengzhe-hou/auto-eeg-analysis/tree/546db87c2e7717ff2eeca83c6e4131294f14a97a/tools/benchmark/cluster_cert)) shows machine-precision equality, which is the claim the data
 > support.
 
 ### Generalization: four components, both tails (added 2026-08-19)
@@ -107,7 +107,7 @@ pinned at `clusteralpha = alpha/2`:
 | N170 | −1 | −584.3781  | 198 | 2 = 2 | **0.0124 / 0.0128** |
 
 Every leading summed-t matches to relative difference **0.00e+00** (printed precision), in both
-effect directions — and the committed elementwise evidence (`ELEMENTWISE_{N400,P3,N170,ERN}.json`)
+effect directions — and the [versioned elementwise evidence](https://github.com/dengzhe-hou/auto-eeg-analysis/tree/546db87c2e7717ff2eeca83c6e4131294f14a97a/tools/benchmark/cluster_cert) (`ELEMENTWISE_{N400,P3,N170,ERN}.json`)
 shows the full t-maps equal to machine precision (max |Δ| 1.8×10⁻¹⁵) with **exactly identical
 cluster partitions** in all four.
 
@@ -185,6 +185,22 @@ that moves.
 4. **Only the one-sample/paired case** was compared; between-groups and F-tests were not.
 
 ## Reproduce
+
+Current CI retains `cluster_input_N170.mat` and all eight shipped t-map / label-map dumps.
+The saved ERN, N400 and P3 inputs and historical full-epoch JSON records remain in the
+[versioned snapshot](https://github.com/dengzhe-hou/auto-eeg-analysis/tree/546db87c2e7717ff2eeca83c6e4131294f14a97a/tools/benchmark/cluster_cert).
+Before running the N400 commands below, restore the saved inputs to their original paths:
+
+```bash
+for component in ERN N400 P3; do
+  curl --fail --location "https://raw.githubusercontent.com/dengzhe-hou/auto-eeg-analysis/546db87c2e7717ff2eeca83c6e4131294f14a97a/tools/benchmark/cluster_cert/cluster_input_${component}.mat" \
+    --output "tools/benchmark/cluster_cert/cluster_input_${component}.mat"
+done
+```
+
+Alternatively, reconstruct an input from the original cached ERP CORE data with
+`python tools/benchmark/export_cluster_input.py --component N400`; use `--component ERN`
+or `--component P3` for the other saved inputs. The commands below generate fresh results.
 
 Shipped configuration (component window at the one-sided default threshold; both sides cropped to
 the identical samples — pass exact sample times):

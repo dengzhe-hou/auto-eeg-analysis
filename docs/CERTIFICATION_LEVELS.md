@@ -21,7 +21,7 @@ Four levels, from strongest to weakest:
 | `eeg-epoch` | **L3** | same chain — epoching is inside every certified value |
 | `eeg-erp` | **L3** | same chain — the certified quantity *is* an ERP amplitude |
 | `eeg-stats` | **L3** *(cluster test only)* | cluster permutation vs FieldTrip `ft_timelockstatistics` at the shipped configuration (component window, one-sided t_0.95, B = 5000): identical cluster partitions and t-maps within 1.8e-15 for N400, P3b, N170 and ERN. The earlier 14-vs-18 cluster count on the full N400 epoch was the certification script's own t_0.975 threshold, a configuration error, not a toolbox convention. Other statistics in this skill are L0. |
-| `eeg-spectral` | **L2** | band power vs a from-scratch NumPy Welch: floating-point precision (max relative error 6.9e-16 with the Hamming taper and 5.2e-16 with the skill's released default Hann taper, `SPECTRAL_KERNEL_INDEP_RESULT_hann.json`; 6.5–8.3×10⁻¹⁶ on an independent stack) once the window periodicity and per-segment demeaning conventions are pinned (a 0.44 % residual before that was those two conventions, not "segment handling"); Welch-vs-multitaper sensitivity 1–5 % quantified |
+| `eeg-spectral` | **L2** | band power vs a from-scratch NumPy Welch: floating-point precision (max relative error 6.9e-16 with the Hamming taper and 5.2e-16 with the skill's released default Hann taper, [`SPECTRAL_KERNEL_INDEP_RESULT_hann.json`](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/546db87c2e7717ff2eeca83c6e4131294f14a97a/tools/benchmark/SPECTRAL_KERNEL_INDEP_RESULT_hann.json); 6.5–8.3×10⁻¹⁶ on an independent stack) once the window periodicity and per-segment demeaning conventions are pinned (a 0.44 % residual before that was those two conventions, not "segment handling"); Welch-vs-multitaper sensitivity 1–5 % quantified |
 | `eeg-recipe` | **L0** | *historical pilot only*: seven pinned-spec generations recorded PASS (≤0.5 nV) in retained scoring summaries, but the programs and (except MMN B1) the per-subject vectors were not retained, so this is not reconstructable second-implementation evidence — reclassified from L2 on 2026-09-13 (result-to-claim gate) |
 | `eeg-audit` | **L1** | 8/8 seeded EEG defects detected on both backends, clean control passed; [archived evaluation](https://github.com/dengzhe-hou/auto-eeg-analysis/tree/76202d6071070c27ad2813561e54272969cacb4b/tools/validation/audit_eval) |
 | `eeg-methods-text` | **L1** | 100% COBIDAS-MEEG coverage, 0/12 fabrications on deliberately withheld items; [archived evaluation](https://github.com/dengzhe-hou/auto-eeg-analysis/tree/76202d6071070c27ad2813561e54272969cacb4b/tools/validation/methods_text_eval) |
@@ -75,16 +75,16 @@ than marking the replacement as an expected failure. Missing optional dependenci
 reported as pytest skips, while an explicit standalone validation request fails if a required
 dependency is unavailable.
 
-The committed [result](../tools/validation/library_numerics_2026-10-03.json) retains versions,
-fixtures, tolerances, measured errors and each check's status. The [initial result](../tools/validation/library_numerics_initial_2026-10-03.json)
+The versioned [result](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/546db87c2e7717ff2eeca83c6e4131294f14a97a/tools/validation/library_numerics_2026-10-03.json) retains versions,
+fixtures, tolerances, measured errors and each check's status. The [initial result](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/546db87c2e7717ff2eeca83c6e4131294f14a97a/tools/validation/library_numerics_initial_2026-10-03.json)
 retains the first QC failure, before adding the separate triangle mechanism control; that first
 ICA probe used 1000 iterations, while the final fixture follows the skill's `max_iter="auto"`.
-The [revised QC result](../tools/validation/qc_revision_2026-10-03.json) records the replacement
+The [revised QC result](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/546db87c2e7717ff2eeca83c6e4131294f14a97a/tools/validation/qc_revision_2026-10-03.json) records the replacement
 separately: all 27 sinusoid controls (1/10/40 Hz, three phases, 128/250/1000 Hz
 sampling) produced no constant/rapid-change spans or bad-channel candidates; the original
 three-sine fixture also produced none. Injected constant/dropout and rapid-change intervals
 matched their known locations. A low-amplitude sine produced 100 warnings and no bad-channel
-candidate. A [cached MNE sample injection check](../tools/validation/qc_sample_revision_2026-10-03.json)
+candidate. A [cached MNE sample injection check](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/546db87c2e7717ff2eeca83c6e4131294f14a97a/tools/validation/qc_sample_revision_2026-10-03.json)
 compares the original first 10 seconds of three EEG channels with known added faults. The
 original recording has no ground-truth clean/bad labels; this check measures injected-event
 localization and preservation of input data, not clinical sensitivity. The [executable checks](../tools/validation/library_numerics.py) and [pytest entry points](../tools/tests/test_library_numerics.py)
@@ -105,4 +105,5 @@ observed cluster statistics, the independent Welch implementation, and the addit
 above support their respective measured outputs. A passing API check alone does not establish
 numerical correctness, and a known-source synthetic check does not establish biological validity.
 Full generated workflows and options outside these checks still need their own evidence before
-being described as certified. `tools/benchmark/` and `tools/validation/` retain that evidence.
+being described as certified. Current CI fixtures remain in `tools/benchmark/` and
+`tools/validation/`; the other versioned records remain accessible through the links above.
