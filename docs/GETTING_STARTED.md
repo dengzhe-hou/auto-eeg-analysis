@@ -1,8 +1,8 @@
 # Getting started
 
-AEA is a library of EEG analysis skills and recipes with MNE-Python as its main
-execution backend. An agent reads the skills, writes analysis code, runs it in your
-Python environment, and records the results in a study directory. The skills are
+AEA (Automated EEG Analysis) is a library of EEG analysis skills and recipes with
+MNE-Python as its main execution backend. An agent reads the skills, writes analysis
+code, runs it in your Python environment, and records the results in a study directory. The skills are
 instructions for the agent; they are not shell commands or a standalone EEG application.
 
 ## 1. Prepare the software
@@ -144,16 +144,16 @@ by [OpenAI](https://learn.chatgpt.com/docs/build-skills) and
 
 ### W1 Run a recipe
 
-For compatible Flankers data, in Codex CLI:
+For compatible N400 semantic-priming data, in Codex CLI:
 
 ```text
-$eeg-recipe ern-flankers --data projects/my-study
+$eeg-recipe n400-semantic --data projects/my-study
 ```
 
 In Claude Code:
 
 ```text
-/eeg-recipe ern-flankers --data projects/my-study
+/eeg-recipe n400-semantic --data projects/my-study
 ```
 
 Choose a recipe matching your paradigm from the [recipe library](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/recipes/README.md).
@@ -161,7 +161,8 @@ The skill checks the required channels, sampling rate, events, and trial counts,
 asks about missing information, and waits for confirmation before running the
 pipeline. A recipe's certified reference configuration may differ from its full
 analysis workflow; read its numerical-specification note when reproducing benchmark
-values.
+values. The [N400 example](EXAMPLES.md#adapt-a-recipe-to-your-study) shows the research
+request, approved choices and saved outputs from a recorded agent run.
 
 ### W2 Design a custom analysis
 
@@ -227,7 +228,7 @@ You can give an agent the source file directly when it does not have a compatibl
 skill selector:
 
 ```text
-Read skills/eeg-recipe/SKILL.md and follow it for ern-flankers with
+Read skills/eeg-recipe/SKILL.md and follow it for n400-semantic with
 --data projects/my-study. Keep the AEA repository as the working directory.
 Read the referenced child SKILL.md files when a stage calls for them.
 Use the aeais environment for Python commands.

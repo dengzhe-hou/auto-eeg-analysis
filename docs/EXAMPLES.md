@@ -48,38 +48,9 @@ from `events.tsv`. Retain the sidecars to interpret channels, coordinates and
 marker meanings. The separate non-BIDS raw/processed downloads have different
 names and are not inputs to this runner.
 
-The OSF layout includes `ses-N400`; the runner expects
-`sub-001/eeg/sub-001_task-N400_eeg.set` and the matching `_events.tsv`.
-If your cache already has that layout, use it directly. For the OSF layout, run the
-following in Python after changing the source path. It creates an input view next
-to the dataset using symbolic links, without changing or copying source EEG.
-On Windows, use WSL or enable symbolic-link creation in Developer Mode; see
-[platform support](PLATFORM_SUPPORT.md).
-
-```python
-from pathlib import Path
-
-source = Path("/path/to/ERP_CORE_BIDS_Raw_Files").resolve()
-view = source.parent / "erpcore-N400-input"
-for number in range(1, 21):
-    subject = f"sub-{number:03d}"
-    original = source / subject / "ses-N400" / "eeg"
-    destination = view / subject / "eeg"
-    destination.mkdir(parents=True, exist_ok=True)
-    for suffix in ("eeg.set", "eeg.fdt", "events.tsv", "eeg.json",
-                   "channels.tsv", "electrodes.tsv", "coordsystem.json"):
-        file = original / f"{subject}_ses-N400_task-N400_{suffix}"
-        if not file.is_file():
-            raise FileNotFoundError(file)
-        (destination / file.name.replace("_ses-N400", "")).symlink_to(file)
-        if suffix == "eeg.fdt":
-            (destination / file.name).symlink_to(file)  # preserve .set's data-file reference
-print(view)
-```
-
-This view is for the fixed runner; it does not convert or replace the original BIDS
-dataset. Keep it with your data cache, outside the repository. Use a fresh view path
-if you repeat preparation.
+Pass `ERP_CORE_BIDS_Raw_Files` directly to the runner. It reads the official
+`sub-001/ses-N400/eeg/sub-001_ses-N400_task-N400_*` layout and existing caches with
+`sub-001/eeg/sub-001_task-N400_*`. No renaming, copying or input-link view is needed.
 
 ## ERP CORE: complete N400 recipe case
 
@@ -91,14 +62,14 @@ the mean unrelated-minus-related amplitude was −2.957 µV (SEM 0.466), with on
 at p = 0.0002. This ROI test is separate from the historical all-channel certification.
 See the [complete numerical record](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/tools/examples/n400/recipe_case_results.json).
 
-Pass the prepared input view (or your existing compatible cache) as `--data-root`,
+Pass the dataset root (or your existing compatible cache) as `--data-root`,
 and choose a fresh run directory. The runner downloads nothing. A Git clone with the
 `v0.3.2` tag is required because it saves that recipe alongside the executed program.
 These tutorial scripts are available on `main` and were added after v0.3.2.
 Install Arial or Helvetica before the full run, which also renders figures.
 
 ```bash
-python tools/examples/run_recipe_case.py --data-root /path/to/erpcore-N400-input --run-dir projects/n400-recipe-case/runs/run-001
+python tools/examples/run_recipe_case.py --data-root /path/to/ERP_CORE_BIDS_Raw_Files --run-dir projects/n400-recipe-case/runs/run-001
 python tools/examples/run_recipe_case.py --run-dir projects/n400-recipe-case/runs/run-001 --replay
 ```
 
@@ -116,8 +87,8 @@ LLM success rate or time savings.
 
 For your own recording, give the agent the [dataset brief](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/templates/DATASET_BRIEF.md)
 and ask it to draft an [analysis plan](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/templates/ANALYSIS_PLAN.md) before execution.
-The following excerpt condenses the recorded N400 agent workflow. It illustrates
-what the researcher supplies and approves; paths are examples.
+The recorded N400 agent workflow has three parts: a research request, researcher
+approval and generated code/results. Start with a brief like this; paths are examples.
 
 ```text
 Study: N400 semantic priming; within participant; sub-001 through sub-020.
@@ -135,12 +106,11 @@ your acquisition log, then review the hypothesis, ROI and window for your design
 Request: “Read this brief and the N400 recipe. Draft the plan, list choices the recipe
 does not fix, and stop for my approval before analyzing EEG.”
 
-| Step | Concrete N400 example | What to inspect |
+| Step | Researcher and agent actions | What to inspect |
 |---|---|---|
-| Map events | Pool 211/212 as related and 221/222 as unrelated | Target timing and condition counts before cleaning |
-| Approve the plan | Freeze contrast, ROI/window, cleaning, eligibility, adjacency, threshold, permutations and seeds | The researcher-approved `ANALYSIS_PLAN.md` |
-| Execute the skills | Generate and save scripts for preprocessing → ICA → epochs → ERP → statistics → figures/report | Commands, stage parameters, per-participant counts and ICA proposals |
-| Inspect and repeat | Retain code, condition averages, statistics, figures, methods and review records | Output arrays, report and saved-program replay comparison |
+| Research request | Supply the data paths, participants, event mapping and hypothesis in the brief above | Target timing and condition counts; 211/212 related, 221/222 unrelated |
+| Researcher approval | Review the agent's plan and freeze contrast, ROI/window, cleaning, eligibility and statistical settings | `ANALYSIS_PLAN.md`; ambiguous ICA components need a further response |
+| Generated code and results | The agent writes and runs scripts for preprocessing → ICA → epochs → ERP → statistics → figures/report, retaining the outputs | Scripts and commands, participant counts, condition averages, statistics, figures, methods, review records and saved-program replay comparison |
 
 In the recorded agent run, the researcher approved ICA plus local AutoReject and
 native 1024 Hz sampling. The plan fixed a 0.1–30 Hz filter, −200 to 800 ms epochs,

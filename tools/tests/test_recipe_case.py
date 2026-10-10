@@ -11,7 +11,35 @@ pd = pytest.importorskip("pandas")
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "examples"))
 from run_recipe_case import (RELATED, ROI, UNRELATED, roi_adjacency, target_events,
                              validate_channels, validate_trial_counts, display_path,
-                             prepare_run_directory, write_json)
+                             prepare_run_directory, write_json, find_subject_inputs)
+
+
+@pytest.mark.parametrize("session", [None, "ses-N400"])
+def test_n400_inputs_accept_official_and_existing_cache_layouts(tmp_path, session):
+    subject = "sub-001"
+    directory = tmp_path / subject
+    prefix = subject
+    if session:
+        directory /= session
+        prefix += f"_{session}"
+    directory /= "eeg"
+    directory.mkdir(parents=True)
+    input_set = directory / f"{prefix}_task-N400_eeg.set"
+    input_events = directory / f"{prefix}_task-N400_events.tsv"
+    input_set.touch()
+    input_events.touch()
+    assert find_subject_inputs(tmp_path, subject) == (input_set, input_events)
+
+
+def test_n400_inputs_do_not_mix_eeg_and_events_from_different_layouts(tmp_path):
+    session = tmp_path / "sub-001" / "ses-N400" / "eeg"
+    session.mkdir(parents=True)
+    (session / "sub-001_ses-N400_task-N400_eeg.set").touch()
+    cache = tmp_path / "sub-001" / "eeg"
+    cache.mkdir()
+    (cache / "sub-001_task-N400_events.tsv").touch()
+    with pytest.raises(FileNotFoundError, match="sub-001_ses-N400_task-N400_events.tsv"):
+        find_subject_inputs(tmp_path, "sub-001")
 
 
 def test_target_mapping_excludes_prime_events():

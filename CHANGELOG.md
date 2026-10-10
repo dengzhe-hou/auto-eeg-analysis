@@ -38,7 +38,8 @@ These changes have not been assigned a new release tag.
   Linux package snapshot, and expanded numerical/API checks. See
   [Replay](docs/REPLAY.md) and [Platform support](docs/PLATFORM_SUPPORT.md).
 - Added the complete fixed-cohort N400 recipe runner, saved numerical
-  results and compact arrays for figure reproduction without raw EEG.
+  results and compact arrays for figure reproduction without raw EEG. The runner
+  reads the official OSF `ses-N400` layout and existing sessionless caches directly.
 - Corrected ICLabel probability shapes and class-name
   examples. Full seven-class probabilities require `iclabel_label_components`;
   the existing component-rejection logic was unchanged.

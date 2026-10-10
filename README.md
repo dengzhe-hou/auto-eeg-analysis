@@ -1,4 +1,4 @@
-# AEA
+# AEA (Automated EEG Analysis)
 
 EEG analysis skills for **MNE-Python**, with executable specifications and a numerically certified core.
 
@@ -10,7 +10,7 @@ Your agent generates and runs analysis code in your environment. Outputs include
 
 [![AEA workflow: skills and recipes guide an LLM coding agent, the researcher approves the plan, and MNE-Python executes the analysis.](docs/assets/library-overview.svg)](docs/assets/library-overview.svg)
 
-Skills and recipes specify the analysis; you approve the plan, the agent adapts the code, and MNE-Python produces inspectable outputs.
+Skills and recipes specify the analysis; you approve the plan, the agent adapts the code, and MNE-Python produces inspectable outputs. [See a recorded N400 agent workflow](docs/EXAMPLES.md#adapt-a-recipe-to-your-study).
 
 ## Quick start
 
@@ -25,10 +25,10 @@ conda activate aeais
 python tools/install_skills.py --agent codex
 ```
 
-Start `codex` from this directory with `aeais` active. With compatible data in `projects/my-study/raw/`, enter this **inside the client**:
+Start `codex` from this directory with `aeais` active. With compatible N400 semantic-priming data in `projects/my-study/raw/`, enter this **inside the client**:
 
 ```text
-$eeg-recipe ern-flankers --data projects/my-study
+$eeg-recipe n400-semantic --data projects/my-study
 ```
 
 For Claude Code, install with `--agent claude`, start `claude`, and use `/eeg-recipe` instead of `$eeg-recipe`.

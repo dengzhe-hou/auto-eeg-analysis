@@ -46,6 +46,23 @@ def prepare_run_directory(run_dir: Path) -> None:
     run_dir.mkdir(parents=True, exist_ok=True)
 
 
+def find_subject_inputs(data_root: Path, sub: str) -> tuple[Path, Path]:
+    """Read the official OSF session layout or an existing sessionless cache."""
+    locations = (
+        (data_root / sub / "ses-N400" / "eeg", f"{sub}_ses-N400_task-N400"),
+        (data_root / sub / "eeg", f"{sub}_task-N400"),
+    )
+    for directory, prefix in locations:
+        input_set = directory / f"{prefix}_eeg.set"
+        if input_set.is_file():
+            input_events = directory / f"{prefix}_events.tsv"
+            if not input_events.is_file():
+                raise FileNotFoundError(input_events)
+            return input_set, input_events
+    expected = [str(directory / f"{prefix}_eeg.set") for directory, prefix in locations]
+    raise FileNotFoundError(f"No N400 EEG input for {sub}; expected one of: {expected}")
+
+
 def target_events(frame, sfreq: float) -> np.ndarray:
     """Map the actual ERP CORE target codes; prime codes do not enter epochs."""
     selected = frame[frame["value"].isin([211, 212, 221, 222])]
@@ -180,9 +197,7 @@ def run_subject(sub: str, data_root: Path, run_dir: Path):
     import mne
     import pandas as pd
 
-    eeg = data_root / sub / "eeg"
-    input_set = eeg / f"{sub}_task-N400_eeg.set"
-    input_events = eeg / f"{sub}_task-N400_events.tsv"
+    input_set, input_events = find_subject_inputs(data_root, sub)
     raw = mne.io.read_raw_eeglab(input_set, preload=True, verbose="ERROR")
     source_sfreq = raw.info["sfreq"]
     raw.drop_channels(["HEOG_left", "HEOG_right", "VEOG_lower"])
