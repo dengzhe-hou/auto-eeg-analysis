@@ -102,22 +102,52 @@ and choose a fresh run directory. The runner downloads nothing. A Git clone with
 `v0.3.2` tag is required because it saves that recipe alongside the executed program.
 These tutorial scripts are available on `main` and were added after v0.3.2.
 Complete the [font check](#prepare-the-figure-fonts) before the full run, which also
-renders figures.
+renders figures. Before reading EEG or creating outputs, the full runner checks
+that all 20 participants have a `.set`, its companion `.fdt` and matching
+`events.tsv`, in either supported layout above. This checks file presence only;
+it does not establish data validity.
 
 ```bash
 python tools/examples/run_recipe_case.py --data-root /path/to/ERP_CORE_BIDS_Raw_Files --run-dir projects/n400-recipe-case/runs/run-001
 python tools/examples/run_recipe_case.py --run-dir projects/n400-recipe-case/runs/run-001 --replay
 ```
 
+The full run prints stage messages like these, repeating the subject stage for all 20 participants:
+
+```text
+[inputs] Checking files for 20 participants...
+[subject 1/20] sub-001: preprocessing, epochs and averages...
+...
+[statistics] Computing group clusters (5000 permutations)...
+[replay] Checking saved group statistics (5000 permutations)...
+[figures] Rendering figures...
+[report] Saving methods and summary...
+```
+
 The run saves the brief, frozen plan, program, preprocessed EEG, epochs, averages,
 statistics, figures and methods. Start inspection at `stats-stage/summary.json`,
 `figure-stage/F1_n400_recipe.png` and `report-stage/methods.md`; the run's `plan.json`
-records the full configuration.
+records the full configuration. Completion means the terminal reports
+`"status": "complete"`, `process.json` has `"exit_code": 0`, and the run directory's
+`summary.json` has `"status": "complete"` and `"required_stages_complete": true`.
+The replay check in `audit-stage/replay.json` must have `"passed": true`.
 
 Replay checks group statistics from saved participant averages, without repeating
 preprocessing. In the retained run, t maps, cluster masks, p values and permutation
 null values were identical. This is an internal worked example, not an estimate of
 LLM success rate or time savings.
+
+### If the full run fails
+
+Keep `run-001`, its `process.json` when created, and the terminal error. Fix the
+reported problem, then use a fresh directory to rerun all 20 participants:
+
+```bash
+python tools/examples/run_recipe_case.py --data-root /path/to/ERP_CORE_BIDS_Raw_Files --run-dir projects/n400-recipe-case/runs/run-002
+```
+
+`--replay` only recomputes group statistics from a completed run's saved arrays;
+it does not resume interrupted preprocessing or finish figures and reports.
 
 ## Adapt a recipe to your study
 

@@ -42,7 +42,9 @@ These changes have not been assigned a new release tag.
   reads the official OSF `ses-N400` layout and existing sessionless caches directly.
   Full runs check figure fonts before reading EEG or creating outputs; statistical
   replay does not require fonts. Setup distinguishes this fixed tutorial from the
-  agent workflow and includes a copy-ready N400 dataset brief.
+  agent workflow and includes a copy-ready N400 dataset brief. Full runs also
+  check all 20 participants' required input files before reading EEG or creating
+  outputs, print stage progress, and document failure retries and completion checks.
 - Corrected ICLabel probability shapes and class-name
   examples. Full seven-class probabilities require `iclabel_label_components`;
   the existing component-rejection logic was unchanged.

@@ -44,7 +44,9 @@ def display_path(path: Path) -> str:
 def prepare_run_directory(run_dir: Path) -> None:
     if run_dir.exists() and any(run_dir.iterdir()):
         raise FileExistsError(f"Full analysis requires a fresh empty run directory: {run_dir}. "
-                              "Use --replay for an existing completed run.")
+                              "After a failed run, fix the error and choose a new directory. "
+                              "Use --replay only to recheck completed group statistics; "
+                              "it does not resume an interrupted analysis.")
     run_dir.mkdir(parents=True, exist_ok=True)
 
 
@@ -63,6 +65,24 @@ def find_subject_inputs(data_root: Path, sub: str) -> tuple[Path, Path]:
             return input_set, input_events
     expected = [str(directory / f"{prefix}_eeg.set") for directory, prefix in locations]
     raise FileNotFoundError(f"No N400 EEG input for {sub}; expected one of: {expected}")
+
+
+def preflight_inputs(data_root: Path) -> None:
+    """Check the fixed cohort's input files without reading EEG or making outputs."""
+    missing = []
+    for sub in SUBJECTS:
+        try:
+            input_set, _ = find_subject_inputs(data_root, sub)
+        except FileNotFoundError as exc:
+            missing.append(f"{sub}: {exc}")
+            continue
+        input_fdt = input_set.with_suffix(".fdt")
+        if not input_fdt.is_file():
+            missing.append(f"{sub}: {input_fdt}")
+    if missing:
+        raise FileNotFoundError("N400 input precheck failed before EEG processing. "
+                                "Check --data-root and complete the missing files:\n"
+                                + "\n".join(missing))
 
 
 def target_events(frame, sfreq: float) -> np.ndarray:
@@ -251,6 +271,8 @@ def run_subject(sub: str, data_root: Path, run_dir: Path):
 def replay(run_dir: Path) -> dict:
     from scipy.sparse import load_npz
 
+    print("[replay] Checking saved group statistics (5000 permutations)...",
+          file=sys.stderr, flush=True)
     arrays = np.load(run_dir / "erp-stage" / "group_arrays.npz")
     expected = np.load(run_dir / "stats-stage" / "cluster_arrays.npz")
     summary, actual = compute_statistics(
@@ -274,7 +296,9 @@ def run(data_root: Path, run_dir: Path, public_out: Path):
 
     create_plan(run_dir, data_root)
     related, unrelated, receipts = [], [], []
-    for sub in SUBJECTS:
+    for index, sub in enumerate(SUBJECTS, 1):
+        print(f"[subject {index}/{len(SUBJECTS)}] {sub}: preprocessing, epochs and averages...",
+              file=sys.stderr, flush=True)
         evokeds, receipt = run_subject(sub, data_root, run_dir)
         related.append(evokeds[0].data)
         unrelated.append(evokeds[1].data)
@@ -289,11 +313,14 @@ def run(data_root: Path, run_dir: Path, public_out: Path):
     adjacency = roi_adjacency(info)
     (run_dir / "stats-stage").mkdir(exist_ok=True)
     save_npz(run_dir / "stats-stage" / "roi_adjacency.npz", adjacency)
+    print("[statistics] Computing group clusters (5000 permutations)...", file=sys.stderr, flush=True)
     summary, stats_arrays = compute_statistics(related, unrelated, times, info["ch_names"], adjacency)
     write_json(run_dir / "stats-stage" / "summary.json", summary)
     np.savez_compressed(run_dir / "stats-stage" / "cluster_arrays.npz", **stats_arrays)
     replay_result = replay(run_dir)
+    print("[figures] Rendering figures...", file=sys.stderr, flush=True)
     figure_files = render(run_dir)
+    print("[report] Saving methods and summary...", file=sys.stderr, flush=True)
     roi_idx = [info["ch_names"].index(name) for name in ROI]
     public_out.parent.mkdir(parents=True, exist_ok=True)
     figure_data_path = public_out.with_name("recipe_case_figure_data.npz")
@@ -388,6 +415,9 @@ def main():
         print(json.dumps(replay(args.run_dir), indent=2))
         return
     figure_style()  # Fail before reading EEG or creating outputs if fonts are missing.
+    print(f"[inputs] Checking files for {len(SUBJECTS)} participants...", file=sys.stderr, flush=True)
+    preflight_inputs(args.data_root)
+    print(f"[inputs] Files found for all {len(SUBJECTS)} participants.", file=sys.stderr, flush=True)
     prepare_run_directory(args.run_dir)
     if args.out is None:
         args.out = args.run_dir / "summary.json"

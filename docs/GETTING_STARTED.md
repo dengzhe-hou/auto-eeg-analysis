@@ -304,6 +304,7 @@ numerical certification describe different evidence. See
 | Windows crashes during LAPACK/SVD | Activate the environment or use `conda run`; see [Windows environment activation](PLATFORM_SUPPORT.md#windows-environment-activation). |
 | Raw files are not found or cannot be read | The header scanner expects files directly in `raw/`; retain companion files and describe nested/BIDS layouts as in [study preparation](#4-prepare-a-study-directory). |
 | The audit fails at login or model access | Check `codex login status`, model access and the command path in [reviewer setup](#configure-the-reviewer). Keep the failed audit's error log. |
+| The fixed N400 tutorial stops or refuses the existing run directory | Keep the failed directory and error; correct the problem, then [rerun in a fresh directory](EXAMPLES.md#if-the-full-run-fails). `--replay` recomputes saved group statistics; it does not resume an interrupted run. |
 | Replay refuses an existing output directory | Choose a new empty output directory and keep the captured bundle unchanged; see [capture and execute](REPLAY.md#capture-and-execute). |
 | The N400 figure exporter requests a font | Install Arial or Helvetica as described in the [N400 example](EXAMPLES.md#erp-core-complete-n400-recipe-case). |
 

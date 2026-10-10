@@ -113,3 +113,33 @@ def test_statistics_replay_does_not_require_figure_fonts(tmp_path, monkeypatch, 
     run_recipe_case.main()
     assert replayed == [tmp_path]
     assert '"passed": true' in capsys.readouterr().out
+
+
+@pytest.mark.parametrize("session", [None, "ses-N400"])
+@pytest.mark.parametrize("missing_suffix", ["eeg.set", "eeg.fdt", "events.tsv"])
+def test_late_subject_missing_input_stops_before_analysis_or_outputs(
+        tmp_path, monkeypatch, session, missing_suffix):
+    import run_recipe_case
+
+    data_root = tmp_path / "raw"
+    for sub in run_recipe_case.SUBJECTS:
+        directory = data_root / sub
+        prefix = sub
+        if session:
+            directory /= session
+            prefix += f"_{session}"
+        directory /= "eeg"
+        directory.mkdir(parents=True)
+        for suffix in ("eeg.set", "eeg.fdt", "events.tsv"):
+            (directory / f"{prefix}_task-N400_{suffix}").touch()
+    missing = directory / f"{prefix}_task-N400_{missing_suffix}"
+    missing.unlink()
+    run_dir = tmp_path / "new-run"
+    monkeypatch.setattr(run_recipe_case, "figure_style", lambda: {})
+    monkeypatch.setattr(run_recipe_case, "run", lambda *args: pytest.fail("EEG work started"))
+    monkeypatch.setattr(sys, "argv", ["run_recipe_case.py", "--data-root", str(data_root),
+                                      "--run-dir", str(run_dir)])
+    with pytest.raises(FileNotFoundError, match="sub-020") as error:
+        run_recipe_case.main()
+    assert str(missing) in str(error.value)
+    assert not run_dir.exists()
