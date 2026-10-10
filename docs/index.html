@@ -37,10 +37,13 @@
       <nav class="docs-nav" aria-label="Documentation">
         <h2>Documentation</h2>
         <a href="GETTING_STARTED.html">Getting started</a>
+        <a href="GETTING_STARTED.html#choose-skills-for-a-task">Task reference</a>
         <a href="PLATFORM_SUPPORT.html">Platform support</a>
         <a href="REPLAY.html">Replay a saved analysis</a>
         <a href="EXAMPLES.html">Worked examples</a>
         <a href="CERTIFICATION_LEVELS.html">Validation coverage</a>
+        <a href="GETTING_STARTED.html#troubleshooting">Troubleshooting</a>
+        <a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/CHANGELOG.md">Versions and changes</a>
         <a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/995f53d42cc74205b164e8711d4b289b8c2ad3a1/docs/BENCHMARK.md">Benchmarks</a>
         <a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/CONTRIBUTING.md">Contributing</a>
       </nav>
@@ -157,7 +160,9 @@ claude</code></pre>
         <p class="note">
           See <a href="GETTING_STARTED.html">Getting started</a> for the complete setup,
           and <a href="PLATFORM_SUPPORT.html">Platform support</a> for environment checks,
-          Windows, and optional dependencies.
+          Windows, and optional dependencies. These commands use <code>main</code>;
+          see <a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/CHANGELOG.md#choose-a-version">version selection</a>
+          for the fixed <code>v0.3.2</code> release.
         </p>
       </section>
 
@@ -184,7 +189,9 @@ claude</code></pre>
         <p>
           Skills are plain Markdown specifications with code paths, reporting
           requirements, and documented failure modes. They cover preprocessing,
-          analysis, statistics, figures, and reporting.
+          analysis, statistics, figures, and reporting. Use the
+          <a href="GETTING_STARTED.html#choose-skills-for-a-task">task reference</a>
+          to find a skill and the choices your analysis plan needs.
         </p>
         <details class="skills-disclosure">
           <summary>All 22 skills</summary>
@@ -302,7 +309,9 @@ claude</code></pre>
           <li><strong>Check.</strong> Inspect the results and the recorded configuration.</li>
           <li><strong>Replay.</strong> Recompute group statistics without preprocessing again.</li>
         </ol>
-        <p><a href="EXAMPLES.html#erp-core-complete-n400-recipe-case">Commands and data requirements</a> ·
+        <p><a href="EXAMPLES.html#replot-the-saved-results">Replot without raw EEG</a> ·
+          <a href="EXAMPLES.html#prepare-the-n400-data">Get and prepare the data</a> ·
+          <a href="EXAMPLES.html#adapt-a-recipe-to-your-study">Adapt to your study</a> ·
           <a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/tools/examples/n400/recipe_case_results.json">Saved numerical results</a></p>
         <details>
           <summary>Recorded results and scope</summary>
@@ -369,8 +378,9 @@ claude</code></pre>
         </p>
         <ul>
           <li><a href="https://github.com/dengzhe-hou/auto-eeg-analysis/releases/tag/v0.3.2">Download release v0.3.2</a></li>
+          <li><a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/CHANGELOG.md">Choose a version and read the changes</a></li>
           <li><a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/CITATION.cff">Citation information</a></li>
-          <li><a href="https://github.com/dengzhe-hou/auto-eeg-analysis/issues">Report an issue</a></li>
+          <li><a href="GETTING_STARTED.html#troubleshooting">Troubleshooting</a> and <a href="https://github.com/dengzhe-hou/auto-eeg-analysis/issues">questions or bug reports</a></li>
           <li><a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/CONTRIBUTING.md">Contribute a recipe or skill</a></li>
         </ul>
         <p>

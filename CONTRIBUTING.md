@@ -31,6 +31,10 @@ MNE is the primary execution backend. Existing EEGLAB and FieldTrip paths have s
 
 ## Contribute a tool, document, or fix
 
+For usage questions, check [troubleshooting](docs/GETTING_STARTED.md#troubleshooting), then
+open a [GitHub issue](https://github.com/dengzhe-hou/auto-eeg-analysis/issues/new/choose).
+Issues are the public support channel; maintainer contact is in [CITATION.cff](CITATION.cff).
+
 Bug reports are most useful with the command or prompt, traceback, affected skill or recipe, environment details, and a small public or synthetic example. For documentation fixes, link the relevant instructions and explain the step that was confusing or incorrect.
 
 Useful starting points include [tools/env/](tools/env/), [tools/auto_brief.py](tools/auto_brief.py), the [project templates](templates/), and [docs/](docs/). Existing computational skills include decoding, spectral analysis, behavior, connectivity, microstates, source analysis, and BIDS support; check them before proposing a duplicate skill.

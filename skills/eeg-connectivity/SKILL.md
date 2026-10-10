@@ -30,7 +30,7 @@ allowed-tools: Bash(*), Read, Write, Edit, Grep, Glob
 Before running, these must exist:
 
 1. `ANALYSIS_PLAN.md` — frozen, with connectivity claims (if any). **Stop if missing or unfrozen.**
-2. `epochs-stage/` — cleaned, epoched `.fif` files per subject per condition.
+2. `epoch-stage/` — cleaned, epoched `.fif` files per subject per condition.
 3. `ENVIRONMENT.json` — to resolve backend.
 4. `channel_mapping.json` — if claim ROI uses 10-20 names but data uses numbered channels.
 5. (Optional) `source-stage/` — source-space time courses if `— space: source`.
@@ -661,6 +661,6 @@ def aec_corrected_pair(a, b):
 
 ## Cross-references
 
-- Inputs: `ANALYSIS_PLAN.md`, `epochs-stage/`, `ENVIRONMENT.json`, `channel_mapping.json`, `source-stage/` (optional)
+- Inputs: `ANALYSIS_PLAN.md`, `epoch-stage/`, `ENVIRONMENT.json`, `channel_mapping.json`, `source-stage/` (optional)
 - Outputs: `connectivity-stage/*.npz`, `connectivity-stage/*-graph_metrics.json`, `connectivity-stage/BACKEND_RESOLUTION.md`, `connectivity-stage/METRIC_SELECTION.md`, `FINDINGS.md`
 - Next: `eeg-stats` for statistical comparison of connectivity between conditions. `eeg-figure` for connectivity matrix plots and circle plots. `eeg-methods-text` for the connectivity paragraph.

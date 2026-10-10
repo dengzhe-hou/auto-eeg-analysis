@@ -13,6 +13,9 @@ instructions. AEA does not install a client, supply model access, or configure
 credentials. The analysis environment below is separate from the agent's model
 subscription or API access.
 
+This guide describes `main`. See [versions and changes](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/CHANGELOG.md#choose-a-version)
+to choose the fixed v0.3.2 snapshot or update an existing checkout.
+
 Run these commands in a terminal:
 
 ```bash
@@ -153,7 +156,7 @@ In Claude Code:
 /eeg-recipe ern-flankers --data projects/my-study
 ```
 
-Choose a recipe matching your paradigm from the [recipe library](../recipes/README.md).
+Choose a recipe matching your paradigm from the [recipe library](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/recipes/README.md).
 The skill checks the required channels, sampling rate, events, and trial counts,
 asks about missing information, and waits for confirmation before running the
 pipeline. A recipe's certified reference configuration may differ from its full
@@ -209,7 +212,7 @@ max effort, and a read-only sandbox. Save the prompt, response, event log,
 and exit status in audit-stage, and write the audit report from that response.
 ```
 
-The [skill's invocation instructions](../skills/eeg-audit/SKILL.md#invocation-pattern)
+The [skill's invocation instructions](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/skills/eeg-audit/SKILL.md#invocation-pattern)
 give the exact command and output files. It closes stdin, waits for completion,
 and checks the exit code and JSON before reporting a verdict. On native Windows,
 the agent can launch the same command through Python with `stdin=subprocess.DEVNULL`;
@@ -234,6 +237,29 @@ The client still needs local file access, command execution, and a configured
 reviewer for the audit stage. This entry point does not establish that the client
 has been evaluated end-to-end.
 
+## Choose skills for a task
+
+Use the tasks in your approved plan. This table is a starting point; each linked
+skill specifies its required inputs, full parameters and output files. Record the
+resolved choices in the [dataset brief](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/templates/DATASET_BRIEF.md) and
+[analysis plan](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/templates/ANALYSIS_PLAN.md) before execution.
+
+| Task | Skills | Choices to supply or approve | Main outputs |
+|---|---|---|---|
+| Clean recordings and inspect quality | [Preprocessing](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/skills/eeg-preprocess/SKILL.md), [ICA](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/skills/eeg-ica/SKILL.md), [QC](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/skills/eeg-qc/SKILL.md) | Filters, reference, bad-channel/artifact policy, ICA exclusions and QC gates | Cleaned EEG, processing summaries and `qc-stage/` reports |
+| Measure event-related potentials | [Epoching](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/skills/eeg-epoch/SKILL.md), [ERP](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/skills/eeg-erp/SKILL.md) | Event-to-condition mapping, epoch/baseline windows, rejection, ROI, component window and measurement | Epochs, participant averages and `erp-stage/component_measures.csv` |
+| Examine power over time | [Time-frequency](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/skills/eeg-tfr/SKILL.md) | Conditions, frequencies, method/cycles, baseline window and normalization | `tfr-stage/` power and inter-trial coherence HDF5 files |
+| Measure spectral power | [Spectral](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/skills/eeg-spectral/SKILL.md) | Frequency bands, estimator, segment length, taper, overlap and any aperiodic-fit range | `spectral-stage/` arrays and parameter/summary JSON |
+| Estimate connectivity | [Connectivity](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/skills/eeg-connectivity/SKILL.md) | Metric, sensor/source space, channel/ROI pairs, bands, time range and trial matching | `connectivity-stage/` matrices and requested graph summaries |
+| Test a planned contrast | [Statistics](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/skills/eeg-stats/SKILL.md) | Observation unit and pairing, contrast, ROI/window, test/tail, correction, permutations and seed | `stats-stage/` statistical JSON, arrays and findings |
+| Prepare figures and a report | [Figures](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/skills/eeg-figure/SKILL.md), [Report](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/skills/eeg-report/SKILL.md) | Figure plan, data sources, units, uncertainty bands and output layout | SVG/PNG figures, captions and `report-stage/` HTML/Markdown |
+
+ERP and time-frequency tasks read cleaned epochs; statistics and figures read the
+matching participant-level outputs. The pipeline arranges these dependencies.
+See [worked examples](EXAMPLES.md#adapt-a-recipe-to-your-study) for a complete case and how to adapt its brief
+and plan to another study. The [coverage page](CERTIFICATION_LEVELS.md) records
+which outputs have numerical evidence.
+
 ## Find the outputs and validation evidence
 
 Analysis outputs belong to the study directory: stage-specific folders such as
@@ -247,7 +273,24 @@ explains how to record an independent run on your own data.
 
 MNE is the main execution and certification reference backend. EEGLAB and FieldTrip
 provide cross-toolbox comparisons and selectable paths for the capabilities listed
-in [the backend registry](../tools/env/backends.json). Availability, API tests, and
+in [the backend registry](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/tools/env/backends.json). Availability, API tests, and
 numerical certification describe different evidence. See
 [certification coverage](CERTIFICATION_LEVELS.md) and the
 [benchmark record](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/995f53d42cc74205b164e8711d4b289b8c2ad3a1/docs/BENCHMARK.md) for the measured configurations and tolerances.
+
+## Troubleshooting
+
+| Symptom | Next step |
+|---|---|
+| Skills do not appear in the client | [Install the links](#2-make-the-skills-visible-to-your-client), then restart the client from the AEA repository root. |
+| Windows cannot create skill links | Enable symlink permission or run the full setup inside WSL; see [skill installation](#2-make-the-skills-visible-to-your-client). |
+| A requested package or backend is missing | Check the active environment, install the selected analysis's dependencies and rerun the [environment probe](#3-check-the-analysis-environment). See [optional packages](PLATFORM_SUPPORT.md#known-gotchas). |
+| Windows crashes during LAPACK/SVD | Activate the environment or use `conda run`; see [Windows environment activation](PLATFORM_SUPPORT.md#windows-environment-activation). |
+| Raw files are not found or cannot be read | The header scanner expects files directly in `raw/`; retain companion files and describe nested/BIDS layouts as in [study preparation](#4-prepare-a-study-directory). |
+| The audit fails at login or model access | Check `codex login status`, model access and the command path in [reviewer setup](#configure-the-reviewer). Keep the failed audit's error log. |
+| Replay refuses an existing output directory | Choose a new empty output directory and keep the captured bundle unchanged; see [capture and execute](REPLAY.md#capture-and-execute). |
+| The N400 figure exporter requests a font | Install Arial or Helvetica as described in the [N400 example](EXAMPLES.md#erp-core-complete-n400-recipe-case). |
+
+If the problem persists, [open an issue](https://github.com/dengzhe-hou/auto-eeg-analysis/issues/new)
+with the command, error, environment and minimal shareable example listed in
+[Contributing](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/CONTRIBUTING.md#contribute-a-tool-document-or-fix).

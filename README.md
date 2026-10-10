@@ -15,6 +15,7 @@ Skills and recipes specify the analysis; you approve the plan, the agent adapts 
 ## Quick start
 
 Install Git, Conda, and a signed-in Codex CLI or Claude Code client first.
+These commands use `main`, including fixes and examples added after [v0.3.2](CHANGELOG.md#choose-a-version).
 
 ```bash
 git clone https://github.com/dengzhe-hou/auto-eeg-analysis.git
@@ -38,12 +39,12 @@ Confirm the analysis plan before execution. The audit stage needs a [configured 
 
 [![N400 results from 20 ERP CORE participants: ERP curves at CPz/Cz/Pz, a descriptive scalp map, and participant amplitude differences.](docs/assets/n400-example.png)](docs/assets/n400-example.png)
 
-Saved results from 20 ERP CORE participants: CPz/Cz/Pz ERPs with ±1 participant SEM, a descriptive difference scalp map, and each participant's 300–500 ms amplitude difference. [Run, inspect, and replay this example](docs/EXAMPLES.md#erp-core-complete-n400-recipe-case).
+Saved results from 20 ERP CORE participants: CPz/Cz/Pz ERPs with ±1 participant SEM, a descriptive difference scalp map, and each participant's 300–500 ms amplitude difference. [Replot without raw EEG](docs/EXAMPLES.md#replot-the-saved-results) or [run the full example](docs/EXAMPLES.md#erp-core-complete-n400-recipe-case).
 
 ## Validation
 
 Certification applies to the outputs and configurations in the [coverage record](docs/CERTIFICATION_LEVELS.md). EEGLAB and FieldTrip provide independent comparisons and selected alternative backend paths. Each [recipe](recipes/README.md#available-recipes) records its status and available evaluation.
 
-[Benchmark record](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/995f53d42cc74205b164e8711d4b289b8c2ad3a1/docs/BENCHMARK.md) · [Worked examples](docs/EXAMPLES.md) · [Contributing](CONTRIBUTING.md) · [Citation](CITATION.cff)
+[Benchmark record](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/995f53d42cc74205b164e8711d4b289b8c2ad3a1/docs/BENCHMARK.md) · [Changes](CHANGELOG.md) · [Help](docs/GETTING_STARTED.md#troubleshooting) · [Contributing](CONTRIBUTING.md) · [Citation](CITATION.cff)
 
 Software uses the [MIT licence](LICENSE); recipe metadata uses CC BY 4.0. Built on [ARIS](https://github.com/wanshuiyin/Auto-claude-code-research-in-sleep).
