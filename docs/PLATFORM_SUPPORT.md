@@ -43,7 +43,7 @@ Schema fields:
 The current probe also records `optional_packages`, `matlab_engine`, `eeglab`, and
 `fieldtrip`. Entries in `capabilities` describe dependency requirements; they are
 not successful execution or numerical-certification results. Use
-`tools/env/resolve_backend.py` with [the registry](../tools/env/backends.json) to
+`tools/env/resolve_backend.py` with [the registry](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/tools/env/backends.json) to
 resolve a supported capability and record its required numerical conventions.
 See [certification coverage](CERTIFICATION_LEVELS.md) for the measured evidence.
 
