@@ -21,6 +21,8 @@ import traceback
 
 import numpy as np
 
+from plot_style import figure_style
+
 ROOT = Path(__file__).resolve().parents[2]
 RECIPE = "recipes/n400-semantic/RECIPE.md"
 SUBJECTS = [f"sub-{i:03d}" for i in range(1, 21)]
@@ -385,6 +387,7 @@ def main():
     if args.replay:
         print(json.dumps(replay(args.run_dir), indent=2))
         return
+    figure_style()  # Fail before reading EEG or creating outputs if fonts are missing.
     prepare_run_directory(args.run_dir)
     if args.out is None:
         args.out = args.run_dir / "summary.json"

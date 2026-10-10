@@ -5,13 +5,15 @@ MNE-Python as its main execution backend. An agent reads the skills, writes anal
 code, runs it in your Python environment, and records the results in a study directory. The skills are
 instructions for the agent; they are not shell commands or a standalone EEG application.
 
+Choose a starting point:
+
+- **Fixed Python N400 tutorial:** set up the shared analysis environment in steps 1–2, then follow the [full example](EXAMPLES.md#erp-core-complete-n400-recipe-case). It needs Git, Conda, the EEG files and Arial or Helvetica. No agent client, model account, skills installation or reviewer is required.
+- **Analysis with a coding agent:** after steps 1–2, continue through steps 3–5. This route needs a signed-in client, installed skill links, researcher approval and a [configured reviewer](#configure-the-reviewer) for the default audit.
+
 ## 1. Prepare the software
 
-You need Git, Conda or Miniconda, and a local agent client that can read files and
-run commands. Install and sign in to Codex CLI or Claude Code using its own setup
-instructions. AEA does not install a client, supply model access, or configure
-credentials. The analysis environment below is separate from the agent's model
-subscription or API access.
+Both routes need Git and Conda or Miniconda. The shared Python environment below
+runs the numerical analysis; model access is only needed for the agent route.
 
 This guide describes `main`. See [versions and changes](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/CHANGELOG.md#choose-a-version)
 to choose the fixed v0.3.2 snapshot or update an existing checkout.
@@ -31,41 +33,12 @@ This snapshot has been rebuilt in a separate Linux environment; it is not a
 cross-platform lock. Other platforms can use `environment.yml`, then capture the
 installed environment with their [saved analysis](REPLAY.md).
 
-Keep the agent's working directory at the **AEA repository root**. Skills refer to
-`tools/`, `templates/`, and `recipes/` there. Put each study in its own directory,
-such as `projects/my-study/`, and pass that path to the skill.
+Run commands from the **AEA repository root**. For the agent route, keep the client's
+working directory there too: skills refer to `tools/`, `templates/`, and `recipes/`.
+Put each study in its own directory, such as `projects/my-study/`, and pass that
+path to the skill.
 
-## 2. Make the skills visible to your client
-
-Choose the command for your client:
-
-```bash
-python tools/install_skills.py --agent codex
-```
-
-```bash
-python tools/install_skills.py --agent claude
-```
-
-Use `--agent both` if you use both clients. The installer creates repository-local
-links from `.agents/skills/` for Codex or `.claude/skills/` for Claude Code to the
-original `skills/` directories. These are the clients' documented discovery
-locations; both support linked skill directories. See the official
-[Codex skill documentation](https://learn.chatgpt.com/docs/build-skills) and
-[Claude Code skill documentation](https://code.claude.com/docs/en/skills).
-
-The installer leaves an existing link to the same skill unchanged. If a destination
-already contains a different directory or link, it reports the conflict and leaves
-that item intact. Move the conflicting item before retrying. Links track edits and
-updates to existing skills automatically; rerun the installer after pulling a
-version that adds new skills.
-
-On Windows, creating directory links requires symlink permission, for example with
-Developer Mode enabled or an appropriately privileged terminal. Alternatively, run
-the checkout, environment, installer, and client together inside WSL. A failed link
-installation reports an error and does not silently copy the skills.
-
-## 3. Check the analysis environment
+## 2. Check the analysis environment
 
 On macOS or Linux, from the activated `aeais` environment:
 
@@ -104,9 +77,51 @@ Data-dependent tests can skip when their datasets are absent. The MNE sample
 regression tests download data only when `AEA_FETCH_DATA=1` is explicitly set;
 reuse an existing dataset cache before opting into that download.
 
+For either N400 figure route, [install and check Arial or Helvetica](EXAMPLES.md#prepare-the-figure-fonts) before starting. The fixed tutorial checks this before processing EEG.
+
+To run the **fixed Python tutorial**, continue directly to the [N400 data and run instructions](EXAMPLES.md#prepare-the-n400-data). The remaining steps below are for analysis with an agent.
+
+## 3. Set up an agent (optional)
+
+Skip this section for the fixed Python tutorial. For agent-led analysis, install
+and sign in to Codex CLI or Claude Code using its own setup instructions. The
+client needs local file access and command execution. AEA does not install a
+client, supply model access or configure credentials. Model subscription or API
+access is separate from the Python environment.
+
+Make the skills visible using the command for your client:
+
+```bash
+python tools/install_skills.py --agent codex
+```
+
+```bash
+python tools/install_skills.py --agent claude
+```
+
+Use `--agent both` if you use both clients. The installer creates repository-local
+links from `.agents/skills/` for Codex or `.claude/skills/` for Claude Code to the
+original `skills/` directories. These are the clients' documented discovery
+locations; both support linked skill directories. See the official
+[Codex skill documentation](https://learn.chatgpt.com/docs/build-skills) and
+[Claude Code skill documentation](https://code.claude.com/docs/en/skills).
+
+The installer leaves an existing link to the same skill unchanged. If a destination
+already contains a different directory or link, it reports the conflict and leaves
+that item intact. Move the conflicting item before retrying. Links track edits and
+updates to existing skills automatically; rerun the installer after pulling a
+version that adds new skills.
+
+On Windows, creating directory links requires symlink permission, for example with
+Developer Mode enabled or an appropriately privileged terminal. Alternatively, run
+the checkout, environment, installer, and client together inside WSL. A failed link
+installation reports an error and does not silently copy the skills.
+
 ## 4. Prepare a study directory
 
-Create a directory with this layout:
+For ERP CORE N400, use the [copy-ready brief and approval prompt](EXAMPLES.md#adapt-a-recipe-to-your-study). They keep the official nested raw-data directory unchanged and separate it from `projects/n400-agent/`. Skip the header-scanner command below for that layout; it scans only the top level.
+
+For recordings stored directly in `raw/`, create a directory with this layout:
 
 ```text
 projects/my-study/
@@ -283,9 +298,9 @@ numerical certification describe different evidence. See
 
 | Symptom | Next step |
 |---|---|
-| Skills do not appear in the client | [Install the links](#2-make-the-skills-visible-to-your-client), then restart the client from the AEA repository root. |
-| Windows cannot create skill links | Enable symlink permission or run the full setup inside WSL; see [skill installation](#2-make-the-skills-visible-to-your-client). |
-| A requested package or backend is missing | Check the active environment, install the selected analysis's dependencies and rerun the [environment probe](#3-check-the-analysis-environment). See [optional packages](PLATFORM_SUPPORT.md#known-gotchas). |
+| Skills do not appear in the client | [Install the links](#3-set-up-an-agent-optional), then restart the client from the AEA repository root. |
+| Windows cannot create skill links | Enable symlink permission or run the full setup inside WSL; see [skill installation](#3-set-up-an-agent-optional). |
+| A requested package or backend is missing | Check the active environment, install the selected analysis's dependencies and rerun the [environment probe](#2-check-the-analysis-environment). See [optional packages](PLATFORM_SUPPORT.md#known-gotchas). |
 | Windows crashes during LAPACK/SVD | Activate the environment or use `conda run`; see [Windows environment activation](PLATFORM_SUPPORT.md#windows-environment-activation). |
 | Raw files are not found or cannot be read | The header scanner expects files directly in `raw/`; retain companion files and describe nested/BIDS layouts as in [study preparation](#4-prepare-a-study-directory). |
 | The audit fails at login or model access | Check `codex login status`, model access and the command path in [reviewer setup](#configure-the-reviewer). Keep the failed audit's error log. |

@@ -1,14 +1,49 @@
 # Worked examples
 
-The N400 tutorial includes runnable scripts and compact result arrays. Raw EEG and
-cached epochs are not distributed; `projects/` is your local workspace. Follow
-[Getting started](GETTING_STARTED.md), run from the repository root in the analysis
-environment, reuse data caches, and choose a new output directory each time.
+Choose how you want to try N400:
+
+| Goal | What you need | Start here |
+|---|---|---|
+| Replot saved results | Python environment and figure fonts; no raw EEG or LLM | [Replot](#replot-the-saved-results) |
+| Run the fixed tutorial | Python environment, figure fonts, Git clone with v0.3.2 tag and ERP CORE data; no LLM | [Complete N400 example](#erp-core-complete-n400-recipe-case) |
+| Use a coding agent | The analysis environment, data, signed-in client, installed skills and configured reviewer | [N400 dataset brief](#adapt-a-recipe-to-your-study) |
+
+For the first two routes, complete only [Python environment setup](GETTING_STARTED.md#1-prepare-the-software)
+and [the environment check](GETTING_STARTED.md#2-check-the-analysis-environment),
+then return here. Client installation and model access are needed for the agent route.
+Raw EEG and cached epochs are not distributed; `projects/` is your local workspace.
+Run from the repository root, reuse data caches and choose a new output directory.
+
+## Prepare the figure fonts
+
+The figures use Arial or Helvetica. These fonts are not installed by the Conda
+environment. Check availability from the repository root with `aeais` active:
+
+```bash
+python -c "import sys; sys.path.insert(0, 'tools/examples'); from plot_style import figure_style; print(figure_style()['font.sans-serif'][0])"
+```
+
+If it prints `Arial` or `Helvetica`, continue. Otherwise install an available copy
+of either font on the machine running Python:
+
+- **Windows:** open the font file and select Install, as in [Microsoft's guide](https://support.microsoft.com/en-us/windows/experience/personalization/manage-fonts-in-windows).
+- **macOS:** install it in [Font Book](https://support.apple.com/guide/font-book/install-and-validate-fonts-fntbk1000/mac).
+- **Linux or WSL:** put the font files in `~/.local/share/fonts/` and run `fc-cache -f`. For WSL, install inside Linux; installing in Windows alone does not supply the Linux font directory. [Fontconfig](https://fontconfig.pages.freedesktop.org/fontconfig/fontconfig-user.html) describes its font locations.
+
+If a newly installed font is still missing, close Python and clear Matplotlib's
+cached font list, then run the check again in a new Python process:
+
+```bash
+python -c "from pathlib import Path; import matplotlib; [p.unlink() for p in Path(matplotlib.get_cachedir()).glob('fontlist-v*.json')]"
+```
+
+The complete runner checks these fonts before reading EEG or creating its output
+directory. Statistical `--replay` does not render figures and needs no fonts.
 
 ## Replot the saved results
 
 Start here to inspect a complete output without downloading source EEG or using an
-LLM. In the analysis environment, install Arial or Helvetica, then run:
+LLM. After [checking the figure fonts](#prepare-the-figure-fonts), run:
 
 ```bash
 python tools/examples/gen_recipe_case_figures.py --run-dir projects/n400-recipe-figure --figure-data tools/examples/n400/recipe_case_figure_data.npz --summary tools/examples/n400/recipe_case_results.json
@@ -66,7 +101,8 @@ Pass the dataset root (or your existing compatible cache) as `--data-root`,
 and choose a fresh run directory. The runner downloads nothing. A Git clone with the
 `v0.3.2` tag is required because it saves that recipe alongside the executed program.
 These tutorial scripts are available on `main` and were added after v0.3.2.
-Install Arial or Helvetica before the full run, which also renders figures.
+Complete the [font check](#prepare-the-figure-fonts) before the full run, which also
+renders figures.
 
 ```bash
 python tools/examples/run_recipe_case.py --data-root /path/to/ERP_CORE_BIDS_Raw_Files --run-dir projects/n400-recipe-case/runs/run-001
@@ -85,26 +121,55 @@ LLM success rate or time savings.
 
 ## Adapt a recipe to your study
 
-For your own recording, give the agent the [dataset brief](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/templates/DATASET_BRIEF.md)
-and ask it to draft an [analysis plan](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/templates/ANALYSIS_PLAN.md) before execution.
-The recorded N400 agent workflow has three parts: a research request, researcher
-approval and generated code/results. Start with a brief like this; paths are examples.
+This route uses a coding agent, rather than the fixed Python runner. Complete
+[agent setup](GETTING_STARTED.md#3-set-up-an-agent-optional), including its reviewer.
+Create `projects/n400-agent/` and save the following as its `DATASET_BRIEF.md`.
+Replace the raw-data path with the absolute path to your existing ERP CORE root;
+keep the source files there, outside the study directory.
 
-```text
-Study: N400 semantic priming; within participant; sub-001 through sub-020.
-Raw data: /path/to/ERP_CORE_BIDS_Raw_Files (read only).
-Time lock: target words, using events.tsv onset and value.
-Related: values 211 and 212. Unrelated: values 221 and 222.
-Prime values 111, 112, 121 and 122 and responses are not target onsets.
-Question: are unrelated targets more negative than related targets?
-Recipe: n400-semantic. Primary contrast: unrelated minus related.
-ROI/window: CPz, Cz, Pz; 300–500 ms. Independent observation: participant.
+```markdown
+# ERP CORE N400 dataset brief
+
+- Study directory: projects/n400-agent
+- Raw data root: /absolute/path/to/ERP_CORE_BIDS_Raw_Files (read only)
+- Source: ERP CORE BIDS-Compatible Raw Files, https://osf.io/9f5w7/
+- Recipe: n400-semantic
+- Participants: sub-001 through sub-020, selected before analysis
+- Design: within participant; participant is the independent observation
+- Layout: sub-NNN/ses-N400/eeg/sub-NNN_ses-N400_task-N400_*
+- Input: .set with companion .fdt; matching events.tsv and BIDS sidecars
+- Expected recording: 30 scalp EEG channels plus 3 EOG channels at 1024 Hz;
+  verify the headers and coordinate units against the source sidecars
+- Event timing: events.tsv onset in seconds; codes in numeric value column
+- Time lock: target words, not primes or responses
+- Related targets: 211 and 212
+- Unrelated targets: 221 and 222
+- Exclude from target epochs: prime codes 111, 112, 121 and 122, and responses
+- Question: do unrelated targets evoke a more negative N400 than related targets?
+- Primary contrast: unrelated minus related
+- ROI and window: CPz, Cz, Pz; 300–500 ms after the target
+- Plan status: not approved; propose cleaning and statistical settings,
+  list unresolved choices and wait for researcher approval before analysis
 ```
 
-For different recordings, replace the paths, participants and event mapping from
-your acquisition log, then review the hypothesis, ROI and window for your design.
-Request: “Read this brief and the N400 recipe. Draft the plan, list choices the recipe
-does not fix, and stop for my approval before analyzing EEG.”
+The generic `auto_brief` scanner reads only the top level of `raw/`; do not point it
+at this nested BIDS root. The agent should read the saved brief, inspect the nested
+EEG headers and matching events directly, and draft an
+[analysis plan](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/templates/ANALYSIS_PLAN.md).
+From the repository root with `aeais` active, enter this inside Codex:
+
+```text
+$eeg-recipe n400-semantic --data projects/n400-agent
+Read projects/n400-agent/DATASET_BRIEF.md and use its external raw-data root without moving the data.
+Inspect the nested BIDS files directly. Draft the plan, list unresolved choices,
+and stop for my approval before analyzing EEG.
+```
+
+In Claude Code, use `/eeg-recipe` instead of `$eeg-recipe`. For your own recordings,
+adapt the [general dataset brief](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/templates/DATASET_BRIEF.md),
+participants, event mapping, hypothesis, ROI and window to your design.
+The recorded N400 agent workflow illustrates the three steps below; the new brief
+does not approve that run's cleaning choices for your analysis.
 
 | Step | Researcher and agent actions | What to inspect |
 |---|---|---|

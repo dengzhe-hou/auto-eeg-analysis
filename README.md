@@ -12,10 +12,10 @@ Your agent generates and runs analysis code in your environment. Outputs include
 
 Skills and recipes specify the analysis; you approve the plan, the agent adapts the code, and MNE-Python produces inspectable outputs. [See a recorded N400 agent workflow](docs/EXAMPLES.md#adapt-a-recipe-to-your-study).
 
-## Quick start
+## Quick start with a coding agent
 
 Install Git, Conda, and a signed-in Codex CLI or Claude Code client first.
-These commands use `main`, including fixes and examples added after [v0.3.2](CHANGELOG.md#choose-a-version).
+To try N400 without an agent or model account, follow the [fixed Python tutorial](docs/EXAMPLES.md). Commands below use `main`, including fixes added after [v0.3.2](CHANGELOG.md#choose-a-version).
 
 ```bash
 git clone https://github.com/dengzhe-hou/auto-eeg-analysis.git
@@ -25,7 +25,7 @@ conda activate aeais
 python tools/install_skills.py --agent codex
 ```
 
-Start `codex` from this directory with `aeais` active. With compatible N400 semantic-priming data in `projects/my-study/raw/`, enter this **inside the client**:
+Start `codex` here with `aeais` active. For ERP CORE, follow the [copy-ready N400 brief and approval prompt](docs/EXAMPLES.md#adapt-a-recipe-to-your-study). For compatible data in `projects/my-study/raw/`, enter this **inside the client**:
 
 ```text
 $eeg-recipe n400-semantic --data projects/my-study

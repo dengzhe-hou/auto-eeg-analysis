@@ -14,7 +14,8 @@ def figure_style() -> dict:
     installed = {font.name for font in font_manager.fontManager.ttflist}
     font = next((name for name in ("Arial", "Helvetica") if name in installed), None)
     if font is None:
-        raise RuntimeError("Install Arial or Helvetica before exporting these figures.")
+        raise RuntimeError("Install Arial or Helvetica before exporting these figures. "
+                           "See docs/EXAMPLES.md#prepare-the-figure-fonts.")
     return {
         "font.family": "sans-serif",
         "font.sans-serif": [font],

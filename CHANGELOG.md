@@ -40,6 +40,9 @@ These changes have not been assigned a new release tag.
 - Added the complete fixed-cohort N400 recipe runner, saved numerical
   results and compact arrays for figure reproduction without raw EEG. The runner
   reads the official OSF `ses-N400` layout and existing sessionless caches directly.
+  Full runs check figure fonts before reading EEG or creating outputs; statistical
+  replay does not require fonts. Setup distinguishes this fixed tutorial from the
+  agent workflow and includes a copy-ready N400 dataset brief.
 - Corrected ICLabel probability shapes and class-name
   examples. Full seven-class probabilities require `iclabel_label_components`;
   the existing component-rejection logic was unchanged.

@@ -85,7 +85,16 @@
       <section id="get-started" aria-labelledby="start-title">
         <h2 id="start-title">Installation</h2>
         <p>
-          Install Git, Conda, and a signed-in Codex CLI or Claude Code client first.
+          Both routes use Git and Conda; start with the
+          <a href="GETTING_STARTED.html#1-prepare-the-software">shared Python setup</a>
+          and <a href="EXAMPLES.html#prepare-the-figure-fonts">figure fonts</a>.
+          To run the <a href="EXAMPLES.html#erp-core-complete-n400-recipe-case">fixed N400 tutorial</a>,
+          add the EEG data and run the Python script. It needs no agent client,
+          model account, skills installation or reviewer.
+        </p>
+        <h3>With a coding agent</h3>
+        <p>
+          This route needs a signed-in Codex CLI or Claude Code client and skill links.
           Choose a <a href="#recipes">recipe that matches your paradigm</a>.
           The example below uses compatible semantic-priming data; replace
           <code>n400-semantic</code> with the recipe for your study.
@@ -94,7 +103,9 @@
           Keep the repository root as your working directory. Put your study's data
           in <code>projects/my-study/raw/</code> before running the recipe, or follow
           the <a href="GETTING_STARTED.html#4-prepare-a-study-directory">data setup guide</a>
-          for another layout.
+          for another layout. For official ERP CORE data, use the
+          <a href="EXAMPLES.html#adapt-a-recipe-to-your-study">copy-ready N400 brief and approval prompt</a>
+          to keep the nested raw-data directory unchanged.
         </p>
 
         <div class="installation-example">
@@ -155,7 +166,7 @@ claude</code></pre>
         <p>
           Review the detected data and confirm the analysis plan before execution.
           <a href="GETTING_STARTED.html#configure-the-reviewer">Configure the reviewer</a>
-          before running an audited workflow.
+          for this route's default audit, even when Claude Code runs the analysis.
         </p>
         <p class="note">
           See <a href="GETTING_STARTED.html">Getting started</a> for the complete setup,
@@ -295,6 +306,8 @@ claude</code></pre>
       <section id="examples" aria-labelledby="examples-title">
         <h2 id="examples-title">N400 tutorial</h2>
         <p>
+          This fixed Python example needs the analysis environment, EEG data and
+          Arial or Helvetica; it uses no agent or model account.
           Follow a complete <a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/recipes/n400-semantic/RECIPE.md">semantic-priming recipe</a>
           with 20 ERP CORE participants. The runner saves the plan, program,
           epochs, participant averages, statistics, figures, and methods text.

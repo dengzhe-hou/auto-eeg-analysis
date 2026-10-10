@@ -79,7 +79,7 @@ powershell -ExecutionPolicy Bypass -File tools/env/check_env.ps1
 PowerShell 7 users can use `pwsh -File tools/env/check_env.ps1`. The local skill
 installer creates directory links, so Windows must permit symlink creation, for
 example through Developer Mode or an appropriately privileged terminal. Otherwise,
-use the full setup inside WSL. See [skill installation](GETTING_STARTED.md#2-make-the-skills-visible-to-your-client).
+use the full setup inside WSL. See [skill installation](GETTING_STARTED.md#3-set-up-an-agent-optional).
 
 ### Windows + WSL2 for FreeSurfer
 

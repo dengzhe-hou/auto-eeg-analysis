@@ -88,3 +88,28 @@ def test_custom_external_paths_and_new_output_parent(tmp_path):
     (run_dir / "process.json").write_text("{}", encoding="utf-8")
     with pytest.raises(FileExistsError, match="fresh empty"):
         prepare_run_directory(run_dir)
+
+
+def test_missing_fonts_stop_full_run_before_reading_eeg_or_creating_outputs(tmp_path, monkeypatch):
+    from matplotlib import font_manager
+    import run_recipe_case
+
+    run_dir = tmp_path / "new-run"
+    monkeypatch.setattr(font_manager.fontManager, "ttflist", [])
+    monkeypatch.setattr(sys, "argv", ["run_recipe_case.py", "--run-dir", str(run_dir)])
+    with pytest.raises(RuntimeError, match="Arial or Helvetica"):
+        run_recipe_case.main()
+    assert not run_dir.exists()
+
+
+def test_statistics_replay_does_not_require_figure_fonts(tmp_path, monkeypatch, capsys):
+    from matplotlib import font_manager
+    import run_recipe_case
+
+    replayed = []
+    monkeypatch.setattr(font_manager.fontManager, "ttflist", [])
+    monkeypatch.setattr(sys, "argv", ["run_recipe_case.py", "--run-dir", str(tmp_path), "--replay"])
+    monkeypatch.setattr(run_recipe_case, "replay", lambda path: replayed.append(path) or {"passed": True})
+    run_recipe_case.main()
+    assert replayed == [tmp_path]
+    assert '"passed": true' in capsys.readouterr().out
