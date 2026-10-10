@@ -108,9 +108,15 @@ The script must:
    # ICLabel reads are. The analysis re-reference stays deferred (see below).
    raw_for_label = raw_for_ica.copy().set_eeg_reference('average')
    ic_labels = label_components(raw_for_label, ica, method='iclabel')
-   # ic_labels is a dict with keys: 'y_pred_proba' (n_components x 7 matrix),
-   #   'labels' (list of predicted class names)
-   # Classes: brain, muscle, eye, heart, line_noise, ch_noise, other
+   # ic_labels is a dict with keys: 'y_pred_proba' (shape (n_components,): the
+   #   probability of each component's predicted class) and 'labels' (list of
+   #   predicted class names).
+   # Classes: brain, muscle artifact, eye blink, heart beat, line noise,
+   #   channel noise, other
+   # The full (n_components x 7) matrix, columns in the class order above, needed
+   # for the top-2 review list (Phase D) and all_probabilities (Phase E), comes from
+   #   from mne_icalabel.iclabel import iclabel_label_components
+   #   full_proba = iclabel_label_components(raw_for_label, ica)
    ```
 5b. **Cross-check with EOG/ECG correlation** (complements ICLabel; SASICA-style). If EOG/ECG channels exist, correlation-based detection is a direct physiological cross-check on the ICLabel labels:
    ```python
@@ -190,13 +196,13 @@ For each subject (after exclusion is finalized):
      "hp_filter_for_fit": 1.0,
      "n_excluded": 3,
      "excluded_components": [0, 4, 12],
-     "excluded_labels": ["eye", "muscle", "eye"],
+     "excluded_labels": ["eye blink", "muscle artifact", "eye blink"],
      "excluded_confidences": [0.95, 0.82, 0.91],
      "n_ambiguous": 1,
      "ambiguous_components": [7],
-     "ambiguous_labels": ["muscle"],
+     "ambiguous_labels": ["muscle artifact"],
      "ambiguous_confidences": [0.55],
-     "all_labels": ["eye", "brain", "brain", "brain", "muscle", "..."],
+     "all_labels": ["eye blink", "brain", "brain", "brain", "muscle artifact", "..."],
      "all_probabilities": [[0.95, 0.02, ...], "..."],
      "threshold": 0.7,
      "backend": "mne+mne_icalabel"
