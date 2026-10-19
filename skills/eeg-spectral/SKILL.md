@@ -62,30 +62,41 @@ Write and execute a Python script. For each subject:
 import mne
 import numpy as np
 
+# Resolve the approved 2 s default against the available samples.
+def welch_parameters(sfreq, n_times):
+    n_per_seg = min(int(2 * sfreq), n_times)
+    n_fft = n_per_seg if N_FFT is None else N_FFT
+    if n_fft < n_per_seg:
+        raise ValueError("N_FFT must be >= n_per_seg; choose the segment duration explicitly.")
+    return dict(n_fft=n_fft, n_per_seg=n_per_seg,
+                n_overlap=n_per_seg // 2, window=WINDOW)
+
 # Resting-state: continuous data
 raw = mne.io.read_raw_fif(preprocessed_path, preload=True)
-n_per_seg = int(2 * raw.info['sfreq'])       # 2 s segments → ~0.5 Hz resolution
-psd = raw.compute_psd(method='welch', fmin=FMIN, fmax=FMAX,
-                      n_fft=n_per_seg, n_per_seg=n_per_seg,
-                      n_overlap=n_per_seg // 2, window='hann')
-freq_res = raw.info['sfreq'] / n_per_seg      # report this
+welch_kw = welch_parameters(raw.info['sfreq'], raw.n_times)
+psd = raw.compute_psd(method='welch', fmin=FMIN, fmax=FMAX, **welch_kw)
+freq_res = raw.info['sfreq'] / welch_kw['n_per_seg']  # segment-limited resolution
+freq_step = raw.info['sfreq'] / welch_kw['n_fft']     # frequency-grid spacing
 # psd.get_data() → (n_channels, n_freqs)
 # psd.freqs → frequency vector
 
 # Task-related: epoched data
 epochs = mne.read_epochs(epochs_path, preload=True)
-psd = epochs.compute_psd(method='welch', fmin=FMIN, fmax=FMAX, n_fft=N_FFT)
+welch_kw = welch_parameters(epochs.info['sfreq'], len(epochs.times))
+psd = epochs.compute_psd(method='welch', fmin=FMIN, fmax=FMAX, **welch_kw)
 # psd.get_data() → (n_epochs, n_channels, n_freqs)
-# Average across epochs per condition:
-psd_cond = epochs[condition].compute_psd(method='welch', fmin=FMIN, fmax=FMAX)
+# Per-condition spectra retain the epoch axis; average it separately if needed:
+psd_cond = epochs[condition].compute_psd(method='welch', fmin=FMIN, fmax=FMAX, **welch_kw)
 
 # Band power extraction
 bands = {'theta': (4, 8), 'alpha': (8, 13), 'beta': (13, 30)}
 for band_name, (fmin_b, fmax_b) in bands.items():
     freq_mask = (psd.freqs >= fmin_b) & (psd.freqs <= fmax_b)
-    band_power = psd.get_data()[:, freq_mask].mean(axis=-1)  # per channel
+    band_power = psd.get_data()[..., freq_mask].mean(axis=-1)  # channels, or epochs × channels
     # Convert to dB: 10 * np.log10(band_power)
 ```
+
+Resolve `N_FFT=null` to Python `None` and `WINDOW` to the approved taper (default `hann`). The same resolved `welch_kw` is used for all epochs and every condition, so their frequency grids agree. Epochs shorter than 2 s use their available samples: report the shorter segment duration and its coarser resolution. An FFT length below the selected segment length raises an error instead of silently shortening the segment.
 
 ### Frequency resolution, zero-padding, and the Nyquist/low-pass cap
 
@@ -349,7 +360,7 @@ Generate and save to `figure-stage/`:
 ## Phase G — Sanity checks
 
 - [ ] PSD values are positive (power cannot be negative).
-- [ ] Frequency resolution matches expectation (n_fft / sfreq).
+- [ ] Segment-limited resolution (`sfreq / n_per_seg`) and frequency-grid spacing (`sfreq / n_fft`) match the recorded settings.
 - [ ] No NaN or Inf in output arrays.
 - [ ] If FOOOF: r_squared > 0.90 for most channels (warn if not).
 - [ ] If IAPF: detected in >80% of subjects (warn if not — population may lack alpha peak).
@@ -380,7 +391,7 @@ Generate and save to `figure-stage/`:
 - **Welch** (default): segments data into overlapping windows, computes FFT on each, averages. Good balance of frequency resolution and variance reduction. Standard for most EEG work.
 - **Multitaper**: uses multiple orthogonal tapers (DPSS/Slepian) on a single window. Better frequency resolution and lower variance than Welch for short data segments. Preferred for resting-state with limited data.
 - **Periodogram**: single FFT on entire signal. Maximum frequency resolution but high variance. Rarely appropriate for EEG.
-- Report: method, window length (n_fft), overlap percentage, frequency resolution.
+- Report: method, segment length (`n_per_seg`, or seconds), FFT length (`n_fft`), overlap percentage, segment-limited resolution and frequency-grid spacing.
 
 ### Parametric (AR / Yule-Walker) spectral estimation (Kay & Marple 1981)
 
@@ -423,7 +434,9 @@ For resting-state data with no event markers, either feed the continuous recordi
 # Fixed-length epochs from continuous resting data
 epochs = mne.make_fixed_length_epochs(raw, duration=2.0, overlap=0.0, preload=True)
 # make_fixed_length_epochs applies NO baseline correction — correct for resting data
-psd = epochs.compute_psd(method='welch', fmin=FMIN, fmax=FMAX, window='hann')
+# Reuse welch_parameters from Phase B with the approved N_FFT and WINDOW.
+welch_kw = welch_parameters(epochs.info['sfreq'], len(epochs.times))
+psd = epochs.compute_psd(method='welch', fmin=FMIN, fmax=FMAX, **welch_kw)
 ```
 
 Epoch/segment duration directly sets spectral resolution (= 1/duration): 2 s → 0.5 Hz, 4 s → 0.25 Hz. Pick the duration from the resolution you need. See `eeg-epoch` for fixed-length epoching of continuous data.
