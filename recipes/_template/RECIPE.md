@@ -15,6 +15,12 @@ status: experimental    # experimental | validated | canonical
 
 > One-paragraph plain-language description of what this analysis tests and why someone would run it.
 
+The values below are recipe-author suggestions or examples. At run time, put the
+study's approved values and their approval source in `ANALYSIS_PLAN.md`; do not
+treat this template, example marker codes or an unanswered field as approval.
+Record unresolved choices and their dependent stages under `待我决定`, and
+continue independent authorized work. Preserve an existing approved plan.
+
 ## What this recipe needs
 
 ### Data shape
@@ -30,21 +36,21 @@ status: experimental    # experimental | validated | canonical
 
 ### Subjects
 
-- **N recommended:** `<≥20>` for adequate cluster permutation power.
+- **N recommended:** `<e.g., ≥20; state its basis, not a guaranteed power or a required minimum>`.
 - **Group structure:** `<within-subject contrast | between-group | mixed>`
 
 ## Pipeline
 
 ### 1. Preprocess
 - Bandpass: `<0.1 – 30 Hz>` (zero-phase FIR)
-- Notch: inferred from country (50 / 60 Hz)
+- Notch: `<line frequency from recording evidence; proposed 50 / 60 Hz setting, if appropriate, needs study-plan approval>`
 - Reference: `<average>`
 - Bad channels: RANSAC + manual review
 
 ### 2. ICA
 - Method: `<infomax extended>`
 - N components: `<0.99 variance>`
-- Auto-label: mne-icalabel with rejection of eye / muscle / heart / line / channel-noise
+- Auto-label: mne-icalabel; `<propose the eye / muscle / heart / line / channel-noise exclusion and review policy; apply only approved rules or recorded decisions>`
 
 ### 3. Epoch
 - Window: `<-0.2 to 1.0 s>`
@@ -69,12 +75,29 @@ status: experimental    # experimental | validated | canonical
 |---|---|---|
 | F1 | ERP butterfly + topomap + cluster mask | (a) per condition (b) difference with cluster outline (c) topomap at peak |
 
+### Stage handoff for each instantiated run
+
+In `RECIPE_RUN_LOG.md`, record the actual input, output, saved configuration,
+program and command for each declared stage. Paths below illustrate the handoff;
+resolve them to the current project/run rather than searching for a recent file.
+
+| Stage | Saved input | Saved output / downstream use |
+|---|---|---|
+| Preprocess / ICA | Raw data, approved configuration and recorded component decisions | `preprocess-stage/` / `ica-stage/` files used by epoching |
+| Epoch / ERP | Approved event mapping, selected processed file and trial gate | `epoch-stage/` epochs and trial identities; `erp-stage/` condition averages and ROI values |
+| Statistics | The saved participant values and approved inference domain | `stats-stage/` group inputs, statistics and permutation outputs |
+| Figures / report | The same ERP, ROI and statistics artifacts | Figure source values, figures, captions and Methods / results referring to those files |
+
 ## Expected output (validation dataset)
 
 If run on the dataset declared in `validation/README.md`, the recipe should produce:
 
 - C1 cluster: p < `<0.05>`, peak channel `<…>`, peak time `<…>`, Cohen's dz ≈ `<…>`.
 - Figure F1: visually matches `reference_figure.png`.
+
+Distinguish an observed result in a named validation run from a predicted effect.
+These values are not acceptance targets for new data or reasons to change an
+approved analysis until its result agrees.
 
 ## Methods paragraph (for your paper)
 
@@ -87,7 +110,7 @@ text against the paper's actual reported methods.>
 ## Reproducibility notes
 
 - AEA records the recipe version, RNG seed, and backend versions in `report-stage/REPRO_RECEIPT.md`.
-- Re-running on the same data with the same recipe version + seed must produce bitwise-identical numerical results.
+- Record the exact numerical configuration and environment, save the executable replay bundle, and compare rerun outputs with the approved tolerances. The same recipe version and seed alone do not establish bitwise identity; retain failed or unperformed replay checks explicitly.
 
 ## Known limitations
 

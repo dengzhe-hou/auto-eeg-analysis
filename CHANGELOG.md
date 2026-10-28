@@ -26,6 +26,18 @@ with missing helpers in the older release.
 
 These changes have not been assigned a new release tag.
 
+- Reorganized all 22 skills into compact entrypoints with detailed procedures
+  and method background loaded from linked reference files. Added section loading
+  with source receipts, a channel-identity check before average referencing,
+  a memory-bounded SampEn helper and a bounded structured ERP report checker.
+  Checks have stated scopes; they do not certify arbitrary generated workflows.
+- Spectral templates now require the task's or approved plan's scientific
+  settings, including Welch segment/taper/overlap/FFT/DC choices, requested band
+  definitions and aggregation, and the selected alpha estimator. Example values
+  are labelled; short epochs and missing dependencies no longer silently change
+  the approved estimator or segment duration. Existing saved runs are unchanged.
+- Redesigned the homepage and README around the library, quickstart and worked
+  examples; retained the validation coverage and original evidence links.
 - Corrected time-frequency baseline units, Morlet
   padding and the explicit `zero_mean` setting; separated constant segments,
   low-amplitude warnings and rapid-change diagnostics in QC. These changes can affect newly

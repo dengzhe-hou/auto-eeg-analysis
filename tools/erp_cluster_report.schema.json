@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AEA opt-in one-sample ERP cluster report inputs",
+  "type": "object",
+  "required": ["contract", "results"],
+  "additionalProperties": false,
+  "$defs": {
+    "names": {"type": "array", "items": {"type": "string"}, "minItems": 1, "uniqueItems": true},
+    "contrast": {"type": "array", "items": {"type": "string"}, "minItems": 2, "maxItems": 2, "uniqueItems": true},
+    "window": {"type": "array", "items": {"type": "number"}, "minItems": 2, "maxItems": 2},
+    "alpha": {"type": "number", "exclusiveMinimum": 0, "exclusiveMaximum": 1}
+  },
+  "properties": {
+    "contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["report_type", "observation_unit", "test", "summary", "descriptive_ci", "cohort", "contrast", "roi_channels", "window_s", "input_sfreq", "epoch_time_origin_s", "input_unit", "tail", "cluster_forming_alpha", "cluster_alpha", "n_permutations_requested", "seed"],
+      "properties": {
+        "report_type": {"const": "one_sample_erp_cluster"},
+        "observation_unit": {"const": "participant"},
+        "test": {"const": "spatio_temporal_cluster_1samp_test"},
+        "summary": {"const": "arithmetic_mean"},
+        "descriptive_ci": {
+          "type": "object", "additionalProperties": false,
+          "required": ["method", "level", "sidedness"],
+          "properties": {"method": {"const": "student_t"}, "level": {"const": 0.95}, "sidedness": {"const": "two-sided"}}
+        },
+        "cohort": {"$ref": "#/$defs/names"},
+        "contrast": {"$ref": "#/$defs/contrast"},
+        "roi_channels": {"$ref": "#/$defs/names"},
+        "window_s": {"$ref": "#/$defs/window"},
+        "input_sfreq": {"type": "number", "exclusiveMinimum": 0, "description": "Sampling rate independently checked from the complete, uncropped source epoch/evoked metadata."},
+        "epoch_time_origin_s": {"type": "number", "description": "First sample time of the complete source epoch/evoked, checked before candidate ROI/window cropping."},
+        "input_unit": {"const": "V"},
+        "tail": {"enum": [-1, 1]},
+        "cluster_forming_alpha": {"$ref": "#/$defs/alpha"},
+        "cluster_alpha": {"$ref": "#/$defs/alpha"},
+        "n_permutations_requested": {"type": "integer", "minimum": 1},
+        "seed": {"type": "integer"}
+      }
+    },
+    "results": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["test_target", "contrast", "roi_channels", "window_s", "input_unit", "amplitude_unit", "tail", "cluster_forming_alpha", "cluster_alpha", "threshold", "n_permutations_requested", "n_permutations_actual", "seed", "participant_ids", "excluded_participants", "roi_mean_uv", "roi_sd_uv", "roi_sem_uv", "roi_ci95_uv", "cluster_p_values"],
+      "properties": {
+        "test_target": {"const": "cluster"},
+        "contrast": {"$ref": "#/$defs/contrast"},
+        "roi_channels": {"$ref": "#/$defs/names"},
+        "window_s": {"$ref": "#/$defs/window"},
+        "input_unit": {"const": "V"},
+        "amplitude_unit": {"const": "uV"},
+        "tail": {"enum": [-1, 1]},
+        "cluster_forming_alpha": {"$ref": "#/$defs/alpha"},
+        "cluster_alpha": {"$ref": "#/$defs/alpha"},
+        "threshold": {"type": "number"},
+        "n_permutations_requested": {"type": "integer", "minimum": 1},
+        "n_permutations_actual": {"type": "integer", "minimum": 0},
+        "seed": {"type": "integer"},
+        "participant_ids": {"$ref": "#/$defs/names"},
+        "excluded_participants": {"type": "object", "additionalProperties": {"type": "string", "minLength": 1}},
+        "roi_mean_uv": {"type": "number"},
+        "roi_sd_uv": {"type": "number", "minimum": 0},
+        "roi_sem_uv": {"type": "number", "minimum": 0},
+        "roi_ci95_uv": {"$ref": "#/$defs/window"},
+        "cluster_p_values": {"type": "array", "items": {"type": "number", "minimum": 0, "maximum": 1}}
+      }
+    }
+  }
+}

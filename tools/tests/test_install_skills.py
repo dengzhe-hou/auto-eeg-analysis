@@ -21,8 +21,7 @@ def checkout(tmp_path):
     shutil.copyfile(ROOT / "tools" / "install_skills.py", root / "tools" / "install_skills.py")
     for skill_file in sorted((ROOT / "skills").glob("*/SKILL.md")):
         destination = root / "skills" / skill_file.parent.name
-        destination.mkdir(parents=True)
-        shutil.copyfile(skill_file, destination / "SKILL.md")
+        shutil.copytree(skill_file.parent, destination)
     return root
 
 
@@ -50,6 +49,7 @@ def test_installs_selected_clients_and_repeated_run_is_noop(checkout, agent, fol
             assert not Path(os.readlink(link)).is_absolute()
             assert link.resolve() == source
             assert (link / "SKILL.md").read_bytes() == (source / "SKILL.md").read_bytes()
+            assert (link / "references/procedure.md").read_bytes() == (source / "references/procedure.md").read_bytes()
     for folder in set((".agents", ".claude")) - set(folders):
         assert not (checkout / folder).exists()
 

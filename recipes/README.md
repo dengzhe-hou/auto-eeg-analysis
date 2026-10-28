@@ -26,14 +26,14 @@ For example, after loading the skills in Claude Code:
 
 In Codex, ask the assistant to use the `eeg-recipe` skill with the same recipe slug and project path. See [Getting started](../docs/GETTING_STARTED.md) for the installation and invocation steps for each assistant.
 
-The [eeg-recipe skill](../skills/eeg-recipe/SKILL.md) reads the recipe and your dataset brief, checks channels, markers, sampling rate, and available trials or recording duration, then asks you to confirm the analysis plan. The assistant generates and runs the analysis code using the stages the recipe specifies. Event-related recipes use epochs and ERP or time-frequency analysis; continuous recipes use the declared spectral, connectivity, microstate, or complexity stages.
+The [eeg-recipe skill](../skills/eeg-recipe/SKILL.md) reads the recipe and your dataset brief, checks channels, markers, sampling rate, and available trials or recording duration, then drafts a study plan or reuses your existing approved plan. Recipe defaults are suggestions; the approved plan supplies the values actually passed to each stage. Existing approval is reused without asking again. Event-related recipes use epochs and ERP or time-frequency analysis; continuous recipes use the declared spectral, connectivity, microstate, or complexity stages.
 
 Outputs belong to your analysis project:
 
 | Output | Purpose |
 |---|---|
 | `ANALYSIS_PLAN.md` | Recipe instantiated for your channels, conditions, and data |
-| `RECIPE_RUN_LOG.md` | Stage progress and deviations |
+| `RECIPE_RUN_LOG.md` | Stage status, input/output and configuration paths, actual commands, deviations and unresolved choices |
 | `figure-stage/` | Figures declared by the recipe; filenames follow its figure plan |
 | `report-stage/methods.md` | Methods text generated from the completed analysis |
 | `report-stage/citation.bib` | Source references copied from the recipe |
@@ -94,7 +94,9 @@ Each accepted recipe earns the contributor a co-authorship line in the eventual 
 - A **recipe** is a reusable artifact written once and applied to many datasets.
 - **ANALYSIS_PLAN.md** specifies the analysis and claims for one study, dataset, and team. It is a preregistration only if you register it before the relevant analysis.
 
-When you run a recipe on your data, AEA instantiates it into an `ANALYSIS_PLAN.md` with your dataset, marker mapping, and parameters. Review that plan before execution; changes belong in the run record.
+When you run a recipe on your data, AEA instantiates it into an `ANALYSIS_PLAN.md` with your dataset, marker mapping, and parameters. The plan distinguishes each recipe suggestion from the approved study value and records its source and consuming stages. Missing scientific choices remain unresolved; an event code observed in a file header does not establish its condition meaning. Approve a new plan before execution; preserve an already approved plan and record proposed changes separately.
+
+During unattended work, record questions under `待我决定` in the plan and run log, and continue independent authorized work. An unresolved ICA policy, channel substitution or trial gate blocks its dependent stage, not all header inspection or already approved work. Each stage records the exact saved input/output paths so statistics, figures and reports can be traced back to the same run. Neither a recipe's suggested value nor its historical validation result substitutes for the user's study decision.
 
 ## Recipe versioning
 

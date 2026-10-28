@@ -1,6 +1,6 @@
 ---
 name: eeg-pipeline
-description: "Top-level orchestrator: chains eeg-bids → eeg-preprocess → eeg-ica → eeg-epoch → (eeg-erp / eeg-tfr / eeg-connectivity / eeg-microstate / eeg-source) → eeg-stats → eeg-figure → eeg-report → eeg-audit. Reads DATASET_BRIEF.md and ANALYSIS_PLAN.md to decide which branches to run. Use when the user wants the full pipeline end-to-end."
+description: "Coordinate an approved EEG analysis across data preparation, selected analysis branches, statistics, figures, reporting and audit. Use for an end-to-end study or resuming a recorded pipeline. Read DATASET_BRIEF.md and ANALYSIS_PLAN.md before choosing stages."
 argument-hint: "[project-dir] [— skip: ica,source] [— from: epoch] [— auto-proceed]"
 allowed-tools: Bash(*), Read, Write, Edit, Grep, Glob, Skill
 ---
@@ -9,177 +9,76 @@ allowed-tools: Bash(*), Read, Write, Edit, Grep, Glob, Skill
 
 ## Context: $ARGUMENTS
 
+## Use this skill
+
+Read the task and the approved analysis plan before choosing a procedure. The
+name and description select this skill; they do not specify the analysis.
+Load only the relevant sections below, rather than every reference in advance.
+For a bounded calculation, use the supplied inputs without inventing upstream
+stages or approvals. Keep the actual method, parameters, outputs, and checks.
+
+Template values in the detailed procedures describe their documented examples.
+Resolve scientific choices against the task and approved plan before execution;
+do not treat an example, a timeout, or an unattended run as researcher approval.
+Preserve explicitly fixed configurations. Record unresolved choices and continue
+independent approved work, as described in the project instructions.
+
+For clients without native skill loading, use the section loader from the
+repository root; it loads the selected procedure, not the whole reference:
+
+```bash
+python tools/load_skill.py eeg-pipeline --section "Constants"
+```
+
+## Execution authority and unattended runs
+
+The approved `ANALYSIS_PLAN.md` determines scientific choices. Recipe examples,
+skill defaults and checkpoint settings do not approve a new filter, reference,
+contrast, ROI, exclusion rule or statistical test. `AUTO_PROCEED` only advances
+steps already covered by that approval.
+
+When the user requests an unattended run, execute those approved steps without
+intermediate confirmation. Record a missing scientific decision in
+`PIPELINE_STATE.json.unresolved_decisions` with the stage, affected claim or
+participant, missing field and reason. Mark the dependent work `blocked`,
+preserve its artifacts, and continue independent approved work. Do not invent an
+answer, request ad hoc help for one condition, silently drop that unit or report
+the pipeline complete. Existing approved ICA decisions apply to their saved
+decomposition, not to matching component numbers in a new fit.
+
+
+## Procedure reference
+
+Choose the section that matches the current operation. Detailed code examples
+and numerical conventions remain in the linked source.
+
 ## Constants
 
-- **AUTO_PROCEED** — read from `~/.claude/checkpoint.json`. If `auto_proceed: true` and the gate is `"auto"`, run gates auto-pass. If `auto_proceed: false` or gate is `"always_wait"`, pause for user OK between stages. If `~/.claude/checkpoint.json` does not exist, default to `true`.
-- **FAIL_FAST = `false`** — when `true`, abort on first per-subject failure; otherwise log and continue.
-- **STAGES_DEFAULT = `[bids, preprocess, ica, epoch, erp, tfr, stats, figure, report, audit]`** — `connectivity / microstate / source` only added if `DATASET_BRIEF.md > Analyses planned` ticks them.
-- **STATE_FILE = `<project-dir>/PIPELINE_STATE.json`** — crash recovery persistence (see Phase B).
-- **TIMEOUT_SECONDS** — read from `~/.claude/checkpoint.json`, default `300`.
+Read this section in [the detailed procedure](references/procedure.md).
 
 ## Stage dependency graph
 
-Some stages have strict sequential dependencies; others can run in parallel when their inputs are ready:
-
-```
-bids ──→ preprocess ──→ ica ──→ epoch ──┬──→ erp ────────┐
-                                         ├──→ tfr ────────┤
-                                         ├──→ connectivity┤
-                                         ├──→ microstate  ├──→ stats ──→ figure ──→ report ──→ audit
-                                         └──→ source ─────┘
-```
-
-- **Parallel group**: After `epoch` completes, `erp`, `tfr`, `connectivity`, `microstate`, and `source` can all run independently.
-- **Sync point**: `stats` waits for ALL analysis branches to finish before starting.
-- In practice, invoke these branches sequentially through the client's skill mechanism, but log that they have no data dependency. If no child-skill invocation tool is available, read the corresponding `skills/eeg-<stage>/SKILL.md` directly and follow it from the repository root.
-
-### Cross-stage ordering invariants (verify before chaining)
-
-Individual child skills enforce their own internal order, but the orchestrator must guarantee these invariants hold *across* stage boundaries, because a re-run with `— from:` or `— skip:` can otherwise violate them:
-
-- **Filter before downsample.** The continuous data must be band-pass / notch filtered *before* any `raw.resample(...)`. Resampling first aliases high-frequency content and shifts event sample indices. If `preprocess` is skipped but a later resample is requested, abort with a clear error.
-- **Resample Raw, never Epochs.** Resampling belongs in `preprocess` (on `Raw`, before `epoch`). Never invoke a resample on the epoched data — `Epochs.resample` jitters event timing relative to t=0 and corrupts ERP latencies. If `ANALYSIS_PLAN.md` requests a sample rate change after `epoch`, route it back to the preprocess stage instead.
-- **Reference / ICA-rank consistency.** If `preprocess` sets an average reference, it must be applied consistently and the data rank reduced by one before `ica` (e.g. via `set_eeg_reference(projection=True)`), so the ICA decomposition is not rank-deficient. The orchestrator should confirm `preprocess_summary.json` and the ICA stage agree on the reference scheme; a mismatch (e.g. average ref in preprocess but ICA run on un-referenced data) is a silent rank/quality bug.
+Read this section in [the detailed procedure](references/procedure.md).
 
 ## Phases
 
-### A. Pre-flight (mandatory)
-1. **Checkpoint config**: Read `~/.claude/checkpoint.json`. Set `AUTO_PROCEED` and `TIMEOUT_SECONDS` from the file. If file missing, default `AUTO_PROCEED=true`, `TIMEOUT_SECONDS=300`.
-2. **Auto-brief**: If `DATASET_BRIEF.md` does not exist but `raw/` does, run `python tools/auto_brief.py --raw-dir <project-dir>/raw/ --out <project-dir>/DATASET_BRIEF.md --json <project-dir>/auto_brief_scan.json`. Then ask the user conversationally about remaining `[USER]` fields (paradigm, condition→marker mapping, epoch window, hypothesis). Do NOT dump the full template.
-3. Read `DATASET_BRIEF.md`. If any `[USER]` fields remain for critical parameters (paradigm, conditions, epoch window), ask the user. Non-critical fields with sensible defaults (bandpass, reference, stats) can proceed with defaults.
-4. Read or generate `ENVIRONMENT.json` via `tools/env/check_env.{sh,ps1}`.
-5. Read `ANALYSIS_PLAN.md`. If absent, generate a draft from `DATASET_BRIEF.md` claims and ask the user to confirm. **Do not run analyses without a frozen plan.**
-6. Resolve which optional analyses (TFR / connectivity / microstate / source) are ticked in DATASET_BRIEF.
-6b. **Resolve the group design before chaining stats.** Read `DATASET_BRIEF.md > Design` and the `ANALYSIS_PLAN.md` claim rows to classify each claim as **within-subject** (same subjects, ≥2 conditions) or **between-subject** (different groups). Record the resolution per claim and pass it through to `eeg-stats` so it selects the matching test:
-   - **Within-subject** → per-subject condition difference fed to `spatio_temporal_cluster_1samp_test` (the analog of FieldTrip `depsamplesT`); point tests use `ttest_rel`. Requires **equal n and matched subject ordering** across conditions.
-   - **Between-subject** → two independent group arrays to `spatio_temporal_cluster_test` (analog of `indepsamplesT`); point tests use `ttest_ind`. Tolerates **unequal n** (e.g. 20 controls vs 18 patients) and must **never pair**.
-   If the design field is `[USER]` or ambiguous (e.g. a claim names two conditions but the subject lists differ), stop and ask the user — do not silently default to paired, because a within-test on mismatched subjects is a hard correctness error, not a tuning choice. Write the resolved design into `PIPELINE_STATE.json` under a `design` key so the stats branch and `eeg-audit` can verify it.
-7. **Resume check**: If `PIPELINE_STATE.json` exists AND `— from:` was NOT explicitly passed, read it and offer to resume from the last incomplete stage (or auto-resume if `AUTO_PROCEED=true`).
-
-### B. State persistence (crash recovery)
-
-Maintain `PIPELINE_STATE.json` throughout the run for crash recovery:
-
-```json
-{
-  "pipeline_version": "1.0",
-  "project_dir": "/path/to/project",
-  "run_dir": "/path/to/project/results/run-001",
-  "started_at": "2026-05-22T10:00:00Z",
-  "updated_at": "2026-05-22T10:15:00Z",
-  "resolved_stages": ["bids", "preprocess", "ica", "epoch", "erp", "stats", "figure", "report", "audit"],
-  "completed_stages": [
-    {"stage": "bids", "status": "done", "duration_s": 12.3, "started_at": "...", "finished_at": "..."},
-    {"stage": "preprocess", "status": "done", "duration_s": 45.1, "started_at": "...", "finished_at": "..."}
-  ],
-  "current_stage": "ica",
-  "current_stage_started_at": "2026-05-22T10:01:00Z",
-  "failed_stages": [],
-  "skipped_stages": ["source"],
-  "auto_proceed": true,
-  "fail_fast": false
-}
-```
-
-**Update rules**:
-- Write `PIPELINE_STATE.json` at the start of the pipeline with `resolved_stages`.
-- Record `run_dir` before executing any stage. Resume and `— from:` reuse that
-  directory and its prerequisite artifacts; never assign them a new empty root.
-- Before each stage: update `current_stage` and `current_stage_started_at`.
-- After each stage: append to `completed_stages` with timing, update `updated_at`.
-- On failure: append to `failed_stages` with error message.
-- On crash recovery: read the file, skip `completed_stages`, resume from `current_stage`.
-
-### C. Stage chain
-
-For a new complete analysis, choose a new `<run-dir>` such as
-`<project-dir>/results/run-001` and record it in `PIPELINE_STATE.json`. For resume
-or `— from:`, reuse the recorded run directory. If an older state lacks that path,
-identify the existing directory containing its prerequisite stage outputs before
-continuing; do not infer that an empty new directory contains completed stages. Copy the
-approved plan, dataset brief and environment probe there. All child skills use
-this run directory as their study root, with stage folders beneath it; raw data
-remain at their original location.
-
-Before executing each scientific stage, save its program, local helpers and
-configuration in `<project-dir>/analysis/`. Add its exact argument list to
-`analysis/run.json` following `docs/REPLAY.md`: `{data}` is the raw-data location,
-`{out}` is this run directory. Read the child skill to prepare the code, then run
-that saved program once with these substitutions from the `analysis/` directory.
-Do not execute a second copy through inline code. Preserve the normal stage
-checkpoints below. Record seeds and all scientific settings in the saved files.
-Model-based review and interpretation stay outside the computational manifest.
-
-For each scientific stage in the resolved list, in order (methods/report/audit run in Phase D):
-
-1. **Update state**: Write `current_stage` to `PIPELINE_STATE.json`.
-2. **Record start time**: `stage_start = now()`.
-3. **Invoke skill**: Use the client's skill mechanism or read the matching `skills/eeg-<stage>/SKILL.md` directly, passing `<run-dir>` + relevant overrides. The agent stays at the repository root; saved programs execute from `analysis/` as specified above.
-4. **Record end time**: `stage_end = now()`. Compute `duration_s = stage_end - stage_start`.
-5. **Progress report**: Print to user:
-   ```
-   ✓ [stage] completed in [duration_s]s  ([N]/[total] stages done)
-   ```
-6. **Update state**: Append to `completed_stages` in `PIPELINE_STATE.json`.
-7. Read the stage's report; if it reports any subject failure and `FAIL_FAST=true`, abort.
-8. **Gate**: If `AUTO_PROCEED=false`, summarize the stage report to the user and wait for "go" before the next stage. If `AUTO_PROCEED=true`, proceed immediately.
-
-### D. Audit + finalize
-
-After all stages:
-0. Capture the actually executed `analysis/` with `tools/replay.py capture`, then
-   replay it into a second, new output directory. Compare that repeat against the
-   first run's scientific outputs using the approved plan's tolerances. Retain the
-   fieldwise comparison. Do not regenerate programs between these runs; record a
-   failed or missing comparison without calling it reproducible.
-1. Invoke methods-text/report and `eeg-audit` on the original `<run-dir>`, where the
-   copied plan and first run's stage outputs live. Surface the audit verdict.
-2. Do not declare the pipeline complete unless the audit produces verdict `pass` or `pass-with-caveats`.
-3. **Final timing report**: Print a summary table of all stage durations:
-   ```
-   Stage          Duration    Status
-   ─────────────  ──────────  ──────
-   bids           12.3s       done
-   preprocess     45.1s       done
-   ica            120.5s      done
-   ...
-   TOTAL          312.4s
-   ```
-4. Update `PIPELINE_STATE.json` with `"pipeline_status": "complete"` and total duration.
+Read this section in [the detailed procedure](references/procedure.md).
 
 ## Resume semantics
 
-- `— from: <stage>` skips earlier stages, reading their existing artifacts from the recorded `run_dir`. Overrides the resume point, not the result directory.
-- `— skip: <stage1>,<stage2>` skips specific stages entirely. They appear in `skipped_stages` in the state file.
-- If `PIPELINE_STATE.json` exists and no `— from:` override, auto-resume from the last incomplete stage.
-- The pipeline is **idempotent on re-run** for any stage as long as inputs haven't changed.
+Read this section in [the detailed procedure](references/procedure.md).
 
 ## Per-stage timing and progress
 
-Every stage invocation is timed. The pipeline emits:
-- **Per-stage**: `"[stage] completed in [X]s"` immediately after each stage.
-- **Running total**: `"([N]/[total] stages done, elapsed [Y]s)"` after each stage.
-- **Final summary**: Table of all stages with durations at pipeline end (see Phase D).
+Read this section in [the detailed procedure](references/procedure.md).
 
 ## Failure modes
 
-| Symptom | Action |
-|---|---|
-| `PIPELINE_STATE.json` corrupt | Delete it, start fresh, warn user. |
-| Stage times out (> TIMEOUT_SECONDS) | Log timeout in state file, surface to user, ask whether to continue. |
-| `DATASET_BRIEF.md` missing + no `raw/` | Stop. Cannot auto-brief without raw data. |
-| `ANALYSIS_PLAN.md` missing | Generate draft, require user confirmation before proceeding. |
-| Checkpoint config missing | Default to `auto_proceed: true`, `timeout_seconds: 300`. |
-| Resample requested after `epoch` / on `— from: stats` re-run | Refuse to resample Epochs (jitters event timing). Route the sample-rate change back to `preprocess` and re-run downstream stages, or reject the request. |
-| Design ambiguous or `[USER]` in DATASET_BRIEF | Stop and ask. Do not default to paired — a within-subject test on mismatched subjects is a correctness error, not a default. |
-| Within-subject claim but condition subject lists differ in count/order | Abort the stats branch for that claim. Paired tests require equal n and matched ordering; flag to user. |
-| Reference scheme disagrees between `preprocess_summary.json` and ICA stage | Halt before `ica`. Re-run preprocess with the planned reference (and rank reduction) so ICA is not rank-deficient. |
+Read this section in [the detailed procedure](references/procedure.md).
 
 ## Domain Knowledge
 
-- **Canonical cross-stage order is filter → resample → epoch, with re-reference deferable until after ICA.** A widely used EEGLAB preprocessing checklist orders steps as: format convert → channel locations → drop unused electrodes → filter → resample → epoch+baseline → bad-segment/channel handling → ICA → drop artifact ICs → extreme-value rejection → re-reference → manual browse. The key transferable facts: filter the *continuous* data before resampling, and re-referencing can be the second-to-last step so the reference does not mix removed artifacts back in. The MNE-Python preprocessing tutorials give the same spirit: notch → band-pass → mark bads → interpolate → ICA → re-reference → epoch. (EEGLAB 12-step preprocessing checklist; MNE-Python preprocessing tutorials, https://mne.tools/stable/auto_tutorials/preprocessing/index.html.)
-- **Within- vs between-subject changes the test statistic AND the grouping.** FieldTrip encodes the design as a 2-row matrix (row 1 = subject id `cfg.uvar`, row 2 = condition `cfg.ivar`) and uses `ft_statfun_depsamplesT` for paired and `ft_statfun_indepsamplesT` for independent (Maris & Oostenveld, J. Neurosci. Methods 2007, 164(1):177-190). The MNE analog: within-subject = compute the per-subject condition difference and run `spatio_temporal_cluster_1samp_test` (one-sample on the difference; the subject pairing is implicit); between-subject = `spatio_temporal_cluster_test` on two independent arrays. Per-point tests mirror this with `scipy.stats.ttest_rel` (within) vs `ttest_ind` (between). Paired tests require equal n and matched ordering; independent tests allow unequal n.
-- **Optional non-destructive ("lossless") mode separates annotation from rejection.** By default the pipeline bakes one irreversible cleaning decision into `preprocess`/`ica`. An alternative, drop-in for MNE-based runs, is to split artifact handling into two phases: a non-destructive **annotation** phase that only writes flags onto the *continuous* data (bad channels, bad time segments, the ICA decomposition with per-IC labels) and leaves the signal otherwise intact, and a destructive **rejection** phase applied separately by each downstream analysis according to its own policy. The shareable intermediate is then a single annotated continuous-data state, and different analyses (or different analysts) apply their own rejection on top of it. This is what makes the multiverse / analyst-specific reruns (see `eeg-report`) feasible from one curated intermediate rather than re-running preprocessing per fork. Implemented by PyLossless, which follows this annotate-then-reject design. To enable, run `preprocess`/`ica` in annotate-only mode and defer rejection to the analysis branches. (Huberty et al., 2024, bioRxiv 2024.01.12.575323, PyLossless; Desjardins et al., 2021, J. Neurosci. Methods 347:108961.)
+Read this section in [the method background](references/background.md).
 
 ## Cross-references
 

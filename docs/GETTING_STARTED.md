@@ -245,7 +245,8 @@ skill selector:
 ```text
 Read skills/eeg-recipe/SKILL.md and follow it for n400-semantic with
 --data projects/my-study. Keep the AEA repository as the working directory.
-Read the referenced child SKILL.md files when a stage calls for them.
+Read the referenced child SKILL.md files and their linked procedure sections
+when a stage calls for them.
 Use the aeais environment for Python commands.
 ```
 

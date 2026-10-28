@@ -6,6 +6,39 @@ This file is the LLM-facing entry point. Read this *before* running any skill.
 
 AEA is an open library of EEG analysis skills for MNE-Python, with executable specifications and a numerically certified core. The agent reads each `SKILL.md` and generates analysis code in the user's environment. The repository also includes utility tools, EEGLAB / FieldTrip backend templates, worked examples, and tests. [Certification coverage](docs/CERTIFICATION_LEVELS.md) links the retained comparison records. You orchestrate; MNE-Python is the primary computation backend. Every step writes artifacts to disk so the pipeline survives compaction, crashes, and sleep.
 
+## Load the procedure before implementing it
+
+The resource index and skill descriptions route you to procedures; they do not
+contain the procedures themselves. Before writing EEG analysis code:
+
+1. Select relevant skills from [RESOURCE_INDEX.md](RESOURCE_INDEX.md) using the supplied research task.
+2. Open their `SKILL.md` files for required inputs, essential rules and section
+   routing. Read the matching sections in `references/procedure.md` for code
+   and numerical conventions; consult `references/background.md` when the
+   method needs explanation. For a recipe, also open its referenced skill
+   procedures. If tool output is truncated, read the remaining relevant
+   sections in separate chunks; a printed file prefix is not the whole skill.
+3. Record the files and sections used with the generated analysis, including
+   where the explicit task overrides an example or default. Do not claim a
+   procedure or independent check was applied merely because it was listed.
+
+For a bounded calculation, apply the relevant procedure to the supplied inputs;
+do not invent completed upstream stages or researcher approvals to satisfy an
+example directory layout. Scientific choices still follow the approved plan.
+
+For a client without native skill loading, the runner can use
+`tools/load_skill.py` to select a skill section and its relevant references,
+then include that complete procedure in the initial model message. This avoids
+losing it to tool-output truncation. Record the source paths and check the
+complete packet in the provider-format request. Keep that check separate from
+evidence that generated code followed the procedure. Changing from autonomous
+discovery to preloaded procedures is a distinct execution condition and must be
+recorded as such in an evaluation.
+
+The section loader follows the entrypoint's explicit reference links and returns
+the requested section with its actual source path. Omitting `--section` returns
+only the compact entrypoint, not all its supporting procedures.
+
 ## Project layout you will encounter
 
 ```
@@ -43,13 +76,24 @@ Always read `ENVIRONMENT.json` before invoking a FreeSurfer-dependent path. If a
 
 The plan declares: *condition contrast → channels/ROI → time window → frequency band → statistical test → expected effect direction*. If a stage finishes and the result contradicts the planned direction, that goes in `FINDINGS.md` as a negative result — **you do not retroactively edit the plan to make the result fit**. This is enforced by `eeg-audit`.
 
+Recipe defaults are proposals until approved for this study. In an explicitly
+unattended run, proceed through already approved steps; record missing scientific
+choices as blocked work and continue independent approved units. Do not resolve
+them by treating example values, a timeout or automatic execution as approval.
+Keep the actual plan and skill/recipe version with the run. Saved ICA exclusions
+refer to their saved decomposition, not to the same component indices in a new fit.
+
 ### 4. Artifact-first, in-memory-second
 
-Every stage writes to disk before returning. If the agent crashes mid-pipeline, the next invocation re-reads the most recent stage output and continues. Skills are designed to be idempotent on re-run.
+Every stage writes to disk before returning. If the agent crashes mid-pipeline, the next invocation re-reads the most recent stage output and continues. Re-runs retain the approved configuration and their comparison records; seeds alone do not guarantee identical ICA fits across numerical environments.
 
 ### 5. The audit step is non-optional
 
 `eeg-audit` invokes a fresh Codex CLI process (gpt-6-astra, max effort, read-only sandbox) with the plan, the stats output, and the figures. It produces an independent verdict on whether claims are evidence-supported. See [reviewer setup](docs/GETTING_STARTED.md#configure-the-reviewer) for configuration and the supported alternative connections. Do not skip even if everything "looks fine" — the same model that ran the analysis cannot grade it without bias.
+
+Use direct checks for objective numerical, contract and artifact agreement. The
+model review complements those checks and does not replace independent
+recomputation or certify arbitrary report prose.
 
 ### 6. GUI tools are not driven, only consumed
 
