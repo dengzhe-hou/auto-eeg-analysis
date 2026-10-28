@@ -1,7 +1,7 @@
 % EEGPLUGIN_AEA - Add the AEA study handoff to EEGLAB's Tools menu.
 % Requires a configured AEA checkout and Python environment; see README.md.
 function vers = eegplugin_aea(fig, try_strings, catch_strings)
-vers = 'aea0.1.1';
+vers = 'aea0.1.2';
 addpath(fileparts(mfilename('fullpath')));
 tools_menu = findobj(fig, 'tag', 'tools');
 % EEGLAB disables the Tools parent before a dataset is loaded. Settings,

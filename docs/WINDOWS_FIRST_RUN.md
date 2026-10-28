@@ -73,10 +73,11 @@ Windows uses directory junctions; Developer Mode is not required.
 
 ## 4. Fill in the EEGLAB settings
 
-Copy the checkout's `extensions/eeglab/aea` folder into your EEGLAB `plugins`
-folder, remove any previous AEA plugin copy, and restart EEGLAB. See
-[preview versions and outstanding fixes](EEGLAB.md#what-is-checked) when choosing
-between a checkout and a released ZIP.
+Update an existing checkout with `git pull --ff-only` first. Copy its
+`extensions/eeglab/aea` folder into your EEGLAB `plugins` folder, or extract the
+matching preview ZIP there. Remove any previous AEA plugin copy and restart
+EEGLAB. Both the MATLAB adapter and the checkout's Python bridge are needed;
+see [preview versions and validation](EEGLAB.md#what-is-checked).
 
 Run these in the activated PowerShell prompt to find the settings:
 
@@ -90,12 +91,19 @@ For Claude, replace the last command with `where.exe claude`.
 
 Open **Tools → AEA → Settings**:
 
+![Actual EEGLAB Tools menu showing the AEA commands](assets/eeglab/01-eeglab-aea-menu.jpg)
+
 | Field | What to paste |
 | --- | --- |
 | AEA checkout folder | The first command's folder, containing `AGENT_GUIDE.md` |
 | Python executable | The full `python.exe` path, not the Conda folder |
 | Coding assistant | `codex` or `claude` |
 | Assistant executable | The working client's `.exe` or `.cmd` path |
+
+![Actual AEA Settings dialog configured for Claude Code](assets/eeglab/02-settings-claude.jpg)
+
+The screenshot uses neutral demonstration paths. Paste the paths from your own
+setup commands, including your own Python and client executable locations.
 
 ## 5. Export, plan and run
 
@@ -119,6 +127,13 @@ After the client creates `report-stage/report.html`, choose **Open study report*
 and select that study folder. Inspect the saved plan, code, results and checks.
 The original EEGLAB dataset is retained; generated analysis is not automatically
 loaded back into `EEG`.
+
+![Actual HTML report from the fixed synthetic Windows Claude test](assets/eeglab/03-real-report-metrics.jpg)
+
+This example is the four-epoch synthetic integration test: its known means are
+2.5 µV and 6.5 µV, with B−A equal to 4 µV. The screenshot comes from the completed
+Windows Claude test, after initial login and terminal setup. It illustrates the
+report location and display; it is not a real-participant EEG result.
 
 The default full-workflow audit needs a
 [separately configured reviewer](GETTING_STARTED.md#configure-the-reviewer),

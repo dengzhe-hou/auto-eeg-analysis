@@ -29,7 +29,11 @@ These changes have not been assigned a new release tag.
 - Added a preview EEGLAB extension with a Tools menu, dataset/event/history
   export, study preparation, interactive Codex/Claude handoff and a report entry.
   Automated checks exercise real EEGLAB/Octave exports and MNE import. MATLAB
-  desktop validation and official EEGLAB catalogue registration are pending.
+  desktop synthetic workflows with real Codex and Claude clients have passed
+  independent result checks and replay on Windows; official EEGLAB catalogue
+  registration remains pending. Plugin preview 0.1.2 packages the tested export-menu
+  fix. Its companion Python bridge and Windows startup fix come from the updated
+  AEA checkout. The library release version remains v0.3.2.
 - Reorganized all 22 skills into compact entrypoints with detailed procedures
   and method background loaded from linked reference files. Added section loading
   with source receipts, a channel-identity check before average referencing,

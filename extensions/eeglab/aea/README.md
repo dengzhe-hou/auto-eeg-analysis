@@ -1,6 +1,6 @@
 # AEA for EEGLAB
 
-Version 0.1.1, preview. Adds **Tools > AEA** to EEGLAB. The adapter copies the
+Version 0.1.2, preview. Adds **Tools > AEA** to EEGLAB. The adapter copies the
 current dataset to a separate study folder, prepares the AEA handoff, starts your
 configured coding assistant in a terminal and opens the resulting HTML report.
 
@@ -10,8 +10,8 @@ For Windows, the [first-report walkthrough](https://dengzhe-hou.github.io/auto-e
 includes client setup and commands to locate the four Settings values. It is
 also available at `docs/WINDOWS_FIRST_RUN.md` in the matching AEA checkout.
 
-1. Set up the [AEA repository and Python environment](https://dengzhe-hou.github.io/auto-eeg-analysis/GETTING_STARTED.html), and sign in to Codex CLI or Claude Code.
-2. Download the [0.1.1 preview ZIP](https://github.com/dengzhe-hou/auto-eeg-analysis/releases/download/eeglab-v0.1.1-preview/aea-eeglab-0.1.1.zip). Remove any previous AEA plugin folder, then extract it into EEGLAB's `plugins` folder, giving `plugins/aea0.1.1/`. Alternatively copy this `aea` folder there. Install only one AEA plugin copy.
+1. Set up the [AEA repository and Python environment](https://dengzhe-hou.github.io/auto-eeg-analysis/GETTING_STARTED.html), update an existing checkout with `git pull --ff-only`, and sign in to Codex CLI or Claude Code. The checkout supplies the Python bridge and its Windows startup fix; it is a separate dependency from this ZIP.
+2. Extract `aea-eeglab-0.1.2.zip` into EEGLAB's `plugins` folder, giving `plugins/aea0.1.2/`. Remove any previous AEA plugin folder first. Alternatively copy this `aea` folder there. Install only one AEA plugin copy.
 3. Restart EEGLAB. Open **Tools > AEA > Settings** and select your AEA checkout, the full path to its Python executable, and your assistant (`codex` or `claude`). Set the assistant's full executable path if it is not on MATLAB's PATH.
 
 The Python field is the executable inside the environment, such as
@@ -62,7 +62,8 @@ readback, terminal launch with labelled test clients, and report-menu opening in
 Chrome. That initial test did not invoke a live model. A subsequent Windows test
 with additional export-menu and terminal-environment fixes completed a real Codex
 synthetic workflow, independent result/figure/report checks and a fresh-output
-replay. Those additional fixes are not in the published 0.1.1 ZIP. The live-client
+replay. The export-menu fix is included in 0.1.2; the terminal-environment fix
+comes from the updated AEA checkout. The live-client
 test required two Python execution approvals and does not establish unattended
 operation or real EEG analysis reliability. On 2026-10-29, the same fixed synthetic
 Windows route also passed with real Claude Code 2.1.312 (`claude-opus-5-5`, existing
@@ -73,8 +74,10 @@ own HTML-title checker needed a parser correction; analysis outputs were unchang
 Billed cost was unavailable. macOS/Linux desktop behavior remains untested. This
 preview is not yet in the EEGLAB extension catalogue.
 
-Version 0.1.1 includes the MATLAB fixes; the original `eeglab-v0.1.0-preview` tag
-predates them. Also update the AEA checkout (including `tools/install_skills.py`)
+The desktop runs above used the development sources labelled 0.1.1; 0.1.2
+packages that MATLAB implementation with a new version label. Version 0.1.1's
+published ZIP predates the export-menu fix. The original `eeglab-v0.1.0-preview`
+tag also predates the initial MATLAB fixes. Update the AEA checkout (including `tools/install_skills.py`)
 for the Windows skill-link fix. Windows skill discovery uses NTFS directory junctions without requiring
 symlink privileges; other systems use relative directory symlinks.
 

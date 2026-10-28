@@ -63,7 +63,7 @@ if has_graphics
     cleanup = onCleanup(@() close(fig));
     uimenu(fig, 'Tag', 'tools', 'Label', 'Tools');
     version = eegplugin_aea(fig, struct('no_check', ''), struct('add_to_hist', ''));
-    assert(strcmp(version, 'aea0.1.1'));
+    assert(strcmp(version, 'aea0.1.2'));
     menu = findobj(fig, 'Tag', 'aea_export');
     assert(numel(menu) == 1);
     assert(~isempty(strfind(get(menu, 'Callback'), 'pop_aea')));

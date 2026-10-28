@@ -14,17 +14,21 @@ commands to find the four Settings values.
 First complete [AEA setup](GETTING_STARTED.md) and sign in to your chosen Codex
 CLI or Claude Code client. The plugin does not include Python, MNE or a model.
 
-Download the [0.1.1 preview ZIP](https://github.com/dengzhe-hou/auto-eeg-analysis/releases/download/eeglab-v0.1.1-preview/aea-eeglab-0.1.1.zip),
+For an existing AEA checkout, save local edits and run `git pull --ff-only`
+before installing the plugin. The ZIP supplies the MATLAB adapter; the checkout
+supplies the Python bridge, including the Windows terminal-startup fix.
+
+Download the [0.1.2 preview ZIP](https://github.com/dengzhe-hou/auto-eeg-analysis/releases/download/eeglab-v0.1.2-preview/aea-eeglab-0.1.2.zip),
 or copy [extensions/eeglab/aea](https://github.com/dengzhe-hou/auto-eeg-analysis/tree/main/extensions/eeglab/aea)
 into your EEGLAB `plugins` folder and restart EEGLAB. An installable ZIP can also
 be built from the AEA checkout:
 
 ```bash
-python tools/package_eeglab_plugin.py --output aea-eeglab-0.1.1.zip
+python tools/package_eeglab_plugin.py --output aea-eeglab-0.1.2.zip
 ```
 
 Remove any previous AEA plugin folder, then extract it inside `plugins`, yielding
-`plugins/aea0.1.1/`. Install only one AEA plugin copy.
+`plugins/aea0.1.2/`. Install only one AEA plugin copy.
 
 Open **Tools > AEA > Settings** and set the AEA checkout folder, its Python
 executable, assistant choice and assistant executable. These are local settings.
@@ -81,10 +85,12 @@ Session token usage was recorded, but billed cost was unavailable and was not
 reported as zero. macOS/Linux desktop behavior remains untested. This extension
 is not yet in the official EEGLAB catalogue.
 
-The export-menu and Windows terminal-environment fixes from that subsequent test
-are changes after the 0.1.1 preview; its published ZIP has not been updated.
+The desktop runs above used development sources labelled 0.1.1. Preview 0.1.2
+packages the tested MATLAB export-menu fix with a new version label. The Windows
+terminal-environment fix is part of the companion AEA checkout, which must also
+be updated. The historical 0.1.1 ZIP has not been changed.
 
-The 0.1.1 preview ZIP includes the MATLAB fixes. The original
+The 0.1.1 preview ZIP includes the initial MATLAB compatibility fixes. The original
 `eeglab-v0.1.0-preview` tag predates them. Also update your AEA checkout for the
 Windows skill-link fix in `tools/install_skills.py`.
 

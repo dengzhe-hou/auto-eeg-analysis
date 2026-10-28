@@ -170,10 +170,10 @@ def test_plugin_archive_contains_the_installable_entrypoint_and_license(tmp_path
     archive = build_archive(ROOT, tmp_path / 'aea-eeglab.zip')
     with ZipFile(archive) as package:
         names = package.namelist()
-        assert 'aea0.1.1/eegplugin_aea.m' in names
-        assert 'aea0.1.1/pop_aea.m' in names
-        assert 'aea0.1.1/README.md' in names
-        assert 'aea0.1.1/LICENSE' in names
+        assert 'aea0.1.2/eegplugin_aea.m' in names
+        assert 'aea0.1.2/pop_aea.m' in names
+        assert 'aea0.1.2/README.md' in names
+        assert 'aea0.1.2/LICENSE' in names
         assert not any(name.endswith(('.set', '.fdt', '.json')) for name in names)
 
 
