@@ -52,9 +52,13 @@ after = pop_aea(EEG, 'project', project, 'repository', repository, ...
 assert(isequaln(before, after));
 assert(exist(fullfile(project, 'AEA_HANDOFF.json'), 'file') == 2);
 
-% Check menu objects and the public callback, without pretending a MATLAB GUI
-% was tested on this headless Octave installation.
-if ~isempty(available_graphics_toolkits())
+% Check menu objects and the public callback. Desktop interaction is tested
+% separately; Octave's graphics-toolkit query is not available in MATLAB.
+has_graphics = true;
+if exist('OCTAVE_VERSION', 'builtin')
+    has_graphics = ~isempty(available_graphics_toolkits());
+end
+if has_graphics
     fig = figure('visible', 'off');
     cleanup = onCleanup(@() close(fig));
     uimenu(fig, 'Tag', 'tools', 'Label', 'Tools');

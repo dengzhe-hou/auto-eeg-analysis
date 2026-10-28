@@ -50,10 +50,18 @@ python /path/to/aea/tools/eeglab_bridge.py session --project /path/to/study
 ```
 
 GNU Octave/EEGLAB export, MNE import, units, events, epoch timing and command
-routing are exercised by automated tests. Actual MATLAB GUI and desktop
-terminal launches need validation on the target machine; source support for an
-OS is not proof of that OS's GUI behavior. No live model is invoked by the tests.
-This preview is not yet in the EEGLAB extension catalogue.
+routing are exercised by automated tests. On 2026-10-28, the preview with the
+Windows/MATLAB fixes in this checkout passed a real Windows 11 desktop test with
+MATLAB R2026a Update 2, EEGLAB 2026.0.0, Python 3.12.10 and MNE 1.11.0. This
+covered menus, settings reload, continuous and four-epoch synthetic data, MNE
+readback, terminal launch with labelled test clients, and report-menu opening in
+Chrome. No live model or scientific analysis was run. macOS and Linux desktop
+behavior remain untested. This preview is not yet in the EEGLAB extension catalogue.
+
+The original `eeglab-v0.1.0-preview` tag predates these fixes. Use the updated AEA
+checkout (including `tools/install_skills.py`) and rebuild its plugin ZIP for
+Windows. Windows skill discovery uses NTFS directory junctions without requiring
+symlink privileges; other systems use relative directory symlinks.
 
 [Project](https://github.com/dengzhe-hou/auto-eeg-analysis) ·
 [EEGLAB plugin instructions](https://eeglab.org/tutorials/contribute/design_plugin.html)

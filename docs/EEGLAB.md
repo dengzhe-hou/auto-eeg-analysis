@@ -46,10 +46,17 @@ exports against real EEGLAB functions and MNE, compare sample values and event
 timing, and check that the original working EEG is preserved. Preparation itself
 does not invoke a model.
 
-GNU Octave checks do not establish MATLAB GUI compatibility. The preview's
-MATLAB dialog, desktop terminal launch and report-opening behavior must also be
-tested on the target MATLAB desktop. This extension has not been registered in
-the official EEGLAB catalogue.
+On 2026-10-28, the preview with the fixes in this checkout passed a real desktop
+test on Windows 11, MATLAB R2026a Update 2, EEGLAB 2026.0.0, Python 3.12.10 and
+MNE 1.11.0. Menus, settings save/reload, continuous and four-epoch synthetic data
+export/readback, desktop terminal launch and report-menu opening in Chrome were
+checked. Terminal tests used explicitly labelled local test clients; no live
+model or scientific analysis was run. macOS and Linux desktop behavior remain
+untested. This extension has not been registered in the official EEGLAB catalogue.
+
+The original `eeglab-v0.1.0-preview` tag predates the Windows/MATLAB fixes. Use an
+updated AEA checkout and build the ZIP above to include the menu fixes; the
+checkout also supplies the Windows skill-link fix in `tools/install_skills.py`.
 
 ## Current limits
 

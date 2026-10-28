@@ -113,10 +113,10 @@ that item intact. Move the conflicting item before retrying. Links track edits a
 updates to existing skills automatically; rerun the installer after pulling a
 version that adds new skills.
 
-On Windows, creating directory links requires symlink permission, for example with
-Developer Mode enabled or an appropriately privileged terminal. Alternatively, run
-the checkout, environment, installer, and client together inside WSL. A failed link
-installation reports an error and does not silently copy the skills.
+On Windows, the installer uses NTFS directory junctions, which do not require
+symlink privileges or Developer Mode. Other systems use relative directory
+symlinks. A failed link installation reports an error and does not silently copy
+the skills.
 
 ## 4. Prepare a study directory
 
@@ -301,7 +301,7 @@ numerical certification describe different evidence. See
 | Symptom | Next step |
 |---|---|
 | Skills do not appear in the client | [Install the links](#3-set-up-an-agent-optional), then restart the client from the AEA repository root. |
-| Windows cannot create skill links | Enable symlink permission or run the full setup inside WSL; see [skill installation](#3-set-up-an-agent-optional). |
+| Windows cannot create skill links | Update the checkout to use the junction-based installer and rerun it; see [skill installation](#3-set-up-an-agent-optional). |
 | A requested package or backend is missing | Check the active environment, install the selected analysis's dependencies and rerun the [environment probe](#2-check-the-analysis-environment). See [optional packages](PLATFORM_SUPPORT.md#known-gotchas). |
 | Windows crashes during LAPACK/SVD | Activate the environment or use `conda run`; see [Windows environment activation](PLATFORM_SUPPORT.md#windows-environment-activation). |
 | Raw files are not found or cannot be read | The header scanner expects files directly in `raw/`; retain companion files and describe nested/BIDS layouts as in [study preparation](#4-prepare-a-study-directory). |

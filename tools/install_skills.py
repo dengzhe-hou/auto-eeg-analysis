@@ -3,8 +3,8 @@
 from __future__ import annotations
 
 import argparse
-import errno
 import os
+import subprocess
 import sys
 from pathlib import Path
 
@@ -13,7 +13,7 @@ AGENT_DIRS = {"codex": ".agents", "claude": ".claude"}
 
 
 def install_skills(root: Path, agent: str) -> tuple[int, int]:
-    """Preflight all destinations, then create relative directory symlinks."""
+    """Preflight destinations, then link skills (Windows uses directory junctions)."""
     sources = sorted(p.parent for p in (root / "skills").glob("*/SKILL.md") if p.is_file())
     if not sources:
         raise ValueError(f"No skills found under {root / 'skills'}")
@@ -32,7 +32,7 @@ def install_skills(root: Path, agent: str) -> tuple[int, int]:
             destination = destination_dir / source.name
             if not os.path.lexists(destination):
                 pending.append((source, destination))
-            elif destination.is_symlink() and destination.resolve() == source:
+            elif destination.resolve() == source:
                 unchanged += 1
             else:
                 conflicts.append(f"{destination}: already exists and is not a link to {source}")
@@ -43,8 +43,13 @@ def install_skills(root: Path, agent: str) -> tuple[int, int]:
 
     for source, destination in pending:
         destination.parent.mkdir(parents=True, exist_ok=True)
-        destination.symlink_to(os.path.relpath(source, destination.parent),
-                               target_is_directory=True)
+        if os.name == 'nt':
+            # Local NTFS junctions work without symlink privileges or Developer Mode.
+            subprocess.run(['cmd', '/c', 'mklink', '/J', str(destination), str(source)],
+                           check=True, capture_output=True)
+        else:
+            destination.symlink_to(os.path.relpath(source, destination.parent),
+                                   target_is_directory=True)
     return len(pending), unchanged
 
 
@@ -56,14 +61,8 @@ def main(argv: list[str] | None = None) -> int:
     root = Path(__file__).resolve().parents[1]
     try:
         created, unchanged = install_skills(root, args.agent)
-    except (ValueError, OSError) as exc:
+    except (ValueError, OSError, subprocess.SubprocessError) as exc:
         print(f"Skill installation failed: {exc}", file=sys.stderr)
-        if (getattr(exc, "winerror", None) == 1314
-                or (os.name == "nt" and isinstance(exc, OSError)
-                    and exc.errno in (errno.EACCES, errno.EPERM))):
-            print("Windows requires permission to create symbolic links. Enable Developer "
-                  "Mode, use a terminal with symlink privileges, or run from WSL.",
-                  file=sys.stderr)
         return 1
     print(f"Skills in {root}: created {created} link(s); {unchanged} already installed.")
     print("Restart your agent session in this checkout to discover the skills.")

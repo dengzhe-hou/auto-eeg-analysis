@@ -80,7 +80,7 @@ def test_prepare_reads_real_set_and_does_not_start_a_model(study, monkeypatch):
     handoff = bridge.read_json(project / 'AEA_HANDOFF.json')
     assert handoff['scientific_plan_approved_by_export'] is False
     assert handoff['model_invoked_during_preparation'] is False
-    assert (repository / '.agents/skills/eeg-recipe').is_symlink()
+    assert (repository / '.agents/skills/eeg-recipe').resolve() == repository / 'skills/eeg-recipe'
     assert (project / 'DATASET_BRIEF.md').exists()
 
 

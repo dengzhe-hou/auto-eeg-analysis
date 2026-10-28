@@ -7,6 +7,7 @@ import shutil
 import subprocess
 import sys
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 
@@ -45,8 +46,12 @@ def test_installs_selected_clients_and_repeated_run_is_noop(checkout, agent, fol
         assert sorted(p.name for p in installed.iterdir()) == [p.name for p in sources]
         for source in sources:
             link = installed / source.name
-            assert link.is_symlink()
-            assert not Path(os.readlink(link)).is_absolute()
+            # Both junctions and symlinks expose the source directory. Do not
+            # require Path.is_junction(), which is absent in supported Python 3.11.
+            assert link.is_dir()
+            if os.name != 'nt':
+                assert link.is_symlink()
+                assert not Path(os.readlink(link)).is_absolute()
             assert link.resolve() == source
             assert (link / "SKILL.md").read_bytes() == (source / "SKILL.md").read_bytes()
             assert (link / "references/procedure.md").read_bytes() == (source / "references/procedure.md").read_bytes()
@@ -81,6 +86,12 @@ def test_conflict_preserves_user_entry_and_creates_no_partial_install(checkout, 
     elif kind == "directory":
         conflict.mkdir()
         (conflict / "user.txt").write_text("user skill", encoding="utf-8")
+    elif os.name == 'nt':
+        target = checkout / "user-skill"
+        target.mkdir()
+        (target / "user.txt").write_text("user skill", encoding="utf-8")
+        subprocess.run(['cmd', '/c', 'mklink', '/J', str(conflict), str(target)],
+                       check=True, capture_output=True)
     else:
         conflict.symlink_to("missing-user-skill", target_is_directory=True)
     unrelated = destination_dir / "my-skill"
@@ -96,6 +107,9 @@ def test_conflict_preserves_user_entry_and_creates_no_partial_install(checkout, 
         assert conflict.read_text(encoding="utf-8-sig") == "user file"
     elif kind == "directory":
         assert (conflict / "user.txt").read_text(encoding="utf-8-sig") == "user skill"
+    elif os.name == 'nt':
+        assert conflict.resolve() == target
+        assert (target / "user.txt").read_text(encoding="utf-8-sig") == "user skill"
     else:
         assert conflict.is_symlink()
         assert os.readlink(conflict) == "missing-user-skill"
@@ -109,20 +123,20 @@ def test_agent_is_required(checkout):
     assert not (checkout / ".claude").exists()
 
 
-def test_windows_symlink_permission_error_is_actionable(checkout, monkeypatch, capsys):
+def test_windows_junction_failure_is_reported(checkout, monkeypatch, capsys):
     spec = importlib.util.spec_from_file_location("aea_install_skills",
                                                 checkout / "tools" / "install_skills.py")
     installer = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(installer)
 
-    def deny_symlink(*args, **kwargs):
-        error = OSError("A required privilege is not held by the client")
-        error.winerror = 1314
-        raise error
+    def deny_junction(command, **kwargs):
+        raise subprocess.CalledProcessError(1, command)
 
-    monkeypatch.setattr(installer.os, "symlink", deny_symlink)
+    # Exercise the Windows failure handler without changing pathlib's host OS.
+    monkeypatch.setattr(installer, "os", SimpleNamespace(name="nt", path=os.path))
+    monkeypatch.setattr(installer.subprocess, "run", deny_junction)
     assert installer.main(["--agent", "codex"]) == 1
     error = capsys.readouterr().err
-    assert "Developer Mode" in error
-    assert "terminal with symlink privileges" in error
-    assert "WSL" in error
+    assert "Skill installation failed" in error
+    assert "mklink" in error
+    assert "Developer Mode" not in error
