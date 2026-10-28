@@ -66,9 +66,20 @@ actual SVG trace coordinates and displayed report values passed. Replaying the
 generated script in a new output directory passed the same checks. The export
 callback was corrected to preserve the working EEG history and avoid a new-dataset
 dialog. Initial failures were retained; the Windows client-startup fix is described below.
-This is one synthetic engineering integration test, without statistical inference
-or evidence of general analysis reliability. Claude Code and macOS/Linux desktop
-behavior remain untested. This extension is not yet in the official EEGLAB catalogue.
+This is a synthetic engineering integration test, without statistical inference
+or evidence of general analysis reliability.
+
+On 2026-10-29, the same fixed fixture passed the complete Windows route with
+Claude Code 2.1.312, model `claude-opus-5-5` and its existing `auto` permission
+mode. The actual EEGLAB export/start/report menus, all-sample MNE checks,
+independent numerical/SVG/report checks and a fresh-directory replay passed.
+First-time CLI sign-in and text-style initialization needed manual completion;
+analysis commands raised no human execution-approval prompts in that session.
+The client's own HTML-title checker initially failed because it included the
+inline SVG title. Its parser was corrected; the analysis and report were unchanged.
+Session token usage was recorded, but billed cost was unavailable and was not
+reported as zero. macOS/Linux desktop behavior remains untested. This extension
+is not yet in the official EEGLAB catalogue.
 
 The export-menu and Windows terminal-environment fixes from that subsequent test
 are changes after the 0.1.1 preview; its published ZIP has not been updated.

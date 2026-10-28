@@ -2,8 +2,10 @@
 
 Use this walkthrough for **Windows MATLAB/EEGLAB → AEA → a coding client → an HTML report**.
 MATLAB supplies the menu and dataset; Python/MNE performs the import checks and
-most analysis. Codex CLI and Claude Code are separate client choices. The tested
-Windows real-client route used Codex; the corresponding Claude test is pending.
+most analysis. Codex CLI and Claude Code are separate client choices. Both routes
+have completed the fixed four-epoch synthetic Windows integration test, including
+independent result checks, replay and opening the generated report from EEGLAB.
+This does not establish real EEG analysis reliability or unattended first-time setup.
 
 ## 1. Prepare the analysis environment
 
@@ -41,6 +43,17 @@ After installation, open a new prompt, return to the AEA folder and activate
 `aeais`. Run `codex --version` then `codex`, or `claude --version` then `claude`,
 and follow the client's login prompts. Retain your chosen model and permissions.
 An account or API connection is separate from the Python environment.
+
+On Claude Code's first launch, select a terminal text style (for example, **Dark mode**)
+and complete sign-in before returning to EEGLAB. Check the CLI login separately,
+even if you already use the Claude Desktop app:
+
+```powershell
+claude auth status
+```
+
+Continue when it reports `"loggedIn": true`. A terminal waiting at the initial
+style or sign-in screen has not started the study analysis.
 
 ## 3. Connect the skills
 

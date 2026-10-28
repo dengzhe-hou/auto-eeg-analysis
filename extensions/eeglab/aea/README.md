@@ -64,8 +64,14 @@ with additional export-menu and terminal-environment fixes completed a real Code
 synthetic workflow, independent result/figure/report checks and a fresh-output
 replay. Those additional fixes are not in the published 0.1.1 ZIP. The live-client
 test required two Python execution approvals and does not establish unattended
-operation or real EEG analysis reliability. Claude Code and macOS/Linux desktop
-behavior remain untested. This preview is not yet in the EEGLAB extension catalogue.
+operation or real EEG analysis reliability. On 2026-10-29, the same fixed synthetic
+Windows route also passed with real Claude Code 2.1.312 (`claude-opus-5-5`, existing
+`auto` permission mode), independent input/result/SVG/report checks and a fresh
+replay. First-time CLI login and text-style initialization needed manual completion;
+analysis commands needed no human execution approvals in that session. The client's
+own HTML-title checker needed a parser correction; analysis outputs were unchanged.
+Billed cost was unavailable. macOS/Linux desktop behavior remains untested. This
+preview is not yet in the EEGLAB extension catalogue.
 
 Version 0.1.1 includes the MATLAB fixes; the original `eeglab-v0.1.0-preview` tag
 predates them. Also update the AEA checkout (including `tools/install_skills.py`)
