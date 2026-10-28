@@ -87,7 +87,7 @@ See [`CONTRIBUTING.md`](../CONTRIBUTING.md). Short version:
 4. Validate against ≥1 publicly available dataset.
 5. Open a PR with the dataset, parameters, execution command, numerical results, and test outcome. Reviewers check the cited method, the completed run, and the declared numerical expectations.
 
-Each accepted recipe earns the contributor a co-authorship line in the eventual AEA paper (similar to how MNE handles tutorial contributions).
+Significant contributors, including contributors of major recipes, are invited as co-authors on the AEA paper; see the [contribution guide](../CONTRIBUTING.md#recognition).
 
 ## Recipes and project analysis plans
 

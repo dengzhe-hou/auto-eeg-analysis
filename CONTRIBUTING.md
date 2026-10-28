@@ -2,6 +2,15 @@
 
 Contributions can add an analysis recipe, improve a skill, or fix code and documentation. Start with [Getting started](docs/GETTING_STARTED.md) to set up the environment and load the skills. The [recipe library](recipes/README.md) lists the existing analyses; the [backend registry](tools/env/backends.json) records available backend capabilities.
 
+## Your first pull request
+
+1. Fork this repository, clone your fork, and create a branch for one focused change. A confusing instruction, a reproducible bug, or a missing method reference is a useful starting point.
+2. Follow the relevant contribution section below. Keep the source references, analysis choices, and existing results visible when changing a skill or recipe.
+3. Run the checks relevant to your change and record their outcomes. Documentation fixes can be reviewed through the diff and changed links; they do not require an EEG dataset or a model account.
+4. Open a pull request against `main`. The pull request template asks what changed, how you checked it, and how to reproduce any analysis result. Maintainers review the method, implementation, and evidence before merging.
+
+Use a public or synthetic example when sharing a bug report. Remove account credentials, personal information, and private participant data from logs and screenshots.
+
 ## Contribute a recipe
 
 A recipe is a reusable Markdown specification of a published EEG analysis: data requirements, parameters, claims, figures, and references.
@@ -34,7 +43,7 @@ MNE is the primary execution backend. Existing EEGLAB and FieldTrip paths have s
 
 For usage questions, check [troubleshooting](docs/GETTING_STARTED.md#troubleshooting), then
 open a [GitHub issue](https://github.com/dengzhe-hou/auto-eeg-analysis/issues/new/choose).
-Issues are the public support channel; maintainer contact is in [CITATION.cff](CITATION.cff).
+Issues are the public support channel for project questions and reproducible bug reports.
 
 Bug reports are most useful with the command or prompt, traceback, affected skill or recipe, environment details, and a small public or synthetic example. For documentation fixes, link the relevant instructions and explain the step that was confusing or incorrect.
 
@@ -42,7 +51,7 @@ Useful starting points include [tools/env/](tools/env/), [tools/auto_brief.py](t
 
 ## Run the checks
 
-From the repository root, after creating the `aeais` environment as described in [Getting started](docs/GETTING_STARTED.md):
+Choose checks that exercise the changed behavior. For code, skills, recipes, or plugin changes, run the relevant tests and record the actual environment. From the repository root, the full suite uses the `aeais` environment described in [Getting started](docs/GETTING_STARTED.md):
 
 ```bash
 conda run -n aeais python -m pytest tools/tests/ recipes/

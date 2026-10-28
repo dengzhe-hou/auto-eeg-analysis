@@ -5,7 +5,7 @@ AEA (Automated EEG Analysis) is an open library of **22 skills and 10 recipes** 
 
 You specify the study and approve the plan. A coding agent adapts and executes the templates in your environment, keeping the plan, code, results, figures, methods text, and review records together.
 
-[Website](https://dengzhe-hou.github.io/auto-eeg-analysis/) · [Documentation](docs/GETTING_STARTED.md) · [Recipes](recipes/README.md) · [Validation coverage](docs/CERTIFICATION_LEVELS.md) · [Releases](https://github.com/dengzhe-hou/auto-eeg-analysis/releases/latest)
+[Website](https://dengzhe-hou.github.io/auto-eeg-analysis/) · [Documentation](docs/GETTING_STARTED.md) · [Recipes](recipes/README.md) · [Validation coverage](docs/CERTIFICATION_LEVELS.md) · [Contribute](CONTRIBUTING.md) · [Releases](https://github.com/dengzhe-hou/auto-eeg-analysis/releases/latest)
 
 ## Quickstart
 
