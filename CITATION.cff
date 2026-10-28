@@ -5,7 +5,6 @@ type: software
 authors:
   - family-names: Hou
     given-names: Dengzhe
-    email: hou.dengzhe.t8@dc.tohoku.ac.jp
     affiliation: Tohoku University
 repository-code: "https://github.com/dengzhe-hou/auto-eeg-analysis"
 abstract: >
