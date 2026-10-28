@@ -56,11 +56,21 @@ def study(tmp_path):
 def test_prepare_reads_real_set_and_does_not_start_a_model(study, monkeypatch):
     project, repository, values = study
 
-    def reject_process(*args, **kwargs):
-        pytest.fail('Preparation must not launch a model or subprocess')
+    original_popen = bridge.subprocess.Popen
 
-    monkeypatch.setattr(bridge.subprocess, 'call', reject_process)
-    monkeypatch.setattr(bridge.subprocess, 'Popen', reject_process)
+    def reject_assistant(command, *args, **kwargs):
+        executable = Path(command[0]).name.lower()
+        if executable in {'codex', 'claude', 'codex.exe', 'claude.exe', 'codex.cmd', 'claude.cmd'}:
+            pytest.fail('Preparation must not launch a coding assistant')
+        # MNE/Matplotlib may query fonts with fc-list on a cold machine.
+        return original_popen(command, *args, **kwargs)
+
+    def reject_session(*args, **kwargs):
+        pytest.fail('Preparation must not start an assistant session')
+
+    monkeypatch.setattr(bridge.subprocess, 'Popen', reject_assistant)
+    monkeypatch.setattr(bridge, 'session', reject_session)
+    monkeypatch.setattr(bridge, 'launch', reject_session)
     result = bridge.prepare(project)
     assert result['status'] == 'prepared'
     raw = mne.io.read_raw_eeglab(project / 'input/imported.set', preload=True, verbose='ERROR')

@@ -1,5 +1,9 @@
 % Run against real EEGLAB functions; no signal-processing or model stubs.
 function test_aea_export(repository, eeglab, output, python)
+had_preferences = ispref('AEA');
+previous_preferences = struct();
+if had_preferences, previous_preferences = getpref('AEA'); end
+pref_cleanup = onCleanup(@() restore_preferences(had_preferences, previous_preferences));
 addpath(genpath(fullfile(eeglab, 'functions')));
 addpath(fullfile(eeglab, 'plugins', 'dipfit'));
 addpath(fullfile(repository, 'extensions', 'eeglab', 'aea'));
@@ -61,4 +65,12 @@ if ~isempty(available_graphics_toolkits())
     assert(~isempty(strfind(get(menu, 'Callback'), 'pop_aea')));
 end
 fprintf('AEA_EXPORT_TEST_PASSED\n');
+end
+
+function restore_preferences(had_preferences, previous)
+if ispref('AEA'), rmpref('AEA'); end
+if had_preferences
+    names = fieldnames(previous);
+    for k = 1:numel(names), setpref('AEA', names{k}, previous.(names{k})); end
+end
 end
