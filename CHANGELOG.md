@@ -26,6 +26,10 @@ with missing helpers in the older release.
 
 These changes have not been assigned a new release tag.
 
+- Added a preview EEGLAB extension with a Tools menu, dataset/event/history
+  export, study preparation, interactive Codex/Claude handoff and a report entry.
+  Automated checks exercise real EEGLAB/Octave exports and MNE import. MATLAB
+  desktop validation and official EEGLAB catalogue registration are pending.
 - Reorganized all 22 skills into compact entrypoints with detailed procedures
   and method background loaded from linked reference files. Added section loading
   with source receipts, a channel-identity check before average referencing,

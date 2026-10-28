@@ -9,6 +9,7 @@ Choose a starting point:
 
 - **Fixed Python N400 tutorial:** set up the shared analysis environment in steps 1–2, then follow the [full example](EXAMPLES.md#erp-core-complete-n400-recipe-case). It needs Git, Conda, the EEG files and Arial or Helvetica. No agent client, model account, skills installation or reviewer is required.
 - **Analysis with a coding agent:** after steps 1–2, continue through steps 3–5. This route needs a signed-in client, installed skill links, researcher approval and a [configured reviewer](#configure-the-reviewer) for the default audit.
+- **Start from EEGLAB:** after setting up AEA and its client, install the [preview EEGLAB extension](EEGLAB.md) to export the current dataset and open the study from a Tools menu.
 
 ## 1. Prepare the software
 

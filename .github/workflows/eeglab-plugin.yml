@@ -1,0 +1,60 @@
+name: EEGLAB plugin
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'extensions/eeglab/**'
+      - 'tools/eeglab_bridge.py'
+      - 'tools/package_eeglab_plugin.py'
+      - 'tools/install_skills.py'
+      - 'tools/tests/test_eeglab_bridge.py'
+      - '.github/workflows/eeglab-plugin.yml'
+  pull_request:
+    paths:
+      - 'extensions/eeglab/**'
+      - 'tools/eeglab_bridge.py'
+      - 'tools/package_eeglab_plugin.py'
+      - 'tools/install_skills.py'
+      - 'tools/tests/test_eeglab_bridge.py'
+      - '.github/workflows/eeglab-plugin.yml'
+  workflow_dispatch:
+
+jobs:
+  octave-roundtrip:
+    name: EEGLAB export and MNE import
+    runs-on: ubuntu-latest
+    env:
+      AEA_OCTAVE: /usr/bin/octave-cli
+      EEGLAB_PATH: ${{ github.workspace }}/.ci/eeglab
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check out the tested EEGLAB source
+        uses: actions/checkout@v4
+        with:
+          repository: sccn/eeglab
+          ref: 420769355b4e754628edfb43da2eb02c72fb8333
+          path: .ci/eeglab
+      - name: Check out its DIPFIT dependency
+        uses: actions/checkout@v4
+        with:
+          repository: sccn/dipfit
+          ref: b0b660e7efca0a9b68a4afb4e1749042e327b90c
+          path: .ci/eeglab/plugins/dipfit
+      - name: Install GNU Octave
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends octave gnuplot-nox
+      - uses: mamba-org/setup-micromamba@v2
+        with:
+          environment-file: tools/env/environment-pinned.yml
+          cache-environment: true
+          cache-downloads: true
+      - name: Test the actual export and handoff
+        run: micromamba run -n aeais python -m pytest tools/tests/test_eeglab_bridge.py -v
+      - name: Build the installable plugin
+        run: micromamba run -n aeais python tools/package_eeglab_plugin.py --output aea-eeglab-0.1.0.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: aea-eeglab-preview
+          path: aea-eeglab-0.1.0.zip
