@@ -166,7 +166,12 @@ def launch(project: Path):
     client_command(project)  # Fail here for missing setup, before opening a terminal.
     arguments = [sys.executable, str(Path(__file__).resolve()), "session", "--project", str(project)]
     if sys.platform == "win32":
-        process = subprocess.Popen(arguments, creationflags=subprocess.CREATE_NEW_CONSOLE)
+        env = os.environ.copy()
+        # MATLAB can inherit TERM=dumb from its launcher. The new Windows
+        # console is interactive; this stale value blocks Codex before startup.
+        if env.get("TERM") == "dumb":
+            env.pop("TERM")
+        process = subprocess.Popen(arguments, creationflags=subprocess.CREATE_NEW_CONSOLE, env=env)
     elif sys.platform == "darwin":
         script = project / "start_aea.command"
         script.write_text("#!/bin/bash\nexec " + shlex.join(arguments) + "\n", encoding="utf-8")

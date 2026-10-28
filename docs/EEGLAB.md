@@ -5,6 +5,10 @@ prepare a separate study folder, open your coding assistant and return to the
 saved report from EEGLAB. Analysis still uses your approved study choices and
 AEA's existing skills and recipes, mainly with MNE-Python.
 
+For a first installation on Windows, follow the
+[first-report walkthrough](WINDOWS_FIRST_RUN.md), including client login and
+commands to find the four Settings values.
+
 ## Install the preview
 
 First complete [AEA setup](GETTING_STARTED.md) and sign in to your chosen Codex
@@ -47,13 +51,27 @@ exports against real EEGLAB functions and MNE, compare sample values and event
 timing, and check that the original working EEG is preserved. Preparation itself
 does not invoke a model.
 
-On 2026-10-28, the preview with the fixes in this checkout passed a real desktop
-test on Windows 11, MATLAB R2026a Update 2, EEGLAB 2026.0.0, Python 3.12.10 and
-MNE 1.11.0. Menus, settings save/reload, continuous and four-epoch synthetic data
-export/readback, desktop terminal launch and report-menu opening in Chrome were
-checked. Terminal tests used explicitly labelled local test clients; no live
-model or scientific analysis was run. macOS and Linux desktop behavior remain
-untested. This extension has not been registered in the official EEGLAB catalogue.
+On 2026-10-28, the preview with the fixes in this checkout passed real desktop
+tests on Windows 11, MATLAB R2026a Update 2, EEGLAB 2026.0.0, Python 3.12.10 and
+MNE 1.11.0. The initial test covered menus, settings save/reload, continuous and
+four-epoch synthetic data export/readback, terminal launch with labelled test
+clients, and report-menu opening in Chrome.
+
+A subsequent test on the same Windows configuration used the actual EEGLAB
+menus to export four synthetic epochs, start Codex CLI 0.165.0-alpha.1.2 and open
+its generated report. The client used its existing gpt-6.1-sol/xhigh configuration;
+two Python commands required user approval under its existing permission policy.
+Independent checks of all 808 input samples, the three known-answer measurements,
+actual SVG trace coordinates and displayed report values passed. Replaying the
+generated script in a new output directory passed the same checks. The export
+callback was corrected to preserve the working EEG history and avoid a new-dataset
+dialog. Initial failures were retained; the Windows client-startup fix is described below.
+This is one synthetic engineering integration test, without statistical inference
+or evidence of general analysis reliability. Claude Code and macOS/Linux desktop
+behavior remain untested. This extension is not yet in the official EEGLAB catalogue.
+
+The export-menu and Windows terminal-environment fixes from that subsequent test
+are changes after the 0.1.1 preview; its published ZIP has not been updated.
 
 The 0.1.1 preview ZIP includes the MATLAB fixes. The original
 `eeglab-v0.1.0-preview` tag predates them. Also update your AEA checkout for the
@@ -71,3 +89,26 @@ See the [plugin README](https://github.com/dengzhe-hou/auto-eeg-analysis/tree/ma
 for command-line retry instructions and requirements. The adapter follows
 [EEGLAB's plugin interface](https://eeglab.org/tutorials/contribute/design_plugin.html);
 official catalogue distribution requires a separate submission and approval.
+
+## Windows client startup
+
+If Codex pauses with `TERM is set to "dumb"`, update the AEA checkout. The Windows
+launcher removes that inherited value when creating a new interactive console.
+It preserves the remaining environment and does not select a model or permissions.
+
+Check the selected executable with `--version` and `login status`. An older npm
+CLI may reject configuration written by a newer desktop app. Use an installed
+CLI version that understands the existing configuration rather than changing
+the model or permission settings to accommodate an older binary.
+
+The tested desktop-app bundled Codex CLI 0.165.0-alpha.1.2 reported a missing
+background-service package when started outside the app. In that test, a local
+`.cmd` launcher calling the same binary with `--no-daemon %*` allowed it to run
+with its existing model, login and permission settings. Select such a launcher
+in Settings before exporting when using that tested configuration. Prefer a
+normal standalone CLI installation for routine setup.
+
+The exported study stores its own client executable in `AEA_BRIDGE_CONFIG.json`.
+Changing Settings affects new exports. To repair an existing study's client
+installation, update that field explicitly and keep the original configuration
+with the study's troubleshooting record.

@@ -30,7 +30,7 @@ Choose a recipe that matches your paradigm. For ERP CORE, follow the [copy-ready
 
 Confirm the analysis plan before execution and [configure the reviewer](docs/GETTING_STARTED.md#configure-the-reviewer) for the audit stage. The [setup guide](docs/GETTING_STARTED.md) covers data formats, study directories, Windows, and output files.
 
-Using EEGLAB? The [preview extension](docs/EEGLAB.md) adds a Tools menu for exporting the current dataset, preparing an AEA study, starting your assistant, and opening the saved report.
+Using Windows and EEGLAB? Follow the [first-report walkthrough](docs/WINDOWS_FIRST_RUN.md) for client installation, Python and executable paths, menu settings, and opening the report. The [preview extension](docs/EEGLAB.md) connects EEGLAB to AEA; analysis mainly uses Python/MNE.
 
 > [!TIP]
 > To try the N400 example without an agent or model account, use the [fixed Python tutorial](docs/EXAMPLES.md#erp-core-complete-n400-recipe-case). You can also [replot the saved results without raw EEG](docs/EXAMPLES.md#replot-the-saved-results).

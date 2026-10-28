@@ -6,6 +6,10 @@ configured coding assistant in a terminal and opens the resulting HTML report.
 
 ## Install
 
+For Windows, the [first-report walkthrough](https://dengzhe-hou.github.io/auto-eeg-analysis/WINDOWS_FIRST_RUN.html)
+includes client setup and commands to locate the four Settings values. It is
+also available at `docs/WINDOWS_FIRST_RUN.md` in the matching AEA checkout.
+
 1. Set up the [AEA repository and Python environment](https://dengzhe-hou.github.io/auto-eeg-analysis/GETTING_STARTED.html), and sign in to Codex CLI or Claude Code.
 2. Download the [0.1.1 preview ZIP](https://github.com/dengzhe-hou/auto-eeg-analysis/releases/download/eeglab-v0.1.1-preview/aea-eeglab-0.1.1.zip). Remove any previous AEA plugin folder, then extract it into EEGLAB's `plugins` folder, giving `plugins/aea0.1.1/`. Alternatively copy this `aea` folder there. Install only one AEA plugin copy.
 3. Restart EEGLAB. Open **Tools > AEA > Settings** and select your AEA checkout, the full path to its Python executable, and your assistant (`codex` or `claude`). Set the assistant's full executable path if it is not on MATLAB's PATH.
@@ -55,7 +59,12 @@ Windows/MATLAB fixes in this checkout passed a real Windows 11 desktop test with
 MATLAB R2026a Update 2, EEGLAB 2026.0.0, Python 3.12.10 and MNE 1.11.0. This
 covered menus, settings reload, continuous and four-epoch synthetic data, MNE
 readback, terminal launch with labelled test clients, and report-menu opening in
-Chrome. No live model or scientific analysis was run. macOS and Linux desktop
+Chrome. That initial test did not invoke a live model. A subsequent Windows test
+with additional export-menu and terminal-environment fixes completed a real Codex
+synthetic workflow, independent result/figure/report checks and a fresh-output
+replay. Those additional fixes are not in the published 0.1.1 ZIP. The live-client
+test required two Python execution approvals and does not establish unattended
+operation or real EEG analysis reliability. Claude Code and macOS/Linux desktop
 behavior remain untested. This preview is not yet in the EEGLAB extension catalogue.
 
 Version 0.1.1 includes the MATLAB fixes; the original `eeglab-v0.1.0-preview` tag

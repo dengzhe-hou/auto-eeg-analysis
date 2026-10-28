@@ -143,6 +143,29 @@ def test_headless_launch_reports_a_manual_command(study, monkeypatch):
         bridge.launch(project)
 
 
+def test_windows_new_console_does_not_inherit_dumb_terminal(study, monkeypatch):
+    from types import SimpleNamespace
+    project, _, _ = study
+    bridge.prepare(project)
+    path = project / 'AEA_BRIDGE_CONFIG.json'
+    config = bridge.read_json(path)
+    config['client_executable'] = sys.executable
+    bridge.write_json(path, config)
+    monkeypatch.setattr(bridge.sys, 'platform', 'win32')
+    monkeypatch.setenv('TERM', 'dumb')
+    monkeypatch.setenv('AEA_TEST_PRESERVED', 'same')
+    monkeypatch.setattr(bridge.subprocess, 'CREATE_NEW_CONSOLE', 16, raising=False)
+    captured = {}
+    def popen(command, **kwargs):
+        captured.update(command=command, **kwargs)
+        return SimpleNamespace(pid=123)
+    monkeypatch.setattr(bridge.subprocess, 'Popen', popen)
+    assert bridge.launch(project)['pid'] == 123
+    assert 'TERM' not in captured['env']
+    assert captured['env']['AEA_TEST_PRESERVED'] == 'same'
+    assert captured['creationflags'] == 16
+
+
 def test_plugin_archive_contains_the_installable_entrypoint_and_license(tmp_path):
     archive = build_archive(ROOT, tmp_path / 'aea-eeglab.zip')
     with ZipFile(archive) as package:
