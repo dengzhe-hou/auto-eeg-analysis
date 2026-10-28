@@ -1,13 +1,13 @@
 # AEA for EEGLAB
 
-Version 0.1.0, preview. Adds **Tools > AEA** to EEGLAB. The adapter copies the
+Version 0.1.1, preview. Adds **Tools > AEA** to EEGLAB. The adapter copies the
 current dataset to a separate study folder, prepares the AEA handoff, starts your
 configured coding assistant in a terminal and opens the resulting HTML report.
 
 ## Install
 
 1. Set up the [AEA repository and Python environment](https://dengzhe-hou.github.io/auto-eeg-analysis/GETTING_STARTED.html), and sign in to Codex CLI or Claude Code.
-2. Extract the plugin ZIP into EEGLAB's `plugins` folder, giving a folder such as `plugins/aea0.1.0/`. Alternatively copy this `aea` folder there.
+2. Download the [0.1.1 preview ZIP](https://github.com/dengzhe-hou/auto-eeg-analysis/releases/download/eeglab-v0.1.1-preview/aea-eeglab-0.1.1.zip). Remove any previous AEA plugin folder, then extract it into EEGLAB's `plugins` folder, giving `plugins/aea0.1.1/`. Alternatively copy this `aea` folder there. Install only one AEA plugin copy.
 3. Restart EEGLAB. Open **Tools > AEA > Settings** and select your AEA checkout, the full path to its Python executable, and your assistant (`codex` or `claude`). Set the assistant's full executable path if it is not on MATLAB's PATH.
 
 The Python field is the executable inside the environment, such as
@@ -58,9 +58,9 @@ readback, terminal launch with labelled test clients, and report-menu opening in
 Chrome. No live model or scientific analysis was run. macOS and Linux desktop
 behavior remain untested. This preview is not yet in the EEGLAB extension catalogue.
 
-The original `eeglab-v0.1.0-preview` tag predates these fixes. Use the updated AEA
-checkout (including `tools/install_skills.py`) and rebuild its plugin ZIP for
-Windows. Windows skill discovery uses NTFS directory junctions without requiring
+Version 0.1.1 includes the MATLAB fixes; the original `eeglab-v0.1.0-preview` tag
+predates them. Also update the AEA checkout (including `tools/install_skills.py`)
+for the Windows skill-link fix. Windows skill discovery uses NTFS directory junctions without requiring
 symlink privileges; other systems use relative directory symlinks.
 
 [Project](https://github.com/dengzhe-hou/auto-eeg-analysis) ·

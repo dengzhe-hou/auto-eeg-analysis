@@ -53,8 +53,8 @@ jobs:
       - name: Test the actual export and handoff
         run: micromamba run -n aeais python -m pytest tools/tests/test_eeglab_bridge.py -v
       - name: Build the installable plugin
-        run: micromamba run -n aeais python tools/package_eeglab_plugin.py --output aea-eeglab-0.1.0.zip
+        run: micromamba run -n aeais python tools/package_eeglab_plugin.py --output aea-eeglab-0.1.1.zip
       - uses: actions/upload-artifact@v4
         with:
           name: aea-eeglab-preview
-          path: aea-eeglab-0.1.0.zip
+          path: aea-eeglab-0.1.1.zip

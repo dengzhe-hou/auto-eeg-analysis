@@ -10,16 +10,17 @@ AEA's existing skills and recipes, mainly with MNE-Python.
 First complete [AEA setup](GETTING_STARTED.md) and sign in to your chosen Codex
 CLI or Claude Code client. The plugin does not include Python, MNE or a model.
 
-Copy [extensions/eeglab/aea](https://github.com/dengzhe-hou/auto-eeg-analysis/tree/main/extensions/eeglab/aea)
-into your EEGLAB `plugins` folder and restart EEGLAB. An installable ZIP can be
-built from the AEA checkout:
+Download the [0.1.1 preview ZIP](https://github.com/dengzhe-hou/auto-eeg-analysis/releases/download/eeglab-v0.1.1-preview/aea-eeglab-0.1.1.zip),
+or copy [extensions/eeglab/aea](https://github.com/dengzhe-hou/auto-eeg-analysis/tree/main/extensions/eeglab/aea)
+into your EEGLAB `plugins` folder and restart EEGLAB. An installable ZIP can also
+be built from the AEA checkout:
 
 ```bash
-python tools/package_eeglab_plugin.py --output aea-eeglab-0.1.0.zip
+python tools/package_eeglab_plugin.py --output aea-eeglab-0.1.1.zip
 ```
 
-Extract it inside `plugins`, yielding `plugins/aea0.1.0/`. Avoid installing both
-the copied folder and ZIP version at the same time.
+Remove any previous AEA plugin folder, then extract it inside `plugins`, yielding
+`plugins/aea0.1.1/`. Install only one AEA plugin copy.
 
 Open **Tools > AEA > Settings** and set the AEA checkout folder, its Python
 executable, assistant choice and assistant executable. These are local settings.
@@ -54,9 +55,9 @@ checked. Terminal tests used explicitly labelled local test clients; no live
 model or scientific analysis was run. macOS and Linux desktop behavior remain
 untested. This extension has not been registered in the official EEGLAB catalogue.
 
-The original `eeglab-v0.1.0-preview` tag predates the Windows/MATLAB fixes. Use an
-updated AEA checkout and build the ZIP above to include the menu fixes; the
-checkout also supplies the Windows skill-link fix in `tools/install_skills.py`.
+The 0.1.1 preview ZIP includes the MATLAB fixes. The original
+`eeglab-v0.1.0-preview` tag predates them. Also update your AEA checkout for the
+Windows skill-link fix in `tools/install_skills.py`.
 
 ## Current limits
 
