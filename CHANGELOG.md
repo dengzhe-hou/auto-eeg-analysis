@@ -41,15 +41,18 @@ previews use separate tags.
   read documented reference values, so this is functional known-answer evidence,
   not blind evaluation. All skills are not translated to MATLAB.
   See the [plugin preview](https://github.com/dengzhe-hou/auto-eeg-analysis/releases/tag/eeglab-v0.1.3-preview).
-  Official catalogue inclusion requires a separate application. The library
+  AEA 0.1.3 was approved by the EEGLAB team and listed in the
+  [official extension catalogue](https://sccn.ucsd.edu/eeglab/plugin_uploader/plugin_list_all.php)
+  on 2026-10-29. Install it through **File > Manage EEGLAB extensions**,
+  then configure the separate AEA checkout and coding client. The library
   release remains v0.3.2.
 
 - Added a preview EEGLAB extension with a Tools menu, dataset/event/history
   export, study preparation, interactive Codex/Claude handoff and a report entry.
   Automated checks exercise real EEGLAB/Octave exports and MNE import. MATLAB
   desktop synthetic workflows with real Codex and Claude clients have passed
-  independent result checks and replay on Windows; official EEGLAB catalogue
-  registration remains pending. Plugin preview 0.1.2 packages the tested export-menu
+  independent result checks and replay on Windows. Catalogue registration was
+  pending for 0.1.2; approval for 0.1.3 is recorded above. Plugin preview 0.1.2 packages the tested export-menu
   fix. Its companion Python bridge and Windows startup fix come from the updated
   AEA checkout. The library release version remains v0.3.2.
 - Reorganized all 22 skills into compact entrypoints with detailed procedures

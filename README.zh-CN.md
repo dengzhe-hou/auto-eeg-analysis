@@ -11,6 +11,8 @@ AEA（Automated EEG Analysis，自动化脑电分析）是一个开放资源库�
 
 此 README 和主页提供三语版本。详细指南、技能与配方源文件、图中文字、EEGLAB 菜单及固定报告模板目前仍以英文为主。可以用中文与编程助手沟通。
 
+**EEGLAB 扩展已获批准：** AEA 0.1.3 已列入 [EEGLAB 官方扩展目录](https://sccn.ucsd.edu/eeglab/plugin_uploader/plugin_list_all.php)。在 EEGLAB 中打开 **File > Manage EEGLAB extensions**，搜索 **AEA** 并安装，再按[配置指南](docs/EEGLAB.md)连接 AEA 源码目录和编程客户端。
+
 ## 快速开始
 
 先安装 Git、Conda，以及已登录的 Codex CLI 或 Claude Code。以下命令使用 `main`，包含 [v0.3.2](CHANGELOG.md#choose-a-version) 之后的修正。

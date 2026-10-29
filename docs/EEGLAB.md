@@ -1,5 +1,8 @@
 # Use AEA from EEGLAB
 
+**AEA 0.1.3 has been approved by the EEGLAB team and is listed in the
+[official extension catalogue](https://sccn.ucsd.edu/eeglab/plugin_uploader/plugin_list_all.php).**
+
 The preview extension adds **Tools > AEA**. Export the current EEG dataset,
 prepare a separate study folder, open your coding assistant and return to the
 saved report from EEGLAB. Analysis still uses your approved study choices and
@@ -26,15 +29,21 @@ checkout supplies the skills/procedures and the Python bridge for backend `mne`.
 Version 0.1.3 requires a matching checkout: use tag `eeglab-v0.1.3-preview`
 or an updated `main`.
 
-Download the [0.1.3 preview ZIP](https://github.com/dengzhe-hou/auto-eeg-analysis/releases/download/eeglab-v0.1.3-preview/aea-eeglab-0.1.3.zip)
-for both native MATLAB and MNE routes. The older 0.1.2 ZIP supports the MNE route.
-Alternatively build the plugin from its matching checkout:
+In EEGLAB, open **File > Manage EEGLAB extensions**, search for **AEA**, and
+install version **0.1.3**. Then restart EEGLAB and configure the plugin below.
+The separate AEA checkout and signed-in coding client are still required for
+assisted runs.
+
+For manual installation, download the
+[0.1.3 preview ZIP](https://github.com/dengzhe-hou/auto-eeg-analysis/releases/download/eeglab-v0.1.3-preview/aea-eeglab-0.1.3.zip)
+for either native MATLAB or MNE. The older 0.1.2 ZIP supports the MNE route.
+You can also build the plugin from its matching checkout:
 
 ```bash
 python tools/package_eeglab_plugin.py --output aea-eeglab-0.1.3.zip
 ```
 
-Remove any previous AEA plugin folder, then extract it inside `plugins`, yielding
+For manual installation, remove any previous AEA plugin folder, then extract the ZIP inside `plugins`, yielding
 `plugins/aea0.1.3/` for this version. Install only one AEA plugin copy.
 
 Open **Tools > AEA > Settings** and set the AEA checkout folder, assistant choice,
@@ -95,8 +104,7 @@ analysis commands raised no human execution-approval prompts in that session.
 The client's own HTML-title checker initially failed because it included the
 inline SVG title. Its parser was corrected; the analysis and report were unchanged.
 Session token usage was recorded, but billed cost was unavailable and was not
-reported as zero. macOS/Linux desktop behavior remains untested. This extension
-is not yet in the official EEGLAB catalogue.
+reported as zero. macOS/Linux desktop behavior remains untested.
 MacBook validation is left to external contributors; platform tests should retain
 the actual software versions, commands and artifacts.
 
@@ -119,8 +127,8 @@ Windows skill-link fix in `tools/install_skills.py`.
 
 See the [plugin README](https://github.com/dengzhe-hou/auto-eeg-analysis/tree/main/extensions/eeglab/aea)
 for command-line retry instructions and requirements. The adapter follows
-[EEGLAB's plugin interface](https://eeglab.org/tutorials/contribute/design_plugin.html);
-official catalogue distribution requires a separate submission and approval.
+[EEGLAB's plugin interface](https://eeglab.org/tutorials/contribute/design_plugin.html)
+and is distributed through the official catalogue following approval.
 
 ## Windows client startup
 

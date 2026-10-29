@@ -11,6 +11,8 @@ AEA（Automated EEG Analysis）は、MNE-Python向けの **22のスキルと10�
 
 このREADMEとホームページは3言語に対応しています。詳細ガイド、スキル・レシピのソース、図中の文字、EEGLABのメニュー、固定レポートのテンプレートは、現在も主に英語です。コーディング支援エージェントとのやり取りには日本語を使えます。
 
+**EEGLAB拡張が承認されました：** AEA 0.1.3は[EEGLAB公式拡張一覧](https://sccn.ucsd.edu/eeglab/plugin_uploader/plugin_list_all.php)に掲載されています。EEGLABの **File > Manage EEGLAB extensions** で **AEA** を検索してインストールし、[設定ガイド](docs/EEGLAB.md)に従ってAEAのソースフォルダとコーディングクライアントを接続してください。
+
 ## クイックスタート
 
 Git、Conda、およびログイン済みのCodex CLIまたはClaude Codeを用意してください。以下は `main` を使う手順で、[v0.3.2](CHANGELOG.md#choose-a-version)以降の修正を含みます。

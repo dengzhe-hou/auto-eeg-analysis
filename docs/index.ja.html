@@ -43,6 +43,7 @@
 <h1 id="hero-title">自動 <span>EEG</span> 解析</h1>
 <p class="hero-description">EEG解析手法、実行可能なワークフロー、確認できる結果をつなぐ、共有可能なスキルとレシピ。</p>
 <p class="hero-detail">MNE-Pythonに対応し、実行可能な仕様と<a href="#evidence">数値認証の対象となる中核</a>を備えています。</p>
+<p class="hero-detail"><strong>EEGLAB拡張が承認されました。</strong> AEA 0.1.3は<a href="https://sccn.ucsd.edu/eeglab/plugin_uploader/plugin_list_all.php">EEGLAB公式拡張一覧</a>に掲載されています。</p>
 <div class="hero-actions">
 <a class="button button-primary" href="#get-started">使い始める <svg aria-hidden="true" class="arrow" focusable="false" viewbox="0 0 24 24"><path d="M12 5v14m-6-6 6 6 6-6"></path></svg></a>
 <a class="button button-outline" href="#recipes">レシピを見る</a>
@@ -291,7 +292,7 @@ claude</code></pre>
 <p>解析環境を有効にして、リポジトリのルートから起動します。対応データを <code>projects/my-study/raw/</code> に置き、パラダイムに合うレシピを選んでください。ERP COREでは、<a href="EXAMPLES.html#adapt-a-recipe-to-your-study">コピーして使えるN400の説明と承認プロンプト</a>に従い、既存のデータ配置を保ってください。</p>
 <p>検出されたデータを確認し、実行前に解析計画を承認してください。この経路の標準監査用に<a href="GETTING_STARTED.html#configure-the-reviewer">レビュー用モデルを設定</a>します。Claude Codeで解析する場合も必要です。</p>
 <p class="note"><a href="GETTING_STARTED.html">セットアップガイド</a>では、共通Python環境、データ形式、研究用ディレクトリ、出力を説明しています。Windowsと追加依存関係は<a href="PLATFORM_SUPPORT.html">プラットフォーム対応</a>を確認してください。<a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/CHANGELOG.md#choose-a-version">固定リリースを選ぶ</a>こともできます。</p>
-<p class="note">WindowsとEEGLABを使う場合は、<a href="WINDOWS_FIRST_RUN.html">最初のレポートを作る手順</a>を参照してください。導入、実行ファイルのパス、メニュー設定、レポートの開き方を説明しています。<a href="EEGLAB.html">プレビュー拡張</a>がPython/MNE経由でEEGLABとAEAを接続します。実際のCodex・Claudeクライアントを使ったWindows MATLAB経路を固定合成データで確認し、独立した結果の確認と再実行を完了しています。</p>
+<p class="note">EEGLABの <strong>File &gt; Manage EEGLAB extensions</strong> で <strong>AEA</strong> を検索し、0.1.3をインストールしてください。<a href="EEGLAB.html">拡張の設定ガイド</a>に従って、AEAのソースフォルダとコーディングクライアントを接続します。Windowsでは、<a href="WINDOWS_FIRST_RUN.html">最初のレポートを作る手順</a>でクライアントの導入、実行ファイルのパス、メニュー設定、レポートの開き方を確認できます。実際のCodex・Claudeクライアントを使ったWindows MATLAB経路を固定合成データで確認し、独立した結果の確認と再実行を完了しています。</p>
 <p class="note"><a href="https://github.com/dengzhe-hou/auto-eeg-analysis/releases/tag/eeglab-v0.1.3-preview">EEGLAB 0.1.3プレビュー</a>では、Python/MNEなしで研究用フォルダを準備し、範囲を限定したERP平均値、図、レポートを作成する<a href="MATLAB_NATIVE.html">MATLABネイティブ設定ガイド</a>を追加しました。対応するソースとプラグインを組み合わせてください。旧0.1.2 ZIPはMNE経路を使います。</p>
 <p class="note translation-note">ホームページとREADMEは英語・簡体字中国語・日本語に対応しています。詳細ガイド、スキル・レシピのソース、図中の文字、EEGLABのメニュー、固定レポートのテンプレートは現在も主に英語です。エージェントとの研究内容の相談には中国語や日本語も使えます。</p>
 </section>

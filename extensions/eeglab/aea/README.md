@@ -9,7 +9,8 @@ client launch and a bounded epoched-ERP helper without Python/MNE. See
 `docs/MATLAB_NATIVE.md` in the matching checkout. This route is not
 included in the older 0.1.2 ZIP. Use the matching checkout and
 [0.1.3 preview ZIP](https://github.com/dengzhe-hou/auto-eeg-analysis/releases/tag/eeglab-v0.1.3-preview).
-This preview is not in the official EEGLAB extension catalogue.
+AEA 0.1.3 has been approved by the EEGLAB team and is listed in the
+[official extension catalogue](https://sccn.ucsd.edu/eeglab/plugin_uploader/plugin_list_all.php).
 
 ## Install
 
@@ -19,7 +20,7 @@ includes client setup and executable paths. Version 0.1.3 adds a fifth Settings
 field for the analysis backend.
 
 1. Obtain the matching AEA checkout and sign in to Codex CLI or Claude Code. Choose MATLAB/EEGLAB for the native route, or set up the [Python/MNE environment](https://dengzhe-hou.github.io/auto-eeg-analysis/GETTING_STARTED.html) for the MNE route. The ZIP supplies the adapter, while the checkout supplies the AEA skills and procedures.
-2. Extract `aea-eeglab-0.1.3.zip` into EEGLAB's `plugins` folder, giving `plugins/aea0.1.3/`. Remove any previous AEA plugin folder first. Alternatively copy this `aea` folder there. Install only one AEA plugin copy.
+2. In EEGLAB, open **File > Manage EEGLAB extensions**, search for **AEA**, and install version **0.1.3**. For manual installation instead, extract `aea-eeglab-0.1.3.zip` into EEGLAB's `plugins` folder, giving `plugins/aea0.1.3/`, or copy this `aea` folder there. Remove any previous AEA plugin folder before a manual installation. Install only one AEA plugin copy.
 3. Restart EEGLAB. Open **Tools > AEA > Settings** and select your AEA checkout, assistant (`codex` or `claude`), its executable, and backend (`matlab` or `mne`). Leave Python blank for `matlab`; for `mne`, select the full path to the configured environment's Python executable.
 
 For `mne`, the Python field is the executable inside the environment, such as
@@ -94,8 +95,7 @@ Windows route also passed with real Claude Code 2.1.312 (`claude-opus-5-5`, exis
 replay. First-time CLI login and text-style initialization needed manual completion;
 analysis commands needed no human execution approvals in that session. The client's
 own HTML-title checker needed a parser correction; analysis outputs were unchanged.
-Billed cost was unavailable. macOS/Linux desktop behavior remains untested. This
-preview is not yet in the EEGLAB extension catalogue.
+Billed cost was unavailable. macOS/Linux desktop behavior remains untested.
 
 The desktop runs above used the development sources labelled 0.1.1; 0.1.2
 packages that MATLAB implementation with a new version label. Version 0.1.1's
