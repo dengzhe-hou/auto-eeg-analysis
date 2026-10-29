@@ -44,7 +44,7 @@ jobs:
       - name: Install GNU Octave
         run: |
           sudo apt-get update
-          sudo apt-get install -y --no-install-recommends octave gnuplot-nox ghostscript
+          sudo apt-get install -y --no-install-recommends octave gnuplot-nox ghostscript fonts-freefont-otf
       - uses: mamba-org/setup-micromamba@v2
         with:
           environment-file: tools/env/environment-pinned.yml
