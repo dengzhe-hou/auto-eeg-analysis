@@ -22,7 +22,7 @@ on:
 
 jobs:
   octave-roundtrip:
-    name: EEGLAB export and MNE import
+    name: EEGLAB native and MNE checks
     runs-on: ubuntu-latest
     env:
       AEA_OCTAVE: /usr/bin/octave-cli
@@ -44,7 +44,7 @@ jobs:
       - name: Install GNU Octave
         run: |
           sudo apt-get update
-          sudo apt-get install -y --no-install-recommends octave gnuplot-nox
+          sudo apt-get install -y --no-install-recommends octave gnuplot-nox ghostscript
       - uses: mamba-org/setup-micromamba@v2
         with:
           environment-file: tools/env/environment-pinned.yml
@@ -53,8 +53,8 @@ jobs:
       - name: Test the actual export and handoff
         run: micromamba run -n aeais python -m pytest tools/tests/test_eeglab_bridge.py -v
       - name: Build the installable plugin
-        run: micromamba run -n aeais python tools/package_eeglab_plugin.py --output aea-eeglab-0.1.2.zip
+        run: micromamba run -n aeais python tools/package_eeglab_plugin.py --output aea-eeglab-0.1.3.zip
       - uses: actions/upload-artifact@v4
         with:
           name: aea-eeglab-preview
-          path: aea-eeglab-0.1.2.zip
+          path: aea-eeglab-0.1.3.zip

@@ -2,6 +2,11 @@
 
 AEA runs on macOS, Linux, and Windows. Capability differs by platform; this page is the source of truth.
 
+The library capability tiers below are separate from desktop-plugin validation.
+See [EEGLAB](EEGLAB.md) and the preview [native MATLAB route](MATLAB_NATIVE.md)
+for their tested scope. MacBook/EEGLAB desktop testing is left to external users
+and remains unverified; a launcher branch alone is not a completed platform test.
+
 For the complete clone, environment, skill installation, and first-analysis sequence,
 start with [Getting started](GETTING_STARTED.md). Launch the agent from the AEA
 repository root with the `aeais` environment active. Client installation and model

@@ -1,5 +1,9 @@
 # First report on Windows
 
+This walkthrough covers the MNE-based route. For the 0.1.3 preview
+route using native MATLAB/EEGLAB without Python, and the DeepSeek connection
+through Claude Code, see [MATLAB setup](MATLAB_NATIVE.md).
+
 Use this walkthrough for **Windows MATLAB/EEGLAB → AEA → a coding client → an HTML report**.
 MATLAB supplies the menu and dataset; Python/MNE performs the import checks and
 most analysis. Codex CLI and Claude Code are separate client choices. Both routes
@@ -99,11 +103,13 @@ Open **Tools → AEA → Settings**:
 | Python executable | The full `python.exe` path, not the Conda folder |
 | Coding assistant | `codex` or `claude` |
 | Assistant executable | The working client's `.exe` or `.cmd` path |
+| Analysis backend | `mne` for this walkthrough |
 
 ![Actual AEA Settings dialog configured for Claude Code](assets/eeglab/02-settings-claude.jpg)
 
 The screenshot uses neutral demonstration paths. Paste the paths from your own
 setup commands, including your own Python and client executable locations.
+It shows the earlier four-field dialog; version 0.1.3 adds the backend field.
 
 ## 5. Export, plan and run
 

@@ -5,33 +5,41 @@ prepare a separate study folder, open your coding assistant and return to the
 saved report from EEGLAB. Analysis still uses your approved study choices and
 AEA's existing skills and recipes, mainly with MNE-Python.
 
+The 0.1.3 preview also has a [native MATLAB route](MATLAB_NATIVE.md)
+for preparation, client launch and bounded epoched ERP means, figures and reports
+without Python/MNE. It is not in the published 0.1.2 ZIP and does not port all skills.
+
 For a first installation on Windows, follow the
 [first-report walkthrough](WINDOWS_FIRST_RUN.md), including client login and
-commands to find the four Settings values.
+commands to find the executable paths. Version 0.1.3 adds a fifth field for the backend.
 
 ## Install the preview
 
-First complete [AEA setup](GETTING_STARTED.md) and sign in to your chosen Codex
-CLI or Claude Code client. The plugin does not include Python, MNE or a model.
+Sign in to your chosen Codex CLI or Claude Code client and obtain the matching
+AEA checkout. Choose `matlab` for native preparation and bounded epoched ERP
+analysis; Python is not required. Choose `mne` after completing
+[Python/MNE setup](GETTING_STARTED.md). The plugin does not include a model.
 
 For an existing AEA checkout, save local edits and run `git pull --ff-only`
-before installing the plugin. The ZIP supplies the MATLAB adapter; the checkout
-supplies the Python bridge, including the Windows terminal-startup fix.
+before installing a published plugin. The ZIP supplies the MATLAB adapter; the
+checkout supplies the skills/procedures and the Python bridge for backend `mne`.
+Version 0.1.3 requires a matching checkout: use tag `eeglab-v0.1.3-preview`
+or an updated `main`.
 
-Download the [0.1.2 preview ZIP](https://github.com/dengzhe-hou/auto-eeg-analysis/releases/download/eeglab-v0.1.2-preview/aea-eeglab-0.1.2.zip),
-or copy [extensions/eeglab/aea](https://github.com/dengzhe-hou/auto-eeg-analysis/tree/main/extensions/eeglab/aea)
-into your EEGLAB `plugins` folder and restart EEGLAB. An installable ZIP can also
-be built from the AEA checkout:
+Download the [0.1.3 preview ZIP](https://github.com/dengzhe-hou/auto-eeg-analysis/releases/download/eeglab-v0.1.3-preview/aea-eeglab-0.1.3.zip)
+for both native MATLAB and MNE routes. The older 0.1.2 ZIP supports the MNE route.
+Alternatively build the plugin from its matching checkout:
 
 ```bash
-python tools/package_eeglab_plugin.py --output aea-eeglab-0.1.2.zip
+python tools/package_eeglab_plugin.py --output aea-eeglab-0.1.3.zip
 ```
 
 Remove any previous AEA plugin folder, then extract it inside `plugins`, yielding
-`plugins/aea0.1.2/`. Install only one AEA plugin copy.
+`plugins/aea0.1.3/` for this version. Install only one AEA plugin copy.
 
-Open **Tools > AEA > Settings** and set the AEA checkout folder, its Python
-executable, assistant choice and assistant executable. These are local settings.
+Open **Tools > AEA > Settings** and set the AEA checkout folder, assistant choice,
+assistant executable and backend. Leave Python blank for `matlab`; for `mne`,
+select the configured Python executable. These are local settings.
 No model is selected and no credentials are requested or saved by the plugin.
 
 ## Start a study
@@ -39,21 +47,26 @@ No model is selected and no credentials are requested or saved by the plugin.
 1. Load the EEG dataset in EEGLAB.
 2. Choose **Export current dataset and prepare study**, and select a new study folder. Choose a recipe or `custom` to discuss the task with AEA.
 3. Choose **Start AEA for exported study**. The assistant reads the exported facts and asks about missing scientific choices before their dependent analyses. Keep an existing approved plan when present.
-4. When the analysis produces `report-stage/report.html`, choose **Open study report**.
+4. When the analysis produces `report-stage/report.html`, choose **Open study report** and select its analysis output folder. The native helper uses a fresh output folder inside the exported study.
 
 The export is a copy of the current dataset, which may already have undergone
 processing. AEA records its history and does not assume it is acquisition-raw or
 automatically re-run ICA or epoching. The data copy uses EEGLAB's float32 save;
-MNE reads its microvolts as volts. Dataset/participant identity, condition meanings
+MNE reads its microvolts as volts, while native EEGLAB retains microvolts.
+Dataset/participant identity, condition meanings
 and actual channel types still need confirmation.
 
 ## What is checked
 
-The bridge compares the imported channel count, sampling rate, samples and epoch
+Each route compares the imported channel count, sampling rate, samples and epoch
 count with the EEGLAB export. Automated tests exercise continuous and epoched
 exports against real EEGLAB functions and MNE, compare sample values and event
 timing, and check that the original working EEG is preserved. Preparation itself
-does not invoke a model.
+does not invoke a model. The native route also has real MATLAB preparation,
+arithmetic/report and fresh-process replay checks. Real Claude Code also generated
+and executed a native MATLAB entry point, with independent first-delivery checks
+and replay. That client read documented reference values; this is a known-answer
+functional case. See [native validation](MATLAB_NATIVE.md#validation-status).
 
 On 2026-10-28, the preview with the fixes in this checkout passed real desktop
 tests on Windows 11, MATLAB R2026a Update 2, EEGLAB 2026.0.0, Python 3.12.10 and
@@ -84,6 +97,8 @@ inline SVG title. Its parser was corrected; the analysis and report were unchang
 Session token usage was recorded, but billed cost was unavailable and was not
 reported as zero. macOS/Linux desktop behavior remains untested. This extension
 is not yet in the official EEGLAB catalogue.
+MacBook validation is left to external contributors; platform tests should retain
+the actual software versions, commands and artifacts.
 
 The desktop runs above used development sources labelled 0.1.1. Preview 0.1.2
 packages the tested MATLAB export-menu fix with a new version label. The Windows
@@ -100,7 +115,7 @@ Windows skill-link fix in `tools/install_skills.py`.
 - Choose a new folder for a different input; the previous exported `.set`/`.fdt` is not overwritten.
 - AEA remains a separate configured library/environment; the plugin is its EEGLAB entry point.
 - Linux desktop launch requires `x-terminal-emulator` or `gnome-terminal`. For a headless server, run the printed `session` command in an existing terminal.
-- Missing MNE or an unavailable assistant executable produces a setup error. Exported data remain available to repair preparation.
+- Backend `mne` requires Python/MNE. Backend `matlab` requires the matching native functions and EEGLAB dependencies; it does not silently switch to MNE when an analysis is unsupported.
 
 See the [plugin README](https://github.com/dengzhe-hou/auto-eeg-analysis/tree/main/extensions/eeglab/aea)
 for command-line retry instructions and requirements. The adapter follows

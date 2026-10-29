@@ -1,20 +1,28 @@
 # AEA for EEGLAB
 
-Version 0.1.2, preview. Adds **Tools > AEA** to EEGLAB. The adapter copies the
+Version 0.1.3 preview. Adds **Tools > AEA** to EEGLAB. The adapter copies the
 current dataset to a separate study folder, prepares the AEA handoff, starts your
 configured coding assistant in a terminal and opens the resulting HTML report.
 
+Setting backend to `matlab` uses native EEGLAB preparation,
+client launch and a bounded epoched-ERP helper without Python/MNE. See
+`docs/MATLAB_NATIVE.md` in the matching checkout. This route is not
+included in the older 0.1.2 ZIP. Use the matching checkout and
+[0.1.3 preview ZIP](https://github.com/dengzhe-hou/auto-eeg-analysis/releases/tag/eeglab-v0.1.3-preview).
+This preview is not in the official EEGLAB extension catalogue.
+
 ## Install
 
-For Windows, the [first-report walkthrough](https://dengzhe-hou.github.io/auto-eeg-analysis/WINDOWS_FIRST_RUN.html)
-includes client setup and commands to locate the four Settings values. It is
-also available at `docs/WINDOWS_FIRST_RUN.md` in the matching AEA checkout.
+For the native route, read `docs/MATLAB_NATIVE.md` in the matching checkout.
+For the MNE route, the [Windows walkthrough](https://dengzhe-hou.github.io/auto-eeg-analysis/WINDOWS_FIRST_RUN.html)
+includes client setup and executable paths. Version 0.1.3 adds a fifth Settings
+field for the analysis backend.
 
-1. Set up the [AEA repository and Python environment](https://dengzhe-hou.github.io/auto-eeg-analysis/GETTING_STARTED.html), update an existing checkout with `git pull --ff-only`, and sign in to Codex CLI or Claude Code. The checkout supplies the Python bridge and its Windows startup fix; it is a separate dependency from this ZIP.
-2. Extract `aea-eeglab-0.1.2.zip` into EEGLAB's `plugins` folder, giving `plugins/aea0.1.2/`. Remove any previous AEA plugin folder first. Alternatively copy this `aea` folder there. Install only one AEA plugin copy.
-3. Restart EEGLAB. Open **Tools > AEA > Settings** and select your AEA checkout, the full path to its Python executable, and your assistant (`codex` or `claude`). Set the assistant's full executable path if it is not on MATLAB's PATH.
+1. Obtain the matching AEA checkout and sign in to Codex CLI or Claude Code. Choose MATLAB/EEGLAB for the native route, or set up the [Python/MNE environment](https://dengzhe-hou.github.io/auto-eeg-analysis/GETTING_STARTED.html) for the MNE route. The ZIP supplies the adapter, while the checkout supplies the AEA skills and procedures.
+2. Extract `aea-eeglab-0.1.3.zip` into EEGLAB's `plugins` folder, giving `plugins/aea0.1.3/`. Remove any previous AEA plugin folder first. Alternatively copy this `aea` folder there. Install only one AEA plugin copy.
+3. Restart EEGLAB. Open **Tools > AEA > Settings** and select your AEA checkout, assistant (`codex` or `claude`), its executable, and backend (`matlab` or `mne`). Leave Python blank for `matlab`; for `mne`, select the full path to the configured environment's Python executable.
 
-The Python field is the executable inside the environment, such as
+For `mne`, the Python field is the executable inside the environment, such as
 `/path/to/env/bin/python` or `C:\path\to\env\python.exe`. An existing Conda
 installation alone is not a configured environment. The plugin uses your
 assistant's current model and permission settings; it does not store an API key.
@@ -24,7 +32,7 @@ assistant's current model and permission settings; it does not store an API key.
 1. Load continuous EEG or a dataset with at least two epochs in EEGLAB. Load samples into memory if the dataset uses memory mapping.
 2. Choose **Export current dataset and prepare study**, select a new study folder and a recipe, or `custom` to choose with the assistant.
 3. Choose **Start AEA for exported study**. Discuss the research question and missing choices, approve the plan, then proceed. Existing approved choices are reused.
-4. After analysis, choose **Open study report**. The report is `report-stage/report.html` in the study folder.
+4. After analysis, choose **Open study report**. Select the output folder containing `report-stage/report.html`; the native helper uses a fresh analysis output folder within the exported study.
 
 Export and preparation do not call a model or perform an EEG analysis. Starting
 the assistant may use your account's model credits. The adapter does not select
@@ -38,20 +46,35 @@ are recorded as software labels that still need physiological confirmation.
 
 ## Requirements and current validation
 
-- AEA checkout with `tools/eeglab_bridge.py`; its Python environment includes MNE.
-- EEGLAB with `pop_saveset`; MATLAB with `jsonencode` support.
+- AEA checkout with `AGENT_GUIDE.md` and the skills/procedures. The `mne` route also requires `tools/eeglab_bridge.py` and Python/MNE.
+- EEGLAB with `pop_saveset`/`pop_loadset` and its DIPFIT dependency; MATLAB with `jsonencode` support. Python is not required for the native route.
 - A desktop terminal for interactive launch. Linux supports `x-terminal-emulator` or `gnome-terminal`; macOS uses Terminal; Windows uses a new console.
 - On a headless server, use the `session` command printed by the launch error in your own terminal.
 
 The first release does not support exporting a single epoched trial. It raises
 before writing rather than flattening it into continuous data. An existing
 export is never overwritten; use another folder. A failed preparation can be
-retried without re-exporting:
+retried without re-exporting. For `mne`:
 
 ```text
 python /path/to/aea/tools/eeglab_bridge.py prepare --project /path/to/study
 python /path/to/aea/tools/eeglab_bridge.py session --project /path/to/study
 ```
+
+For `matlab`, call `aea_prepare_matlab(study_folder)` in the initialized EEGLAB
+environment, then use the Start AEA menu or `aea_launch_matlab(study_folder)`.
+
+Native preparation, arithmetic, figures/report and fresh-process replay passed
+on Windows 11 / MATLAB R2026a Update 2 / EEGLAB 2026.0.0 on 2026-10-29.
+Codex/Claude launch routing used labelled test clients. The separate real-Claude
+native test subsequently used Claude Code 2.1.312 (`claude-opus-5-5`, existing
+`auto` mode) to read AEA skills/procedures, generate `analysis.m` and run MATLAB.
+Independent first-delivery checks and fresh-process replay of the unchanged
+entry point passed. The client read a test excerpt and documented reference
+values despite the requested reading restriction; this is a functional
+known-answer case, not blind evaluation or evidence of a skills benefit.
+The native helper is bounded to explicit epoched ERP means, not all skills.
+MacBook testing is left to external users and remains unverified.
 
 GNU Octave/EEGLAB export, MNE import, units, events, epoch timing and command
 routing are exercised by automated tests. On 2026-10-28, the preview with the

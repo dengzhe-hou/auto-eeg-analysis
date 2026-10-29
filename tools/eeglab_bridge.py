@@ -32,6 +32,8 @@ def project_config(project: Path):
         raise ValueError("Configure an AEA repository containing AGENT_GUIDE.md")
     if config["client"] not in ("codex", "claude"):
         raise ValueError("Select codex or claude as the coding assistant")
+    if config.get("backend", "mne") != "mne":
+        raise ValueError("This Python bridge serves backend mne. For backend matlab, use EEGLAB's AEA menus or aea_prepare_matlab.")
     return config, repository
 
 

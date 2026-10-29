@@ -5,8 +5,9 @@
 % pop_aea([], 'action', 'launch', 'project', folder)
 % pop_aea([], 'action', 'report', 'project', folder)
 %
-% Noninteractive export uses project, repository, python, client, and optional
-% recipe/client_executable arguments. It does not run a model or analysis.
+% Noninteractive export uses project, repository, client, and optional backend,
+% python, recipe/client_executable arguments. MATLAB backend needs no Python.
+% Export does not run a model or analysis.
 function [EEG, com, info] = pop_aea(EEG, varargin)
 com = ''; info = struct();
 p = inputParser;
@@ -16,19 +17,23 @@ addParameter(p, 'repository', pref('repository', ''));
 addParameter(p, 'python', pref('python', ''));
 addParameter(p, 'client', pref('client', ''));
 addParameter(p, 'client_executable', pref('client_executable', ''));
+addParameter(p, 'backend', pref('backend', 'mne'));
 addParameter(p, 'recipe', 'custom');
 parse(p, varargin{:});
 o = p.Results;
 if strcmp(o.action, 'configure')
     values = inputdlg({'AEA checkout folder', 'Python executable in the AEA environment', ...
-        'Coding assistant (codex or claude)', 'Assistant executable (name or full path)'}, ...
-        'AEA settings', [1 75], {o.repository, o.python, o.client, o.client_executable});
+        'Coding assistant (codex or claude)', 'Assistant executable (name or full path)', ...
+        'Analysis backend (mne or matlab; Python is optional for matlab)'}, ...
+        'AEA settings', [1 75], {o.repository, o.python, o.client, o.client_executable, o.backend});
     if isempty(values), return; end
     o.repository = values{1}; o.python = values{2};
     o.client = values{3}; o.client_executable = values{4};
+    o.backend = values{5};
     validate_settings(o);
     setpref('AEA', 'repository', o.repository); setpref('AEA', 'python', o.python);
     setpref('AEA', 'client', o.client); setpref('AEA', 'client_executable', o.client_executable);
+    setpref('AEA', 'backend', o.backend);
     info = o;
     return;
 end
@@ -66,23 +71,34 @@ if strcmp(o.action, 'launch')
     config = jsondecode(fileread(fullfile(o.project, 'AEA_BRIDGE_CONFIG.json')));
     o.repository = config.repository; o.python = config.python;
     o.client = config.client;
+    o.backend = 'mne';
+    if isfield(config, 'backend'), o.backend = config.backend; end
 end
 validate_settings(o);
 bridge = fullfile(o.repository, 'tools', 'eeglab_bridge.py');
 if strcmp(o.action, 'export')
     info = aea_export(EEG, o.project);
     config = struct('repository', o.repository, 'python', o.python, ...
-        'client', o.client, 'client_executable', o.client_executable, 'recipe', o.recipe);
+        'client', o.client, 'client_executable', o.client_executable, 'recipe', o.recipe, ...
+        'backend', o.backend);
     aea_write_json(fullfile(o.project, 'AEA_BRIDGE_CONFIG.json'), config);
-    run_bridge(o.python, bridge, 'prepare', o.project);
-    if ~exist(fullfile(o.project, 'AEA_HANDOFF.json'), 'file')
-        error('AEA:PreparationFailed', 'The dataset was exported, but preparation did not complete. Check the Python error and retry preparation.');
+    if strcmp(o.backend, 'matlab')
+        aea_prepare_matlab(o.project);
+    else
+        run_bridge(o.python, bridge, 'prepare', o.project);
     end
-    com = sprintf('[EEG, LASTCOM] = pop_aea(EEG, ''action'', ''export'', ''project'', %s, ''repository'', %s, ''python'', %s, ''client'', %s, ''client_executable'', %s, ''recipe'', %s);', ...
-        literal(o.project), literal(o.repository), literal(o.python), literal(o.client), literal(o.client_executable), literal(o.recipe));
+    if ~exist(fullfile(o.project, 'AEA_HANDOFF.json'), 'file')
+        error('AEA:PreparationFailed', 'The dataset was exported, but preparation did not complete. Check the backend error and retry preparation.');
+    end
+    com = sprintf('[EEG, LASTCOM] = pop_aea(EEG, ''action'', ''export'', ''project'', %s, ''repository'', %s, ''python'', %s, ''client'', %s, ''client_executable'', %s, ''recipe'', %s, ''backend'', %s);', ...
+        literal(o.project), literal(o.repository), literal(o.python), literal(o.client), literal(o.client_executable), literal(o.recipe), literal(o.backend));
     fprintf('AEA study prepared: %s\nStart AEA from Tools > AEA when ready to discuss the plan.\n', o.project);
 else
-    run_bridge(o.python, bridge, 'launch', o.project);
+    if strcmp(o.backend, 'matlab')
+        info = aea_launch_matlab(o.project);
+    else
+        run_bridge(o.python, bridge, 'launch', o.project);
+    end
 end
 setpref('AEA', 'project', o.project);
 end
@@ -93,10 +109,13 @@ if ispref('AEA', name), value = getpref('AEA', name); end
 end
 
 function validate_settings(o)
-if ~exist(fullfile(o.repository, 'tools', 'eeglab_bridge.py'), 'file')
-    error('AEA:Repository', 'Select an AEA checkout containing tools/eeglab_bridge.py in Tools > AEA > Settings.');
+if ~exist(fullfile(o.repository, 'AGENT_GUIDE.md'), 'file')
+    error('AEA:Repository', 'Select an AEA checkout containing AGENT_GUIDE.md in Tools > AEA > Settings.');
 end
-if isempty(o.python) || ~exist(o.python, 'file')
+if ~any(strcmp(o.backend, {'mne', 'matlab'}))
+    error('AEA:Backend', 'Choose mne or matlab in AEA settings.');
+end
+if strcmp(o.backend, 'mne') && (isempty(o.python) || ~exist(o.python, 'file'))
     error('AEA:Python', 'Select the Python executable in your AEA environment.');
 end
 if ~any(strcmp(o.client, {'codex', 'claude'}))

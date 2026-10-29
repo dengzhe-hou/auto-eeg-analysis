@@ -32,6 +32,11 @@ Confirm the analysis plan before execution and [configure the reviewer](docs/GET
 
 Using Windows and EEGLAB? Follow the [first-report walkthrough](docs/WINDOWS_FIRST_RUN.md) for client installation, Python and executable paths, menu settings, and opening the report. The [preview extension](docs/EEGLAB.md) connects EEGLAB to AEA; analysis mainly uses Python/MNE.
 
+The **[EEGLAB 0.1.3 preview](https://github.com/dengzhe-hou/auto-eeg-analysis/releases/tag/eeglab-v0.1.3-preview)** adds a [native MATLAB route](docs/MATLAB_NATIVE.md)
+for preparation, client launch and bounded ERP means, figures and reports without
+Python/MNE. Use the matching checkout and ZIP from that preview; the older
+0.1.2 package does not contain this route.
+
 > [!TIP]
 > To try the N400 example without an agent or model account, use the [fixed Python tutorial](docs/EXAMPLES.md#erp-core-complete-n400-recipe-case). You can also [replot the saved results without raw EEG](docs/EXAMPLES.md#replot-the-saved-results).
 

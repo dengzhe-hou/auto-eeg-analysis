@@ -104,6 +104,17 @@ def test_import_mismatch_is_rejected(study):
     assert not (project / 'AEA_HANDOFF.json').exists()
 
 
+def test_python_bridge_does_not_silently_replace_matlab_backend(study):
+    project, _, _ = study
+    config_path = project / 'AEA_BRIDGE_CONFIG.json'
+    config = bridge.read_json(config_path)
+    config['backend'] = 'matlab'
+    bridge.write_json(config_path, config)
+    with pytest.raises(ValueError, match='aea_prepare_matlab'):
+        bridge.prepare(project)
+    assert not (project / 'AEA_HANDOFF.json').exists()
+
+
 @pytest.mark.parametrize('client', ['codex', 'claude'])
 def test_session_routes_workspace_and_keeps_client_configuration(study, monkeypatch, client):
     project, repository, _ = study
@@ -170,10 +181,12 @@ def test_plugin_archive_contains_the_installable_entrypoint_and_license(tmp_path
     archive = build_archive(ROOT, tmp_path / 'aea-eeglab.zip')
     with ZipFile(archive) as package:
         names = package.namelist()
-        assert 'aea0.1.2/eegplugin_aea.m' in names
-        assert 'aea0.1.2/pop_aea.m' in names
-        assert 'aea0.1.2/README.md' in names
-        assert 'aea0.1.2/LICENSE' in names
+        assert 'aea0.1.3/eegplugin_aea.m' in names
+        assert 'aea0.1.3/pop_aea.m' in names
+        assert 'aea0.1.3/README.md' in names
+        assert 'aea0.1.3/LICENSE' in names
+        assert 'aea0.1.3/aea_prepare_matlab.m' in names
+        assert 'aea0.1.3/aea_erp_mean.m' in names
         assert not any(name.endswith(('.set', '.fdt', '.json')) for name in names)
 
 
@@ -213,3 +226,55 @@ def test_actual_octave_eeglab_export_roundtrip(tmp_path):
             expected = np.stack([np.vstack([np.arange(101)+i, -np.arange(101)-i])
                                  for i in range(1, 5)]) * 1e-6
             np.testing.assert_allclose(epochs.get_data(), expected, atol=1e-12)
+
+
+def test_actual_native_eeglab_analysis_without_python_bridge(tmp_path):
+    octave = os.environ.get('AEA_OCTAVE') or shutil.which('octave-cli')
+    eeglab = Path(os.environ.get('EEGLAB_PATH', str(Path.home() / 'eeglab')))
+    if not octave or not (eeglab / 'eeglab.m').is_file():
+        pytest.skip('Set AEA_OCTAVE and EEGLAB_PATH for the native EEGLAB integration test')
+    quote = lambda value: "'" + str(value).replace("'", "''") + "'"
+    script = tmp_path / 'test_native.m'
+    script.write_text(
+        f"addpath({quote(ROOT / 'extensions/eeglab/aea/tests')});\n"
+        f"test_aea_matlab({quote(ROOT)}, {quote(eeglab)}, {quote(tmp_path)});\n",
+        encoding='utf-8')
+    env = os.environ.copy()
+    env['OCTAVE_HOME'] = str(Path(octave).resolve().parents[1])
+    result = subprocess.run([octave, '--no-gui', '--quiet', str(script)], env=env,
+                            capture_output=True, text=True, timeout=120)
+    (tmp_path / 'native-execution.log').write_text(result.stdout + result.stderr, encoding='utf-8')
+    assert result.returncode == 0, result.stdout + result.stderr
+    project = tmp_path / "researcher's native study"
+    # A coding client normally starts a fresh MATLAB/Octave process. The saved
+    # replay must initialize EEGLAB function dependencies on its own.
+    fresh_script = tmp_path / 'fresh_replay.m'
+    fresh_script.write_text(
+        f"addpath({quote(project / 'first-delivery')});\n"
+        f"run_analysis({quote(project / 'fresh-process-replay')});\n", encoding='utf-8')
+    fresh = subprocess.run([octave, '--no-gui', '--quiet', str(fresh_script)], env=env,
+                           capture_output=True, text=True, timeout=90)
+    (tmp_path / 'fresh-process.log').write_text(fresh.stdout + fresh.stderr, encoding='utf-8')
+    assert fresh.returncode == 0, fresh.stdout + fresh.stderr
+    # Independent reference from the original fixture's sample array, in uV.
+    expected = np.zeros((4, 2, 101))
+    expected[:, :, 20:71] = np.array([[1, 2], [5, 6], [3, 4], [7, 8]])[:, :, None]
+    epochs = mne.read_epochs_eeglab(project / 'input/imported.set', verbose='ERROR')
+    np.testing.assert_allclose(epochs.get_data() * 1e6, expected, atol=1e-6)
+    traces = expected.mean(axis=1)
+    means = traces[:, 30:51].mean(axis=1)
+    expected_conditions = np.array([means[[0, 2]].mean(), means[[1, 3]].mean()])
+    for delivery in ('first-delivery', 'replay', 'fresh-process-replay'):
+        output = project / delivery
+        data = bridge.read_json(output / 'results.json')
+        np.testing.assert_allclose(data['condition_means_uV'], expected_conditions, atol=1e-6)
+        assert data['contrast_uV'] == pytest.approx(4., abs=1e-6)
+        assert data['sample_indices_one_based'] == list(range(31, 52))
+        plotted = bridge.read_json(output / 'plot_data.json')
+        np.testing.assert_allclose(plotted['traces_uV'], [traces[[0, 2]].mean(axis=0),
+                                                        traces[[1, 3]].mean(axis=0)], atol=1e-6)
+        html = (output / 'report-stage/report.html').read_text(encoding='utf-8')
+        assert 'data-value-uv="2.5"' in html and 'data-value-uv="6.5"' in html
+        assert 'data-metric="contrast" data-value-uv="4"' in html
+        for extension in ('svg', 'pdf', 'png'):
+            assert (output / f'figure-stage/condition_means.{extension}').stat().st_size > 100

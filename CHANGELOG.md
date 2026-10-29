@@ -24,7 +24,21 @@ with missing helpers in the older release.
 
 ## Changes on main since v0.3.2
 
-These changes have not been assigned a new release tag.
+These changes have not been assigned a new library release tag. EEGLAB plugin
+previews use separate tags.
+
+- Released EEGLAB plugin preview 0.1.3 with a selectable native
+  MATLAB route: EEGLAB preparation/readback, Codex/Claude terminal launch and
+  explicit epoched ERP means with figures, HTML report and fresh-process replay.
+  This route does not require Python/MNE; the existing MNE route remains available.
+  Native runtime and desktop checks passed on the fixed Windows synthetic case.
+  Real Claude Code generated and executed a study-local MATLAB entry point;
+  independent first-delivery checks and fresh-process replay passed. It also
+  read documented reference values, so this is functional known-answer evidence,
+  not blind evaluation. All skills are not translated to MATLAB.
+  See the [plugin preview](https://github.com/dengzhe-hou/auto-eeg-analysis/releases/tag/eeglab-v0.1.3-preview).
+  Official catalogue inclusion requires a separate application. The library
+  release remains v0.3.2.
 
 - Added a preview EEGLAB extension with a Tools menu, dataset/event/history
   export, study preparation, interactive Codex/Claude handoff and a report entry.
