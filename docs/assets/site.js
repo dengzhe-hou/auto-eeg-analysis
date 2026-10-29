@@ -28,14 +28,14 @@ document.querySelectorAll('[data-copy]').forEach(button => {
     const code = document.getElementById(button.dataset.copy);
     try {
       await navigator.clipboard.writeText(code.textContent);
-      copyStatus.textContent = 'Copied. Paste into the terminal or client indicated above.';
+      copyStatus.textContent = copyStatus.dataset.copySuccess;
     } catch {
       const selection = window.getSelection();
       const range = document.createRange();
       range.selectNodeContents(code);
       selection.removeAllRanges();
       selection.addRange(range);
-      copyStatus.textContent = 'Clipboard unavailable. The text is selected; copy it with your keyboard.';
+      copyStatus.textContent = copyStatus.dataset.copyFallback;
     }
   });
 });

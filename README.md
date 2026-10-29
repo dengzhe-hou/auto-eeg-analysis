@@ -1,6 +1,8 @@
 <h1 align="center">AEA</h1>
 <h3 align="center">Shareable skills and recipes for EEG analysis</h3>
 
+<p align="center"><strong>English</strong> · <a href="README.zh-CN.md">简体中文</a> · <a href="README.ja.md">日本語</a></p>
+
 AEA (Automated EEG Analysis) is an open library of **22 skills and 10 recipes** for MNE-Python, with executable specifications and a numerically certified core. Skills combine EEG methods, numerical conventions, code templates, and output checks; recipes assemble them into paradigm-specific workflows.
 
 You specify the study and approve the plan. A coding agent adapts and executes the templates in your environment, keeping the plan, code, results, figures, methods text, and review records together.

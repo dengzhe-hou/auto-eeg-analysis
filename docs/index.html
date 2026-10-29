@@ -8,6 +8,10 @@
 <meta content="An open library of EEG analysis skills and recipes for MNE-Python, with executable specifications and a numerically certified core." name="description"/>
 <meta content="#f3f7fd" name="theme-color"/>
 <link href="https://dengzhe-hou.github.io/auto-eeg-analysis/" rel="canonical"/>
+<link href="https://dengzhe-hou.github.io/auto-eeg-analysis/" hreflang="en" rel="alternate"/>
+<link href="https://dengzhe-hou.github.io/auto-eeg-analysis/index.zh-CN.html" hreflang="zh-Hans" rel="alternate"/>
+<link href="https://dengzhe-hou.github.io/auto-eeg-analysis/index.ja.html" hreflang="ja" rel="alternate"/>
+<link href="https://dengzhe-hou.github.io/auto-eeg-analysis/" hreflang="x-default" rel="alternate"/>
 <link href="assets/site.css" rel="stylesheet"/>
 <script defer="" src="assets/site.js"></script>
 </head>
@@ -16,6 +20,7 @@
 <header class="site-header">
 <div class="header-inner">
 <a aria-label="AEA home" class="brand" href="#main">AEA<span>EEG methods library</span></a>
+<div class="header-links">
 <nav aria-label="Site navigation">
 <a href="#library">Library</a>
 <a href="#examples">Example</a>
@@ -23,6 +28,12 @@
 <a href="GETTING_STARTED.html">Docs</a>
 <a class="nav-source" href="https://github.com/dengzhe-hou/auto-eeg-analysis">GitHub <svg aria-hidden="true" class="arrow" focusable="false" viewBox="0 0 24 24"><path d="M7 17 17 7M7 7h10v10"></path></svg></a>
 </nav>
+<nav aria-label="Language" class="language-switcher">
+<a aria-current="page" href="index.html" hreflang="en" lang="en">English</a>
+<a href="index.zh-CN.html" hreflang="zh-Hans" lang="zh-Hans">简体中文</a>
+<a href="index.ja.html" hreflang="ja" lang="ja">日本語</a>
+</nav>
+</div>
 </div>
 </header>
 <main id="main">
@@ -268,7 +279,6 @@
 <details class="methods-disclosure"><summary>Methods text</summary><p>
           AEA reads pipeline logs and writes a COBIDAS-MEEG paragraph.
           Every number from disk, not memory.
-          <span id="methods-priority-claim">No other EEG tool does this.</span>
 </p></details>
 </section>
 <section aria-labelledby="start-title" class="page-section" id="get-started">
@@ -305,7 +315,7 @@ claude</code></pre>
 <div class="code-heading"><span>Inside Claude Code</span><button aria-label="Copy Claude recipe prompt" class="copy-button" data-copy="prompt-claude" type="button">Copy</button></div>
 <pre><code id="prompt-claude">/eeg-recipe n400-semantic --data projects/my-study</code></pre>
 </div>
-<p aria-live="polite" class="copy-status" id="copy-status" role="status"></p>
+<p aria-live="polite" class="copy-status" data-copy-success="Copied. Paste into the terminal or client indicated above." data-copy-fallback="Clipboard unavailable. The text is selected; copy it with your keyboard." id="copy-status" role="status"></p>
 </div>
 <noscript><p>JavaScript enables client switching and copy buttons. For Claude Code, use <code>--agent claude</code>, launch <code>claude</code>, and invoke <code>/eeg-recipe</code>. Both clients are covered in the <a href="GETTING_STARTED.html">setup guide</a>.</p></noscript>
 <p>Run from the repository root with your analysis environment active. For compatible data, place files in <code>projects/my-study/raw/</code> and choose a recipe matching your paradigm. For ERP CORE, use the <a href="EXAMPLES.html#adapt-a-recipe-to-your-study">copy-ready N400 brief and approval prompt</a> to preserve the existing data layout.</p>
@@ -314,6 +324,7 @@ claude</code></pre>
 <p class="note">The <a href="GETTING_STARTED.html">setup guide</a> covers the shared Python environment, data formats, study directories, and output files. See <a href="PLATFORM_SUPPORT.html">platform support</a> for Windows and optional dependencies, or <a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/CHANGELOG.md#choose-a-version">choose a fixed release</a>.</p>
 <p class="note">Using Windows and EEGLAB? The <a href="WINDOWS_FIRST_RUN.html">first-report walkthrough</a> covers installation, executable paths, menu settings, and opening the report. The <a href="EEGLAB.html">preview extension</a> connects EEGLAB to AEA with Python/MNE. Windows MATLAB workflows with real Codex and Claude clients have been checked on fixed synthetic data, including independent result checks and replay.</p>
 <p class="note">The <a href="https://github.com/dengzhe-hou/auto-eeg-analysis/releases/tag/eeglab-v0.1.3-preview">EEGLAB 0.1.3 preview</a> adds a <a href="MATLAB_NATIVE.html">native MATLAB setup</a> for preparation and bounded ERP means, figures and reports without Python/MNE. Use the matching checkout and plugin package; the older 0.1.2 ZIP uses the MNE route.</p>
+<p class="note translation-note">This homepage and the repository README are available in English, Simplified Chinese and Japanese. Detailed guides, skill/recipe source files, figure labels, EEGLAB menus and fixed report templates are currently mainly in English. You can discuss your study with the coding client in Chinese or Japanese.</p>
 </section>
 <section aria-labelledby="project-title" class="page-section" id="project">
 <div class="section-heading">

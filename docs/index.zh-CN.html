@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>AEA｜自动化脑电分析</title>
+<meta content="开放的 EEG 分析技能与工作流配方库，面向 MNE-Python，包含可执行规范和经过数值认证的核心。" name="description"/>
+<meta content="#f3f7fd" name="theme-color"/>
+<link href="https://dengzhe-hou.github.io/auto-eeg-analysis/index.zh-CN.html" rel="canonical"/>
+<link href="https://dengzhe-hou.github.io/auto-eeg-analysis/" hreflang="en" rel="alternate"/>
+<link href="https://dengzhe-hou.github.io/auto-eeg-analysis/index.zh-CN.html" hreflang="zh-Hans" rel="alternate"/>
+<link href="https://dengzhe-hou.github.io/auto-eeg-analysis/index.ja.html" hreflang="ja" rel="alternate"/>
+<link href="https://dengzhe-hou.github.io/auto-eeg-analysis/" hreflang="x-default" rel="alternate"/>
+<link href="assets/site.css" rel="stylesheet"/>
+<script defer="" src="assets/site.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#main">跳至正文</a>
+<header class="site-header">
+<div class="header-inner">
+<a aria-label="AEA 首页" class="brand" href="#main">AEA<span>EEG 方法库</span></a>
+<div class="header-links">
+<nav aria-label="网站导航">
+<a href="#library">资源库</a>
+<a href="#examples">示例</a>
+<a href="#evidence">验证</a>
+<a href="GETTING_STARTED.html">文档</a>
+<a class="nav-source" href="https://github.com/dengzhe-hou/auto-eeg-analysis">GitHub <svg aria-hidden="true" class="arrow" focusable="false" viewbox="0 0 24 24"><path d="M7 17 17 7M7 7h10v10"></path></svg></a>
+</nav>
+<nav aria-label="语言" class="language-switcher">
+<a href="index.html" hreflang="en" lang="en">English</a>
+<a aria-current="page" href="index.zh-CN.html" hreflang="zh-Hans" lang="zh-Hans">简体中文</a>
+<a href="index.ja.html" hreflang="ja" lang="ja">日本語</a>
+</nav>
+</div>
+</div>
+</header>
+<main id="main">
+<section aria-labelledby="hero-title" class="hero">
+<div class="container hero-inner">
+<p class="eyebrow hero-eyebrow">开放的 EEG 方法库</p>
+<h1 id="hero-title">自动 <span>EEG</span> 分析</h1>
+<p class="hero-description">可共享的技能与配方，将 EEG 方法、可执行工作流和可检查的结果连接起来。</p>
+<p class="hero-detail">面向 MNE-Python，提供可执行规范和<a href="#evidence">经过数值认证的核心</a>。</p>
+<div class="hero-actions">
+<a class="button button-primary" href="#get-started">开始使用 <svg aria-hidden="true" class="arrow" focusable="false" viewbox="0 0 24 24"><path d="M12 5v14m-6-6 6 6 6-6"></path></svg></a>
+<a class="button button-outline" href="#recipes">浏览配方</a>
+<a class="button button-text" href="https://github.com/dengzhe-hou/auto-eeg-analysis">在 GitHub 查看 <svg aria-hidden="true" class="arrow" focusable="false" viewbox="0 0 24 24"><path d="M7 17 17 7M7 7h10v10"></path></svg></a>
+</div>
+<ul aria-label="资源库概览" class="hero-facts">
+<li><strong>22</strong> 个分析技能</li>
+<li><strong>10</strong> 个范式配方</li>
+<li><strong>MNE-Python</strong> 计算后端</li>
+</ul>
+</div>
+</section>
+<div class="container content">
+<section aria-labelledby="library-title" class="page-section" id="library">
+<div class="section-heading">
+<p class="eyebrow">资源库</p>
+<h2 id="library-title">可以阅读、调整和检查的方法</h2>
+<p>技能描述单项分析，配方按实验范式组合技能。研究者确定分析选择并批准方案。</p>
+</div>
+<div class="resource-grid">
+<article class="resource-card resource-blue">
+<p class="card-label">01 / 技能</p>
+<h3>分析流程</h3>
+<p>用 Markdown 记录 EEG 方法、数值约定、可执行模板、预期输出和检查。</p>
+<a href="GETTING_STARTED.html#choose-skills-for-a-task">查找技能 <svg aria-hidden="true" class="arrow" focusable="false" viewbox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></a>
+</article>
+<article class="resource-card resource-gold">
+<p class="card-label">02 / 配方</p>
+<h3>研究工作流</h3>
+<p>按范式组合技能，说明数据要求、分析选择和参考来源。</p>
+<a href="#recipes">选择配方 <svg aria-hidden="true" class="arrow" focusable="false" viewbox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></a>
+</article>
+<article class="resource-card resource-violet">
+<p class="card-label">03 / 检查</p>
+<h3>输出背后的证据</h3>
+<p>提供数值比较、输出检查和审阅记录，并说明各配置的验证范围。</p>
+<a href="CERTIFICATION_LEVELS.html">查看证据 <svg aria-hidden="true" class="arrow" focusable="false" viewbox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></a>
+</article>
+</div>
+<details class="skills-disclosure">
+<summary>全部 22 个技能</summary>
+<ul class="skills-list">
+<li><a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/skills/eeg-preprocess/SKILL.md"><code>eeg-preprocess</code></a><span>滤波、参考与坏导</span></li>
+<li><a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/skills/eeg-ica/SKILL.md"><code>eeg-ica</code></a><span>ICA 与成分标注</span></li>
+<li><a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/skills/eeg-epoch/SKILL.md"><code>eeg-epoch</code></a><span>分段与伪迹剔除</span></li>
+<li><a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/skills/eeg-erp/SKILL.md"><code>eeg-erp</code></a><span>ERP 与成分测量</span></li>
+<li><a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/skills/eeg-tfr/SKILL.md"><code>eeg-tfr</code></a><span>时频分析</span></li>
+<li><a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/skills/eeg-spectral/SKILL.md"><code>eeg-spectral</code></a><span>功率谱与频谱参数</span></li>
+<li><a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/skills/eeg-stats/SKILL.md"><code>eeg-stats</code></a><span>统计推断</span></li>
+<li><a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/skills/eeg-decoding/SKILL.md"><code>eeg-decoding</code></a><span>MVPA 与时间泛化</span></li>
+<li><a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/skills/eeg-behavior/SKILL.md"><code>eeg-behavior</code></a><span>行为与试次层面的关联</span></li>
+<li><a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/skills/eeg-connectivity/SKILL.md"><code>eeg-connectivity</code></a><span>功能连接与有向连接</span></li>
+<li><a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/skills/eeg-microstate/SKILL.md"><code>eeg-microstate</code></a><span>微状态图与时间动态</span></li>
+<li><a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/skills/eeg-complexity/SKILL.md"><code>eeg-complexity</code></a><span>熵与复杂度指标</span></li>
+<li><a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/skills/eeg-source/SKILL.md"><code>eeg-source</code></a><span>源定位</span></li>
+<li><a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/skills/eeg-bids/SKILL.md"><code>eeg-bids</code></a><span>BIDS-EEG 转换</span></li>
+<li><a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/skills/eeg-qc/SKILL.md"><code>eeg-qc</code></a><span>数据质量检查</span></li>
+<li><a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/skills/eeg-group-compare/SKILL.md"><code>eeg-group-compare</code></a><span>组间比较与效应量</span></li>
+<li><a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/skills/eeg-figure/SKILL.md"><code>eeg-figure</code></a><span>绘图与数据一致性检查</span></li>
+<li><a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/skills/eeg-methods-text/SKILL.md"><code>eeg-methods-text</code></a><span>COBIDAS-MEEG 方法文字</span></li>
+<li><a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/skills/eeg-audit/SKILL.md"><code>eeg-audit</code></a><span>独立模型审阅</span></li>
+<li><a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/skills/eeg-report/SKILL.md"><code>eeg-report</code></a><span>报告与可复算记录</span></li>
+<li><a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/skills/eeg-pipeline/SKILL.md"><code>eeg-pipeline</code></a><span>分析编排</span></li>
+<li><a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/skills/eeg-recipe/SKILL.md"><code>eeg-recipe</code></a><span>配方执行与版本记录</span></li>
+</ul>
+<p class="note">检查适用于特定输出和配置。请参阅<a href="CERTIFICATION_LEVELS.html">各技能的验证证据</a>。</p>
+</details>
+<div class="recipe-heading">
+<div>
+<h3 id="recipes">从配方开始</h3>
+<p>应用于自己的数据前，先阅读要求和待确认的选择。</p>
+</div>
+<a class="text-link" href="https://github.com/dengzhe-hou/auto-eeg-analysis/tree/main/recipes">源码目录 <svg aria-hidden="true" class="arrow" focusable="false" viewbox="0 0 24 24"><path d="M7 17 17 7M7 7h10v10"></path></svg></a>
+</div>
+<div class="recipe-picks">
+<a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/recipes/n400-semantic/RECIPE.md"><span class="recipe-kind">ERP / 语义启动</span><strong>N400</strong><span>相关词与不相关词 <svg aria-hidden="true" class="arrow" focusable="false" viewbox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span></a>
+<a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/recipes/p300-oddball/RECIPE.md"><span class="recipe-kind">ERP / oddball</span><strong>P300</strong><span>对稀有目标的反应 <svg aria-hidden="true" class="arrow" focusable="false" viewbox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span></a>
+<a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/recipes/resting-spectral-connectivity/RECIPE.md"><span class="recipe-kind">静息态</span><strong>频谱与连接性</strong><span>功率、非周期成分拟合与耦合 <svg aria-hidden="true" class="arrow" focusable="false" viewbox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span></a>
+</div>
+<details class="catalogue-disclosure">
+<summary>查看全部 10 个配方及其声明状态</summary>
+<p class="note">声明状态与已有验证分别记录。复现结果时，请使用相应配方规定的配置。</p>
+<div aria-label="配方目录" class="table-wrap" role="region" tabindex="0">
+<table class="recipe-table">
+<caption class="sr-only">10 个分析配方及其声明状态</caption>
+<thead>
+<tr><th scope="col">配方</th><th scope="col">分析</th><th scope="col">声明状态</th></tr>
+</thead>
+<tbody>
+<tr>
+<th scope="row"><a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/recipes/ern-flankers/RECIPE.md"><code>ern-flankers</code></a></th>
+<td>N2、反应相关负波、额叶 theta</td><td>已验证</td>
+</tr>
+<tr>
+<th scope="row"><a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/recipes/mmn-oddball/RECIPE.md"><code>mmn-oddball</code></a></th>
+<td>听觉失匹配负波</td><td>已验证</td>
+</tr>
+<tr>
+<th scope="row"><a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/recipes/p300-oddball/RECIPE.md"><code>p300-oddball</code></a></th>
+<td>稀有目标诱发的 P300</td><td>实验性<small>已记录组水平验证结果</small></td>
+</tr>
+<tr>
+<th scope="row"><a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/recipes/n170-faces/RECIPE.md"><code>n170-faces</code></a></th>
+<td>人脸与非人脸对照</td><td>已验证</td>
+</tr>
+<tr>
+<th scope="row"><a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/recipes/n170-face-inversion/RECIPE.md"><code>n170-face-inversion</code></a></th>
+<td>正立与倒立人脸</td><td>实验性</td>
+</tr>
+<tr>
+<th scope="row"><a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/recipes/n400-semantic/RECIPE.md"><code>n400-semantic</code></a></th>
+<td>语义启动</td><td>已验证</td>
+</tr>
+<tr>
+<th scope="row"><a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/recipes/alpha-attention-cueing/RECIPE.md"><code>alpha-attention-cueing</code></a></th>
+<td>后部 alpha 调制</td><td>实验性</td>
+</tr>
+<tr>
+<th scope="row"><a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/recipes/resting-microstate/RECIPE.md"><code>resting-microstate</code></a></th>
+<td>静息态微状态图与动态</td><td>已验证</td>
+</tr>
+<tr>
+<th scope="row"><a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/recipes/resting-spectral-connectivity/RECIPE.md"><code>resting-spectral-connectivity</code></a></th>
+<td>功率谱、非周期成分拟合、连接性</td><td>已验证</td>
+</tr>
+<tr>
+<th scope="row"><a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/recipes/complexity-anesthesia/RECIPE.md"><code>complexity-anesthesia</code></a></th>
+<td>连续信号的复杂度与熵</td><td>已验证<small>已检查清醒状态；此处尚未测试麻醉状态</small></td>
+</tr>
+</tbody>
+</table>
+</div>
+</details>
+</section>
+<section aria-labelledby="workflow-title" class="page-section" id="workflows">
+<div class="section-heading">
+<p class="eyebrow">如何工作</p>
+<h2 id="workflow-title">从研究选择到可检查的结果</h2>
+<p>编程助手读取流程，调整模板并执行脚本。分析方案、代码、结果和审阅记录均保留，供研究者检查。</p>
+</div>
+<ol class="workflow-steps">
+<li><span class="step-number">1</span><div><h3>明确问题并批准</h3><p>定义研究内容，选择配方或技能，并确认科学选择。</p></div></li>
+<li><span class="step-number">2</span><div><h3>调整并执行</h3><p>助手在你的环境中生成并运行代码，主要使用 MNE-Python。</p></div></li>
+<li><span class="step-number">3</span><div><h3>检查并重放</h3><p>审阅保存的输出、图、方法文字和检查记录，重放已记录的分析。</p></div></li>
+</ol>
+<figure class="framed-figure workflow-figure">
+<a aria-label="查看 AEA 工作流原图" href="assets/library-overview.svg">
+<img alt="AEA 工作流：技能和配方指导 LLM 编程助手，研究者批准方案，MNE-Python 执行分析。" height="492" loading="lazy" src="assets/library-overview.svg" width="1080"/>
+</a>
+<figcaption>技能和配方描述分析流程；研究者批准方案，助手调整代码，MNE-Python 生成可检查的输出。 <a href="assets/library-overview.svg">查看原图</a>.</figcaption>
+</figure>
+<div class="workflow-links">
+<a href="GETTING_STARTED.html#w2-design-a-custom-analysis">设计自定义分析 <svg aria-hidden="true" class="arrow" focusable="false" viewbox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></a>
+<a href="GETTING_STARTED.html#w3-audit-an-existing-analysis">审阅已有分析 <svg aria-hidden="true" class="arrow" focusable="false" viewbox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></a>
+<a href="REPLAY.html">重放保存的分析 <svg aria-hidden="true" class="arrow" focusable="false" viewbox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></a>
+</div>
+</section>
+<section aria-labelledby="examples-title" class="page-section" id="examples">
+<div class="section-heading example-heading">
+<div><p class="eyebrow">完整示例</p><h2 id="examples-title">可以检查的 N400 分析</h2></div>
+<span class="quiet-label">20 名 ERP CORE 参与者</span>
+</div>
+<p class="section-intro">按照固定 Python 教程，从语义启动配方得到保存的 epochs、参与者平均值、统计、图和方法文字。可以从保存的平均值重新计算组统计，也可以不读取原始 EEG，直接用公开数组重新作图。</p>
+<figure class="framed-figure example-figure">
+<a aria-label="查看 N400 结果原图" href="assets/n400-example.png">
+<img alt="20 名 ERP CORE 参与者的 N400 结果：CPz/Cz/Pz 的相关、不相关及差波 ERP、描述性头皮图和所有参与者的幅值差。" loading="lazy" src="assets/n400-example.png"/>
+</a>
+<figcaption>20 名参与者的保存结果。(a) CPz/Cz/Pz 的 ERP；阴影为参与者间 ±1 SEM，灰色窗口为 300–500 ms。(b) 该窗口内 ROI 峰值时刻的描述性差值头皮图。(c) 每位参与者在 300–500 ms 的“不相关减相关”平均幅值；横线为组平均值。 <a href="assets/n400-example.png">查看原图</a>.</figcaption>
+</figure>
+<div class="example-actions">
+<a class="button button-primary" href="EXAMPLES.html#replot-the-saved-results">用保存的结果重新作图 <svg aria-hidden="true" class="arrow" focusable="false" viewbox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></a>
+<a class="button button-outline" href="EXAMPLES.html#erp-core-complete-n400-recipe-case">打开完整教程</a>
+<a class="text-link" href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/tools/examples/n400/recipe_case_results.json">保存的数值结果 <svg aria-hidden="true" class="arrow" focusable="false" viewbox="0 0 24 24"><path d="M7 17 17 7M7 7h10v10"></path></svg></a>
+</div>
+<p class="note">固定教程需要分析环境和 Arial 或 Helvetica 字体；完整运行还需要 EEG 数据，不需要编程助手或模型账户。 <a href="EXAMPLES.html#prepare-the-n400-data">准备数据</a> · <a href="EXAMPLES.html#prepare-the-figure-fonts">绘图字体</a>.</p>
+<details>
+<summary>配合编程助手使用配方</summary>
+<ol class="tutorial-steps">
+<li><strong>研究问题。</strong> 检验不相关目标词是否比相关目标词诱发更负的 N400。</li>
+<li><strong>研究者批准。</strong> 确认事件标签、CPz/Cz/Pz、300–500 ms、清理方法和统计，并审阅不明确的 ICA 成分。</li>
+<li><strong>生成的代码与结果。</strong> 助手编写并执行脚本，保留条件平均值、统计、图、方法和审阅记录。</li>
+</ol>
+<p><a href="EXAMPLES.html#adapt-a-recipe-to-your-study">已记录的助手案例</a>使用 ICA、局部 AutoReject 和 1024 Hz 采样率。固定教程省略 ICA，使用 256 Hz；两者的结果分别记录。</p>
+</details>
+<details>
+<summary>已有结果与适用范围</summary>
+<p> CPz/Cz/Pz 在 300–500 ms 的分析为每位参与者、每个条件保留 60 个试次。“不相关减相关”幅值为 −2.957 µV（SEM 0.466），一个 cluster 的 p = .0002。在保存的运行中，重放完全复现了 t 图、cluster 掩码、p 值和置换零分布数值，也可以从精简的公开数组重新生成图。 </p>
+<p> 这一记录分支省略 ICA 和幅值剔除。示例中的 20 人队列小于来源数据的 40 人队列，其 ROI 检验与历史上的全通道认证分别记录。头皮图仅作描述；cluster 结果不能定位到每个电极或时间点。这个 v0.3.2 之后新增的示例不评估 LLM 成功率、时间节省、留出数据上的表现或临床效果。 </p>
+</details>
+<details class="additional-example">
+<summary>较早的 N100 与 Flankers 示例</summary>
+<p>这些单参与者示例在 v0.3.2 之后进行了修正。图、脚本、原始方案、阳性和零结果及修正记录均保留在<a href="EXAMPLES.html#earlier-examples">历史示例</a>中。它们不能证明总体效应或 LLM 带来的提速。</p>
+</details>
+</section>
+<section aria-labelledby="evidence-title" class="page-section" id="evidence">
+<div class="section-heading">
+<p class="eyebrow">验证</p>
+<h2 id="evidence-title">范围明确的数值认证核心</h2>
+<p>认证适用于选定的输出和配置。覆盖记录区分跨工具箱比较、独立实现、行为评估和 API 检查。</p>
+</div>
+<div class="evidence-grid">
+<article><p class="card-label">ERP 幅值</p><h3>跨工具箱比较</h3><p>在记录的设置下，将选定的 ERP 输出与 MNE-BIDS-Pipeline、EEGLAB 和 FieldTrip 比较。</p></article>
+<article><p class="card-label">Cluster 统计</p><h3>观测统计量与分区</h3><p>在随库提供的配置下，将选定 cluster 检验的 t 图与 cluster 分区同 FieldTrip 比较。</p></article>
+<article><p class="card-label">频谱功率</p><h3>独立的 Welch 实现</h3><p>固定数值约定后，使用独立实现检查频带功率。</p></article>
+</div>
+<p class="coverage-note">这些比较不等于每个选项或生成的工作流都已认证。主要计算后端是 MNE-Python，EEGLAB 和 FieldTrip 也提供部分替代路线。</p>
+<p class="section-links"><a href="CERTIFICATION_LEVELS.html">各技能的覆盖范围与证据 <svg aria-hidden="true" class="arrow" focusable="false" viewbox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></a><a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/995f53d42cc74205b164e8711d4b289b8c2ad3a1/docs/BENCHMARK.md">基准配置与结果 <svg aria-hidden="true" class="arrow" focusable="false" viewbox="0 0 24 24"><path d="M7 17 17 7M7 7h10v10"></path></svg></a></p>
+<details class="methods-disclosure"><summary>方法文字</summary><p> AEA 读取流程日志，生成 COBIDAS-MEEG 方法段落。数字均从磁盘上的文件读取，不依赖记忆。 </p></details>
+</section>
+<section aria-labelledby="start-title" class="page-section" id="get-started">
+<div class="section-heading">
+<p class="eyebrow">使用 AEA</p>
+<h2 id="start-title">从配方开始，保留清晰的科学选择。</h2>
+<p>先安装 Git、Conda 和已登录的 Codex CLI 或 Claude Code。以下命令使用 <code>main</code>，包含 v0.3.2 之后的修正。</p>
+</div>
+<div class="installation-example">
+<div aria-label="分析客户端" class="client-tabs" role="tablist">
+<button aria-controls="panel-codex" aria-selected="true" id="tab-codex" role="tab" tabindex="0" type="button">Codex CLI</button>
+<button aria-controls="panel-claude" aria-selected="false" id="tab-claude" role="tab" tabindex="-1" type="button">Claude Code</button>
+</div>
+<div aria-labelledby="tab-codex" id="panel-codex" role="tabpanel" tabindex="0">
+<div class="code-heading"><span>在终端中</span><button aria-label="复制 Codex 安装命令" class="copy-button" data-copy="install-codex" type="button">复制</button></div>
+<pre><code id="install-codex">git clone https://github.com/dengzhe-hou/auto-eeg-analysis.git
+cd auto-eeg-analysis
+conda env create -f environment.yml
+conda activate aeais
+python tools/install_skills.py --agent codex
+codex</code></pre>
+<div class="code-heading"><span>在 Codex 内</span><button aria-label="复制 Codex 配方提示" class="copy-button" data-copy="prompt-codex" type="button">复制</button></div>
+<pre><code id="prompt-codex">$eeg-recipe n400-semantic --data projects/my-study</code></pre>
+</div>
+<div aria-labelledby="tab-claude" hidden="" id="panel-claude" role="tabpanel" tabindex="0">
+<div class="code-heading"><span>在终端中</span><button aria-label="复制 Claude 安装命令" class="copy-button" data-copy="install-claude" type="button">复制</button></div>
+<pre><code id="install-claude">git clone https://github.com/dengzhe-hou/auto-eeg-analysis.git
+cd auto-eeg-analysis
+conda env create -f environment.yml
+conda activate aeais
+python tools/install_skills.py --agent claude
+claude</code></pre>
+<div class="code-heading"><span>在 Claude Code 内</span><button aria-label="复制 Claude 配方提示" class="copy-button" data-copy="prompt-claude" type="button">复制</button></div>
+<pre><code id="prompt-claude">/eeg-recipe n400-semantic --data projects/my-study</code></pre>
+</div>
+<p aria-live="polite" class="copy-status" data-copy-fallback="无法使用剪贴板。已选中文字，请使用键盘复制。" data-copy-success="已复制。请粘贴到上方指定的终端或客户端。" id="copy-status" role="status"></p>
+</div>
+<noscript><p>JavaScript 用于客户端标签切换和复制按钮。使用 Claude Code 时，以 <code>--agent claude</code> 安装，启动 <code>claude</code>，再使用 <code>/eeg-recipe</code>。两种客户端均见<a href="GETTING_STARTED.html">安装指南</a>。</p></noscript>
+<p>在仓库根目录运行，并保持分析环境已激活。将兼容数据放入 <code>projects/my-study/raw/</code>，选择适合范式的配方。使用 ERP CORE 时，请参照<a href="EXAMPLES.html#adapt-a-recipe-to-your-study">可直接复制的 N400 说明与批准提示</a>，保留现有数据布局。</p>
+<p>检查识别到的数据，执行前确认分析方案。请为此路线的默认审阅阶段<a href="GETTING_STARTED.html#configure-the-reviewer">配置审阅模型</a>，使用 Claude Code 执行分析时也一样。</p>
+<p class="note"><a href="GETTING_STARTED.html">安装指南</a>说明了共享 Python 环境、数据格式、研究目录和输出文件。Windows 与可选依赖请参阅<a href="PLATFORM_SUPPORT.html">平台支持</a>，也可以<a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/CHANGELOG.md#choose-a-version">选择固定版本</a>。</p>
+<p class="note">使用 Windows 和 EEGLAB？<a href="WINDOWS_FIRST_RUN.html">首次报告教程</a>涵盖安装、执行文件路径、菜单设置和报告打开方式。<a href="EEGLAB.html">预览扩展</a>通过 Python/MNE 连接 EEGLAB 和 AEA。在固定合成数据上，使用真实 Codex 和 Claude 客户端的 Windows MATLAB 路线已通过独立结果检查和重放。</p>
+<p class="note"><a href="https://github.com/dengzhe-hou/auto-eeg-analysis/releases/tag/eeglab-v0.1.3-preview">EEGLAB 0.1.3 预览版</a>新增 <a href="MATLAB_NATIVE.html">MATLAB 原生配置教程</a>，无需 Python/MNE 即可准备研究，并在限定范围内生成 ERP 均值、图和报告。请搭配对应版本的源码与插件包；较早的 0.1.2 ZIP 使用 MNE 路线。</p>
+<p class="note translation-note">主页与仓库 README 提供英文、简体中文和日文版本。详细指南、技能与配方源文件、图中文字、EEGLAB 菜单及固定报告模板目前仍以英文为主。可以用中文或日文与编程助手讨论研究。</p>
+</section>
+<section aria-labelledby="project-title" class="page-section" id="project">
+<div class="section-heading">
+<p class="eyebrow">项目资源</p>
+<h2 id="project-title">继续了解</h2>
+</div>
+<div class="project-links">
+<a href="GETTING_STARTED.html"><strong>使用文档</strong><span>配置、数据与任务索引 <svg aria-hidden="true" class="arrow" focusable="false" viewbox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span></a>
+<a href="EXAMPLES.html"><strong>完整示例</strong><span>方案、图与重放说明 <svg aria-hidden="true" class="arrow" focusable="false" viewbox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span></a>
+<a href="https://github.com/dengzhe-hou/auto-eeg-analysis/releases/tag/v0.3.2"><strong>v0.3.2 发布版</strong><span>固定版本与版本历史 <svg aria-hidden="true" class="arrow" focusable="false" viewbox="0 0 24 24"><path d="M7 17 17 7M7 7h10v10"></path></svg></span></a>
+<a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/CITATION.cff"><strong>引用</strong><span>引用 AEA 和配方来源论文 <svg aria-hidden="true" class="arrow" focusable="false" viewbox="0 0 24 24"><path d="M7 17 17 7M7 7h10v10"></path></svg></span></a>
+<a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/CONTRIBUTING.md"><strong>参与贡献</strong><span>新增配方或改进技能 <svg aria-hidden="true" class="arrow" focusable="false" viewbox="0 0 24 24"><path d="M7 17 17 7M7 7h10v10"></path></svg></span></a>
+<a href="GETTING_STARTED.html#troubleshooting"><strong>帮助与问题排查</strong><span>配置问题与错误报告 <svg aria-hidden="true" class="arrow" focusable="false" viewbox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span></a>
+</div>
+<p class="project-note">AEA 基于 <a href="https://github.com/wanshuiyin/Auto-claude-code-research-in-sleep">ARIS 架构</a>和 EEG 领域知识构建，使用 MNE-Python 计算。重要贡献者将受邀成为 AEA 论文的共同作者，详见贡献指南。</p>
+</section>
+<footer>
+<div><a class="footer-brand" href="#main">AEA</a><span>自动化脑电分析</span></div>
+<p>软件： <a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/LICENSE">MIT</a> · 配方元数据：CC BY 4.0</p>
+<p class="design-credit">版式参考： <a href="https://looketal.com/s/acl-2026-craft.html">CRAFT，来自 Look et al.</a> · <a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/docs/index.html">页面源码</a></p>
+</footer>
+</div>
+</main>
+</body>
+</html>

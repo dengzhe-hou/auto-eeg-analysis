@@ -27,6 +27,10 @@ with missing helpers in the older release.
 These changes have not been assigned a new library release tag. EEGLAB plugin
 previews use separate tags.
 
+- Added Simplified Chinese and Japanese READMEs and homepages, with language
+  links, localized navigation and copy feedback. Detailed technical guides,
+  skill/recipe source and EEGLAB menus remain primarily in English.
+
 - Released EEGLAB plugin preview 0.1.3 with a selectable native
   MATLAB route: EEGLAB preparation/readback, Codex/Claude terminal launch and
   explicit epoched ERP means with figures, HTML report and fresh-process replay.

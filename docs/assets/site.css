@@ -61,6 +61,12 @@ p code, dd code { background: var(--soft); border-radius: 3px; padding: 2px 5px;
 .header-inner nav a { color: var(--muted); text-decoration: none; }
 .header-inner nav a:hover { color: var(--blue-dark); }
 .header-inner nav .nav-source { color: var(--ink); }
+.header-links { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; padding-block: 10px; }
+.header-inner .language-switcher { width: auto; justify-content: flex-end; gap: 14px; font-size: 12px; font-weight: 400; }
+.language-switcher a[aria-current="page"] { color: var(--blue-dark); font-weight: 700; text-decoration: underline; }
+html:lang(zh) { --sans: "Noto Sans CJK SC", "PingFang SC", "Microsoft YaHei", sans-serif; --serif: var(--sans); }
+html:lang(ja) { --sans: "Noto Sans CJK JP", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif; --serif: var(--sans); }
+html:lang(zh) h1, html:lang(zh) h2, html:lang(ja) h1, html:lang(ja) h2 { letter-spacing: 0; }
 
 .hero { border-bottom: 1px solid var(--border); background: linear-gradient(150deg, #e8f0fd, #eef6ff 55%, #f4f8fe); }
 .hero-inner { padding-block: 72px 42px; text-align: center; }
@@ -224,6 +230,7 @@ footer p { margin: 0; }
 }
 
 @media (max-width: 430px) {
+  .header-links { width: 100%; align-items: stretch; padding-block: 2px; }
   html { scroll-padding-top: 115px; }
   .header-inner { flex-wrap: wrap; gap: 4px; padding-block: 10px; }
   .brand { flex-basis: 100%; line-height: 1.25; }
