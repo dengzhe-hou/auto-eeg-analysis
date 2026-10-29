@@ -82,6 +82,8 @@ Each [recipe](recipes/README.md#available-recipes) records its declared status a
 
 Use [CITATION.cff](CITATION.cff) to cite AEA, and cite the source papers declared by the recipes you use. See the [contribution guide](CONTRIBUTING.md) to add or improve a skill or recipe.
 
+Official usage tutorials are in English. You can also [share a community tutorial in any language](CONTRIBUTING.md#share-a-community-tutorial) or [report your first run and platform results](CONTRIBUTING.md#report-a-first-run-or-platform-check), including incomplete attempts.
+
 [Changes](CHANGELOG.md) · [Troubleshooting](docs/GETTING_STARTED.md#troubleshooting) · [Issues](https://github.com/dengzhe-hou/auto-eeg-analysis/issues)
 
 Software uses the [MIT licence](LICENSE); recipe metadata uses CC BY 4.0. Built on [ARIS](https://github.com/wanshuiyin/Auto-claude-code-research-in-sleep).

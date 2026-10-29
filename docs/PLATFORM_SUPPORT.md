@@ -7,6 +7,11 @@ See [EEGLAB](EEGLAB.md) and the preview [native MATLAB route](MATLAB_NATIVE.md)
 for their tested scope. MacBook/EEGLAB desktop testing is left to external users
 and remains unverified; a launcher branch alone is not a completed platform test.
 
+To contribute a first-run or compatibility report, use the
+[platform feedback form](https://github.com/dengzhe-hou/auto-eeg-analysis/issues/new?template=first-run-platform-feedback.md).
+Include the version, environment, steps actually tried and their outcomes, as
+described in the [contribution guide](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/CONTRIBUTING.md#report-a-first-run-or-platform-check).
+
 For the complete clone, environment, skill installation, and first-analysis sequence,
 start with [Getting started](GETTING_STARTED.md). Launch the agent from the AEA
 repository root with the `aeais` environment active. Client installation and model

@@ -81,6 +81,8 @@ $eeg-recipe n400-semantic --data projects/my-study
 
 引用 AEA 时请使用 [CITATION.cff](CITATION.cff)，并引用所用配方声明的来源论文。新增或改进技能、配方，请参照[贡献指南](CONTRIBUTING.md)。
 
+官方使用教程提供英文版。社区可以[贡献任意语言的教程](CONTRIBUTING.md#share-a-community-tutorial)，也可以[提交首次使用和平台测试反馈](CONTRIBUTING.md#report-a-first-run-or-platform-check)，包括未完成或失败的尝试。
+
 [更新记录](CHANGELOG.md) · [问题排查](docs/GETTING_STARTED.md#troubleshooting) · [提交问题](https://github.com/dengzhe-hou/auto-eeg-analysis/issues)
 
 软件采用 [MIT 许可证](LICENSE)，配方元数据采用 CC BY 4.0。项目基于 [ARIS](https://github.com/wanshuiyin/Auto-claude-code-research-in-sleep) 构建。

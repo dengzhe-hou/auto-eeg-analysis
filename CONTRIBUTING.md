@@ -1,6 +1,6 @@
 # Contributing to AEA
 
-Contributions can add an analysis recipe, improve a skill, or fix code and documentation. Start with [Getting started](docs/GETTING_STARTED.md) to set up the environment and load the skills. The [recipe library](recipes/README.md) lists the existing analyses; the [backend registry](tools/env/backends.json) records available backend capabilities.
+Contributions can add an analysis recipe, improve a skill, fix code and documentation, share a community tutorial, or report a first run on your platform. Start with [Getting started](docs/GETTING_STARTED.md) to set up the environment and load the skills. The [recipe library](recipes/README.md) lists the existing analyses; the [backend registry](tools/env/backends.json) records available backend capabilities.
 
 ## Your first pull request
 
@@ -10,6 +10,41 @@ Contributions can add an analysis recipe, improve a skill, or fix code and docum
 4. Open a pull request against `main`. The pull request template asks what changed, how you checked it, and how to reproduce any analysis result. Maintainers review the method, implementation, and evidence before merging.
 
 Use a public or synthetic example when sharing a bug report. Remove account credentials, personal information, and private participant data from logs and screenshots.
+
+## Share a community tutorial
+
+Official usage tutorials are maintained in English. Community tutorials can use
+any language, including Simplified Chinese and Japanese. A written guide, video,
+translated walkthrough, or explanation of a confusing setup step is welcome.
+
+- Submit a link or draft through the [community tutorial form](https://github.com/dengzhe-hou/auto-eeg-analysis/issues/new?template=community-tutorial.md), or open a documentation pull request. You do not need to write code to share a guide.
+- Include the AEA tag or commit, operating system, software and client versions, data source, steps actually tried, and expected outputs. Public or synthetic data make the example easier for others to follow.
+- Credit the original instructions when translating or adapting them. Identify any changes to the analysis settings and explain why they were made.
+- For a guide hosted in this repository, use `docs/community/<descriptive-name>.md`, name its language and author, and link the official English instructions it follows. An external guide can remain on its author's site; share its link and attribution for review.
+
+Maintainers review submitted guides before adding them to the documentation.
+Community guides should identify their author, language, tested version and
+tested scope. A tutorial submission alone does not establish numerical
+certification or support for an entire platform.
+
+## Report a first run or platform check
+
+Use the [first-run and platform feedback form](https://github.com/dengzhe-hou/auto-eeg-analysis/issues/new?template=first-run-platform-feedback.md)
+to share what worked, failed, or was unclear. Reports from macOS users, including
+Intel and Apple Silicon MacBooks, are welcome. You can fill in the form in any
+language, even if you only completed part of the setup.
+
+Record the AEA version, operating system and CPU architecture, relevant Python
+or MATLAB/EEGLAB versions, agent client and model if used, instructions followed,
+and the steps actually exercised. Include the outcome, any manual fixes, and
+shareable logs, screenshots or check results. A model account is unnecessary if
+you only tried the fixed tutorial or saved-result replay.
+
+Distinguish environment setup, client launch, analysis completion, output checks
+and replay in your report. Maintainers can use a reproducible, scoped report to
+update the [platform record](docs/PLATFORM_SUPPORT.md). Successful client launch
+only establishes that launch step; numerical checks need their actual results.
+Keep failed or incomplete steps visible so the instructions can be improved.
 
 ## Contribute a recipe
 

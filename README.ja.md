@@ -81,6 +81,8 @@ WindowsとEEGLABを使う場合は、[最初のレポートを作る手順](docs
 
 AEAの引用には [CITATION.cff](CITATION.cff) を使い、利用したレシピが示す出典論文も引用してください。スキルやレシピを追加・改善する場合は、[貢献ガイド](CONTRIBUTING.md)を参照してください。
 
+公式の利用チュートリアルは英語で提供します。[任意の言語でコミュニティのチュートリアルを投稿](CONTRIBUTING.md#share-a-community-tutorial)したり、途中で止まった試行や失敗を含めて[初回利用や環境ごとの動作結果を報告](CONTRIBUTING.md#report-a-first-run-or-platform-check)したりすることも歓迎します。
+
 [変更履歴](CHANGELOG.md) · [トラブルシューティング](docs/GETTING_STARTED.md#troubleshooting) · [Issue](https://github.com/dengzhe-hou/auto-eeg-analysis/issues)
 
 ソフトウェアは [MITライセンス](LICENSE)、レシピのメタデータはCC BY 4.0で公開しています。[ARIS](https://github.com/wanshuiyin/Auto-claude-code-research-in-sleep)を基に構築しています。
