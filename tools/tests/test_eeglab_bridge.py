@@ -273,7 +273,7 @@ def test_actual_native_eeglab_analysis_without_python_bridge(tmp_path):
         plotted = bridge.read_json(output / 'plot_data.json')
         np.testing.assert_allclose(plotted['traces_uV'], [traces[[0, 2]].mean(axis=0),
                                                         traces[[1, 3]].mean(axis=0)], atol=1e-6)
-        html = (output / 'report-stage/report.html').read_text(encoding='utf-8')
+        html = (output / 'report-stage/report.html').read_text(encoding='utf-8-sig')
         assert 'data-value-uv="2.5"' in html and 'data-value-uv="6.5"' in html
         assert 'data-metric="contrast" data-value-uv="4"' in html
         for extension in ('svg', 'pdf', 'png'):
