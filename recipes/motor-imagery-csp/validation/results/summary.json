@@ -1,0 +1,10 @@
+{
+  "participants": 5,
+  "folds": 15,
+  "trials": 225,
+  "mean_participant_balanced_accuracy": 0.5827380952380952,
+  "sd_participant_balanced_accuracy": 0.10968382461976767,
+  "chance_balanced_accuracy": 0.5,
+  "data_bytes": 38581920,
+  "inference": "Descriptive validation only; no significance or population claim."
+}
