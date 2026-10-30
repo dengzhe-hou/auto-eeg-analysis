@@ -1,0 +1,43 @@
+{
+  "project": "AEA motor-imagery-csp",
+  "subjects": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "runs": [
+    4,
+    8,
+    12
+  ],
+  "labels": {
+    "T1": "left_fist_imagery",
+    "T2": "right_fist_imagery"
+  },
+  "bandpass_hz": [
+    7,
+    30
+  ],
+  "notch_hz": 60,
+  "filter": "MNE zero-phase FIR firwin",
+  "reference": "average applied after filtering",
+  "epoch_s": [
+    1,
+    2
+  ],
+  "baseline": null,
+  "ica": false,
+  "rejection": "annotations and incomplete epochs only; no fitted cleaning",
+  "csp": {
+    "n_components": 4,
+    "reg": null,
+    "log": true,
+    "norm_trace": false,
+    "rank": null
+  },
+  "lda": "svd default",
+  "evaluation": "within-participant leave-one-run-out; no tuning; report every fold, mean and SD of participant means; descriptive, no inferential claim",
+  "validation": "exact prediction/count regression, probability absolute tolerance 1e-6, independent log-variance identity 1e-10; full frozen-script replay; absence of data causes explicit skip only"
+}

@@ -1,0 +1,666 @@
+{
+  "subject": 2,
+  "records": [
+    {
+      "subject": 2,
+      "run": 4,
+      "sfreq": 160.0,
+      "channels": [
+        "FC5",
+        "FC3",
+        "FC1",
+        "FCz",
+        "FC2",
+        "FC4",
+        "FC6",
+        "C5",
+        "C3",
+        "C1",
+        "Cz",
+        "C2",
+        "C4",
+        "C6",
+        "CP5",
+        "CP3",
+        "CP1",
+        "CPz",
+        "CP2",
+        "CP4",
+        "CP6",
+        "Fp1",
+        "Fpz",
+        "Fp2",
+        "AF7",
+        "AF3",
+        "AFz",
+        "AF4",
+        "AF8",
+        "F7",
+        "F5",
+        "F3",
+        "F1",
+        "Fz",
+        "F2",
+        "F4",
+        "F6",
+        "F8",
+        "FT7",
+        "FT8",
+        "T7",
+        "T8",
+        "T9",
+        "T10",
+        "TP7",
+        "TP8",
+        "P7",
+        "P5",
+        "P3",
+        "P1",
+        "Pz",
+        "P2",
+        "P4",
+        "P6",
+        "P8",
+        "PO7",
+        "PO3",
+        "POz",
+        "PO4",
+        "PO8",
+        "O1",
+        "Oz",
+        "O2",
+        "Iz"
+      ],
+      "event_count": 15,
+      "retained": 15,
+      "left": 7,
+      "right": 8,
+      "dropped": [],
+      "source_bytes": 2555616
+    },
+    {
+      "subject": 2,
+      "run": 8,
+      "sfreq": 160.0,
+      "channels": [
+        "FC5",
+        "FC3",
+        "FC1",
+        "FCz",
+        "FC2",
+        "FC4",
+        "FC6",
+        "C5",
+        "C3",
+        "C1",
+        "Cz",
+        "C2",
+        "C4",
+        "C6",
+        "CP5",
+        "CP3",
+        "CP1",
+        "CPz",
+        "CP2",
+        "CP4",
+        "CP6",
+        "Fp1",
+        "Fpz",
+        "Fp2",
+        "AF7",
+        "AF3",
+        "AFz",
+        "AF4",
+        "AF8",
+        "F7",
+        "F5",
+        "F3",
+        "F1",
+        "Fz",
+        "F2",
+        "F4",
+        "F6",
+        "F8",
+        "FT7",
+        "FT8",
+        "T7",
+        "T8",
+        "T9",
+        "T10",
+        "TP7",
+        "TP8",
+        "P7",
+        "P5",
+        "P3",
+        "P1",
+        "Pz",
+        "P2",
+        "P4",
+        "P6",
+        "P8",
+        "PO7",
+        "PO3",
+        "POz",
+        "PO4",
+        "PO8",
+        "O1",
+        "Oz",
+        "O2",
+        "Iz"
+      ],
+      "event_count": 15,
+      "retained": 15,
+      "left": 8,
+      "right": 7,
+      "dropped": [],
+      "source_bytes": 2555616
+    },
+    {
+      "subject": 2,
+      "run": 12,
+      "sfreq": 160.0,
+      "channels": [
+        "FC5",
+        "FC3",
+        "FC1",
+        "FCz",
+        "FC2",
+        "FC4",
+        "FC6",
+        "C5",
+        "C3",
+        "C1",
+        "Cz",
+        "C2",
+        "C4",
+        "C6",
+        "CP5",
+        "CP3",
+        "CP1",
+        "CPz",
+        "CP2",
+        "CP4",
+        "CP6",
+        "Fp1",
+        "Fpz",
+        "Fp2",
+        "AF7",
+        "AF3",
+        "AFz",
+        "AF4",
+        "AF8",
+        "F7",
+        "F5",
+        "F3",
+        "F1",
+        "Fz",
+        "F2",
+        "F4",
+        "F6",
+        "F8",
+        "FT7",
+        "FT8",
+        "T7",
+        "T8",
+        "T9",
+        "T10",
+        "TP7",
+        "TP8",
+        "P7",
+        "P5",
+        "P3",
+        "P1",
+        "Pz",
+        "P2",
+        "P4",
+        "P6",
+        "P8",
+        "PO7",
+        "PO3",
+        "POz",
+        "PO4",
+        "PO8",
+        "O1",
+        "Oz",
+        "O2",
+        "Iz"
+      ],
+      "event_count": 15,
+      "retained": 15,
+      "left": 8,
+      "right": 7,
+      "dropped": [],
+      "source_bytes": 2555616
+    }
+  ],
+  "folds": [
+    {
+      "subject": 2,
+      "held_out_run": 4,
+      "train_runs": [
+        8,
+        12
+      ],
+      "train_n": 30,
+      "test_n": 15,
+      "balanced_accuracy": 0.6517857142857143,
+      "confusion_matrix": [
+        [
+          3,
+          4
+        ],
+        [
+          1,
+          7
+        ]
+      ],
+      "manual_feature_max_error": 4.440892098500626e-16
+    },
+    {
+      "subject": 2,
+      "held_out_run": 8,
+      "train_runs": [
+        4,
+        12
+      ],
+      "train_n": 30,
+      "test_n": 15,
+      "balanced_accuracy": 0.5267857142857143,
+      "confusion_matrix": [
+        [
+          5,
+          3
+        ],
+        [
+          4,
+          3
+        ]
+      ],
+      "manual_feature_max_error": 4.440892098500626e-16
+    },
+    {
+      "subject": 2,
+      "held_out_run": 12,
+      "train_runs": [
+        4,
+        8
+      ],
+      "train_n": 30,
+      "test_n": 15,
+      "balanced_accuracy": 0.7321428571428572,
+      "confusion_matrix": [
+        [
+          6,
+          2
+        ],
+        [
+          2,
+          5
+        ]
+      ],
+      "manual_feature_max_error": 2.220446049250313e-16
+    }
+  ],
+  "predictions": [
+    {
+      "subject": 2,
+      "run": 4,
+      "event_sample": 656,
+      "label": 0,
+      "prediction": 1,
+      "right_probability": 0.6527217192094302
+    },
+    {
+      "subject": 2,
+      "run": 4,
+      "event_sample": 1968,
+      "label": 1,
+      "prediction": 0,
+      "right_probability": 0.3841176540621923
+    },
+    {
+      "subject": 2,
+      "run": 4,
+      "event_sample": 3280,
+      "label": 0,
+      "prediction": 0,
+      "right_probability": 0.20985595669645138
+    },
+    {
+      "subject": 2,
+      "run": 4,
+      "event_sample": 4592,
+      "label": 1,
+      "prediction": 1,
+      "right_probability": 0.5651657191283407
+    },
+    {
+      "subject": 2,
+      "run": 4,
+      "event_sample": 5904,
+      "label": 0,
+      "prediction": 0,
+      "right_probability": 0.32177402870535193
+    },
+    {
+      "subject": 2,
+      "run": 4,
+      "event_sample": 7216,
+      "label": 1,
+      "prediction": 1,
+      "right_probability": 0.713124549650031
+    },
+    {
+      "subject": 2,
+      "run": 4,
+      "event_sample": 8528,
+      "label": 1,
+      "prediction": 1,
+      "right_probability": 0.5997800712921844
+    },
+    {
+      "subject": 2,
+      "run": 4,
+      "event_sample": 9840,
+      "label": 0,
+      "prediction": 0,
+      "right_probability": 0.42905010502837637
+    },
+    {
+      "subject": 2,
+      "run": 4,
+      "event_sample": 11152,
+      "label": 1,
+      "prediction": 1,
+      "right_probability": 0.7406559112956022
+    },
+    {
+      "subject": 2,
+      "run": 4,
+      "event_sample": 12464,
+      "label": 0,
+      "prediction": 1,
+      "right_probability": 0.8362952334448321
+    },
+    {
+      "subject": 2,
+      "run": 4,
+      "event_sample": 13776,
+      "label": 1,
+      "prediction": 1,
+      "right_probability": 0.6157729588945484
+    },
+    {
+      "subject": 2,
+      "run": 4,
+      "event_sample": 15088,
+      "label": 0,
+      "prediction": 1,
+      "right_probability": 0.5670916733760578
+    },
+    {
+      "subject": 2,
+      "run": 4,
+      "event_sample": 16400,
+      "label": 1,
+      "prediction": 1,
+      "right_probability": 0.85769311462906
+    },
+    {
+      "subject": 2,
+      "run": 4,
+      "event_sample": 17712,
+      "label": 0,
+      "prediction": 1,
+      "right_probability": 0.6682014299661136
+    },
+    {
+      "subject": 2,
+      "run": 4,
+      "event_sample": 19024,
+      "label": 1,
+      "prediction": 1,
+      "right_probability": 0.5749127016749095
+    },
+    {
+      "subject": 2,
+      "run": 8,
+      "event_sample": 656,
+      "label": 0,
+      "prediction": 0,
+      "right_probability": 0.16617803472070236
+    },
+    {
+      "subject": 2,
+      "run": 8,
+      "event_sample": 1968,
+      "label": 1,
+      "prediction": 0,
+      "right_probability": 0.06765676147332743
+    },
+    {
+      "subject": 2,
+      "run": 8,
+      "event_sample": 3280,
+      "label": 1,
+      "prediction": 1,
+      "right_probability": 0.9972854281415331
+    },
+    {
+      "subject": 2,
+      "run": 8,
+      "event_sample": 4592,
+      "label": 0,
+      "prediction": 0,
+      "right_probability": 0.07515079841188792
+    },
+    {
+      "subject": 2,
+      "run": 8,
+      "event_sample": 5904,
+      "label": 1,
+      "prediction": 0,
+      "right_probability": 0.38576923589635276
+    },
+    {
+      "subject": 2,
+      "run": 8,
+      "event_sample": 7216,
+      "label": 0,
+      "prediction": 1,
+      "right_probability": 0.6664841636721807
+    },
+    {
+      "subject": 2,
+      "run": 8,
+      "event_sample": 8528,
+      "label": 1,
+      "prediction": 1,
+      "right_probability": 0.8903784905548903
+    },
+    {
+      "subject": 2,
+      "run": 8,
+      "event_sample": 9840,
+      "label": 0,
+      "prediction": 1,
+      "right_probability": 0.5702509623207302
+    },
+    {
+      "subject": 2,
+      "run": 8,
+      "event_sample": 11152,
+      "label": 1,
+      "prediction": 1,
+      "right_probability": 0.9995966348439179
+    },
+    {
+      "subject": 2,
+      "run": 8,
+      "event_sample": 12464,
+      "label": 0,
+      "prediction": 0,
+      "right_probability": 0.39510175179084056
+    },
+    {
+      "subject": 2,
+      "run": 8,
+      "event_sample": 13776,
+      "label": 1,
+      "prediction": 0,
+      "right_probability": 0.11078046921498524
+    },
+    {
+      "subject": 2,
+      "run": 8,
+      "event_sample": 15088,
+      "label": 0,
+      "prediction": 0,
+      "right_probability": 0.002146817348120798
+    },
+    {
+      "subject": 2,
+      "run": 8,
+      "event_sample": 16400,
+      "label": 0,
+      "prediction": 1,
+      "right_probability": 0.5724644707740715
+    },
+    {
+      "subject": 2,
+      "run": 8,
+      "event_sample": 17712,
+      "label": 1,
+      "prediction": 0,
+      "right_probability": 0.027937894950375904
+    },
+    {
+      "subject": 2,
+      "run": 8,
+      "event_sample": 19024,
+      "label": 0,
+      "prediction": 0,
+      "right_probability": 0.20928757346093804
+    },
+    {
+      "subject": 2,
+      "run": 12,
+      "event_sample": 656,
+      "label": 0,
+      "prediction": 1,
+      "right_probability": 0.9688432611421314
+    },
+    {
+      "subject": 2,
+      "run": 12,
+      "event_sample": 1968,
+      "label": 1,
+      "prediction": 1,
+      "right_probability": 0.9941675703043164
+    },
+    {
+      "subject": 2,
+      "run": 12,
+      "event_sample": 3280,
+      "label": 1,
+      "prediction": 1,
+      "right_probability": 0.9671814752772641
+    },
+    {
+      "subject": 2,
+      "run": 12,
+      "event_sample": 4592,
+      "label": 0,
+      "prediction": 0,
+      "right_probability": 8.524774880552638e-05
+    },
+    {
+      "subject": 2,
+      "run": 12,
+      "event_sample": 5904,
+      "label": 1,
+      "prediction": 1,
+      "right_probability": 0.9998966399296894
+    },
+    {
+      "subject": 2,
+      "run": 12,
+      "event_sample": 7216,
+      "label": 0,
+      "prediction": 0,
+      "right_probability": 0.02582238383861179
+    },
+    {
+      "subject": 2,
+      "run": 12,
+      "event_sample": 8528,
+      "label": 0,
+      "prediction": 0,
+      "right_probability": 3.7119074789085035e-05
+    },
+    {
+      "subject": 2,
+      "run": 12,
+      "event_sample": 9840,
+      "label": 1,
+      "prediction": 0,
+      "right_probability": 0.2872302180449343
+    },
+    {
+      "subject": 2,
+      "run": 12,
+      "event_sample": 11152,
+      "label": 1,
+      "prediction": 1,
+      "right_probability": 0.9999992016154323
+    },
+    {
+      "subject": 2,
+      "run": 12,
+      "event_sample": 12464,
+      "label": 0,
+      "prediction": 0,
+      "right_probability": 1.5651685204017638e-11
+    },
+    {
+      "subject": 2,
+      "run": 12,
+      "event_sample": 13776,
+      "label": 1,
+      "prediction": 0,
+      "right_probability": 0.001521099573346305
+    },
+    {
+      "subject": 2,
+      "run": 12,
+      "event_sample": 15088,
+      "label": 0,
+      "prediction": 0,
+      "right_probability": 0.0007547795361121801
+    },
+    {
+      "subject": 2,
+      "run": 12,
+      "event_sample": 16400,
+      "label": 0,
+      "prediction": 0,
+      "right_probability": 6.308599189750988e-06
+    },
+    {
+      "subject": 2,
+      "run": 12,
+      "event_sample": 17712,
+      "label": 1,
+      "prediction": 1,
+      "right_probability": 0.9910415317250485
+    },
+    {
+      "subject": 2,
+      "run": 12,
+      "event_sample": 19024,
+      "label": 0,
+      "prediction": 1,
+      "right_probability": 0.9999997593373771
+    }
+  ]
+}
