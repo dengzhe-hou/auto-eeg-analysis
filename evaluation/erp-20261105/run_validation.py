@@ -122,7 +122,9 @@ def run(item, row):
                                   execution_timeout_sec=float(limit['execution_timeout_sec']), case_timeout_sec=float(limit['case_timeout_sec']))
     ctx, rewritten = prepare_case_context(config=config, run_root=create_run_root(config), workspace_root=base.PILOT,
                                           instance_id=item['request_id'], agent_input={'instruction': item['instruction']})
-    ctx = replace(ctx, input_mounts={RAW_ROOT: MOUNT}, runtime_dir=Path(tempfile.mkdtemp(prefix='aea-erp-', dir=out)))
+    runtime_root = ROOT / 'rt'
+    runtime_root.mkdir(exist_ok=True)
+    ctx = replace(ctx, input_mounts={RAW_ROOT: MOUNT}, runtime_dir=Path(tempfile.mkdtemp(prefix='', dir=runtime_root)))
     ctx.audit.update(formal_session=label, AEA_condition=row['arm'], repetition=row['repetition'], bids_mount=MOUNT,
                      source_bids_root=str(RAW_ROOT), contract_version='erp-explicit-plan-20261101')
     public = json.loads(Path(item['public_contract_path']).read_text())

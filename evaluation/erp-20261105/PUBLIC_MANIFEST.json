@@ -1,6 +1,6 @@
 {
-  "status": "public_pre_run_freeze",
-  "formal_sessions_started": 0,
+  "status": "public_freeze_with_pre_model_runtime_correction",
+  "formal_sessions_started": 2,
   "resource_version": "aea-erp-r1-20261101",
   "files": [
     {
@@ -49,7 +49,7 @@
     },
     {
       "path": "run_validation.py",
-      "bytes": 10913
+      "bytes": 10983
     },
     {
       "path": "controller.py",
@@ -214,10 +214,16 @@
     {
       "path": "FREEZE_RECORD.json",
       "bytes": 4226
+    },
+    {
+      "path": "LAUNCH_CORRECTION.md",
+      "bytes": 1339
     }
   ],
   "included_reference_outputs": false,
   "included_raw_eeg": false,
   "credential_pattern_findings": [],
-  "public_deposit_authorization": "User authorized an independent GitHub freeze branch and formal execution on 2026-11-05."
+  "public_deposit_authorization": "User authorized an independent GitHub freeze branch and formal execution on 2026-11-05.",
+  "formal_model_requests_at_revision": 0,
+  "initial_freeze_commit": "95a24a6043e306129d1e6c09665dfee8a8557de2"
 }

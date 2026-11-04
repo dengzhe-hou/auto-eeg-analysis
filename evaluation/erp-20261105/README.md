@@ -1,6 +1,6 @@
 # AEA ERP paired-validation public freeze
 
-This commit freezes the approved plan and resources on 2026-11-05 before the first formal session. The user explicitly authorized public freezing and formal execution. It contains no formal-run results.
+Commit 95a24a6 froze the approved plan and resources before formal launch. This revision records the runtime-path correction described in LAUNCH_CORRECTION.md after two infrastructure-only failures and before the first formal model request. The scientific plan and resource snapshot are unchanged.
 
 The approved design remains 24 requests, two resource conditions and three
 repetitions (144 formal sessions), using Haiku 5.5 and the original 12 USD cap.
