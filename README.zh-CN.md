@@ -1,19 +1,42 @@
-<h1 align="center">AEA</h1>
-<h3 align="center">可共享的 EEG 分析技能与工作流配方</h3>
+<div align="center">
+
+# AEA：可共享的 EEG 分析技能与工作流配方
 
 <p align="center"><a href="README.md">English</a> · <strong>简体中文</strong> · <a href="README.ja.md">日本語</a></p>
+
+[![Documentation](https://img.shields.io/badge/Docs-Get_started-2f6fd0)](docs/GETTING_STARTED.md)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![EEGLAB 0.1.3](https://img.shields.io/badge/EEGLAB-0.1.3-6d4bd6)](docs/EEGLAB.md)
+
+**[中文主页](https://dengzhe-hou.github.io/auto-eeg-analysis/index.zh-CN.html) · [使用指南](docs/GETTING_STARTED.md) · [配方目录](recipes/README.md) · [验证范围](docs/CERTIFICATION_LEVELS.md) · [参与贡献](CONTRIBUTING.md) · [发布版本](https://github.com/dengzhe-hou/auto-eeg-analysis/releases/latest)**
+
+</div>
 
 AEA（Automated EEG Analysis，自动化脑电分析）是一个开放资源库，提供面向 MNE-Python 的 **22 个技能（skills）和 10 个工作流配方（recipes）**，包含可执行规范和经过数值认证的核心。技能整合 EEG 方法、数值约定、代码模板和输出检查；配方将技能组合为适用于特定实验范式的工作流。
 
 研究者定义研究问题并批准分析方案。编程助手在你的环境中调整并执行模板，将方案、代码、结果、图、方法文字和审阅记录保存在一起。
 
-[中文主页](https://dengzhe-hou.github.io/auto-eeg-analysis/index.zh-CN.html) · [使用指南](docs/GETTING_STARTED.md) · [配方目录](recipes/README.md) · [验证范围](docs/CERTIFICATION_LEVELS.md) · [参与贡献](CONTRIBUTING.md) · [发布版本](https://github.com/dengzhe-hou/auto-eeg-analysis/releases/latest)
+| 阶段 | 执行者与资源 | 输入 → 输出 |
+| --- | --- | --- |
+| **定义并批准** | 研究者、配方和技能 | 研究问题与数据 → 已批准的分析方案 |
+| **调整并执行** | 编程助手与代码模板 | 已批准的方案 → 主要使用 MNE-Python 执行的脚本 |
+| **检查与重放** | 研究者与输出检查 | 已保存结果 → 图、方法文字、审阅与有记录的重放 |
+
+## 输出示例
+
+[![20 名 ERP CORE 参与者的 N400 结果：CPz/Cz/Pz 的 ERP 曲线、描述性头皮图及各参与者的幅值差。](docs/assets/n400-example.png)](docs/assets/n400-example.png)
+
+固定 N400 示例保留了 20 名 ERP CORE 参与者的结果：CPz/Cz/Pz 的 ERP 曲线及参与者间 ±1 SEM、描述性差值头皮图，以及每位参与者在 300–500 ms 的“不相关减相关”幅值。其[保存的配置和结果](tools/examples/n400/recipe_case_results.json)与已记录的助手运行和历史认证分别记录。
+
+[运行示例](docs/EXAMPLES.md#erp-core-complete-n400-recipe-case) · [用保存的结果重新作图](docs/EXAMPLES.md#replot-the-saved-results) · [查看助手案例记录](docs/EXAMPLES.md#adapt-a-recipe-to-your-study)
+
+---
+
+## 快速开始
 
 此 README 和主页提供三语版本。详细指南、技能与配方源文件、图中文字、EEGLAB 菜单及固定报告模板目前仍以英文为主。可以用中文与编程助手沟通。
 
 **EEGLAB 扩展已获批准：** AEA 0.1.3 已列入 [EEGLAB 官方扩展目录](https://sccn.ucsd.edu/eeglab/plugin_uploader/plugin_list_all.php)。在 EEGLAB 中打开 **File > Manage EEGLAB extensions**，搜索 **AEA** 并安装，再按[配置指南](docs/EEGLAB.md)连接 AEA 源码目录和编程客户端。
-
-## 快速开始
 
 先安装 Git、Conda，以及已登录的 Codex CLI 或 Claude Code。以下命令使用 `main`，包含 [v0.3.2](CHANGELOG.md#choose-a-version) 之后的修正。
 
@@ -43,25 +66,15 @@ $eeg-recipe n400-semantic --data projects/my-study
 > [!TIP]
 > 不使用编程助手或模型账户，也可以运行[固定 Python 教程](docs/EXAMPLES.md#erp-core-complete-n400-recipe-case)体验 N400 示例；还可以[不读取原始 EEG，直接用已保存结果重新作图](docs/EXAMPLES.md#replot-the-saved-results)。
 
-## 如何工作
+---
 
-| 步骤 | 实际操作 |
-| --- | --- |
-| 明确问题并批准方案 | 定义研究问题和分析选择，选择配方或组合技能。 |
-| 调整并执行 | 助手读取流程，调整代码模板，主要通过 MNE-Python 执行。 |
-| 检查并重放 | 审阅保存的输出、图、方法文字和检查记录，重放已记录的分析。 |
+## 如何工作
 
 [![AEA 工作流：技能和配方指导 LLM 编程助手，研究者批准方案，MNE-Python 执行分析。](docs/assets/library-overview.svg)](docs/assets/library-overview.svg)
 
 [已记录的助手工作流](docs/EXAMPLES.md#adapt-a-recipe-to-your-study) · [自定义分析](docs/GETTING_STARTED.md#w2-design-a-custom-analysis) · [重放指南](docs/REPLAY.md)
 
-## 输出示例
-
-[![20 名 ERP CORE 参与者的 N400 结果：CPz/Cz/Pz 的 ERP 曲线、描述性头皮图及各参与者的幅值差。](docs/assets/n400-example.png)](docs/assets/n400-example.png)
-
-固定 N400 示例保留了 20 名 ERP CORE 参与者的结果：CPz/Cz/Pz 的 ERP 曲线及参与者间 ±1 SEM、描述性差值头皮图，以及每位参与者在 300–500 ms 的“不相关减相关”幅值。其[保存的配置和结果](tools/examples/n400/recipe_case_results.json)与已记录的助手运行和历史认证分别记录。
-
-[运行示例](docs/EXAMPLES.md#erp-core-complete-n400-recipe-case) · [用保存的结果重新作图](docs/EXAMPLES.md#replot-the-saved-results) · [查看助手案例记录](docs/EXAMPLES.md#adapt-a-recipe-to-your-study)
+---
 
 ## 浏览资源库
 
@@ -71,6 +84,8 @@ $eeg-recipe n400-semantic --data projects/my-study
 | 配方 | 特定范式的工作流、数据要求、参数选择和来源论文 | [配方目录](recipes/README.md) |
 | 完整示例 | 方案、脚本、保存的结果、图和重放说明 | [示例指南](docs/EXAMPLES.md) |
 
+---
+
 ## 验证范围
 
 认证仅适用于[覆盖记录](docs/CERTIFICATION_LEVELS.md)中列出的**输出和配置**。数值核心涵盖部分 ERP 幅值、cluster 统计和频带功率。EEGLAB 与 FieldTrip 提供独立比较以及部分替代后端路线。
@@ -78,6 +93,8 @@ $eeg-recipe n400-semantic --data projects/my-study
 每个[配方](recipes/README.md#available-recipes)均记录其声明状态和已有评估。经过检查的数值核心不等于所有选项或生成的工作流都已认证。
 
 [验证范围](docs/CERTIFICATION_LEVELS.md) · [基准配置与结果](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/995f53d42cc74205b164e8711d4b289b8c2ad3a1/docs/BENCHMARK.md)
+
+---
 
 ## 引用与贡献
 
@@ -89,4 +106,4 @@ $eeg-recipe n400-semantic --data projects/my-study
 
 软件采用 [MIT 许可证](LICENSE)，配方元数据采用 CC BY 4.0。项目基于 [ARIS](https://github.com/wanshuiyin/Auto-claude-code-research-in-sleep) 构建。
 
-版式参考：[PEFT](https://looketal.com/s/readme-huggingface-peft.html)，来自 [Look et al.](https://looketal.com/)。
+版式参考：[CRAFT](https://looketal.com/s/readme-coral-lab-asu-craft.html)，来自 [Look et al.](https://looketal.com/)。
