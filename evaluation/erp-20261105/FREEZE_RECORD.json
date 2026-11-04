@@ -1,0 +1,107 @@
+{
+  "status": "public_frozen_before_formal_runs",
+  "public_archive_url": null,
+  "drafted_at_utc": "2026-11-01T14:13:48.21511+09:00",
+  "research_question": "Starting from BIDS data in a public repository and a given plan, does an agent with AEA more often reach the certified reference answer than one without AEA?",
+  "formal_instances": 24,
+  "single_subject_requests": 20,
+  "group_requests": 4,
+  "components": [
+    "P3b",
+    "N170",
+    "ERN",
+    "N400"
+  ],
+  "subjects": "sub-021 to sub-040",
+  "single_subject_rule": "First five eligible subjects by number within sub-021 to sub-040, per component, using the trial minimum of tab:spec. Fixed before any model result.",
+  "repetitions": 3,
+  "formal_sessions": 144,
+  "pilot_sessions_not_in_estimate": 4,
+  "randomization_seed": 20261101,
+  "model": {
+    "execution": "claude-haiku-5-5",
+    "thinking": {
+      "type": "disabled"
+    },
+    "effort": "medium",
+    "max_completion_tokens": 2048,
+    "loop": "Upstream BrainBench CodeAct, unchanged",
+    "max_iterations": 20,
+    "max_non_action_responses": 3,
+    "repeated_failure_limit": 3,
+    "observation_max_chars": 8000,
+    "basis": "Same settings as aea-next-validation-preparation-20261031, read from its actual provider requests in EXECUTION_CONFIG_WITNESS.json"
+  },
+  "judge": {
+    "enabled": false,
+    "sonnet_requests_expected": 0,
+    "enforced_by": "StudyClient refuses any role other than target"
+  },
+  "session_limits": {
+    "execution_timeout_sec": 300,
+    "case_timeout_sec": 1200,
+    "cpus_per_session": 2,
+    "threads_in_kernel": 1,
+    "memory_gib": {
+      "single_subject": 8,
+      "group": 16
+    },
+    "same_in_both_arms": true
+  },
+  "resource_version": "aea-erp-r1-20261101",
+  "execution_condition": "preloaded_procedures chosen by the experimenter per component; control arm has no AEA resources; all else identical",
+  "reference": {
+    "code": "v0.3.2 validate_p3_group.py, validate_n170_erpcore_group.py, validate_ern_erpcore_group.py, validate_n400_erpcore_group.py, unchanged",
+    "environment_frozen": "MNE 1.12.1",
+    "cross_environment_max_abs_roi_difference_uv": 1.8918200339612667E-13
+  },
+  "primary_endpoint": "Answer fields. Single subject: ROI amplitude absolute error at most 0.1 uV. Group: effect direction, t-test significance and cluster significance equal to the reference. Deterministic checks only.",
+  "secondary_endpoints": [
+    "full contract",
+    "evidence arrays",
+    "BIDS-Derivatives passes bids-validator with subject outputs",
+    "dataset version and DOI recorded"
+  ],
+  "statistic": "Request mean of 3 paired differences; equal weight over 24 requests; crossed exponential weights on component and subject, 10000 draws, seed 20261029; the 4 group requests share one subject-factor level",
+  "criterion": "Positive difference and lower limit of the 95 percent interval above zero",
+  "analysis_code": "analyze_validation.py",
+  "verifier_code": "verify_contract.py",
+  "public_files_proposed": [
+    "EXPERIMENT_PLAN.md",
+    "requests/",
+    "SCHEDULE.proposed.json",
+    "REQUESTS.json",
+    "packets/",
+    "aea-erp-r1-20261101.zip",
+    "components.py",
+    "contracts.py",
+    "verify_contract.py",
+    "grade_validation.py",
+    "analyze_validation.py",
+    "run_validation.py",
+    "controller.py",
+    "RUN_PARAMETERS.json",
+    "data_prep/DATA_MANIFEST.json"
+  ],
+  "private_until_decision": [
+    "references_frozen/",
+    "references/",
+    "REFERENCE_AGREEMENT.json",
+    "calibration/",
+    "PLAN_DETAIL_SENSITIVITY.json",
+    "sessions/"
+  ],
+  "cost": {
+    "pilot_usd": 0.1624612,
+    "forecast_formal_usd": 5.204880000000001,
+    "new_api_cap_usd": 12.0,
+    "effective_shared_ceiling_usd": 39.897205400000175
+  },
+  "target_replacement_allowed": false,
+  "formal_authorized": true,
+  "publication_authorized": true,
+  "approval_date": "2026-11-05 Asia/Tokyo",
+  "user_execution_instruction": "执行",
+  "user_publication_instruction": "允许公开冻结并开跑（推荐）",
+  "effective_plan": "Approved defaults unchanged; pending proposed endpoint/resource changes are not adopted. See README.md."
+}

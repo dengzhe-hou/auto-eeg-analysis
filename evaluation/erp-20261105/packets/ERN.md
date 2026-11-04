@@ -1,0 +1,1925 @@
+AEA preloaded procedures and executable templates
+
+Use these selected procedures for the supplied approved task. Scientific settings come from that task and its approved plan, not an example. Record procedures/helpers actually used and any explicit adaptations. Complete input delivery is distinct from correct execution. Run the public artifact self-check before final delivery; external numerical verification remains separate.
+
+AEA procedure: skills/eeg-preprocess/SKILL.md
+
+---
+name: eeg-preprocess
+description: "Preprocess raw EEG according to the approved analysis plan: filtering, reference, bad channels and line noise. Also use for explicitly bounded channel/filter/export tasks and population-SD global field power (GFP) with peak times. Preserve the requested channels, operation order, units and outputs."
+argument-hint: "[project-dir] [— subjects: sub-01,sub-02,...]"
+allowed-tools: Bash(*), Read, Write, Edit, Grep, Glob
+---
+
+# eeg-preprocess: Raw → preprocessed EEG
+
+Canonical sample skill for AEA. Mirrors ARIS skill structure: Constants → Inputs → Phases → Output → Errors.
+
+## Context: $ARGUMENTS
+
+## Use this skill
+
+Read the task and approved plan, then select only the matching procedure.
+For a bounded calculation, go directly to these sections:
+
+- [Bounded preprocessing](references/bounded.md#bounded-preprocessing): translate
+  approved steps, preserve their order and use a fresh input copy after errors.
+- [Population global field power](references/bounded.md#population-global-field-power):
+  preserve the approved buffer and compute absolute peak times.
+- [Result status and inference limits](references/bounded.md#result-status-and-inference-limits):
+  distinguish missing source data, supported calculations and unsupported inference.
+- [Public artifact self-check](references/bounded.md#public-artifact-self-check):
+  save actual outputs and check the processing, arrays and final JSON at the declared scope.
+
+The full-study stages below apply when that workflow is requested. Their example
+values add no processing step or scientific default to a bounded task. Preserve
+fixed settings; record unresolved scientific choices and continue independent
+approved work. A timeout or unattended run supplies no additional approval.
+
+For clients without native skill loading, use the section loader from the
+repository root; it loads the selected procedure, not the whole reference:
+
+```bash
+python tools/load_skill.py eeg-preprocess --section "Bounded preprocessing"
+```
+
+For an approved bounded MNE GFP, Welch or Hilbert plan, the
+[continuous-plan runner](../../docs/PRELOADED_SKILLS.md#execute-and-check-a-complete-continuous-plan)
+executes its ordered operations and saves actual metadata and a checked final
+JSON object. This route adds no scientific defaults.
+
+## Required inputs
+
+For a bounded channel/filter/export/GFP request, the supplied Raw or recording
+and resolved task/plan provide the inputs. Preserve documented channel roles,
+units, interval, operation order and output requirements; do not construct
+unrequested full-study directories.
+
+For a full study, the following must exist in the project directory:
+
+1. `DATASET_BRIEF.md` — auto-generated via `tools/auto_brief.py` or manually filled. Resolve scientific choices against the approved plan. For an explicitly bounded request, its supplied public plan can provide these inputs; do not invent a new study brief or adopt example filter/reference values.
+2. `ENVIRONMENT.json` — produced by `tools/env/check_env.{sh,ps1}`. Run the probe if missing.
+3. `raw/` — directory with subject files (`.bdf`/`.set`/`.edf`/`.fif`/`.vhdr`).
+
+## Critical Rules
+
+- **Never** change the preprocessing order without justification. Filter → detect bads → interpolate → re-reference is the canonical order (Robbins et al. 2020).
+- **Never** use a highpass >0.1 Hz for the final ERP data without documenting the rationale (risk of filter artifacts in baseline, Tanner et al. 2015).
+- **Never** use causal (single-pass) filters for offline analysis — they introduce phase distortion and asymmetric temporal smearing.
+- **Never** apply ICA in this stage — ICA belongs in `eeg-ica`. This stage only prepares data for ICA (1 Hz highpass copy if needed).
+- When line-noise removal is approved, use its actual frequency and method; a lowpass does not establish that the specified operation was performed. Bounded tasks receive only their approved operations.
+- **Never** use a lowpass below 20 Hz for ERP data — it distorts component morphology.
+- **Never** include EOG/ECG/EMG/mastoid channels in an `average` reference — set their channel types (or drop them) first, or they leak into every scalp channel.
+- **Never** silently change the planned sampling rate or downsampling stage. Raw resampling affects event-time precision; epoch resampling requires edge-effect precautions, and decimation requires prior anti-alias filtering.
+- **Never** choose ICA dimensionality without accounting for the actual reference, interpolation and effective rank. Record `n_interpolated`, `avg_ref_applied` and projection state; a signal-derived rank already includes those dependencies and must not have them subtracted again.
+- **Never** try to ICA out a transient all-channel excursion (head movement, swallow) — annotate it `'bad'` and reject the segment; ICA is for spatially-stationary sources (blinks, EOG, cardiac, EMG elsewhere).
+- **Never** change the approved reference order or apply a decomposition to a different channel/reference configuration. Record whether average reference is applied or only a pending projector, and use the corresponding effective rank.
+- A FIR parameter table or spectral integration band does not authorize a filter. Keep the approved processing order and do not add a notch or bandpass to an analysis that does not request it.
+- **Never** decimate or slice samples without appropriate prior anti-alias filtering. Do not confuse this with MNE `resample`, which includes its own anti-alias filter.
+- **Never** re-filter already-baselined epochs without re-running baseline correction — filtering reshapes the baseline window and invalidates the prior correction (prefer finalizing all filtering on continuous `Raw` before epoching).
+
+
+## Procedure reference
+
+Use the [bounded processing/export helpers](scripts/continuous.py) to select
+the actual analysis subset, preserve SI units and reopen exported EDF files.
+
+Choose the section that matches the current operation. Detailed code examples
+and numerical conventions remain in the linked source.
+
+Before an average reference or an EEG-only channel ranking, read
+[Channel identity and actual analysis picks](references/channel-identity.md).
+Use the bundled [channel checker](scripts/check_channels.py) with the recording's
+documented identities and the approved channel set. Reader-default EEG labels
+alone are not evidence of scalp identity.
+
+## Constants
+
+Read this section in [the detailed procedure](references/procedure.md).
+
+## Phase A — Plan
+
+Read this section in [the detailed procedure](references/procedure.md).
+
+## Phase B — Backend resolution
+
+Read this section in [the detailed procedure](references/procedure.md).
+
+## Phase C — Per-subject execution
+
+Read this section in [the detailed procedure](references/procedure.md).
+
+## Phase D — Aggregate summary
+
+Read this section in [the detailed procedure](references/procedure.md).
+
+## Phase E — Sanity checks before signaling success
+
+Read this section in [the detailed procedure](references/procedure.md).
+
+## Error handling
+
+Read this section in [the detailed procedure](references/procedure.md).
+
+## Domain Knowledge (distilled from EEG methodology literature)
+
+Read this section in [the method background](references/background.md).
+
+## Cross-references
+
+- Inputs: `DATASET_BRIEF.md`, `ENVIRONMENT.json`, `ANALYSIS_PLAN.md` (for seed)
+- Next stage: `eeg-ica` reads `preprocess-stage/<sub>/<sub>_preprocessed_raw.fif` and **uses `n_interpolated` + `avg_ref_applied` from `preprocess_summary.json` to set `ICA(n_components=...)`** (fit on a 1 Hz-highpass copy, apply to the 0.1 Hz data).
+- `eeg-epoch` consumes the `'bad_*'` annotations written here via `reject_by_annotation=True`; amplitude-based peak-to-peak rejection (~100 µV, tightened for clean data) is applied there, AFTER ICA.
+- `eeg-connectivity` may apply `compute_current_source_density()` (this skill's optional CSD transform) before sensor-space FC to reduce volume conduction.
+- Audit: `eeg-audit` checks that the bandpass and reference recorded in `preprocess_summary.json` match what `DATASET_BRIEF.md` declared.
+
+
+AEA procedure: skills/eeg-preprocess/references/procedure.md
+
+## Constants
+
+- **BACKEND = `mne`** — MNE-Python is the computation backend.
+- **OUTPUT_DIR = `preprocess-stage/`** — relative to project root. Create if missing.
+- **DEFAULT_BANDPASS = `[0.1, 40.0]` Hz** — overridden by `DATASET_BRIEF.md > Preprocessing decisions > Bandpass`.
+- **DEFAULT_NOTCH = inferred from country** — Japan/EU = 50 Hz, US = 60 Hz. Always confirmed against `DATASET_BRIEF.md > Notch`.
+- **DEFAULT_REFERENCE = `average`** — overridden by `DATASET_BRIEF.md > Re-reference scheme`.
+- **DEFAULT_BAD_CHAN_RULE = `ransac`** (via pyprep). Falls back to manual list if pyprep missing.
+- **RESAMPLE_TO = `null`** — no resampling unless DATASET_BRIEF requests it (recommend ≥250 Hz for ERP, ≥500 Hz for high-freq).
+- **N_JOBS = `4`** — parallelism for filtering. Lower if memory-constrained.
+
+## Phase A — Plan
+
+Before touching data, write `preprocess-stage/PREPROCESS_PLAN.json` summarizing:
+
+```json
+{
+  "backend": "mne",                     // MNE-Python
+  "bandpass": [0.1, 40.0],
+  "notch_freqs": [50],
+  "reference": "average",
+  "bad_channel_detection": "ransac",
+  "resample_sfreq": null,
+  "n_jobs": 4,
+  "subjects": ["sub-01", "sub-02", ...],
+  "raw_format": ".bdf",
+  "seed": 42                            // copied from ANALYSIS_PLAN if it exists
+}
+```
+
+If the user provided overrides via the skill argument (`— bandpass: 0.5,30`), apply them here. Print the plan and **wait for user confirmation** (or auto-proceed if `AUTO_PROCEED=true` was set in ARGUMENTS).
+
+## Phase B — Backend resolution
+
+Do **not** decide this by hand. Run the resolver — it reads `ENVIRONMENT.json` and
+`tools/env/backends.json`, picks a backend, and writes the record the audit skill reads:
+
+```bash
+python tools/env/resolve_backend.py \
+  --capability erp.preprocess_average \
+  --env ENVIRONMENT.json \
+  --out preprocess-stage/BACKEND_RESOLUTION.md
+```
+
+`mne` is the default and the reference backend — every committed certified value was produced by
+it. `eeglab` and `fieldtrip` are selectable alternatives, validated on all five certified ERP CORE
+components ([CROSS_TOOLBOX_EVAL.md](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/995f53d42cc74205b164e8711d4b289b8c2ad3a1/tools/benchmark/CROSS_TOOLBOX_EVAL.md): 10/10 runs
+reproduce the group conclusion). Pass `--prefer eeglab` / `--prefer fieldtrip` when the user asks
+for one, or when MNE is unavailable.
+
+Three rules the resolver enforces, all of them earned from measurement rather than assumed:
+
+1. **It fails loudly rather than degrading.** No backend available → non-zero exit with the install
+   hint. Do not work around this; surface it.
+2. **It refuses to switch silently away from a certified reference.** When you are reproducing a
+   recipe's certified numbers, pass `--certified-reference mne`. Resolving to any other backend then
+   fails unless the user explicitly accepts `--allow-uncertified`, and the report states that the
+   result is no longer digit-comparable.
+3. **It never claims unmeasured equivalence.** Where no benchmark exists (e.g. `ica.label` on
+   EEGLAB), the report says "not measured" and you must not describe the outputs as interchangeable.
+
+### If the resolved backend is not `mne`
+
+**Emit the pinned template, never ad-hoc code.** Start from
+`templates/backends/erp_preprocess_eeglab.m` or `erp_preprocess_fieldtrip.m` and fill only the
+`SPEC` block.
+
+This matters more than it looks. Cross-toolbox agreement is a property of how completely the
+specification is pinned, **not** of the toolbox: at each toolbox's own defaults, per-subject
+amplitudes differed from the reference by up to 43% of the group effect; with the specification
+pinned, FieldTrip matched the reference within 0.1 µV on all 74 subject-component comparisons without trial rejection (per-component maxima 0.050–0.099 µV; MMN, which has trial rejection, 0.184 µV), while EEGLAB at its own defaults matched on 68 of 74 (N170 0.161 µV, ERN 0.210 µV; not pinned further).
+The four conventions the templates force you to state — filter cutoff convention, transition width,
+rejection criterion, resampling algorithm — are the ones that matter: the first three were measured to move the numbers (cutoff convention 0.80 → 0.05 µV on the FieldTrip P3b at fixed transition width; rejection criterion 0.089 → 0.040 µV mean |Δ| on MMN), while the contribution of the resampling algorithm was not isolated (the three arms use three different resamplers and agree within 0.1 µV once the filter is pinned).
+
+Copy the `pin` section of `BACKEND_RESOLUTION.md` into `PREPROCESS_PLAN.json` so the choices reach
+`eeg-methods-text` and `eeg-audit`.
+
+## Phase C — Per-subject execution
+
+For each `sub-XX` in `PREPROCESS_PLAN.json.subjects`:
+
+Write and execute a preprocessing script following the canonical order (Robbins et al. 2020): **filter → bad channel detection → interpolation → re-reference → (optional resample)**. This order matters because filtering before bad channel detection prevents spectral artifacts from corrupting RANSAC correlation estimates, and interpolation must precede re-referencing so that bad channels do not contaminate the average reference.
+
+### Canonical step order (full ERP pipeline checklist)
+
+When the study epochs into ERPs and runs ICA, the **continuous-data steps in this skill are only the first half** of a longer canonical sequence that spans `eeg-preprocess` → `eeg-ica` → `eeg-epoch`. The full taught order (distilled from a teaching EEGLAB command history and the accompanying lab Q&A, see Domain Knowledge → "End-to-end canonical order") is:
+
+1. ☐ **Import** raw recording (`mne.io.read_raw_*`, `preload=True`).
+2. ☐ **Set montage / channel locations** (`raw.set_montage(...)`) — needed for interpolation, ICLabel, and average reference.
+3. ☐ **Drop / re-type non-scalp refs** — set EOG/VEOG/HEOG/ECG/mastoid channel *types* (`raw.set_channel_types({...})`) or drop them; do an initial **manual bad-channel** pass from `DATASET_BRIEF.md` here.
+4. ☐ **Filter** — high-pass (default 0.1 Hz), low-pass (default 40 Hz), **then notch** (always; see rule below). This stage.
+5. ☐ **Resample** — only *after* filtering (`raw.resample(...)`). This stage.
+6. ☐ **Epoch + baseline** — `mne.Epochs(...)`, `baseline=(None, 0)`. (`eeg-epoch` stage.)
+7. ☐ **At the epoch stage**: interpolate remaining bad channels + reject bad epochs (loose amplitude pass, `reject_by_annotation=True`). (`eeg-epoch` stage.)
+8. ☐ **ICA** — extended Infomax, fit on a 1 Hz HP copy. (`eeg-ica` stage.)
+9. ☐ **Remove artifact ICs** — eye/muscle/heart/line/channel-noise. (`eeg-ica` stage.)
+10. ☐ **POST-ICA amplitude sweep** — run a peak-to-peak reject at ±100 µV, then tighten to ~±60 µV for clean data. (`eeg-epoch` stage, AFTER ICA.)
+11. ☐ **RE-REFERENCE LAST** — e.g. linked mastoids `raw.set_eeg_reference(['M1', 'M2'])` or average. **Never before ICA.**
+    - **Reference choices**, roughly: *average* (default for ≥32 ch; needs whole-head coverage), *linked mastoids* (ERP convention, but can attenuate temporally-distributed effects), *CSD / surface Laplacian* (reference-free, sharpens local sources — see Domain Knowledge), and **REST** (Reference Electrode Standardization Technique): approximates a reference at infinity by projecting through a head model, reducing the reference's distortion of topography/connectivity (Yao 2001, *Physiol Meas* 22:693–711; available via `mne` lead-field projection or the `pyrest`/`eeglab` implementations). Report whichever you use — PSD, connectivity, and microstate results are all reference-dependent.
+
+The continuous re-reference inside this skill's per-subject script (step 6 below) is for studies that do **not** run ICA, or where you deliberately apply an average reference as a `projection=True` projector to preserve rank for a later ICA. When the pipeline includes ICA, defer the final substantive re-reference (e.g. linked mastoids) to after artifact-IC removal — see Critical Rules and Domain Knowledge → "Re-reference last".
+
+### MNE-Python path (default)
+
+The script must:
+
+1. **Load raw**: `mne.io.read_raw_*` — auto-detect format from extension (`.bdf`→`read_raw_bdf`, `.edf`→`read_raw_edf`, `.set`→`read_raw_eeglab`, `.fif`→`read_raw_fif`, `.vhdr`→`read_raw_brainvision`). Always load with `preload=True` for filtering.
+2. **Bandpass filter**: `raw.filter(l_freq, h_freq, n_jobs=N_JOBS)`.
+   - MNE defaults to FIR (zero-phase, windowed sinc) which is appropriate for most ERP/TFR work (Widmann et al. 2015).
+   - For fine control: `raw.filter(l_freq, h_freq, method='fir', fir_design='firwin', phase='zero', fir_window='hamming')`.
+   - Override `filter_length` only when MNE's auto-length exceeds the data duration (short recordings); prefer the default `'auto'` which sets length = 3.3x the reciprocal of the transition bandwidth.
+   - For ICA-prerequisite runs, use `l_freq=1.0` for stable ICA decomposition, and apply the study's actual highpass later on the ICA-cleaned data.
+3. **Notch filter / line noise removal**:
+   - **Always apply the notch, even when the low-pass is below the line frequency.** The taught rule is to notch unconditionally: a 40 Hz LP does *not* guarantee 50/60 Hz is gone (FIR transition band leaks, and harmonics or filter ringing can re-introduce it), and skipping it is a frequent source of a residual line peak in the PSD. The notch is cheap insurance — run it after the band-pass.
+   - Default: `raw.notch_filter(notch_freqs)` for simple spectral notch.
+   - Preferred when available: `mne.preprocessing.EOGRegression` is not suitable; instead use spectral interpolation approaches. If `meegkit` is installed, use ZapLine (`meegkit.dss.dss_line`) which removes line noise without spectral notch artifacts. Log which method was used.
+4. **Bad channel detection**: `pyprep.NoisyChannels(raw)` with `.find_all_bads()` which runs RANSAC (Bigdely-Shamlo et al. 2015). Mark via `raw.info['bads']`.
+   - If pyprep is unavailable, fall back to manual list from `DATASET_BRIEF.md`.
+   - If RANSAC marks >50% of channels, stop (likely wrong reference or montage).
+5. **Interpolate**: `raw.interpolate_bads(reset_bads=True)` using spherical spline interpolation. **Record `n_interpolated = len(raw.info['bads'])` into `preprocess_summary.json` before the reset** — each interpolated channel costs one rank, which the downstream ICA must subtract from `n_components` (see Domain Knowledge → "Rank after interpolation and reference"). Interpolating bad channels before ICA without reducing the ICA rank produces ghost/duplicate components.
+6. **Re-reference according to the approved plan.** For an average reference, use `apply_average_reference(...)` from the bundled channel checker linked below. Use `raw.set_eeg_reference(reference)` directly only for an explicitly approved non-average reference.
+   - **Before an `average` reference, exclude non-scalp channels** (EOG/ECG/EMG/mastoid). Set their types correctly first (`raw.set_channel_types({'HEOG': 'eog', ...})`) or drop them — otherwise they contaminate the average and leak ocular/cardiac signal into every scalp channel. `set_eeg_reference('average')` already ignores non-`eeg` channels, so the fix is to *type* them, not necessarily delete them.
+   - Check the actual contributor set against documented channel identities and the approved set immediately before applying the reference. Use the bundled helper in [Channel identity and actual analysis picks](channel-identity.md); include its record in `preprocess_summary.json`. It fails if an ocular/auxiliary signal is still typed EEG instead of merely warning in prose. Do not infer identities from the reader's default channel types.
+   - **Applied average reference reduces rank.** Record whether it was actually applied in `preprocess_summary.json`, together with the effective rank used for ICA. `raw.set_eeg_reference('average', projection=True)` adds a pending projector and leaves sample values unchanged until applied; do not record `avg_ref_applied: true` for that operation alone or subtract the same rank loss twice.
+   - For robust average reference (Bigdely-Shamlo et al. 2015), run the full PREP pipeline: `pyprep.PrepPipeline(raw, prep_params, montage)` which iteratively detects bad channels and re-references.
+   - For mastoid or linked-mastoid reference: `raw.set_eeg_reference(['M1', 'M2'])` — verify channel names exist.
+   - For REST (reference electrode standardization technique): `raw.set_eeg_reference('REST')` (requires MNE >= 1.1 and a forward model).
+7. **Resample only if planned at this stage.** MNE's `raw.resample` applies anti-alias filtering itself. Pass existing event samples with `raw, events = raw.resample(resample_sfreq, events=events)` and preserve trial identities and the original sampling rate; raw resampling reduces event-time precision. Follow the approved filtering order and record the actual output rate. A plan may instead use epoch-level resampling with sufficient padding, or continuous low-pass filtering followed by integer epoch decimation; `decimate` does not anti-alias. Do not move a planned downsampling step, choose a new rate or forbid epoch resampling categorically. See [MNE resampling guidance](https://mne.tools/stable/auto_tutorials/preprocessing/30_filtering_resampling.html#resampling).
+8. **Save**: `preprocess-stage/<sub>/<sub>_preprocessed_raw.fif`.
+9. **Write summaries**:
+   - `preprocess-stage/<sub>/preprocess_summary.json` — all parameters actually used (filter freqs, filter design, detected bads, reference, sfreq_out, backend versions, line noise method).
+   - `preprocess-stage/<sub>/config.json` — the config that was used.
+
+### Bad channels vs bad segments (the "sandwich" order)
+
+A persistently dead/noisy *channel* and a transient all-channel *time segment* are handled by different mechanisms, and the ordering matters:
+
+1. **Channels first**: identify and interpolate consistently-bad channels (`raw.info['bads']` → `raw.interpolate_bads`). Doing this first prevents a single globally-bad channel from falsely flagging many time segments.
+2. **Segments second**: after channels are clean, mark transient artifacts that affect *all* channels and cannot be corrected by interpolation or ICA — head movement, large muscle bursts, electrode pops. Use `mne.preprocessing.annotate_amplitude(raw, peak=<V>, flat=...)` or hand-built `mne.Annotations` labelled `'bad_*'`; at epoching set `reject_by_annotation=True` to drop them.
+
+Decision rule: persistently bad single channel → `interpolate_bads` (spherical). Transient all-channel excursion (movement, swallow) → annotate as `'bad'` and exclude the segment — do **not** try to ICA it out. This continuous-data screening is best done before ICA so the ICA decomposition is not dominated by a few huge non-stationary excursions.
+
+**Artifact Subspace Reconstruction (ASR) — the missing middle option (optional).** Between "interpolate a dead channel" and "delete a contaminated segment" there is a third move this skill otherwise lacks: *reconstructing* high-variance transients while keeping the segment. ASR (Chang et al. 2018) learns a clean-data covariance on an artifact-free calibration window, then for each sliding window flags principal subspace directions whose variance exceeds a cutoff `k` (in SD units) and reconstructs them from the retained subspace. Implement via `meegkit.asr` (the same `meegkit` already used here for ZapLine), and place it **after the high-pass filter and before ICA**. Encodable rules: (a) high-pass *first* — an inadequate high-pass makes ASR over-correct, which in turn balloons the downstream `annotate_amplitude` window-rejection count; (b) calibrate on an explicitly clean baseline window, because ASR *cannot* remove an artifact that is also present in its own calibration data; (c) keep the cutoff in `k = 10–100` SD — below ~10 it starts deleting genuine high-amplitude neural activity. For mobile or low-channel montages prefer Riemannian ASR (rASR, Blum et al. 2019): better VEP specificity at roughly one-third the compute. ASR complements, and does not replace, the channel-interpolation / segment-rejection sandwich above.
+- Cite: Chang, C.-Y., Hsu, S.-H., Pion-Tonachini, L., & Jung, T.-P. (2018). Evaluation of artifact subspace reconstruction for automatic EEG artifact removal. IEEE EMBC, 1242–1245; Blum, S., et al. (2019). A Riemannian modification of artifact subspace reconstruction for EEG artifact handling. Frontiers in Human Neuroscience, 13, 141; Jacobsen, N. S. J., et al. (2021). A walk in the park? EJN, 54, 8421 (calibration caveat).
+
+### Re-filtering after baseline correction
+
+If you re-filter data that has *already been epoched and baseline-corrected* (e.g. you decide to tighten the low-pass on existing epochs), the filter operation reshapes the whole epoch including the baseline window, so the previously-applied baseline no longer holds. **Re-run baseline correction after any re-filter of baselined epochs** (`epochs.apply_baseline((None, 0))`). The clean way to avoid this entirely is to finalize all filtering on the continuous `Raw` *before* epoching (canonical step order above) — only re-filter epochs when you genuinely cannot re-derive them from `Raw`, and re-baseline immediately when you do.
+
+### Output per subject
+
+Each subject produces:
+- `preprocess-stage/<sub>/<sub>_preprocessed_raw.fif` (or `.set` for EEGLAB) — the preprocessed continuous EEG.
+- `preprocess-stage/<sub>/preprocess_summary.json` — what was actually done (filter freqs, filter design, detected bads, reference, line noise method).
+- `preprocess-stage/<sub>/config.json` — the config that was used.
+
+If a subject fails (file unreadable, filter divergence, etc.), do **not** stop the batch. Record the failure in `preprocess-stage/<sub>/error.json` and continue. At the end, report the full success/failure list.
+
+## Phase D — Aggregate summary
+
+After all subjects processed, write `preprocess-stage/PREPROCESS_REPORT.md`:
+
+```markdown
+# Preprocess report
+
+- Backend resolved: mne
+- Subjects in: N=<X>, out: N=<Y>, failed: N=<Z>
+- Mean bad channels per subject: <m> (range <a>–<b>)
+- Bandpass applied: <l>–<h> Hz
+- Notch: <freqs>
+- Reference: <…>
+- Resample: <…>
+- Failed subjects:
+  | Subject | Reason |
+  |---|---|
+  | sub-XX | <error> |
+- Artifact path: preprocess-stage/
+```
+
+Also append a block to `FINDINGS.md` with the headline numbers.
+
+## Phase E — Sanity checks before signaling success
+
+The following must all be true. If any fails, the skill is **not** complete:
+
+1. ☐ Every successful subject has `*_preprocessed_raw.fif` AND `preprocess_summary.json` on disk.
+2. ☐ `BACKEND_RESOLUTION.md` exists.
+3. ☐ `PREPROCESS_REPORT.md` exists and lists all subjects (even failed ones).
+4. ☐ `FINDINGS.md` has a new dated entry referencing this stage.
+5. ☐ For each subject, `preprocess_summary.json.sfreq_out` matches the planned `resample_sfreq` (if set) or the input sfreq (if not).
+6. ☐ For an average reference, the summary records the checked contributor names and the channel-identity source. The actual contributors match the approved set after the planned bad-channel handling, and no documented non-scalp signal remains in that set. A pending projector is recorded as pending; recheck its contributor set if picks/bads change before application.
+
+## Error handling
+
+| Symptom | Action |
+|---|---|
+| `DATASET_BRIEF.md` has `<…>` placeholders | Stop. Ask the user to fill them. |
+| `ENVIRONMENT.json` missing | Run `tools/env/check_env.sh` (or `.ps1` on Windows). |
+| MNE-Python unavailable | Stop. Output an actionable install instruction in `BACKEND_RESOLUTION.md`. |
+| Subject file not readable | Skip subject, log to `error.json`, continue batch. |
+| RANSAC marks >50% of channels bad | Almost certainly a bad reference electrode or wrong montage — stop, ask user to verify. |
+| Filter eats all data (NaN output) | Check the bandpass against the sfreq (Nyquist). Stop and report. |
+| Residual 50/60 Hz peak in PSD despite a 40 Hz low-pass | The notch was skipped or under-specified. Always run `raw.notch_filter()` (even when LP < line freq) and include harmonics. Re-run the line-noise step. |
+| Reference state differs from the approved ICA fitting/application configuration | Preserve the mismatch and rebuild the affected step with the planned reference and effective rank. An approved average reference before ICA is supported; do not move it solely because another example references after ICA. |
+| Re-filtered epochs but baseline now looks shifted | Re-filtering reshaped the baseline window. Re-run `epochs.apply_baseline((None, 0))` after the re-filter, or re-derive epochs from the continuous `Raw`. |
+| Downsampled, then a line/HF peak aliased into the band | Inspect the actual method and filter transition band. MNE `resample` anti-aliases; unfiltered `decimate`/sample slicing does not. Preserve the failure and rebuild from the original signal with the approved anti-aliasing configuration. |
+
+
+AEA procedure: skills/eeg-epoch/SKILL.md
+
+---
+name: eeg-epoch
+description: "Create event-locked or fixed-length EEG epochs and apply the approved baseline, rejection and inclusion policy. Supports continuous ICA before epoching, approved epoch-first ICA, and analyses without ICA. Backend: MNE-Python. Use for 'epoch', 'segment', 'create epochs' or 'trial rejection'."
+argument-hint: "[project-dir] [— window: -0.2,1.2] [— baseline: -0.2,0] [— reject_mode: autoreject|threshold|none]"
+allowed-tools: Bash(*), Read, Write, Edit, Glob, Grep
+---
+
+# eeg-epoch: continuous → epoched
+
+## Context: $ARGUMENTS
+
+## Use this skill
+
+Read the task and the approved analysis plan before choosing a procedure. The
+name and description select this skill; they do not specify the analysis.
+Load only the relevant sections below, rather than every reference in advance.
+For a bounded calculation, use the supplied inputs without inventing upstream
+stages or approvals. Keep the actual method, parameters, outputs, and checks.
+
+Template values in the detailed procedures describe their documented examples.
+Resolve scientific choices against the task and approved plan before execution;
+do not treat an example, a timeout, or an unattended run as researcher approval.
+Preserve explicitly fixed configurations. Record unresolved choices and continue
+independent approved work, as described in the project instructions.
+
+For clients without native skill loading, use the section loader from the
+repository root; it loads the selected procedure, not the whole reference:
+
+```bash
+python tools/load_skill.py eeg-epoch --section "Phase A — Event Extraction"
+```
+
+## Required Inputs
+
+Use the input selected by the approved task/plan, not a mandatory ICA directory:
+
+1. Continuous ICA first: cleaned Raw from `ica-stage/`.
+2. Epoch-first ICA: preprocessed Raw for the initial cut; cleaned Epochs from
+   `ica-stage/` for finalization. Do not cut the cleaned epochs a second time.
+3. No ICA: the supplied preprocessed Raw.
+
+Resolve event mapping, window or duration, baseline and its stage, projection,
+rejection and participant-inclusion rules from the approved task/plan. Record
+them in `EPOCH_PARAMS.json`. For a bounded request, supplied data and explicit
+settings suffice; do not invent a full-study prerequisite. Check environment
+availability only for the selected method.
+
+## Critical Rules
+
+- Follow the approved ICA domain and ordering. Short/irregular ISI alone does not authorize changing between continuous and epoch-first ICA; see [the handoff](references/procedure.md#constants).
+- **Never** use too-short epochs that cut off the component of interest. The epoch must extend beyond the latest expected component peak (e.g., P600 requires at least 800 ms post-stimulus).
+- **Never** use a baseline window that overlaps with the stimulus or a preceding stimulus in rapid designs. For SOA < 500 ms, consider a pre-trial baseline or no baseline.
+- Apply only the rejection steps approved for this stage. Do not append a second rejection method or substitute a missing dependency with a threshold.
+- **Never** exclude subjects without documenting the reason in `EXCLUSION_REPORT.md`.
+- Report actual retained trials and apply only the approved flag/exclusion rule. There is no universal trial-count cutoff for every component or score.
+- **Never** silently change sampling rate or leave event samples on the old grid. Follow the approved stage: for Raw resampling, pass the existing events to `raw.resample(..., events=events)` and retain their identities; for epoch resampling, keep filtering edges outside the analyzed window. Integer epoch decimation requires prior continuous-data anti-alias filtering. See [MNE resampling guidance](https://mne.tools/stable/auto_tutorials/preprocessing/30_filtering_resampling.html#resampling).
+- **Never** drop epochs silently. Every rejection must be logged and counted.
+- Apply baseline correction only at its approved stage and record it once. Fixed-length helper output has no baseline correction; do not add one implicitly.
+- Keep pre-ICA segment handling separate from post-ICA rejection. Both thresholds and their definitions (peak-to-peak versus signed amplitude) must be approved; neither a numerical example nor a slow run authorizes tightening them.
+
+
+## Procedure reference
+
+Choose the section that matches the current operation. Detailed code examples
+and numerical conventions remain in the linked source.
+
+## Constants
+
+Read this section in [the detailed procedure](references/procedure.md).
+
+## Phase A — Event Extraction
+
+Read this section in [the detailed procedure](references/procedure.md).
+
+## Phase B — Epoch Creation
+
+Read this section in [the detailed procedure](references/procedure.md).
+
+## Phase C — Baseline Correction
+
+Read this section in [the detailed procedure](references/procedure.md).
+
+## Phase D — Artifact Rejection
+
+Read this section in [the detailed procedure](references/procedure.md).
+
+## Phase E — Trial Counting and Exclusion
+
+Read this section in [the detailed procedure](references/procedure.md).
+
+## Phase F — Save Outputs
+
+Read this section in [the detailed procedure](references/procedure.md).
+
+## Phase G — Sanity Checks
+
+Read this section in [the detailed procedure](references/procedure.md).
+
+## Domain Knowledge (distilled from EEG methodology literature)
+
+Read this section in [the method background](references/background.md).
+
+## Failure Modes
+
+Read this section in [the detailed procedure](references/procedure.md).
+
+## Cross-references
+
+- **Inputs**: approved Raw/Epochs input, event mapping and analysis settings; full studies also use `DATASET_BRIEF.md`, `ANALYSIS_PLAN.md`, `ENVIRONMENT.json`.
+- **Outputs**: `epoch-stage/*-epo.fif`, `epoch-stage/*-reject-log.json`, `epoch-stage/EPOCH_PARAMS.json`, `epoch-stage/TRIAL_COUNT_TABLE.csv`, `epoch-stage/EXCLUSION_REPORT.md`
+- **Next**: `eeg-erp` averages epochs into ERPs. `eeg-tfr` computes time-frequency from epochs. `eeg-spectral` runs PSD/Welch on epochs (especially the fixed-length resting-state epochs from Phase B — match Welch `n_per_seg` to the epoch duration; see the resolution = 1/duration rule). `eeg-stats` uses trial counts for power analysis.
+- **Previous / handoff**: preprocessing or ICA according to the approved route. Save epoch-first fitting inputs as `*-preica-epo.fif`, retain ICA-cleaned epochs, and finalize `*-epo.fif` without overwriting the pre-ICA input.
+
+
+AEA procedure: skills/eeg-epoch/references/procedure.md
+
+## Constants
+
+- **BACKEND = `mne`** — MNE-Python is the computation backend.
+- **SCIENTIFIC SETTINGS** — resolve from the approved task/plan into
+  `approved_epoch_params`, without fallback values: `event_source`, `event_id`,
+  event detection settings; `tmin`, `tmax` for event-locked data or `duration_s`,
+  `overlap_s` for fixed-length data; `baseline`, `baseline_stage`, `detrend`,
+  `proj`, `reject_by_annotation`, `on_missing`, rejection method/settings, and
+  flag/exclusion criteria. Explicit `None` or `none` differs from an absent choice.
+- **ICA HANDOFF** — record `ica_fit_domain` and actual input/output paths:
+  - `continuous`: preprocessing → ICA-cleaned Raw → epoching/final rejection.
+  - `epochs`: preprocessing → initial epochs (`*-preica-epo.fif`) → ICA-cleaned
+    epochs (`ica-stage/<sub>/<sub>-clean-epo.fif`) → epoch finalization. Preserve
+    the original analysis-bandpass epochs separately from any ICA fitting copy.
+  - `none`: supplied preprocessed Raw → epoching/final rejection.
+  Do not select a route from ISI alone. For epoch-first finalization, use the
+  existing cleaned Epochs and their events; do not re-cut or reapply a baseline.
+- **TRIAL COUNTS** — there are no implicit 30-trial flag or 10-trial exclusion
+  rules. Apply the approved scope (condition, contrast or participant). With no
+  approved cutoff, record counts/quality and mark any needed inclusion decision
+  unresolved rather than removing a participant.
+- **OUTPUT_DIR = `epoch-stage/`** — Create if missing.
+- **OUTPUT_FORMAT = `epoch-stage/<sub>/<sub>-epo.fif`** — MNE Epochs FIF file.
+
+An explicit user instruction may amend the plan. An agent-generated override
+does not authorize a new baseline, threshold or participant exclusion.
+
+## Phase A — Event Extraction
+
+1. Read `DATASET_BRIEF.md` for:
+   - Event coding scheme: numeric trigger codes (e.g., `{1: 'standard', 2: 'deviant'}`) or annotation strings.
+   - Whether events are in the EEG data (trigger channel), a sidecar file (`*_events.tsv` for BIDS), or annotations.
+   - Stimulus onset definition (trigger edge, photodiode, etc.).
+
+2. Extract events per subject:
+
+### MNE-Python event extraction
+
+```python
+import mne
+
+# AEA example: event-source
+# raw and approved_epoch_params are the supplied input and resolved plan.
+source = approved_epoch_params['event_source']
+event_id = approved_epoch_params['event_id']
+if source == 'stim':
+    events = mne.find_events(raw, **approved_epoch_params['stim_detection'])
+elif source in ('annotations', 'bids'):
+    # For BIDS, raw must have been loaded through read_raw_bids below.
+    # Explicit mapping preserves the intended labels/codes; do not infer them.
+    events, event_id = mne.events_from_annotations(
+        raw, event_id=event_id, regexp=None,
+        use_rounding=approved_epoch_params['use_rounding'])
+else:
+    raise ValueError('Resolve the event source before extraction')
+```
+
+For BIDS input, load the dataset with MNE-BIDS so the sidecar events are attached
+as annotations, then take the single `bids` branch above:
+
+```python
+# AEA example: bids-input
+from mne_bids import read_raw_bids
+raw = read_raw_bids(bids_path=bids_path, verbose=False)
+raw.load_data()
+```
+
+Do not pass a BIDS `events.tsv` to `mne.read_events`: that reader expects MNE
+event-file conventions, not BIDS onset seconds and condition columns. If the
+input is an isolated sidecar, resolve its recording/time origin and condition
+mapping before conversion; do not invent a sampling grid. Inspect event counts
+and sample positions, including `raw.first_samp`, against the imported data.
+
+3. Build `event_id` dictionary mapping condition labels to numeric codes.
+4. Verify event counts per condition. Write `epoch-stage/EVENT_SUMMARY.json`:
+```json
+{
+  "subject": "sub-01",
+  "total_events": 480,
+  "per_condition": {"standard": 400, "deviant": 80},
+  "event_source": "annotations",
+  "duplicate_events_removed": 0,
+  "events_outside_recording": 0
+}
+```
+
+## Phase B — Epoch Creation
+
+1. Create epochs from events:
+
+### MNE-Python epoching
+
+```python
+# AEA example: event-epochs
+epochs = mne.Epochs(
+    raw, events, approved_epoch_params['event_id'],
+    tmin=approved_epoch_params['tmin'], tmax=approved_epoch_params['tmax'],
+    baseline=approved_epoch_params['baseline_at_creation'],
+    preload=True,
+    reject=None,               # apply only the selected Phase D method
+    reject_by_annotation=approved_epoch_params['reject_by_annotation'],
+    on_missing=approved_epoch_params['on_missing'],
+    detrend=approved_epoch_params['detrend'],
+    proj=approved_epoch_params['proj']
+)
+
+# Only if the plan specifies epoch-level resampling; keep enough padding for
+# its filter edge effects outside the analyzed interval.
+# epochs.resample(256)  # only if original srate > 256 and needed
+```
+
+### Resting-state / continuous data (no event markers)
+
+For an approved fixed-length analysis, use its duration and overlap. The helper
+does not baseline-correct. Any separately approved correction must be explicit
+and recorded, rather than inferred from event-locked ERP examples.
+
+```python
+# AEA example: fixed-epochs
+epochs = mne.make_fixed_length_epochs(
+    raw, duration=approved_epoch_params['duration_s'],
+    overlap=approved_epoch_params['overlap_s'],
+    proj=approved_epoch_params['proj'], preload=True,
+    reject_by_annotation=approved_epoch_params['reject_by_annotation']
+)
+```
+
+If custom events require the two-step form, MNE includes `tmax`. Use the same
+sample count as the helper, rather than adding the endpoint sample:
+
+```python
+# AEA example: fixed-epochs-two-step
+events = mne.make_fixed_length_events(
+    raw, duration=approved_epoch_params['duration_s'],
+    overlap=approved_epoch_params['overlap_s'])
+epochs = mne.Epochs(
+    raw, events, event_id=None, tmin=0,
+    tmax=approved_epoch_params['duration_s'] - 1 / raw.info['sfreq'],
+    baseline=None, detrend=None, proj=approved_epoch_params['proj'],
+    reject_by_annotation=approved_epoch_params['reject_by_annotation'],
+    preload=True)
+```
+
+At 250 Hz a 2 s segment contains 500 points; the last point is 1.996 s. Verify
+the actual count on the requested grid. For spectral work, distinguish FFT bin
+spacing (`sfreq / n_fft`) from resolution governed by segment duration/window;
+zero-padding does not supply additional independent spectral information.
+
+2. Verify epoch count per condition matches expected count (within tolerance for edge-of-recording events).
+
+## Phase C — Baseline Correction
+
+Resolve the approved interval (or explicit `None`) and stage. Set
+`baseline_at_creation` to that interval only when correction is approved at
+creation; otherwise it is explicitly `None`. In epoch-first ICA, use the
+approved fitting baseline policy and apply any final correction only after
+cleaning if specified. Check `epochs.baseline` and the saved processing record
+before applying it; do not apply it twice. An unavailable or out-of-range
+baseline is an unresolved step, not permission to shorten the interval.
+
+## Phase D — Artifact Rejection
+
+### AutoReject (Jas et al. 2017) — only when selected
+
+```python
+# AEA example: epoch-rejection
+method = approved_epoch_params['rejection_method']
+if method == 'autoreject_local':
+    from autoreject import AutoReject
+    ar = AutoReject(**approved_epoch_params['autoreject_local'])
+    epochs_clean, reject_log = ar.fit_transform(epochs, return_log=True)
+elif method == 'autoreject_global':
+    from autoreject import get_rejection_threshold
+    reject = get_rejection_threshold(
+        epochs, **approved_epoch_params['autoreject_global'])
+    epochs_clean = epochs.copy().drop_bad(reject=reject)
+    reject_log = None
+elif method == 'threshold':
+    epochs_clean = epochs.copy().drop_bad(
+        reject=approved_epoch_params['reject_v'],
+        flat=approved_epoch_params['flat_v'])
+    reject_log = None
+elif method == 'none':
+    epochs_clean, reject_log = epochs.copy(), None
+else:
+    raise ValueError('Resolve the rejection method before executing')
+```
+
+These branches are alternatives. A missing selected package leaves this step
+incomplete; do not silently change to a fixed threshold. MNE `reject` uses
+peak-to-peak volts, whereas EEGLAB signed amplitude limits use a different
+definition. Record the threshold definition, stage, channels and applied values.
+
+### Recording rejection details
+
+For every subject, record:
+- Number of epochs before rejection per condition.
+- Number rejected per condition (and reason if available).
+- Number interpolated (AutoReject local mode).
+- Percentage rejected.
+- Channels most frequently interpolated.
+
+Write per-subject: `epoch-stage/<sub>/<sub>-reject-log.json`.
+
+## Phase E — Trial Counting and Exclusion
+
+1. After rejection, count remaining trials per condition per subject.
+2. Apply the approved flag/exclusion criteria and their scope. Keep condition
+   counts distinct from participant inclusion; one sparse condition does not
+   automatically exclude that participant from all contrasts. Record the exact
+   rule and reason. If there is no cutoff policy, retain the counts and identify
+   any unresolved inclusion decision without inventing a 10/30-trial rule.
+
+3. Trial-count needs depend on the score, noise and design. Descriptive examples
+   below illustrate reporting only; their numbers are not study cutoffs.
+
+4. Write `epoch-stage/TRIAL_COUNT_TABLE.csv`:
+```csv
+subject,condition,n_before_reject,n_after_reject,n_rejected,pct_rejected,flag
+sub-01,standard,400,385,15,3.8,ok
+sub-01,deviant,80,72,8,10.0,ok
+sub-02,standard,400,312,88,22.0,high_rejection
+sub-02,deviant,80,18,62,77.5,below_minimum
+```
+
+5. Write `epoch-stage/EXCLUSION_REPORT.md`:
+```markdown
+# Exclusion Report
+## Excluded subjects
+- sub-05: deviant condition 8 trials (below threshold 10). Reason: excessive muscle artifacts.
+## Flagged subjects (included with warning)
+- sub-02: deviant condition 18 trials (below recommended 30).
+## Summary
+- Total subjects: 24
+- Excluded: 1 (4.2%)
+- Flagged: 1 (4.2%)
+- Mean rejection rate: 12.3% (SD: 8.1%)
+```
+
+## Phase F — Save Outputs
+
+For each subject, save:
+
+### `epoch-stage/<sub>/<sub>-epo.fif`
+MNE Epochs FIF file with metadata, event_id, and rejection info embedded.
+
+### `epoch-stage/<sub>/<sub>-reject-log.json`
+```json
+{
+  "subject": "sub-01",
+  "autoreject_mode": "local",
+  "n_epochs_before": 480,
+  "n_epochs_after": 457,
+  "n_rejected": 23,
+  "n_interpolated_total": 89,
+  "pct_rejected": 4.8,
+  "per_condition": {
+    "standard": {"before": 400, "after": 385, "rejected": 15},
+    "deviant": {"before": 80, "after": 72, "rejected": 8}
+  },
+  "most_interpolated_channels": ["Fp1", "Fp2", "T7"],
+  "autoreject_thresholds_uv": {"Fp1": 95.2, "Fz": 112.4}
+}
+```
+
+### `epoch-stage/EPOCH_PARAMS.json`
+Illustrative resolved record only. Write actual settings and installed versions,
+including ICA domain, input path, baseline stage, rejection definition and the
+approved scope of inclusion rules. Do not copy these values into a new study.
+```json
+{
+  "window_s": [-0.2, 1.2],
+  "baseline_s": [-0.2, 0],
+  "autoreject_mode": "local",
+  "min_trials_per_condition": 30,
+  "exclusion_threshold": 10,
+  "event_source": "annotations",
+  "event_id": {"standard": 1, "deviant": 2},
+  "n_subjects_processed": 24,
+  "n_subjects_excluded": 1,
+  "backend": "mne",
+  "mne_version": "1.7.0",
+  "autoreject_version": "0.4.3"
+}
+```
+
+### `epoch-stage/TRIAL_COUNT_TABLE.csv`
+Summary table (see Phase E above).
+
+### `epoch-stage/EXCLUSION_REPORT.md`
+Subject exclusion and flagging report (see Phase E above).
+
+## Phase G — Sanity Checks
+
+All must pass before declaring success:
+
+- [ ] Every approved input subject has final epochs or a documented pending/excluded status, using the selected ICA/no-ICA route.
+- [ ] `EPOCH_PARAMS.json` exists with all fields populated.
+- [ ] Counts, retained event identities and drop reasons reconcile. Zero-trial conditions are explicitly unavailable; they are never averaged as zeros.
+- [ ] Epoch time window matches `DATASET_BRIEF.md` specification.
+- [ ] Baseline interval and actual stage match the approved settings and the saved record shows it was applied at most once.
+- [ ] Event codes in epochs match `DATASET_BRIEF.md` condition table.
+- [ ] Rejected epoch count is reasonable (< 50% per subject; if higher, investigate).
+- [ ] `EXCLUSION_REPORT.md` exists (even if no subjects excluded).
+- [ ] Epoch files load without error: `mne.read_epochs(fif_path)` succeeds.
+- [ ] No channel has been interpolated in > 50% of epochs (flag as potentially bad channel — should have been removed upstream).
+
+## Failure Modes
+
+| Symptom | Action |
+|---|---|
+| Expected input missing | Identify the approved route and missing artifact. Do not require ICA for a no-ICA task or for initial epoch-first inputs. |
+| No events found in data | Check `stim_channel` name. Try `mne.find_events` with different `stim_channel` or `mne.events_from_annotations`. |
+| Event codes don't match DATASET_BRIEF | Stop. Ask user to verify event coding. Common issue: event codes are strings in annotations but integers in the brief. |
+| > 50% epochs rejected for a subject | Investigate: was ICA cleaning sufficient? Are there remaining bad channels? Consider re-running upstream stages. |
+| AutoReject is slow | Report runtime and continue within approved resources. A global-mode substitution or changed interpolation candidates requires approval. |
+| Unequal trial counts across conditions | Expected for oddball/rare-event paradigms. Document. If comparing conditions, note that noise levels differ. |
+| Baseline correction changes the ERP unexpectedly | Compare the actual interval/stage to the plan and check preceding activity. Report the issue; do not shorten or replace the approved baseline automatically. |
+| Selected `autoreject` dependency missing | Leave this step incomplete and report the missing package; no threshold fallback. |
+| Epochs have different numbers of time points | Check if resampling was applied inconsistently. All epochs for a subject must have identical shape. |
+
+
+AEA procedure: skills/eeg-erp/SKILL.md
+
+---
+name: eeg-erp
+description: "Compute ERPs (evoked responses) per condition per subject; export grand averages, GFP (global field power), difference waves, and per-condition .fif evoked files for the figure and stats stages. Measures component amplitudes and latencies per ANALYSIS_PLAN. Reads epoch-stage/ output. Use when user says 'compute ERPs', 'average epochs', 'ERP components', or after epoch-stage completes."
+argument-hint: "[project-dir] [— conditions: valid,invalid] [— measure: mean_amp|peak|area_latency] [— components: N1,P3b,N400]"
+allowed-tools: Bash(*), Read, Write, Edit, Glob
+---
+
+# eeg-erp: epochs → evoked
+
+## Context: $ARGUMENTS
+
+## Use this skill
+
+Read the task and the approved analysis plan before choosing a procedure. The
+name and description select this skill; they do not specify the analysis.
+Load only the relevant sections below, rather than every reference in advance.
+For a bounded calculation, use the supplied inputs without inventing upstream
+stages or approvals. Keep the actual method, parameters, outputs, and checks.
+
+Template values in the detailed procedures describe their documented examples.
+Resolve scientific choices against the task and approved plan before execution;
+do not treat an example, a timeout, or an unattended run as researcher approval.
+Preserve explicitly fixed configurations. Record unresolved choices and continue
+independent approved work, as described in the project instructions.
+
+For clients without native skill loading, use the section loader from the
+repository root; it loads the selected procedure, not the whole reference:
+
+```bash
+python tools/load_skill.py eeg-erp --section "Phase A — Parse conditions and components"
+```
+
+## Required Inputs
+
+Before running, these must exist:
+
+1. `ANALYSIS_PLAN.md` — frozen, with claim table filled. **Stop if missing or unfrozen.**
+2. `epoch-stage/` — cleaned epochs per subject (`.fif` or `.set`).
+3. `ENVIRONMENT.json` — to resolve backend.
+4. `channel_mapping.json` — if claim ROI uses 10-20 names but data uses numbered channels.
+
+## Critical Rules
+
+- **Never** measure a component not specified in ANALYSIS_PLAN (unless `— exploratory` is passed).
+- **Never** choose time windows or ROI channels based on the grand average — this is circular (Luck & Gaspelin 2017). Use pre-registered or literature-based windows.
+- Broad/noisy components make peak scores especially sensitive to noise. Report the limitation and preserve the approved score; do not replace it automatically.
+- Preserve the approved measurement. Flag an unavailable/noisy peak rather than automatically substituting fractional-area latency or mean amplitude. Area latency also needs an explicit area/polarity/crossing definition.
+- **Never** confuse the grand average difference wave (for display) with subject-level difference waves (for statistics).
+- **Never** average across subjects before a cluster/ANOVA test — retain the per-subject array (FieldTrip `keepindividual='yes'`); collapsing first destroys the variance the test needs.
+- **Never** select the time window or ROI from a data-driven test and then report a fixed-window test inside it as pre-registered — that is the circular window problem (Luck & Gaspelin 2017). Pre-register the window (Route A) or report the cluster-corrected result (Route B).
+- Report retained trials per condition. Unequal counts affect precision but do not by themselves imply bias in a difference of condition means. Equalization discards data and requires an approved rule; do not add it automatically.
+
+
+## Procedure reference
+
+Choose the section that matches the current operation. Detailed code examples
+and numerical conventions remain in the linked source.
+
+For an approved trapezoid-based fractional-area measure, use
+[the explicit-convention helper](scripts/measurements.py). It requires the area
+mode, polarity, fraction, crossing and interpolation choices; it does not choose
+them from the observed waveform.
+
+## Constants
+
+Read this section in [the detailed procedure](references/procedure.md).
+
+## Phase A — Parse conditions and components
+
+Read this section in [the detailed procedure](references/procedure.md).
+
+## Phase B — Backend resolution
+
+Read this section in [the detailed procedure](references/procedure.md).
+
+## Phase C — Per-subject averaging
+
+Read this section in [the detailed procedure](references/procedure.md).
+
+## Phase D — Component measurement
+
+Read this section in [the detailed procedure](references/procedure.md).
+
+## Phase D.5 — Group statistics strategy (hypothesis-driven vs data-driven)
+
+Read this section in [the detailed procedure](references/procedure.md).
+
+## Phase E — Grand averages and difference waves
+
+Read this section in [the detailed procedure](references/procedure.md).
+
+## Phase E.5 — Regression ERP (rERP) with overlap deconvolution (optional)
+
+Read this section in [the detailed procedure](references/procedure.md).
+
+## Phase F — Write outputs
+
+Read this section in [the detailed procedure](references/procedure.md).
+
+## Phase G — Sanity checks
+
+Read this section in [the detailed procedure](references/procedure.md).
+
+## Domain Knowledge (distilled from ERP methodology literature)
+
+Read this section in [the method background](references/background.md).
+
+## Failure Modes
+
+Read this section in [the detailed procedure](references/procedure.md).
+
+## Cross-references
+
+- Inputs: `ANALYSIS_PLAN.md`, `epoch-stage/`, `ENVIRONMENT.json`, `channel_mapping.json`
+- Outputs: `erp-stage/*-ave.fif`, `erp-stage/grand_average/`, `erp-stage/component_measures.csv`, `erp-stage/peak_table.csv`, `erp-stage/ERP_PLAN.json`, `erp-stage/BACKEND_RESOLUTION.md`, `FINDINGS.md`
+- Next: `eeg-stats` reads evoked files and the per-subject metric arrays from this stage — hand it Route-A subject values (paired t-test / `mne.stats.f_mway_rm` for factorial designs) or the per-subject arrays for Route-B cluster permutation ('when'/'where'). `eeg-figure` reads grand averages and the mean±SEM band for plots. `eeg-audit` verifies measurements and trial counts match the plan. For topographic segmentation of evoked data (ERP microstates), see `eeg-microstate` (polarity-aware, all-timepoints mode — distinct from resting defaults).
+
+
+AEA procedure: skills/eeg-erp/references/procedure.md
+
+## Constants
+
+- **BACKEND = `mne`** — MNE-Python is the computation backend.
+- **CONDITIONS = read from ANALYSIS_PLAN claim rows** (the contrasts to be tested).
+- **METHOD** — approved averaging estimator; do not switch mean/median after inspecting outliers.
+- **GFP = always computed** (paper-required for many ERP papers).
+- **MEASURE** — approved component measurement, ROI/window, polarity and spatial aggregation. Missing choices remain unresolved; an example does not select a measure.
+- **OUTPUT_DIR = `erp-stage/`** — Create if missing.
+
+> Override: `/eeg-erp projects/my-study — conditions: target,standard — measure: mean_amp — components: N1,P3b`
+
+## Phase A — Parse conditions and components
+
+1. Read ANALYSIS_PLAN claim table. Extract all unique conditions from the `contrast` column.
+2. For each claim, extract the target ERP component (e.g., N1, P3b, N400) and its expected:
+   - Time window (e.g., 80–150 ms for N1)
+   - ROI channels (e.g., Fz, Cz for N1)
+   - Direction (negative for N-components, positive for P-components)
+3. Resolve ROI channels via `channel_mapping.json` if needed. **Stop and ask** if mapping is missing.
+4. Write `erp-stage/ERP_PLAN.json` summarizing conditions, components, and measurement parameters.
+
+## Phase B — Backend resolution
+
+```
+1. Read ENVIRONMENT.json
+2. Verify MNE-Python is available → generate MNE-Python code
+3. Else → ERROR: MNE-Python required
+```
+
+Write `erp-stage/BACKEND_RESOLUTION.md`.
+
+## Phase C — Per-subject averaging
+
+For each subject + each condition:
+
+### MNE-Python path (default)
+
+```python
+# AEA example: erp-condition-averages
+import mne
+import numpy as np
+
+# Load cleaned epochs
+epochs = mne.read_epochs(f'epoch-stage/{sub}/{sub}-epo.fif')
+
+# Average per condition
+evokeds = {}
+for cond in conditions:
+    evoked = epochs[cond].average(method=approved_erp_params['averaging_method'])
+    evokeds[cond] = evoked
+    evoked.save(f'erp-stage/{sub}/{sub}-{cond}-ave.fif', overwrite=True)
+
+# Difference wave (condition_A minus condition_B per claim contrast)
+condition_A, condition_B = approved_erp_params['contrast']
+diff = mne.combine_evoked([evokeds[condition_A], evokeds[condition_B]], weights=[1, -1])
+diff.save(f'erp-stage/{sub}/{sub}-diff_{contrast_name}-ave.fif', overwrite=True)
+```
+
+### Report retained trial counts (always)
+
+ERP SNR scales with the square root of trial count, so per-condition trial counts are a first-class result, not an afterthought. Record them alongside every evoked file and flag imbalance.
+
+```python
+# Per-condition retained-trial counts (after AR/ICA cleaning)
+n_trials = {cond: len(epochs[cond]) for cond in conditions}
+# evoked.nave is the authoritative count actually averaged (respects drops/equalization)
+for cond in conditions:
+    print(cond, 'n_trials =', epochs[cond].average().nave)
+```
+
+- **Correction over rejection**: prefer ICA correction of *stereotyped* artifacts (blinks, saccades, line noise) so trials survive, and reserve trial *rejection* for non-correctable segments (gross movement, swallowing, muscle bursts). Over-aggressive IC rejection removes neural signal and can erase part of the ERP (Chaumon et al. 2015) — see `eeg-ica`.
+- Unequal retained counts can produce unequal precision. For condition means
+  with zero-mean errors, unequal counts alone do not imply bias in their
+  difference. Nonlinear scores such as extrema require separate consideration.
+  Record counts and score-specific uncertainty. Equalize trials only if the
+  approved plan specifies the conditions, selection method and stage; retain
+  the pre-equalization counts and selected event identities.
+- Write per-condition `nave` into `ERP_PLAN.json` and surface it in `FINDINGS.md`.
+
+### Standardized Measurement Error (SME) — quantitative per-subject data quality
+
+Trial count alone is a coarse proxy; the SME is the actual standard error of the score you report, computed per subject, per condition, *per score*. For **mean amplitude** it has a closed form: the SD of the single-trial mean-amplitude values divided by `sqrt(n_trials)`. For **peak amplitude, peak/fractional-area latency, or any nonlinear score** there is no analytic SME, so bootstrap it: resample trials with replacement, re-average, re-score (~1000 iterations), and take the SD of the resulting score distribution.
+
+```python
+# Analytic SME for mean amplitude (Luck et al. 2021)
+single_trial_amp = epochs[cond].get_data(picks=roi, tmin=t_min, tmax=t_max).mean(axis=(1, 2)) * 1e6
+sme_mean_amp = single_trial_amp.std(ddof=1) / np.sqrt(len(single_trial_amp))
+
+# Bootstrap SME for any nonlinear score (peak, fractional-area latency, ...)
+def bootstrap_sme(epochs_cond, score_fn, n_boot=1000, rng=np.random.default_rng(0)):
+    ep = epochs_cond.get_data()  # [n_trials, n_ch, n_times]
+    n = ep.shape[0]
+    scores = [score_fn(ep[rng.integers(0, n, n)].mean(axis=0)) for _ in range(n_boot)]
+    return np.std(scores, ddof=1)
+```
+
+Aggregate across conditions as `RMS(SME)` and report a group-level `SNR = effect / RMS(SME)`. This gives a quantitative, score-specific number to gate subject inclusion, to explain a null as low power rather than absence of effect, and it bridges directly to `eeg-qc`. Write per-subject SME into `component_measures.csv` (one column per score) alongside `nave`. Cite: Luck, S. J., Stewart, A. X., Simmons, A. M., & Kappenman, E. S. (2021). Standardized measurement error: A universal metric of data quality for averaged event-related potentials. *Psychophysiology*, 58(6), e13793.
+
+## Phase D — Component measurement
+
+For each claim's target component, use the measurement specified in ANALYSIS_PLAN.
+Resolve all score-specific settings before execution. A poor/no peak or an
+undefined area is an unavailable measurement, not permission to change scores.
+
+### Measurement methods (from Luck 2014; Keil et al. 2014; Kappenman & Luck 2016)
+
+#### 1. Mean amplitude in time window (PREFERRED for most components)
+
+The mean voltage in a pre-specified time window. Preferred because:
+- Unbiased by noise — high-frequency noise averages out.
+- Does not require a clear peak (works for broad components like N400, P3b, LPP).
+- Less sensitive to individual differences in peak timing.
+- Recommended by Keil et al. (2014) committee guidelines as the default choice.
+
+```python
+# MNE
+times = evoked.times
+mask = (times >= t_min) & (times <= t_max)
+ch_idx = [evoked.ch_names.index(ch) for ch in roi_channels]
+mean_amp = evoked.data[ch_idx][:, mask].mean() * 1e6  # convert to µV
+```
+
+#### 2. Peak amplitude + peak latency (USE WITH CAUTION)
+
+The maximum (or minimum) voltage in a time window.
+
+**Warnings** (Kappenman & Luck 2016):
+- Biased by noise: peak amplitude is systematically overestimated in noisy data because noise can only increase the apparent peak.
+- Unreliable for broad, plateau-shaped components (P3b, N400).
+- Should only be used for sharp, well-defined components (e.g., P1, N1, N170) with high SNR.
+- Low trial counts increase noise sensitivity. Report score-specific quality;
+  do not infer a universal sample-size cutoff or substitute a different score.
+
+```python
+# AEA example: erp-peak
+# This example measures an extremum across the approved ROI channels.
+peak_evoked = evoked.copy().pick(roi_channels)
+ch, lat, amp = peak_evoked.get_peak(
+    ch_type='eeg', tmin=t_min, tmax=t_max,
+    mode=approved_erp_params['peak_mode'], return_amplitude=True)
+# lat is seconds and amp is volts; convert once for the named output columns.
+```
+
+This channel-extremum estimator differs from the peak of an ROI-mean waveform.
+Use this example only for the approved channel-extremum definition; an ROI-mean
+score must first form the approved spatial mean. MNE returns only channel and
+latency unless `return_amplitude=True`.
+
+#### 3. Adaptive mean (window centered on individual peak)
+
+A hybrid: find the individual's peak latency, then measure mean amplitude in a narrow window (e.g., +/-25 ms) around that peak. Combines noise robustness of mean amplitude with sensitivity to individual timing differences.
+
+```python
+# AEA example: erp-adaptive-mean
+# peak_evoked must implement the plan's spatial peak definition.
+_, peak_lat = peak_evoked.get_peak(
+    ch_type='eeg', tmin=t_min, tmax=t_max,
+    mode=approved_erp_params['peak_mode'])
+half_width = approved_erp_params['adaptive_half_width_s']
+adaptive_tmin = peak_lat - half_width
+adaptive_tmax = peak_lat + half_width
+if adaptive_tmin < times[0] or adaptive_tmax > times[-1]:
+    raise ValueError('Approved adaptive window extends outside the supplied ERP')
+mask = (times >= adaptive_tmin) & (times <= adaptive_tmax)
+adaptive_mean = evoked.data[ch_idx][:, mask].mean() * 1e6
+```
+
+#### 4. Fractional area latency (when specified)
+
+The time point at which a specified fraction (typically 50%) of the area under the curve is reached. Better than peak latency because:
+- Less sensitive to noise.
+- More stable across subjects.
+- Recommended by Luck (2014) and Keil et al. (2014).
+
+```python
+# AEA example: erp-area-latency
+from pathlib import Path
+import runpy
+area_latency = runpy.run_path(str(
+    Path(AEA_ROOT) / 'skills/eeg-erp/scripts/measurements.py'))['fractional_area_latency']
+mask = (evoked.times >= t_min) & (evoked.times <= t_max)
+trace = evoked.data[ch_idx].mean(axis=0)[mask]  # approved ROI-mean estimator
+area_result = area_latency(trace, evoked.times[mask],
+    **approved_erp_params['fractional_area'])
+frac_latency = area_result['latency_s']  # seconds; save the conventions too
+```
+
+The helper uses trapezoidal integration. Its required configuration is
+`fraction`, `area_mode` (`signed`, `positive`, `absolute`), `polarity`
+(`positive`/`negative`, or `None` for absolute area), `crossing` (`first`/`last`
+upward crossing), and `interpolation` (`sample`/`linear`). Linear interpolation
+is on the sampled cumulative area. Use it only if that definition is approved;
+other integration definitions require their own explicit implementation.
+Polarity flipping does not remove opposite-sign samples. Signed cumulative
+area can decrease: never sort it or call `searchsorted` to locate its latency.
+An absent convention or non-positive total area remains unresolved/unavailable,
+not an automatic switch to clipping, absolute area or a different score.
+
+#### 5. Jackknife latency (PREFERRED for latency *difference* tests)
+
+For comparing onset or latency *between conditions/groups*, the jackknife is the most accurate approach: instead of scoring each noisy single-subject waveform, form `n` leave-one-out grand subaverages (omit one subject at a time), measure latency (fractional area or relative-criterion onset) on each near-noise-free subaverage, then run the across-subject test on those `n` jackknife values. Because the leave-one-out values are far less variable than independent observations, the raw `t`/`F` is hugely inflated and **must** be corrected before computing `p`: `t_corrected = t / (n - 1)` (equivalently `F_corrected = F / (n - 1)^2`). Omitting this correction is the classic and easy-to-miss error.
+
+```python
+# Jackknife latency-difference scoring (Kiesel et al. 2008; correction: Ulrich & Miller 2001)
+n = len(evokeds_A)
+def jk_latency(evokeds, roi, tmin, tmax, polarity):
+    out = []
+    for i in range(len(evokeds)):
+        sub = mne.grand_average([e for j, e in enumerate(evokeds) if j != i])
+        out.append(frac_area_latency(sub, roi, tmin, tmax, polarity))  # score the LOO subaverage
+    return np.array(out)
+lat_A, lat_B = jk_latency(evokeds_A, ...), jk_latency(evokeds_B, ...)
+t_raw, _ = scipy.stats.ttest_rel(lat_A, lat_B)
+t_corr = t_raw / (n - 1)               # MANDATORY jackknife correction
+p = 2 * scipy.stats.t.sf(abs(t_corr), df=n - 1)
+```
+Cite: Kiesel, A., et al. (2008). Measurement of ERP latency differences: A comparison of single-participant and jackknife-based scoring methods. *Psychophysiology*, 45(2), 250–274; Ulrich, R., & Miller, J. (2001). Using the jackknife-based scoring method for measuring LRP onset effects in factorial designs. *Psychophysiology*, 38(5), 816–827.
+
+### Standard ERP component reference (from Woodman 2010)
+
+| Component | Polarity | Typical latency | Typical ROI | Notes |
+|-----------|----------|-----------------|-------------|-------|
+| P1 (C1) | Positive | 60–90 ms | O1, Oz, O2 | Early visual, striate cortex |
+| N1 | Negative | 80–150 ms | Fz, Cz, FCz | Auditory; posterior N1 for visual |
+| P1 (visual) | Positive | 80–130 ms | O1, Oz, O2 | Extrastriate visual |
+| N170 | Negative | 140–200 ms | P7, P8 | Face/object processing |
+| N2 | Negative | 200–350 ms | Fz, FCz | Conflict monitoring, inhibition |
+| P3a | Positive | 250–350 ms | Fz, FCz | Novelty / involuntary attention |
+| P3b | Positive | 300–600 ms | Pz, CPz | Target detection, context updating |
+| N400 | Negative | 300–500 ms | Cz, CPz | Semantic processing |
+| LRP | Neg (contra) | variable | C3, C4 | Lateralized readiness potential |
+| ERN | Negative | 0–100 ms post-response | FCz, Cz | Error-related negativity |
+| CRN | Negative | 0–100 ms post-response | FCz, Cz | Correct-response negativity (smaller than ERN) |
+| LPP | Positive | 400–800 ms | Pz, CPz | Late positive potential (emotion) |
+| MMN | Negative | 100–250 ms | Fz, FCz | Mismatch negativity (auditory) |
+
+Use this table to validate that the user's time windows and ROI channels are reasonable for their claimed component. **Warn** if the planned window deviates strongly from the literature norm.
+
+## Phase D.5 — Group statistics strategy (hypothesis-driven vs data-driven)
+
+The ERP group-analysis flow is: individual averaging cancels trial noise → extract a metric per subject → test across subjects (which cancels inter-subject differences). There are two routes to the across-subject test; pick one *a priori* per claim and record it in `ERP_PLAN.json`.
+
+### Route A — Hypothesis-driven (fixed ROI + fixed window)
+
+When the claim names a component with an *a-priori* time window and ROI, reduce each subject to a single number and run one test — minimal multiple-comparison burden.
+
+```python
+# One mean-amplitude (or peak) value per subject, no mass correction needed
+def subj_mean_amp(evoked, roi, tmin, tmax):
+    return evoked.get_data(picks=roi, tmin=tmin, tmax=tmax).mean() * 1e6  # µV
+
+vals_A = [subj_mean_amp(ev, roi, tmin, tmax) for ev in evokeds_A]
+vals_B = [subj_mean_amp(ev, roi, tmin, tmax) for ev in evokeds_B]
+# peak amplitude + latency per subject (sharp, high-SNR components only):
+# get_peak has no `picks` arg — restrict channels first, e.g. ev.copy().pick(roi):
+# _, lat, amp = ev.copy().pick(roi).get_peak(ch_type='eeg', tmin=tmin, tmax=tmax,
+#                                            mode='neg', return_amplitude=True)
+# → hand vals_A/vals_B (and latencies) to eeg-stats for a paired t-test / RM-ANOVA
+```
+
+### Route B — Data-driven (point-by-point, cluster-corrected)
+
+Use when the window or ROI is *not* fixed in advance and you want the data to localize it:
+- **"when?"** — fix the ROI/channel, test every time point across subjects → 1D temporal cluster permutation localizes the component window.
+- **"where?"** — fix the latency, test every channel across subjects → spatial cluster permutation (with sensor adjacency) localizes the ROI.
+
+Both must keep the **per-subject** array (do not collapse to grand average first) and use cluster correction. Hand the stacked `[n_subjects, n_times]` (when) or `[n_subjects, n_channels]` (where) array to `eeg-stats`, which runs `mne.stats.permutation_cluster_1samp_test` (within-subject difference waves) / `mne.stats.spatio_temporal_cluster_test` (with channel adjacency).
+
+**Discipline**: do not run Route B and then report a Route-A test inside the discovered window as if it were pre-registered — that is the circular window problem (Luck & Gaspelin 2017). Choosing window/ROI from your own grand average is the same error. Either pre-register (Route A) or report the cluster-corrected result (Route B).
+
+### The collapsed localizer — the sanctioned data-adaptive window/ROI selector
+
+When no pre-registered or literature window is available, the *collapsed localizer* is the one legitimate way to let the data set the window/ROI without double-dipping: average together **all** the conditions that will later be contrasted, then pick the window and ROI where the component is maximal in that collapsed waveform, and finally measure the individual conditions there. Under the null the collapsed waveform is identical across conditions, so selecting from it is orthogonal to the difference being tested — selection bias is removed. This is the escape hatch that the "never pick a window from your data" rule otherwise leaves open. Cite: Luck, S. J., & Gaspelin, N. (2017). How to get statistically significant effects in any ERP experiment (and why you shouldn't). *Psychophysiology*, 54(1), 146–157.
+
+### High-pass filter distortion guard for amplitude/latency measurement
+
+The component score inherits the upstream filter. High-pass cutoffs at or above ~0.3 Hz introduce artifactual deflections of *opposite* polarity immediately adjacent in time to a real effect, which corrupt the amplitude, onset, and fractional-area latency measured in neighbouring windows. For amplitude/latency scoring prefer a high-pass cutoff of **≤ 0.1 Hz**. When the upstream filter (from `eeg-preprocess`/`ENVIRONMENT.json`) exceeds 0.1 Hz, flag it on every affected row of `component_measures.csv` so the distortion risk travels with the number. Cite: Tanner, D., Morgan-Short, K., & Luck, S. J. (2015). How inappropriate high-pass filters can produce artifactual effects and incorrect conclusions in ERP studies of language and cognition. *Psychophysiology*, 52(8), 997–1009.
+
+## Phase E — Grand averages and difference waves
+
+1. **Grand average per condition**: average across all subjects' evoked responses.
+   ```python
+   grand_avg = mne.grand_average([evoked_sub1, evoked_sub2, ...])
+   grand_avg.save(f'erp-stage/grand_average/{cond}-grand-ave.fif', overwrite=True)
+   ```
+
+2. **Grand average difference wave**: compute the difference wave from grand averages (for visualization), AND from individual difference waves (for statistics — these are different!).
+   ```python
+   # For visualization
+   grand_diff = mne.combine_evoked([grand_avg_A, grand_avg_B], weights=[1, -1])
+   # For statistics — use individual subject differences averaged
+   individual_diffs = [mne.combine_evoked([subj_A, subj_B], weights=[1, -1]) for ...]
+   grand_diff_for_stats = mne.grand_average(individual_diffs)
+   ```
+
+3. **GFP** (Global Field Power): RMS across channels at each time point.
+   ```python
+   gfp = evoked.data.std(axis=0)  # or np.sqrt((evoked.data ** 2).mean(axis=0))
+   ```
+
+4. **Grand-average confidence band (mean ± SEM)**. A common convention is to shade ± 1 standard error of the mean across subjects, SEM = std(ddof=0)/√n_subjects.
+   ```python
+   import numpy as np
+   data = np.array([ev.get_data(picks=roi).mean(axis=0) for ev in evokeds])  # [n_subjects, n_times]
+   mean = data.mean(axis=0)
+   sem = data.std(axis=0, ddof=0) / np.sqrt(data.shape[0])
+   # plt.fill_between(times, mean - sem, mean + sem, alpha=0.2)
+   ```
+   `mne.viz.plot_compare_evokeds(evokeds_dict)` draws a band automatically when given a *list of per-subject Evoked* per condition: `ci=True` is equivalent to a 0.95 threshold (95% bootstrap CI for a single plot; parametric when `axes='topo'`), a float in (0, 1) sets the threshold, and a callable taking an `[n_observations × n_times]` array returns custom upper/lower margins (e.g. SEM). State the band definition in the figure caption.
+
+**Keep the subject axis for statistics.** For any cluster/ANOVA test, retain the per-subject arrays — do *not* average across subjects before the test (the analog of FieldTrip's `keepindividual='yes'`). Collapsing first destroys the variance the test needs.
+
+## Phase E.5 — Regression ERP (rERP) with overlap deconvolution (optional)
+
+Plain condition averaging breaks down when events are spaced closely enough that adjacent responses overlap — fast RSVP, fixation- or saccade-locked reading and free-viewing, and button presses that fall near stimulus onsets. The average then confounds the response of interest with the tails of neighbouring responses, and there is no way to bin a *continuous* predictor (word frequency, luminance, saccade amplitude) without throwing away resolution. Regression ERP solves both: build a **time-expanded design matrix** with one impulse-response basis per predictor across the whole continuous recording and solve a single least-squares problem, which deconvolves the overlapping responses and yields a separate response estimate per predictor. Continuous covariates enter directly (no binning), and spline/GAM bases let a predictor's effect be nonlinear.
+
+This is portable from the `unfold` time-expansion framework (and `pymatreader`/custom design matrices in Python). Treat it as an alternative to Phase C averaging when the design has overlap or continuous predictors; the recovered betas are non-overlapping evoked responses that feed the rest of the pipeline (component measurement, grand average, stats) exactly like condition evokeds. Cite: Smith, N. J., & Kutas, M. (2015). Regression-based estimation of ERP waveforms: I. The rERP framework. *Psychophysiology*, 52(2), 157–168; Ehinger, B. V., & Dimigen, O. (2019). Unfold: an integrated toolbox for overlap correction, non-linear modeling, and regression-based EEG analysis. *PeerJ*, 7, e7838.
+
+## Phase F — Write outputs
+
+### Per-subject files
+- `erp-stage/<sub>/<sub>-<cond>-ave.fif` — per-condition evoked.
+- `erp-stage/<sub>/<sub>-diff_<contrast>-ave.fif` — per-contrast difference wave.
+
+### Grand average files
+- `erp-stage/grand_average/<cond>-grand-ave.fif`
+- `erp-stage/grand_average/diff_<contrast>-grand-ave.fif`
+
+### Measurement tables
+- `erp-stage/component_measures.csv` — one row per subject x component x condition:
+  ```
+  subject, component, condition, measure_type, amplitude_uV, latency_ms, time_window, roi_channels
+  sub-01, N1, target, mean_amp, -3.42, NaN, 80-150, "Fz,Cz,FCz"
+  sub-01, N1, target, peak_amp, -5.17, 112, 80-150, "Fz,Cz,FCz"
+  sub-01, N1, target, frac_area_lat, NaN, 108, 80-150, "Fz,Cz,FCz"
+  ```
+
+- `erp-stage/peak_table.csv` — backward-compatible summary for figure stage.
+
+### Append to `FINDINGS.md`
+```markdown
+## ERP Stage
+- N subjects averaged: [N]
+- Conditions: [list]
+- Components measured: [list]
+- Measurement method: [mean_amp / peak / adaptive_mean / frac_area_lat]
+- Grand average files: erp-stage/grand_average/
+```
+
+## Phase G — Sanity checks
+
+All must pass before declaring success:
+
+- [ ] Every subject in `epoch-stage/` has corresponding evoked files in `erp-stage/`.
+- [ ] Every condition in ANALYSIS_PLAN has a grand average file.
+- [ ] `component_measures.csv` exists and has rows for every subject x component combination.
+- [ ] Difference waves exist for every contrast in the claim table.
+- [ ] GFP was computed for each condition and the difference wave.
+- [ ] `ERP_PLAN.json` and `BACKEND_RESOLUTION.md` exist.
+- [ ] Time windows in `component_measures.csv` match those in ANALYSIS_PLAN.
+
+## Failure Modes
+
+| Symptom | Action |
+|---|---|
+| ANALYSIS_PLAN missing or has placeholders | Stop. Ask user to fill and freeze the plan. |
+| Epoch files missing for some subjects | Report which subjects are missing. Proceed with available subjects but warn. |
+| Fewer than 30 trials per condition per subject | Warn: low trial count degrades ERP quality; peak measures especially unreliable. The fixed 30 is a heuristic — prefer a G-theory D-study cutoff (`phi ≥ 0.8`) and per-subject SME for a principled, score-specific threshold (Clayson et al. 2021; Luck et al. 2021). |
+| No valid peak under the approved definition | Report the measurement unavailable and preserve the error. A new mean-amplitude or area score requires an approved change. |
+| Time window in plan does not match known component latency | Warn user but use the planned window (it may be intentional). |
+| ROI channels not found in data | Stop. Check channel_mapping.json or ask user. |
+| Mixed backends (some subjects in .fif, some in .set) | Convert all to one format before averaging. |
+| Unequal trial counts across conditions in a contrast | Record retained counts and score-specific precision. Do not infer mean-difference bias from counts alone or equalize automatically. Follow the approved selection method if equalization is requested. |
+| Tempted to pick the window/ROI from the grand average then test it | Stop — circular (Luck & Gaspelin 2017). Use a pre-registered window (Route A) or a cluster-corrected data-driven test (Route B). |
+| Per-subject arrays collapsed to grand average before stats | Re-extract per-subject values/arrays; cluster and ANOVA tests need the subject axis (FieldTrip keepindividual='yes'). |
+
+
+AEA procedure: skills/eeg-stats/SKILL.md
+
+---
+name: eeg-stats
+description: "Run claim-driven group statistics: cluster permutation (channel/time/freq), paired/independent t, effect sizes. Reads ANALYSIS_PLAN.md claim rows and the matching erp/tfr/connectivity stage outputs. Backend: MNE-Python. Use when user says 'run stats', 'cluster permutation', 'test my claims', or after ERP/TFR stages complete."
+argument-hint: "[project-dir] [— claim: C1,C2] [— perms: 5000] [— exploratory]"
+allowed-tools: Bash(*), Read, Write, Edit, Grep, Glob
+---
+
+# eeg-stats: claim-driven group statistics
+
+## Context: $ARGUMENTS
+
+## Use this skill
+
+Read the task and the approved analysis plan before choosing a procedure. The
+name and description select this skill; they do not specify the analysis.
+Load only the relevant sections below, rather than every reference in advance.
+For a bounded calculation, use the supplied inputs without inventing upstream
+stages or approvals. Keep the actual method, parameters, outputs, and checks.
+
+Template values in the detailed procedures describe their documented examples.
+Resolve scientific choices against the task and approved plan before execution;
+do not treat an example, a timeout, or an unattended run as researcher approval.
+Preserve explicitly fixed configurations. Record unresolved choices and continue
+independent approved work, as described in the project instructions.
+
+For clients without native skill loading, use the section loader from the
+repository root; it loads the selected procedure, not the whole reference:
+
+```bash
+python tools/load_skill.py eeg-stats --section "Phase A — Parse claims"
+```
+
+## Required Inputs
+
+Before running, these must exist:
+
+1. `ANALYSIS_PLAN.md` — frozen, with claim table filled. **Stop if missing or unfrozen.**
+2. `erp-stage/` or `tfr-stage/` — averaged data per condition per subject (`.fif` or `.h5`).
+3. `ENVIRONMENT.json` — to resolve backend.
+4. `channel_mapping.json` — if claim ROI uses 10-20 names but data uses numbered channels.
+
+## Critical Rules
+
+- **Never** run a stat not in ANALYSIS_PLAN. Exploratory analyses go in `stats-stage/exploratory/` and are labeled `[EXPLORATORY]` in FINDINGS.md.
+- **Never** edit ANALYSIS_PLAN after running. If a reviewer asks for additional analyses, add them as exploratory or create a v2 plan with documented reason.
+- **Never** change `n_permutations` to chase significance.
+- **Never** use `tail=0` when the plan specifies a directional hypothesis (or vice versa).
+- **Never** report cluster boundaries as precise onset/offset — cluster permutation only supports "a difference exists somewhere in the tested space."
+- **Never** pair different participants or treat repeated measurements from the same participants as separate groups. At the trial level, establish pairing separately from participant identity (Phase A step 3b). Paired tests require matched observation identifiers, not just equal array lengths.
+- **Never** copy FieldTrip's `cfg.alpha=0.025` as a second halving in MNE — MNE handles two-sidedness internally; judge `cluster_p < alpha` with `tail=0` (Phase C step 5).
+- **Never** average across subjects before a group test, and never present an uncorrected p-map as 'significant' — uncorrected maps are visualization only.
+- **Never** select the TF band/window or ERP channel+window from the grand average and then test it (double-dipping) — a-priori ROIs come from ANALYSIS_PLAN only.
+- **Refuse to certify** group analyses with very small N (≲12) as adequately powered — flag them as underpowered in FINDINGS.md.
+
+
+## Procedure reference
+
+Use [conditional method choices](references/method-choices.md) when formulating
+a plan. They do not authorize changing an approved test, estimator or interval,
+or adding sensitivity analyses during execution.
+
+Choose the section that matches the current operation. Detailed code examples
+and numerical conventions remain in the linked source.
+
+## Constants
+
+Read this section in [the detailed procedure](references/procedure.md).
+
+## Phase A — Parse claims
+
+Read this section in [the detailed procedure](references/procedure.md).
+
+## Phase B — Backend resolution
+
+Read this section in [the detailed procedure](references/procedure.md).
+
+## Phase C — Per-claim execution
+
+Read this section in [the detailed procedure](references/procedure.md).
+
+## Phase D — Multiple comparisons
+
+Read this section in [the detailed procedure](references/procedure.md).
+
+## Phase E — Write outputs
+
+Read this section in [the detailed procedure](references/procedure.md).
+
+## Phase F — Sanity checks
+
+Read this section in [the detailed procedure](references/procedure.md).
+
+## Domain Knowledge (distilled from EEG methodology literature)
+
+Read this section in [the method background](references/background.md).
+
+## Failure Modes
+
+Read this section in [the detailed procedure](references/procedure.md).
+
+## Cross-references
+
+- Inputs: `ANALYSIS_PLAN.md`, `erp-stage/`, `tfr-stage/`, `ENVIRONMENT.json`, `channel_mapping.json`
+- Outputs: `stats-stage/*.json`, `stats-stage/*.npz`, `stats-stage/BACKEND_RESOLUTION.md`, `FINDINGS.md`
+- Next: `eeg-figure` reads stats results for cluster-masked plots. `eeg-methods-text` reads stats JSON for the paragraph. `eeg-audit` verifies stats match the plan.
+
+
+AEA procedure: skills/eeg-stats/references/procedure.md
+
+## Constants
+
+- **BACKEND = `mne`** — MNE-Python is the computation backend.
+- **N_PERMUTATIONS** — read the approved `ANALYSIS_PLAN.md`; a development override requires authorization and its own label, not silent reduction of a planned run.
+- **SEED** — read the approved `ANALYSIS_PLAN.md > RNG seeds > Cluster permutation`; no missing-seed fallback.
+- **CLAIMS = read from ANALYSIS_PLAN.md claim table** — one stat run per claim row, never extra unless `— exploratory` is passed.
+- **OUTPUT_DIR = `stats-stage/`** — Create if missing.
+- **ALPHA** — read the approved claim table `α` column; do not fill a missing decision from a template.
+
+> Override: `/eeg-stats projects/my-study — claim: C1 — perms: 1000 — backend: mne`
+
+## Phase A — Parse claims
+
+For each row in ANALYSIS_PLAN's claim table:
+
+1. Extract: `claim_id`, `contrast`, `channels/ROI`, `time_window`, `freq_band`, `test`, `direction`, `alpha`.
+2. Resolve ROI channels:
+   - If claim says `Fz, Cz, FC1` but data uses `EEG 001, EEG 002...`, read `channel_mapping.json` and map.
+   - If no mapping exists, **stop and ask** — do not guess.
+3. Determine test type:
+   - `cluster perm, paired` → `mne.stats.spatio_temporal_cluster_1samp_test` on (subjects × time × channels) difference array.
+   - `cluster perm, independent` → `mne.stats.spatio_temporal_cluster_test` on two group arrays.
+   - If single-subject (N=1): determine the observation unit from the acquisition design before using trial-level inference. Two conditions recorded from one person do not make their individual trials paired. Never pair equal-length prefixes or discard extra trials merely to form differences. Use an approved trial-pair/block definition, or an approved unpaired test with the appropriate exchangeability restrictions; document the single-subject limitation.
+3b. **Determine the design (within vs between) — this switches BOTH the test and the pairing:**
+   - **Within-subject** (same subjects measured under ≥2 conditions; the contrast is a condition difference): compute the per-subject difference `A − B` and feed it to `spatio_temporal_cluster_1samp_test` (one-sample test on the difference). This is the exact analog of FieldTrip `ft_statfun_depsamplesT`. Use `ttest_rel` / `f_mway_rm` for the per-point case. Requires **equal N and matched subject ordering** between conditions.
+   - **Between-subject** (different groups, e.g. patients vs controls): feed the two group arrays to `spatio_temporal_cluster_test` (independent). Use `ttest_ind` for the per-point case. Tolerates **unequal N** (e.g. 20 controls vs 18 patients) — never pair.
+   - The plan's `contrast` column plus the cohort description determines this. These subject-level rules do not establish trial pairing within a single subject. Inspect event order, pairing keys and design blocks; fixed condition order does not establish randomization. If the required observation unit or exchangeability scheme is ambiguous, record the concrete alternatives for the researcher before running inference.
+4. Determine tail from `direction`:
+   - "A more negative" → `tail = -1`, threshold must be negative.
+   - "A more positive" or "A > B" → `tail = 1`, threshold positive.
+   - Explicitly approved "any direction" → `tail = 0`, two-sided. An empty direction remains unresolved; propose the test sidedness before the dependent computation.
+
+Write `stats-stage/STATS_PLAN.json` summarizing all resolved claims before executing.
+
+## Phase B — Backend resolution
+
+```
+1. Read ENVIRONMENT.json
+2. Verify MNE-Python is available → generate MNE-Python code
+3. Else → ERROR: MNE-Python required
+```
+
+Write `stats-stage/BACKEND_RESOLUTION.md`.
+
+## Phase C — Per-claim execution
+
+For each claim in `STATS_PLAN.json`, write and execute a Python script:
+
+### MNE-Python path (default)
+
+The script must:
+
+1. **Load data**: read `-ave.fif` (ERP) or `-tfr.h5` (TFR) per subject per condition from `erp-stage/` or `tfr-stage/`.
+2. **Build arrays**: shape `(n_observations, n_times, n_channels)`. Subtract conditions only for design-matched paired observations; retain separate condition arrays for unpaired observations. Record the observation identifiers and any design blocks.
+3. **Constrain to ROI + time window**: only include planned channels and time range.
+4. **Compute adjacency**: `mne.channels.find_ch_adjacency(info, ch_type="eeg")` on the ROI subset.
+5. **Compute the cluster-forming threshold from the design df — do NOT hard-code 1.96 / 2.0.** This is the cluster-FORMING threshold (which data points enter a cluster), a *different* knob from the cluster-LEVEL alpha (whether a formed cluster is significant). `df = n_subjects − 1` for the within/paired one-sample-on-difference design; `df = nA + nB − 2` for independent. For an F-based cluster test, use `scipy.stats.f.ppf(1 - alpha, dfn, dfd)`.
+   - `tail=-1`: `threshold = scipy.stats.t.ppf(alpha, df)`  (negative)
+   - `tail=1`:  `threshold = scipy.stats.t.ppf(1 - alpha, df)`
+   - `tail=0`:  `threshold = scipy.stats.t.ppf(1 - alpha/2, df)`  (halve alpha ONCE, here, for the two-sided forming threshold)
+   - **Do not halve alpha a second time at the cluster level.** With `tail=0`, MNE already accounts for two-sidedness internally; judge the returned `cluster_p` against the full `alpha` (e.g. 0.05). FieldTrip users halve `cfg.alpha` to 0.025 because FieldTrip does not — that 0.025 is NOT a second correction to copy into MNE.
+   - Preserve the approved fixed-threshold or TFCE method and its exact settings.
+     Run threshold-sensitivity analyses only when approved, retaining the primary
+     specification. A missing threshold does not authorize switching to TFCE or
+     adding tests. Record the unresolved choice and continue independent work.
+     See [method choices](method-choices.md) for conditional planning options.
+6. **Run the approved design**: for paired differences, use `mne.stats.spatio_temporal_cluster_1samp_test(X, n_permutations=N, threshold=threshold, tail=tail, seed=SEED, adjacency=adj, out_type="mask")`. For an unpaired signed t contrast with unrestricted label exchangeability, use `mne.stats.spatio_temporal_cluster_test([A, B], stat_fun=mne.stats.ttest_ind_no_p, ...)` with an explicit t threshold and tail; its default statistic is F, not a signed t statistic. If the acquisition design requires block-restricted permutations, preserve those restrictions in the implementation instead of silently using the unrestricted-label API.
+7. **Extract significant clusters**: `cluster_p < alpha`.
+8. **Compute effect size** on the planned ROI+window irrespective of significance. For paired observations, Cohen's dz is mean(differences) divided by their sample standard deviation (`ddof=1`). For unpaired observations, use the difference in means divided by the pooled sample standard deviation, with the formula recorded. An unpaired contrast must not be converted into arbitrary pairwise differences to obtain an effect size.
+
+Use the approved amplitude/latency estimator and interval. Arithmetic mean,
+trimmed mean and their uncertainty methods are not interchangeable. Do not
+replace an approved arithmetic mean with a 20% trimmed mean because a reference
+mentions it or the observed data are inconvenient. Propose an unresolved choice
+before its computation; retain approved primary and exploratory analyses under
+their own labels. See [conditional method choices](method-choices.md).
+
+### Brain–behavior correlation (when the claim links an EEG measure to a behavioral score)
+
+For claims like "ERN amplitude predicts post-error slowing" or "frontal-theta power correlates with accuracy", the unit of analysis is a per-subject (or per-trial) **(EEG metric, behavior)** pair, not a condition contrast:
+
+- Preserve the approved correlation coefficient and diagnostics. Pearson or Spearman can be proposed with their assumptions when formulating the plan; inspecting a scatterplot does not authorize switching an approved coefficient. Record a needed change for the researcher before dependent inference.
+- **Combine / compare correlations across subjects or ROIs with the Fisher-z transform** (r is not additive; z is): `z = np.arctanh(r)` with `SE = 1/np.sqrt(n-3)`; average/compare in z-space, then back-transform `r = np.tanh(z)`. To test whether two independent correlations differ: `Z = (z1 - z2) / np.sqrt(1/(n1-3) + 1/(n2-3))`.
+- **Significance / robustness:** for small N or non-normal data prefer a permutation test (shuffle the behavior labels, recompute r, 5000×) over the parametric p; report the CI from the Fisher-z SE, and FDR across multiple electrodes/ROIs/time-windows just as for the contrast tests above.
+- **Single-trial** EEG–behavior coupling (amplitude → RT within subject) is a mixed-effects regression — route to `eeg-behavior` (statsmodels MixedLM), not a subject-level correlation.
+
+Cite: Cohen, M. X. (2014). *Analyzing Neural Time Series Data*, Ch. 27–28 (correlation, Fisher-z, robustness).
+
+### Mass-univariate LMM with crossed subject AND item random effects (lmeEEG)
+
+When stimuli are **sampled** (faces, words, scenes — the classic N400/face/word case) and single-trial data exist, treating the stimulus set as fixed silently inflates Type I error: the inference does not generalize to new stimuli. AEA's existing mixed-effects support (`eeg-behavior`, `eeg-group-compare` MixedLM) carries only a subject random effect (`1|subject`) and either collapses to one scalar per subject or models single-trial *behavior* — it cannot cross subjects with items. (The plain single-trial-LMM idea — Volpert-Esmond et al. 2021 — is already covered by `eeg-behavior`; the genuinely new piece here is the *mass-univariate crossed* design.)
+
+The lmeEEG recipe avoids refitting REML at millions of (channel × time) points: fit the full LMM with crossed subject and item random effects **once** per channel/time point, extract the **marginal EEG** (observed signal minus the estimated random-effect contributions), then run ordinary mass-univariate regression on those marginals followed by cluster/TFCE permutation. Use whenever stimuli are sampled and you want to generalize beyond the specific stimulus set. Cite: Visalli et al. (2024). lmeEEG: Mass linear mixed-effects modeling of EEG data with crossed random effects. *J. Neurosci. Methods*, 401, 110008.
+
+### Time-frequency claims — three routes (pick by hypothesis specificity)
+
+When the claim is on a TFR (`tfr-stage/*-tfr.h5`), build the per-subject array as `(n_subjects, n_freqs, n_times)` for the chosen channel/ROI and choose ONE route:
+
+1. **A-priori TF-ROI averaging (highest power; requires a pre-registered band+window).** Crop to the planned `(fmin:fmax, tmin:tmax)` and average those axes per subject to one value, then run a single (optionally one-sided) test across subjects: `X.mean(axis=(-2,-1))` → `ttest_rel` / `ttest_1samp`. If multiple ROIs/channels, FDR across them. This is the TF analog of `cfg.avgovertime='yes'; cfg.avgoverfreq='yes'`. Double-dipping risk: the band/window MUST come from the plan, never from the grand-average TFR.
+2. **Spatial-only cluster after collapsing time+freq.** When only the band and window are hypothesized but the topography is the question, average the freq+time axes per subject first, leaving `(n_subjects, n_channels)`, then cluster over channels with `adjacency=find_ch_adjacency(info,'eeg')`. This is the 'where' test at high power.
+3. **Full pixel-wise mass-univariate + FDR (no cluster assumption).** Run `scipy.stats.ttest_rel`/`ttest_ind` over every `(freq,time)` pixel, then mask with `mne.stats.fdr_correction(p, alpha=0.05)`. Cheap and assumption-light, but lower power than cluster permutation; report the FDR-significant region, not the raw p-map.
+
+Prefer cluster-based permutation over the freq×time plane (`permutation_cluster_1samp_test` with TF adjacency) when the effect is contiguous and no a-priori ROI exists — it controls FWER while respecting TF contiguity. **Baseline-correct before any of these** (see Domain Knowledge: baseline modes).
+
+### Factorial within-subject designs (mne.stats.f_mway_rm)
+
+For a 2×2 (or higher) repeated-measures design, do NOT chain pairwise t-tests. Stack per-subject condition data into `(n_subjects, n_conditions, n_signals)` with the condition axis ordered so factor levels nest in a FIXED order (e.g. A1B1, A1B2, A2B1, A2B2 — B varies fastest within A), then:
+
+```python
+from mne.stats import f_mway_rm
+factor_levels = [2, 2]            # levels per factor, same order as the stacking
+F_A,  p_A  = f_mway_rm(X, factor_levels, effects='A')
+F_B,  p_B  = f_mway_rm(X, factor_levels, effects='B')
+F_AB, p_AB = f_mway_rm(X, factor_levels, effects='A:B')
+```
+
+For a corrected map, wrap `f_mway_rm` as the `stat_fun` inside `permutation_cluster_test(..., stat_fun=lambda *a: f_mway_rm(np.stack(a,1), factor_levels, effects='A', return_pvals=False)[0])` rather than FDR-ing per point. Heed Luck & Gaspelin 2017: each extra factor adds interaction terms that inflate Type I error — only run the effects the plan names, and record df for the methods text.
+
+### Source-space and decoding claims (cross-reference)
+
+- **Source space**: use `mne.stats.spatio_temporal_cluster_1samp_test` (within) / `spatio_temporal_cluster_test` (between) with source adjacency `mne.spatial_src_adjacency(src)`, `n_permutations ≥ 1000`, two-tailed. The FieldTrip course convention is `alpha=0.025` per tail = 0.05 overall — in MNE judge `cluster_p < 0.05` with `tail=0` (do not also halve, per Phase C step 5). When whole-brain is underpowered, parcellate first: `mne.extract_label_time_course` over an atlas → one value per label per subject → paired test per label with FDR/Bonferroni across labels. See `eeg-source`.
+- **Decoding / RSA vs chance**: test per-subject `(accuracy − chance)` curves with `permutation_cluster_1samp_test(tail=1)` over the post-stimulus window ONLY; state chance explicitly (`1/n_classes`, or 0.5 for binary). For a single global-accuracy p-value use `sklearn.model_selection.permutation_test_score` (n_permutations≥1000; it applies the corrected p=(C+1)/(n+1)). See `eeg-decoding` for the upstream CV/balancing defaults.
+
+## Phase D — Multiple comparisons
+
+**Two distinct levels apply — keep them separate:**
+
+**D1. Within a single mass-univariate test** (many time / freq / channel points in one claim). Pick the method by the *structure* of the expected effect:
+
+| Method | Controls | Use when | MNE call |
+|---|---|---|---|
+| **Cluster-based permutation** (default) | FWER | Effect is contiguous in time / space / frequency (the EEG norm) | `*_cluster_*_test` (already in Phase C) |
+| **FDR (Benjamini–Hochberg)** | FDR | Effect is sparse / non-contiguous, or you want a cheap per-point map without a cluster assumption | `mne.stats.fdr_correction(p_vals, alpha=alpha, method='indep')` → `(reject_bool, p_corrected)` |
+| **tmax (max-statistic permutation)** | strong FWER | Sparse / narrow / punctate effect where you DO want per-point "significant here" licence (cluster tests cannot give that) | `mne.stats.permutation_t_test(X)` (single-step max-stat) |
+| **Bonferroni** | FWER | A small, pre-specified set of channels×windows only (last resort) | `p_corrected = np.minimum(p_vals * n_tests, 1.0)` |
+
+Bonferroni is over-conservative for autocorrelated EEG points — reserve it for a handful of a-priori comparisons. **Never report an uncorrected p<0.05 map as 'significant'** (uncorrected maps are for visualization only).
+
+> **FIX — the `method='indep'` default is the wrong FDR variant when EEG points are dependent.** The table above (and the Phase E default) hard-code `fdr_correction(..., method='indep')`, which is plain Benjamini–Hochberg and is only proven valid under independence or *positive* dependence with a known structure. Neighbouring EEG time/freq/channel points are positively autocorrelated with a structure you have not characterized, so for an unknown-dependence map use the Benjamini–Yekutieli variant `method='negcorr'` — it controls FDR under arbitrary dependence (at some power cost). Default to `'negcorr'` whenever you cannot justify the independence assumption.
+>
+> **tmax vs cluster — pick by effect shape.** Single-step max-statistic permutation controls strong FWER at *every individual point*, so — unlike cluster permutation — it legitimately licenses per-electrode / per-timepoint "the effect is significant here" statements, and it is *more* powerful than cluster tests when the effect is narrow or punctate. Rule of thumb: broad/contiguous effect → cluster; sparse/narrow → tmax (`mne.stats.permutation_t_test`). Cite: Groppe, Urbach & Kutas (2011). Mass univariate analysis of event-related brain potentials/fields I. *Psychophysiology*, 48(12), 1711–1725 (tmax and the BY/`negcorr` FDR choice).
+
+**D2. Across claims** (the cross-claim family). If ANALYSIS_PLAN specifies a strategy:
+- `Bonferroni N=K` → adjusted alpha = alpha / K for each claim.
+- `hierarchical` → primary claim at alpha, secondary at alpha only if primary significant.
+- `none` → no correction (single claim or pre-registered).
+
+Apply the correction to the per-claim verdicts.
+
+## Phase E — Write outputs
+
+For each claim, write:
+
+### `stats-stage/<claim_id>_cluster_perm.json`
+```json
+{
+  "claim_id": "C1",
+  "claim": "...",
+  "test": "spatio_temporal_cluster_1samp_test",
+  "n_permutations": 5000,
+  "threshold": -1.656,
+  "tail": -1,
+  "tail_justification": "Directional: auditory more negative",
+  "seed": 42,
+  "window": [0.08, 0.15],
+  "window_matches_plan": true,
+  "roi_channels_numbered": ["EEG 004", "..."],
+  "roi_channels_1020": ["F3", "Cz", "..."],
+  "roi_matches_plan": true,
+  "n_observations": 144,
+  "n_clusters": 2,
+  "significant": [
+    {"id": 0, "p": 0.001, "t_sum": -1139.2, "time_ms": [82, 150], "channels_1020": ["Fz","Cz"]}
+  ],
+  "cohens_d": -0.461,
+  "cohens_d_formula": "mean(diff) / std(diff) across observations in ROI+window",
+  "adjacency": "Delaunay triangulation from digitized positions, ROI subset",
+  "alpha": 0.05,
+  "mc_correction": "none (single claim)",
+  "verdict": "supports"
+}
+```
+
+### `stats-stage/<claim_id>_arrays.npz`
+Save `t_obs`, `cluster_p`, `H0` for reproducibility.
+
+### Optional handoff to deterministic ERP result reporting
+
+For the approved participant-level, one-sided `spatio_temporal_cluster_1samp_test` branch, the report skill can use [tools/render_statistical_report.py](../../../tools/render_statistical_report.py). This is an opt-in report check, not a new test or a change to the plan. Its current scope is arithmetic participant means with an explicitly approved descriptive two-sided 95% Student t interval. Do not replace an approved trimmed mean, bootstrap interval, two-sided test, independent-groups test or other analysis merely to use it; unsupported specifications fail explicitly and continue through their existing reporting route without this validation label.
+
+When using this handoff, read [the contract/result schema](../../../tools/erp_cluster_report.schema.json). Write `<claim_id>_report_contract.json` from the approved choices and `<claim_id>_report_results.json` from the **actual** execution record. Independently check `input_sfreq` and `epoch_time_origin_s` against the complete uncropped source epoch/evoked metadata before preparing the report arrays; do not infer that reference from the candidate cropped arrays. The reporter generates the full expected sample grid for the approved inclusive window. Keep the forming alpha distinct from the cluster-level alpha; retain actual permutation counts and all exclusions with reasons. These JSON records use the schema's explicit field names rather than reinterpreting a historical output format.
+
+In the same saved NPZ, retain these arrays in addition to `t_obs`, `cluster_p` and `H0`:
+
+```python
+# A and B: matched participants x retained time samples x ROI channels, in V.
+# positive_name / negative_name and all coordinates come from the approved plan.
+np.savez(arrays_path, data=X, positive=A, negative=B,
+         participant_ids=np.asarray(subject_ids), times=times,
+         ch_names=np.asarray(roi_channels),
+         contrast=np.asarray([positive_name, negative_name]), unit=np.asarray('V'),
+         t_obs=t_obs, cluster_p=cluster_p, H0=H0)
+```
+
+The reporter checks `X == A - B` and recomputes the descriptive statistics from the retained participant arrays, rather than accepting agreement between two self-reported JSON files. The resulting scalar interval stays descriptive; cluster significance does not imply significance of the full ROI-window mean. This handoff does not change the analysis defaults, certify every operation exposed by this skill, or decide the research claim.
+
+### Append to `FINDINGS.md`
+```markdown
+## C1: [claim text]
+- Result: [supports / does_not_support / partial]
+- Cluster p = [value], [N] permutations, seed [S]
+- Cohen's d = [value]
+- ROI: [channels], window: [time]
+```
+
+### Group grand-average + uncertainty band (for the figure stage)
+
+For group inference, keep the subject axis; do not average it away before the
+test. For descriptive plotting, pass the approved estimator, uncertainty method,
+observation identifiers and units to `eeg-figure` with the actual per-subject
+values. Its mean-band helper computes approved SEM or CI bounds and a matching
+caption; it supplies no missing scientific choice. MNE `ci=True` is a 95%
+confidence band, not mean ±1 SEM. Cluster significance and a descriptive ROI
+interval remain distinct; retain the existing deterministic report checks.
+
+## Phase F — Sanity checks
+
+All must pass before declaring success:
+
+- [ ] Every claim in ANALYSIS_PLAN has a corresponding `stats-stage/<claim_id>_cluster_perm.json`.
+- [ ] Every JSON has `window_matches_plan: true` and `roi_matches_plan: true`.
+- [ ] No claim was run that isn't in the plan (unless `— exploratory` was passed).
+- [ ] FINDINGS.md has a new dated entry for each claim.
+- [ ] BACKEND_RESOLUTION.md exists.
+
+## Failure Modes
+
+| Symptom | Action |
+|---|---|
+| ANALYSIS_PLAN missing or has placeholders | Stop. Ask user to fill and freeze the plan. |
+| ROI channels not found in data | Stop. Check channel_mapping.json or ask user. |
+| No significant clusters | Report as ❌ does_not_support. Do NOT rerun with different params. |
+| Cluster spans entire tested window | Report but warn: "cluster hits analysis boundary — consider wider window or note temporal non-specificity." |
+| Only 1 subject | Establish the approved trial or block observation unit and exchangeability scheme. Document single-subject inference; one person does not imply paired trials. |
+| MNE-Python unavailable | Stop. MNE-Python is required for statistics. |
+| Participant-paired conditions but unequal/mismatched N | Stop. Subject-level pairing requires matched participants — check the contrast and cohort, do not silently fall back to independent. For single-subject trials, use the separately approved observation and exchangeability scheme. |
+| Plan specifies two-sided but code halves alpha twice (0.025 at cluster level) | Fix: derive forming threshold with `alpha/2`, judge `cluster_p < alpha` with `tail=0`. MNE handles two-sidedness once. |
+| TFR claim with no baseline applied before stats | Stop. Apply `logratio`/`percent` (evoked power) or `zscore` (single-trial) baseline inside the COI first. |
+| Mass-univariate p-map reported without correction | Reject as 'significant'. Apply cluster permutation (contiguous) or `fdr_correction` (sparse); uncorrected maps are visualization only. |
+| Multi-factor design tested with chained pairwise t-tests | Use `mne.stats.f_mway_rm` with `factor_levels`; run only the plan's effects (interactions inflate Type I). |
+| Group N ≲ 12 | Run, but label FINDINGS.md entry 'underpowered'; do not certify the claim as adequately powered. |
+
+
+AEA procedure: recipes/ern-flankers/RECIPE.md
+
+---
+recipe: ern-flankers
+version: "v0.1.0"
+paradigm: Eriksen Flankers — Error-Related Negativity (ERN) + conflict N2 + frontal theta
+status: validated
+min_channels: 20
+min_sfreq: 256
+min_trials_per_condition: 40
+required_markers: [stimulus/compatible, stimulus/incompatible, response]
+references:
+  - "Kappenman, E. S., et al. (2021). ERP CORE: An open resource for human event-related potential research. NeuroImage, 225, 117465. doi:10.1016/j.neuroimage.2020.117465"
+  - "Gehring, W. J., et al. (1993). A neural system for error detection and compensation. Psychological Science, 4(6), 385–390."
+  - "Cavanagh, J. F., & Frank, M. J. (2014). Frontal theta as a mechanism for cognitive control. Trends in Cognitive Sciences, 18(8), 414–421."
+validation_dataset: "ERP CORE Subject-001, Task-Flankers (local converted FIF)"
+contributors:
+  - "AEA core <hou.dengzhe.t8@dc.tohoku.ac.jp>"
+license: CC-BY-4.0
+---
+
+# Recipe: ERN + Conflict N2 + Frontal Theta (Flankers)
+
+The error-related negativity (ERN) is a negative-going ERP component peaking within 100 ms after an erroneous response at frontocentral sites (FCz/Cz). In the Eriksen Flankers task, incompatible trials have flankers pointing in the opposite direction to the target. This recipe tests stimulus-locked N2, response-locked compatibility, and frontal theta contrasts. Its C2 groups responses by stimulus compatibility, not by response correctness. The separate group ERN validation below uses the canonical error-minus-correct contrast.
+
+This recipe tests three effects:
+- **(C1)** Stimulus-locked N2: incompatible > compatible at FCz/Fz/Cz (200–350 ms)
+- **(C2)** Response-locked compatibility contrast: incompatible more negative than compatible at FCz/Fz/Cz (0–100 ms)
+- **(C3)** Frontal theta power: incompatible > compatible at FCz/Fz/Cz (200–500 ms, 4–8 Hz)
+
+## What this recipe needs
+
+### Data shape
+
+- **Channels:** at minimum FCz, Fz, Cz (10–20 system). 20+ channels recommended for topomaps.
+- **Sampling rate (after resampling):** ≥ 256 Hz.
+- **Conditions and marker codes (REQUIRED):**
+
+  | Condition | Default event | Plain meaning |
+  |---|---|---|
+  | compatible_stim | stimulus/compatible/* | compatible flanker stimulus onset |
+  | incompatible_stim | stimulus/incompatible/* | incompatible flanker stimulus onset |
+  | response | response/* | button press (any) |
+
+  The recipe derives response-locked epochs by finding the most recent stimulus before each response and labeling the response as compatible or incompatible.
+
+- **Trial counts:** ≥ 40 per condition per subject after artifact rejection.
+
+### Subjects
+
+- **N recommended:** ≥ 15 for group-level cluster permutation. Single-subject trial-level analysis is supported but limited.
+- **Group structure:** within-subject (every subject sees both compatible and incompatible).
+
+## Pipeline
+
+### 1. Preprocess
+- Bandpass: 0.1–30 Hz, zero-phase FIR (30 Hz LP appropriate for ERN and N2).
+- Notch: 60 Hz (US) or 50 Hz (EU/Asia) — infer from data or ask user.
+- Reference: average of all scalp channels.
+- Bad channels: RANSAC (pyprep) if available; otherwise manual list.
+
+### 2. ICA
+- Method: extended Infomax.
+- N components: 15 (or 0.99 variance if >30 channels).
+- Auto-label via mne-icalabel; reject eye / muscle / heart.
+- Pre-fit 1 Hz HP filter copy (best practice).
+
+The single-participant case uses ICA, 150 µV peak-to-peak rejection, and the native 1024 Hz data.
+The separate N=14 canonical ERN group validation and cross-tool benchmark use the harmonized
+minimal configuration: no ICA, `reject=None`, and 256 Hz. These are different analyses.
+Use the pinned configuration to reproduce the cross-tool results; see
+[`tools/benchmark/SPEC_PRECISION_EVAL.md`](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/76202d6071070c27ad2813561e54272969cacb4b/tools/benchmark/SPEC_PRECISION_EVAL.md).
+
+### 3. Epoch
+- **Stimulus-locked:** −0.2 to 0.8 s relative to stimulus onset. Baseline: −0.2 to 0 s.
+- **Response-locked:** −0.4 to 0.6 s relative to response. Baseline: −0.4 to −0.2 s.
+- Artifact rejection: 150 µV peak-to-peak EEG threshold in the reference case.
+- Derive response condition (compatible/incompatible) from the preceding stimulus marker.
+
+### 4. Claims to test
+
+| ID | Claim | Contrast | Channels / ROI | Time window | Freq band | Test | Direction predicted |
+|---|---|---|---|---|---|---|---|
+| C1 | Incompatible elicits larger N2 | incomp_stim − comp_stim | FCz, Fz, Cz | 200–350 ms | n/a | cluster perm, trial-level, tail=-1 | incomp more negative |
+| C2 | Incompatible responses are more negative | incomp_resp − comp_resp | FCz, Fz, Cz | 0–100 ms post-resp | n/a | cluster perm, trial-level, tail=-1 | incomp more negative |
+| C3 | Frontal theta greater for incompatible | incomp_stim − comp_stim (TFR) | FCz, Fz, Cz | 200–500 ms | 4–8 Hz | cluster perm on theta power, tail=1 | incomp more positive |
+
+### 5. Statistics
+- Use every retained trial, without truncating conditions to equal counts or pairing trials by their order.
+- Statistic: pooled independent-samples t, incompatible minus compatible; df = n_incompatible + n_compatible − 2.
+- Permute compatibility labels within original acquisition block × target-side strata, preserving each stratum's retained condition counts. In Subject-001, the original ten blocks have 40 trials each, ten per compatibility × target-side cell. Original event samples link cached epochs to this structure.
+- This assumes conditional exchangeability within the strata. It is not a reconstruction of the original task randomization algorithm, and it is not a population-level test.
+- N permutations: 5000, including the observed configuration and 4999 random configurations.
+- Cluster-forming threshold: derived from p < 0.05 (one-sided) t at the actual df. This is distinct from the final Bonferroni threshold.
+- RNG seed: 42.
+- Adjacency: ROI channel triangulation combined with adjacent time samples for C1/C2; adjacent time samples × adjacent frequency bins × ROI channel triangulation for C3. C3 retains all five 4–8 Hz bins and all three ROI channels, without averaging these dimensions before inference.
+- Correct for the complete tested domain using maximum cluster mass. Across C1/C2/C3, use Bonferroni N=3: cluster p < 0.05/3 = 0.0166667.
+- Report all cluster p-values and all three claims. Report descriptive Cohen's d for every claim using trial-level planned-domain means and pooled within-condition sample variance (ddof=1), regardless of significance.
+
+The saved local analysis plan and its dated repair specification are analysis records, not a formal preregistration.
+
+### 6. Figures
+
+| Fig | Type | Panels |
+|---|---|---|
+| F1 | Full case study | (a) stimulus-locked ERP at ROI; (b) response-locked compatibility ERP; (c) mean N2-window topomap; (d) TFR difference; (e) theta time course; (f) PSD |
+
+### 7. Time-frequency
+- Method: Morlet wavelets, 4–29 Hz, n_cycles = freqs/3, decim=4, zero_mean=True, use_fft=False.
+- Baseline: −0.2 to 0 s. Normalize each trial's power separately, then convert to dB with `10 * log10(power / mean_baseline_power)` before averaging trials.
+- Use that same per-trial dB quantity in statistics, condition summaries and figures. Log-normalizing condition-averaged power is a different estimand.
+- C3 tests the complete 4–8 Hz × 200–500 ms × FCz/Fz/Cz domain.
+
+## Corrected single-participant results (2026-10-04)
+
+The repair reused the historical ICA-cleaned epochs of **ERP CORE Subject-001 Flankers**.
+Preprocessing and ICA were not rerun. C1/C3 use 196 compatible and 197 incompatible trials;
+C2 uses 196 compatible and 194 incompatible trials. All three original claims were tested.
+
+| Claim | Incompatible − compatible | Pooled Cohen's d | Minimum cluster p | Significant clusters at p < 0.05/3 |
+|---|---:|---:|---:|---:|
+| C1, stimulus-locked N2 | −0.192431 µV | −0.062090 | 0.0588 | 0 |
+| C2, response-locked compatibility | −1.151246 µV | −0.316387 | 0.0006 | 1 |
+| C3, frontal theta | +1.278953 dB | +0.295295 | 0.0002 | 1 |
+
+These are trial-level results for one participant. The reported p-values already correct
+over each claim's full cluster domain; compare them with 0.05/3 for the additional correction
+across claims. The tested arrays contain 154 times × 3 channels for C1, 103 × 3 for C2,
+and 77 times × 5 frequencies × 3 channels for C3. Full result and reproduction details are in
+[`projects/erp-core-full/REANALYSIS.md`](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/76202d6071070c27ad2813561e54272969cacb4b/projects/erp-core-full/REANALYSIS.md) and
+[`REANALYSIS.json`](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/76202d6071070c27ad2813561e54272969cacb4b/projects/erp-core-full/REANALYSIS.json).
+
+### Recorded corrected example
+
+The recorded source project contains the local converted FIF at `raw/sub-01.fif`. The
+cached-epoch run also requires the saved stimulus and response FIFs under
+`epoch-stage/sub-01/`. Raw EEG and these cached FIFs are not distributed in the Git repository.
+
+The [recorded runner](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/7597b6aa2e82355d56703c81621979b3ff1d45c0/tools/run_full_case_study.py)
+and [figure generator](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/7597b6aa2e82355d56703c81621979b3ff1d45c0/tools/gen_case_study_figures.py)
+remain in that fixed source snapshot. They are historical example scripts;
+the current library keeps the complete [N400 worked example](../../docs/EXAMPLES.md)
+as its runnable tutorial.
+
+Choose a new or empty output directory for each run. Omit `--reuse-epochs` to run the
+original raw-FIF preprocessing, ICA and epoching configuration as well. The runner preserves
+the source project's historical plan and results. Its output contains the summary, all trial
+inputs and strata, adjacency, observed cluster maps, every cluster p-value, permutation null,
+plotting arrays, methods and findings. The plotting command exports the six-panel figure as
+PDF, editable SVG and 600 dpi PNG.
+
+The corrected downstream run took 12.596 s on the recorded environment, excluding preprocessing,
+ICA and separate figure rendering. This is not a full-pipeline runtime or a speedup comparison.
+The correction is on current development history; the immutable **v0.3.2** release does not
+contain this later reanalysis.
+
+### Historical single-participant output (2026-05-23)
+
+The following table preserves the original reported values and verdicts. It is a record of
+the previous implementation, not the current corrected evidence. C1/C2 paired equal-length
+condition prefixes by order. C3 used uncorrected per-time-point t-tests within its window,
+despite the plan specifying a cluster test. Its reported dB values were actually unscaled
+log10 power ratios. The historical C2 label “ERN” meant the compatibility contrast.
+
+| Claim | Verdict | Key values |
+|-------|---------|-----------|
+| C1 (N2) | not supported (Bonferroni) | diff = −0.19 µV, not significant at α=0.017 |
+| C2 (historically labeled ERN) | reported supported | diff = −1.15 µV, cluster p reported significant, d = −0.23 |
+| C3 (Theta) | reported supported | diff reported as 0.12 dB (unit incorrect), 41/77 significant timepoints, d = 0.20 |
+
+Historical pipeline: 30 EEG channels, 1024 Hz, 0.1–30 Hz FIR, 60 Hz notch, average reference,
+ICA 15 components (6 excluded), 393 stimulus epochs and 390 response epochs. The old
+documentation reported 94.6 s; no corresponding retained execution-time trace was identified.
+That number is preserved as a historical report, not substituted with the downstream repair time.
+
+The old TFR figure normalized power after averaging trials, whereas the old statistical
+input normalized each trial first. Their summaries therefore estimated different quantities.
+The old trial-based difference, after the ×10 unit correction, was 1.2643586534 dB for the
+first 196 trials of each condition. Applying that same selection to the new saved inputs
+reproduces it to 3 × 10⁻¹² dB. The corrected 1.2789527859 dB uses all 197 incompatible
+trials and all 196 compatible trials. Morlet settings were unchanged.
+
+### N>1 group ERN — canonical error−correct (server, 2026-06-24)
+
+The C2 above uses incompatible−compatible responses (a conflict framing). The **standard** ERN is
+**error − correct**, response-locked — validated here as a genuine group effect on ERP CORE ERN
+(Kappenman 2021), **N = 14** (6 of 20 subjects excluded for <15 error trials), FCz/Fz/Cz, 0–100 ms
+post-response, pre-response baseline (−0.4,−0.2), 0.1–30 Hz, 256 Hz, average ref, reject=None:
+
+| Quantity | Value (N = 14) |
+|---|---|
+| Grand-average ERN (error − correct, 0–100 ms) | **−5.446 µV** (SEM 0.863) |
+| One-sample t (vs 0) | **t(13) = −6.31, p = 2.7 × 10⁻⁵**, Cohen's dz = −1.69 |
+| Second-level spatiotemporal cluster | **1 significant cluster, p = 0.0004** |
+
+A large, robust ERN. [Recorded validation script](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/995f53d42cc74205b164e8711d4b289b8c2ad3a1/tools/validation/validate_ern_erpcore_group.py) (20 subjects).
+**Cross-tool benchmark** (the first *response-locked* one): reproduces MNE-BIDS-Pipeline's per-subject
+ERN to **≤ 32 nV (CCC = 1.000, 14/14 within ±0.1 µV)** — see the [benchmark record §4e](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/995f53d42cc74205b164e8711d4b289b8c2ad3a1/docs/BENCHMARK.md).
+
+## Methods paragraph (for your paper)
+
+```text
+[REFERENCE-CASE METHODS; use the run's generated methods for its exact results]
+
+Continuous EEG was preprocessed with a 0.1–30 Hz zero-phase FIR bandpass and
+60 Hz notch, re-referenced to the average of all scalp channels. ICA (extended
+Infomax, 15 components, seed 42) was fit on a 1 Hz high-pass copy; ICLabel
+classified 3 eye-blink and 3 muscle components for rejection. Stimulus-locked
+epochs (-200 to 800 ms) and response-locked epochs (-400 to 600 ms) were
+extracted, baseline-corrected, and epochs exceeding 150 µV peak-to-peak EEG
+amplitude were rejected. The corrected downstream run reused these epochs.
+
+Three contrasts fixed in a local analysis plan were tested at FCz/Fz/Cz:
+stimulus N2, response-locked compatibility, and frontal theta. All retained
+trials entered pooled independent-samples t statistics. Compatibility labels
+were permuted within block-by-target-side strata, retaining each stratum's
+condition counts (5000 permutations, seed 42). Cluster-forming p was 0.05
+one-sided; final cluster p was compared with 0.05/3 across the three claims.
+C3 retained its full time-by-frequency-by-electrode domain. Power was converted
+to dB after per-trial baseline normalization and before averaging. This is
+conditional trial-level inference for one participant, not population inference.
+```
+
+## Known limitations
+
+- Single-subject demo: C1 (N2) may not reach significance with N=1 and Bonferroni. With N≥15, the N2 effect is robust in published literature.
+- Response-locked epoching requires stimulus→response pairing logic (the recipe handles this automatically).
+- Theta TFR requires epoch length > wavelet length at 4 Hz — n_cycles capped at freqs/3 for safety.
+
+## Changelog
+
+- **2026-10-04 correction**: all-trial block-by-target-side permutation, full-domain C3 cluster correction, consistent per-trial dB, pooled descriptive effect sizes, and retained historical records. This update is after the immutable AEA v0.3.2 release.
+- **v0.1.0** (2026-05-23): initial release and the historical three-claim case-study results preserved above.
+
+
+AEA procedure: templates/bids_derivatives/README.md
+
+# BIDS-Derivatives output template for ERP results
+
+Write the analysis outputs as a derivative dataset, separate from the read-only raw
+tree. The layout below passes the BIDS validator (schema validator 3.0.2, schema 1.2.7)
+with no errors. ERP difference waves have no official BIDS suffix yet, so the `_erp`
+files are declared in `.bidsignore`, which is how BIDS allows files outside the current
+specification.
+
+```
+derivatives/<pipeline-name>/
+    dataset_description.json     DatasetType "derivative", GeneratedBy, SourceDatasets
+    .bidsignore                  lists *_erp.tsv and *_erp.json
+    README
+    sub-XXX/eeg/sub-XXX_task-<task>_desc-<contrast>_erp.tsv
+    sub-XXX/eeg/sub-XXX_task-<task>_desc-<contrast>_erp.json
+```
+
+Rules that the validator enforces or that downstream users rely on:
+
+- `dataset_description.json` must exist at the derivative root, with `"DatasetType": "derivative"`.
+- `SourceDatasets` records the DOI of the raw dataset (`doi:` prefix) and its version.
+  Read the version from the raw dataset's own `CHANGES` file instead of assuming one.
+- `<task>` and `<contrast>` are alphanumeric, with no hyphen or underscore inside.
+- Column units go in the `_erp.json` sidecar.
+
+`tools/write_erp_derivatives.py` writes this layout:
+
+```python
+import sys
+sys.path.insert(0, "/workspace/aea/tools")
+from write_erp_derivatives import start_derivative, write_subject_erp
+root = start_derivative("/workspace/derivatives/erp-analysis", pipeline="my-analysis",
+                        source_doi="10.xxxx/xxxxx", source_version="1.0")
+write_subject_erp(root, subject="sub-XXX", task="P3", contrast="rareminusfrequent",
+                  times_s=times, values_uv=roi_wave)
+```
+
+Nothing in this template selects a method. Filter, epoch, ROI and test settings come
+from the approved analysis plan.

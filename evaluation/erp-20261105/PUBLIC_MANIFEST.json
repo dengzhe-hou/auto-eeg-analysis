@@ -1,0 +1,223 @@
+{
+  "status": "public_pre_run_freeze",
+  "formal_sessions_started": 0,
+  "resource_version": "aea-erp-r1-20261101",
+  "files": [
+    {
+      "path": "EXPERIMENT_PLAN.md",
+      "bytes": 13885
+    },
+    {
+      "path": "PROTOCOL_FROZEN.draft.json",
+      "bytes": 3652
+    },
+    {
+      "path": "REQUESTS.json",
+      "bytes": 24321
+    },
+    {
+      "path": "SCHEDULE.proposed.json",
+      "bytes": 31865
+    },
+    {
+      "path": "RUN_PARAMETERS.json",
+      "bytes": 2438
+    },
+    {
+      "path": "RESOURCE_FREEZE.json",
+      "bytes": 48435
+    },
+    {
+      "path": "components.py",
+      "bytes": 3047
+    },
+    {
+      "path": "contracts.py",
+      "bytes": 7193
+    },
+    {
+      "path": "verify_contract.py",
+      "bytes": 11383
+    },
+    {
+      "path": "grade_validation.py",
+      "bytes": 2699
+    },
+    {
+      "path": "analyze_validation.py",
+      "bytes": 6015
+    },
+    {
+      "path": "run_validation.py",
+      "bytes": 10913
+    },
+    {
+      "path": "controller.py",
+      "bytes": 4594
+    },
+    {
+      "path": "study_apptainer.py",
+      "bytes": 7914
+    },
+    {
+      "path": "observed_kernel.py",
+      "bytes": 1522
+    },
+    {
+      "path": "verify_allocation.py",
+      "bytes": 1936
+    },
+    {
+      "path": "finalize_freeze.py",
+      "bytes": 1382
+    },
+    {
+      "path": "launch_formal.py",
+      "bytes": 1176
+    },
+    {
+      "path": "formal-single.sbatch",
+      "bytes": 904
+    },
+    {
+      "path": "formal-group.sbatch",
+      "bytes": 893
+    },
+    {
+      "path": "aea-erp-r1-20261101.zip",
+      "bytes": 13129339
+    },
+    {
+      "path": "requests/erp_ERN_group.json",
+      "bytes": 5360
+    },
+    {
+      "path": "requests/erp_ERN_sub-021.json",
+      "bytes": 3799
+    },
+    {
+      "path": "requests/erp_ERN_sub-022.json",
+      "bytes": 3799
+    },
+    {
+      "path": "requests/erp_ERN_sub-023.json",
+      "bytes": 3799
+    },
+    {
+      "path": "requests/erp_ERN_sub-024.json",
+      "bytes": 3799
+    },
+    {
+      "path": "requests/erp_ERN_sub-025.json",
+      "bytes": 3799
+    },
+    {
+      "path": "requests/erp_N170_group.json",
+      "bytes": 5381
+    },
+    {
+      "path": "requests/erp_N170_sub-021.json",
+      "bytes": 3820
+    },
+    {
+      "path": "requests/erp_N170_sub-022.json",
+      "bytes": 3820
+    },
+    {
+      "path": "requests/erp_N170_sub-023.json",
+      "bytes": 3820
+    },
+    {
+      "path": "requests/erp_N170_sub-024.json",
+      "bytes": 3820
+    },
+    {
+      "path": "requests/erp_N170_sub-025.json",
+      "bytes": 3820
+    },
+    {
+      "path": "requests/erp_N400_group.json",
+      "bytes": 5355
+    },
+    {
+      "path": "requests/erp_N400_sub-021.json",
+      "bytes": 3794
+    },
+    {
+      "path": "requests/erp_N400_sub-022.json",
+      "bytes": 3794
+    },
+    {
+      "path": "requests/erp_N400_sub-023.json",
+      "bytes": 3794
+    },
+    {
+      "path": "requests/erp_N400_sub-024.json",
+      "bytes": 3794
+    },
+    {
+      "path": "requests/erp_N400_sub-025.json",
+      "bytes": 3794
+    },
+    {
+      "path": "requests/erp_P3b_group.json",
+      "bytes": 5374
+    },
+    {
+      "path": "requests/erp_P3b_sub-021.json",
+      "bytes": 3814
+    },
+    {
+      "path": "requests/erp_P3b_sub-022.json",
+      "bytes": 3814
+    },
+    {
+      "path": "requests/erp_P3b_sub-023.json",
+      "bytes": 3814
+    },
+    {
+      "path": "requests/erp_P3b_sub-024.json",
+      "bytes": 3814
+    },
+    {
+      "path": "requests/erp_P3b_sub-025.json",
+      "bytes": 3814
+    },
+    {
+      "path": "requests/pilot_N170_group_sub001to020.json",
+      "bytes": 5395
+    },
+    {
+      "path": "requests/pilot_N400_sub-026.json",
+      "bytes": 3796
+    },
+    {
+      "path": "packets/ERN.md",
+      "bytes": 128320
+    },
+    {
+      "path": "packets/N170.md",
+      "bytes": 120606
+    },
+    {
+      "path": "packets/N400.md",
+      "bytes": 118114
+    },
+    {
+      "path": "packets/P3b.md",
+      "bytes": 120600
+    },
+    {
+      "path": "data_prep/DATA_MANIFEST.json",
+      "bytes": 375413
+    },
+    {
+      "path": "FREEZE_RECORD.json",
+      "bytes": 4226
+    }
+  ],
+  "included_reference_outputs": false,
+  "included_raw_eeg": false,
+  "credential_pattern_findings": [],
+  "public_deposit_authorization": "User authorized an independent GitHub freeze branch and formal execution on 2026-11-05."
+}

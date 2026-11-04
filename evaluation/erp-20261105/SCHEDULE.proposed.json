@@ -1,0 +1,1302 @@
+{
+ "status": "proposed_not_authorized_for_launch",
+ "randomization_seed": 20261101,
+ "sessions": [
+  {
+   "order": 0,
+   "session": "v8erp__erp_P3b_sub-025__without_aea__rep1",
+   "request_id": "erp_P3b_sub-025",
+   "component": "P3b",
+   "request_kind": "single_subject",
+   "arm": "without_aea",
+   "repetition": 1
+  },
+  {
+   "order": 1,
+   "session": "v8erp__erp_P3b_sub-025__with_aea__rep1",
+   "request_id": "erp_P3b_sub-025",
+   "component": "P3b",
+   "request_kind": "single_subject",
+   "arm": "with_aea",
+   "repetition": 1
+  },
+  {
+   "order": 2,
+   "session": "v8erp__erp_P3b_sub-022__with_aea__rep1",
+   "request_id": "erp_P3b_sub-022",
+   "component": "P3b",
+   "request_kind": "single_subject",
+   "arm": "with_aea",
+   "repetition": 1
+  },
+  {
+   "order": 3,
+   "session": "v8erp__erp_P3b_sub-022__without_aea__rep1",
+   "request_id": "erp_P3b_sub-022",
+   "component": "P3b",
+   "request_kind": "single_subject",
+   "arm": "without_aea",
+   "repetition": 1
+  },
+  {
+   "order": 4,
+   "session": "v8erp__erp_N170_sub-021__without_aea__rep1",
+   "request_id": "erp_N170_sub-021",
+   "component": "N170",
+   "request_kind": "single_subject",
+   "arm": "without_aea",
+   "repetition": 1
+  },
+  {
+   "order": 5,
+   "session": "v8erp__erp_N170_sub-021__with_aea__rep1",
+   "request_id": "erp_N170_sub-021",
+   "component": "N170",
+   "request_kind": "single_subject",
+   "arm": "with_aea",
+   "repetition": 1
+  },
+  {
+   "order": 6,
+   "session": "v8erp__erp_ERN_sub-021__with_aea__rep1",
+   "request_id": "erp_ERN_sub-021",
+   "component": "ERN",
+   "request_kind": "single_subject",
+   "arm": "with_aea",
+   "repetition": 1
+  },
+  {
+   "order": 7,
+   "session": "v8erp__erp_ERN_sub-021__without_aea__rep1",
+   "request_id": "erp_ERN_sub-021",
+   "component": "ERN",
+   "request_kind": "single_subject",
+   "arm": "without_aea",
+   "repetition": 1
+  },
+  {
+   "order": 8,
+   "session": "v8erp__erp_ERN_sub-023__with_aea__rep3",
+   "request_id": "erp_ERN_sub-023",
+   "component": "ERN",
+   "request_kind": "single_subject",
+   "arm": "with_aea",
+   "repetition": 3
+  },
+  {
+   "order": 9,
+   "session": "v8erp__erp_ERN_sub-023__without_aea__rep3",
+   "request_id": "erp_ERN_sub-023",
+   "component": "ERN",
+   "request_kind": "single_subject",
+   "arm": "without_aea",
+   "repetition": 3
+  },
+  {
+   "order": 10,
+   "session": "v8erp__erp_N170_sub-023__without_aea__rep2",
+   "request_id": "erp_N170_sub-023",
+   "component": "N170",
+   "request_kind": "single_subject",
+   "arm": "without_aea",
+   "repetition": 2
+  },
+  {
+   "order": 11,
+   "session": "v8erp__erp_N170_sub-023__with_aea__rep2",
+   "request_id": "erp_N170_sub-023",
+   "component": "N170",
+   "request_kind": "single_subject",
+   "arm": "with_aea",
+   "repetition": 2
+  },
+  {
+   "order": 12,
+   "session": "v8erp__erp_P3b_sub-022__without_aea__rep2",
+   "request_id": "erp_P3b_sub-022",
+   "component": "P3b",
+   "request_kind": "single_subject",
+   "arm": "without_aea",
+   "repetition": 2
+  },
+  {
+   "order": 13,
+   "session": "v8erp__erp_P3b_sub-022__with_aea__rep2",
+   "request_id": "erp_P3b_sub-022",
+   "component": "P3b",
+   "request_kind": "single_subject",
+   "arm": "with_aea",
+   "repetition": 2
+  },
+  {
+   "order": 14,
+   "session": "v8erp__erp_N400_sub-023__without_aea__rep2",
+   "request_id": "erp_N400_sub-023",
+   "component": "N400",
+   "request_kind": "single_subject",
+   "arm": "without_aea",
+   "repetition": 2
+  },
+  {
+   "order": 15,
+   "session": "v8erp__erp_N400_sub-023__with_aea__rep2",
+   "request_id": "erp_N400_sub-023",
+   "component": "N400",
+   "request_kind": "single_subject",
+   "arm": "with_aea",
+   "repetition": 2
+  },
+  {
+   "order": 16,
+   "session": "v8erp__erp_N170_sub-025__without_aea__rep3",
+   "request_id": "erp_N170_sub-025",
+   "component": "N170",
+   "request_kind": "single_subject",
+   "arm": "without_aea",
+   "repetition": 3
+  },
+  {
+   "order": 17,
+   "session": "v8erp__erp_N170_sub-025__with_aea__rep3",
+   "request_id": "erp_N170_sub-025",
+   "component": "N170",
+   "request_kind": "single_subject",
+   "arm": "with_aea",
+   "repetition": 3
+  },
+  {
+   "order": 18,
+   "session": "v8erp__erp_N400_sub-021__with_aea__rep3",
+   "request_id": "erp_N400_sub-021",
+   "component": "N400",
+   "request_kind": "single_subject",
+   "arm": "with_aea",
+   "repetition": 3
+  },
+  {
+   "order": 19,
+   "session": "v8erp__erp_N400_sub-021__without_aea__rep3",
+   "request_id": "erp_N400_sub-021",
+   "component": "N400",
+   "request_kind": "single_subject",
+   "arm": "without_aea",
+   "repetition": 3
+  },
+  {
+   "order": 20,
+   "session": "v8erp__erp_P3b_sub-021__with_aea__rep3",
+   "request_id": "erp_P3b_sub-021",
+   "component": "P3b",
+   "request_kind": "single_subject",
+   "arm": "with_aea",
+   "repetition": 3
+  },
+  {
+   "order": 21,
+   "session": "v8erp__erp_P3b_sub-021__without_aea__rep3",
+   "request_id": "erp_P3b_sub-021",
+   "component": "P3b",
+   "request_kind": "single_subject",
+   "arm": "without_aea",
+   "repetition": 3
+  },
+  {
+   "order": 22,
+   "session": "v8erp__erp_N400_sub-024__with_aea__rep1",
+   "request_id": "erp_N400_sub-024",
+   "component": "N400",
+   "request_kind": "single_subject",
+   "arm": "with_aea",
+   "repetition": 1
+  },
+  {
+   "order": 23,
+   "session": "v8erp__erp_N400_sub-024__without_aea__rep1",
+   "request_id": "erp_N400_sub-024",
+   "component": "N400",
+   "request_kind": "single_subject",
+   "arm": "without_aea",
+   "repetition": 1
+  },
+  {
+   "order": 24,
+   "session": "v8erp__erp_N400_group__with_aea__rep1",
+   "request_id": "erp_N400_group",
+   "component": "N400",
+   "request_kind": "group",
+   "arm": "with_aea",
+   "repetition": 1
+  },
+  {
+   "order": 25,
+   "session": "v8erp__erp_N400_group__without_aea__rep1",
+   "request_id": "erp_N400_group",
+   "component": "N400",
+   "request_kind": "group",
+   "arm": "without_aea",
+   "repetition": 1
+  },
+  {
+   "order": 26,
+   "session": "v8erp__erp_N170_sub-024__without_aea__rep3",
+   "request_id": "erp_N170_sub-024",
+   "component": "N170",
+   "request_kind": "single_subject",
+   "arm": "without_aea",
+   "repetition": 3
+  },
+  {
+   "order": 27,
+   "session": "v8erp__erp_N170_sub-024__with_aea__rep3",
+   "request_id": "erp_N170_sub-024",
+   "component": "N170",
+   "request_kind": "single_subject",
+   "arm": "with_aea",
+   "repetition": 3
+  },
+  {
+   "order": 28,
+   "session": "v8erp__erp_ERN_sub-021__without_aea__rep3",
+   "request_id": "erp_ERN_sub-021",
+   "component": "ERN",
+   "request_kind": "single_subject",
+   "arm": "without_aea",
+   "repetition": 3
+  },
+  {
+   "order": 29,
+   "session": "v8erp__erp_ERN_sub-021__with_aea__rep3",
+   "request_id": "erp_ERN_sub-021",
+   "component": "ERN",
+   "request_kind": "single_subject",
+   "arm": "with_aea",
+   "repetition": 3
+  },
+  {
+   "order": 30,
+   "session": "v8erp__erp_P3b_group__without_aea__rep3",
+   "request_id": "erp_P3b_group",
+   "component": "P3b",
+   "request_kind": "group",
+   "arm": "without_aea",
+   "repetition": 3
+  },
+  {
+   "order": 31,
+   "session": "v8erp__erp_P3b_group__with_aea__rep3",
+   "request_id": "erp_P3b_group",
+   "component": "P3b",
+   "request_kind": "group",
+   "arm": "with_aea",
+   "repetition": 3
+  },
+  {
+   "order": 32,
+   "session": "v8erp__erp_N170_sub-022__with_aea__rep3",
+   "request_id": "erp_N170_sub-022",
+   "component": "N170",
+   "request_kind": "single_subject",
+   "arm": "with_aea",
+   "repetition": 3
+  },
+  {
+   "order": 33,
+   "session": "v8erp__erp_N170_sub-022__without_aea__rep3",
+   "request_id": "erp_N170_sub-022",
+   "component": "N170",
+   "request_kind": "single_subject",
+   "arm": "without_aea",
+   "repetition": 3
+  },
+  {
+   "order": 34,
+   "session": "v8erp__erp_N170_group__with_aea__rep1",
+   "request_id": "erp_N170_group",
+   "component": "N170",
+   "request_kind": "group",
+   "arm": "with_aea",
+   "repetition": 1
+  },
+  {
+   "order": 35,
+   "session": "v8erp__erp_N170_group__without_aea__rep1",
+   "request_id": "erp_N170_group",
+   "component": "N170",
+   "request_kind": "group",
+   "arm": "without_aea",
+   "repetition": 1
+  },
+  {
+   "order": 36,
+   "session": "v8erp__erp_N170_sub-025__with_aea__rep1",
+   "request_id": "erp_N170_sub-025",
+   "component": "N170",
+   "request_kind": "single_subject",
+   "arm": "with_aea",
+   "repetition": 1
+  },
+  {
+   "order": 37,
+   "session": "v8erp__erp_N170_sub-025__without_aea__rep1",
+   "request_id": "erp_N170_sub-025",
+   "component": "N170",
+   "request_kind": "single_subject",
+   "arm": "without_aea",
+   "repetition": 1
+  },
+  {
+   "order": 38,
+   "session": "v8erp__erp_N400_sub-021__without_aea__rep1",
+   "request_id": "erp_N400_sub-021",
+   "component": "N400",
+   "request_kind": "single_subject",
+   "arm": "without_aea",
+   "repetition": 1
+  },
+  {
+   "order": 39,
+   "session": "v8erp__erp_N400_sub-021__with_aea__rep1",
+   "request_id": "erp_N400_sub-021",
+   "component": "N400",
+   "request_kind": "single_subject",
+   "arm": "with_aea",
+   "repetition": 1
+  },
+  {
+   "order": 40,
+   "session": "v8erp__erp_ERN_sub-022__with_aea__rep3",
+   "request_id": "erp_ERN_sub-022",
+   "component": "ERN",
+   "request_kind": "single_subject",
+   "arm": "with_aea",
+   "repetition": 3
+  },
+  {
+   "order": 41,
+   "session": "v8erp__erp_ERN_sub-022__without_aea__rep3",
+   "request_id": "erp_ERN_sub-022",
+   "component": "ERN",
+   "request_kind": "single_subject",
+   "arm": "without_aea",
+   "repetition": 3
+  },
+  {
+   "order": 42,
+   "session": "v8erp__erp_N400_sub-023__with_aea__rep1",
+   "request_id": "erp_N400_sub-023",
+   "component": "N400",
+   "request_kind": "single_subject",
+   "arm": "with_aea",
+   "repetition": 1
+  },
+  {
+   "order": 43,
+   "session": "v8erp__erp_N400_sub-023__without_aea__rep1",
+   "request_id": "erp_N400_sub-023",
+   "component": "N400",
+   "request_kind": "single_subject",
+   "arm": "without_aea",
+   "repetition": 1
+  },
+  {
+   "order": 44,
+   "session": "v8erp__erp_ERN_sub-024__with_aea__rep3",
+   "request_id": "erp_ERN_sub-024",
+   "component": "ERN",
+   "request_kind": "single_subject",
+   "arm": "with_aea",
+   "repetition": 3
+  },
+  {
+   "order": 45,
+   "session": "v8erp__erp_ERN_sub-024__without_aea__rep3",
+   "request_id": "erp_ERN_sub-024",
+   "component": "ERN",
+   "request_kind": "single_subject",
+   "arm": "without_aea",
+   "repetition": 3
+  },
+  {
+   "order": 46,
+   "session": "v8erp__erp_ERN_sub-024__with_aea__rep1",
+   "request_id": "erp_ERN_sub-024",
+   "component": "ERN",
+   "request_kind": "single_subject",
+   "arm": "with_aea",
+   "repetition": 1
+  },
+  {
+   "order": 47,
+   "session": "v8erp__erp_ERN_sub-024__without_aea__rep1",
+   "request_id": "erp_ERN_sub-024",
+   "component": "ERN",
+   "request_kind": "single_subject",
+   "arm": "without_aea",
+   "repetition": 1
+  },
+  {
+   "order": 48,
+   "session": "v8erp__erp_N400_sub-022__with_aea__rep3",
+   "request_id": "erp_N400_sub-022",
+   "component": "N400",
+   "request_kind": "single_subject",
+   "arm": "with_aea",
+   "repetition": 3
+  },
+  {
+   "order": 49,
+   "session": "v8erp__erp_N400_sub-022__without_aea__rep3",
+   "request_id": "erp_N400_sub-022",
+   "component": "N400",
+   "request_kind": "single_subject",
+   "arm": "without_aea",
+   "repetition": 3
+  },
+  {
+   "order": 50,
+   "session": "v8erp__erp_P3b_group__without_aea__rep2",
+   "request_id": "erp_P3b_group",
+   "component": "P3b",
+   "request_kind": "group",
+   "arm": "without_aea",
+   "repetition": 2
+  },
+  {
+   "order": 51,
+   "session": "v8erp__erp_P3b_group__with_aea__rep2",
+   "request_id": "erp_P3b_group",
+   "component": "P3b",
+   "request_kind": "group",
+   "arm": "with_aea",
+   "repetition": 2
+  },
+  {
+   "order": 52,
+   "session": "v8erp__erp_P3b_sub-025__without_aea__rep2",
+   "request_id": "erp_P3b_sub-025",
+   "component": "P3b",
+   "request_kind": "single_subject",
+   "arm": "without_aea",
+   "repetition": 2
+  },
+  {
+   "order": 53,
+   "session": "v8erp__erp_P3b_sub-025__with_aea__rep2",
+   "request_id": "erp_P3b_sub-025",
+   "component": "P3b",
+   "request_kind": "single_subject",
+   "arm": "with_aea",
+   "repetition": 2
+  },
+  {
+   "order": 54,
+   "session": "v8erp__erp_N170_sub-024__with_aea__rep1",
+   "request_id": "erp_N170_sub-024",
+   "component": "N170",
+   "request_kind": "single_subject",
+   "arm": "with_aea",
+   "repetition": 1
+  },
+  {
+   "order": 55,
+   "session": "v8erp__erp_N170_sub-024__without_aea__rep1",
+   "request_id": "erp_N170_sub-024",
+   "component": "N170",
+   "request_kind": "single_subject",
+   "arm": "without_aea",
+   "repetition": 1
+  },
+  {
+   "order": 56,
+   "session": "v8erp__erp_N400_group__with_aea__rep2",
+   "request_id": "erp_N400_group",
+   "component": "N400",
+   "request_kind": "group",
+   "arm": "with_aea",
+   "repetition": 2
+  },
+  {
+   "order": 57,
+   "session": "v8erp__erp_N400_group__without_aea__rep2",
+   "request_id": "erp_N400_group",
+   "component": "N400",
+   "request_kind": "group",
+   "arm": "without_aea",
+   "repetition": 2
+  },
+  {
+   "order": 58,
+   "session": "v8erp__erp_N400_sub-025__without_aea__rep3",
+   "request_id": "erp_N400_sub-025",
+   "component": "N400",
+   "request_kind": "single_subject",
+   "arm": "without_aea",
+   "repetition": 3
+  },
+  {
+   "order": 59,
+   "session": "v8erp__erp_N400_sub-025__with_aea__rep3",
+   "request_id": "erp_N400_sub-025",
+   "component": "N400",
+   "request_kind": "single_subject",
+   "arm": "with_aea",
+   "repetition": 3
+  },
+  {
+   "order": 60,
+   "session": "v8erp__erp_N170_group__with_aea__rep2",
+   "request_id": "erp_N170_group",
+   "component": "N170",
+   "request_kind": "group",
+   "arm": "with_aea",
+   "repetition": 2
+  },
+  {
+   "order": 61,
+   "session": "v8erp__erp_N170_group__without_aea__rep2",
+   "request_id": "erp_N170_group",
+   "component": "N170",
+   "request_kind": "group",
+   "arm": "without_aea",
+   "repetition": 2
+  },
+  {
+   "order": 62,
+   "session": "v8erp__erp_ERN_sub-021__without_aea__rep2",
+   "request_id": "erp_ERN_sub-021",
+   "component": "ERN",
+   "request_kind": "single_subject",
+   "arm": "without_aea",
+   "repetition": 2
+  },
+  {
+   "order": 63,
+   "session": "v8erp__erp_ERN_sub-021__with_aea__rep2",
+   "request_id": "erp_ERN_sub-021",
+   "component": "ERN",
+   "request_kind": "single_subject",
+   "arm": "with_aea",
+   "repetition": 2
+  },
+  {
+   "order": 64,
+   "session": "v8erp__erp_N170_sub-023__with_aea__rep3",
+   "request_id": "erp_N170_sub-023",
+   "component": "N170",
+   "request_kind": "single_subject",
+   "arm": "with_aea",
+   "repetition": 3
+  },
+  {
+   "order": 65,
+   "session": "v8erp__erp_N170_sub-023__without_aea__rep3",
+   "request_id": "erp_N170_sub-023",
+   "component": "N170",
+   "request_kind": "single_subject",
+   "arm": "without_aea",
+   "repetition": 3
+  },
+  {
+   "order": 66,
+   "session": "v8erp__erp_ERN_group__without_aea__rep2",
+   "request_id": "erp_ERN_group",
+   "component": "ERN",
+   "request_kind": "group",
+   "arm": "without_aea",
+   "repetition": 2
+  },
+  {
+   "order": 67,
+   "session": "v8erp__erp_ERN_group__with_aea__rep2",
+   "request_id": "erp_ERN_group",
+   "component": "ERN",
+   "request_kind": "group",
+   "arm": "with_aea",
+   "repetition": 2
+  },
+  {
+   "order": 68,
+   "session": "v8erp__erp_P3b_sub-024__without_aea__rep2",
+   "request_id": "erp_P3b_sub-024",
+   "component": "P3b",
+   "request_kind": "single_subject",
+   "arm": "without_aea",
+   "repetition": 2
+  },
+  {
+   "order": 69,
+   "session": "v8erp__erp_P3b_sub-024__with_aea__rep2",
+   "request_id": "erp_P3b_sub-024",
+   "component": "P3b",
+   "request_kind": "single_subject",
+   "arm": "with_aea",
+   "repetition": 2
+  },
+  {
+   "order": 70,
+   "session": "v8erp__erp_ERN_sub-025__without_aea__rep2",
+   "request_id": "erp_ERN_sub-025",
+   "component": "ERN",
+   "request_kind": "single_subject",
+   "arm": "without_aea",
+   "repetition": 2
+  },
+  {
+   "order": 71,
+   "session": "v8erp__erp_ERN_sub-025__with_aea__rep2",
+   "request_id": "erp_ERN_sub-025",
+   "component": "ERN",
+   "request_kind": "single_subject",
+   "arm": "with_aea",
+   "repetition": 2
+  },
+  {
+   "order": 72,
+   "session": "v8erp__erp_N170_sub-021__without_aea__rep3",
+   "request_id": "erp_N170_sub-021",
+   "component": "N170",
+   "request_kind": "single_subject",
+   "arm": "without_aea",
+   "repetition": 3
+  },
+  {
+   "order": 73,
+   "session": "v8erp__erp_N170_sub-021__with_aea__rep3",
+   "request_id": "erp_N170_sub-021",
+   "component": "N170",
+   "request_kind": "single_subject",
+   "arm": "with_aea",
+   "repetition": 3
+  },
+  {
+   "order": 74,
+   "session": "v8erp__erp_N170_sub-021__with_aea__rep2",
+   "request_id": "erp_N170_sub-021",
+   "component": "N170",
+   "request_kind": "single_subject",
+   "arm": "with_aea",
+   "repetition": 2
+  },
+  {
+   "order": 75,
+   "session": "v8erp__erp_N170_sub-021__without_aea__rep2",
+   "request_id": "erp_N170_sub-021",
+   "component": "N170",
+   "request_kind": "single_subject",
+   "arm": "without_aea",
+   "repetition": 2
+  },
+  {
+   "order": 76,
+   "session": "v8erp__erp_ERN_sub-023__without_aea__rep2",
+   "request_id": "erp_ERN_sub-023",
+   "component": "ERN",
+   "request_kind": "single_subject",
+   "arm": "without_aea",
+   "repetition": 2
+  },
+  {
+   "order": 77,
+   "session": "v8erp__erp_ERN_sub-023__with_aea__rep2",
+   "request_id": "erp_ERN_sub-023",
+   "component": "ERN",
+   "request_kind": "single_subject",
+   "arm": "with_aea",
+   "repetition": 2
+  },
+  {
+   "order": 78,
+   "session": "v8erp__erp_P3b_group__without_aea__rep1",
+   "request_id": "erp_P3b_group",
+   "component": "P3b",
+   "request_kind": "group",
+   "arm": "without_aea",
+   "repetition": 1
+  },
+  {
+   "order": 79,
+   "session": "v8erp__erp_P3b_group__with_aea__rep1",
+   "request_id": "erp_P3b_group",
+   "component": "P3b",
+   "request_kind": "group",
+   "arm": "with_aea",
+   "repetition": 1
+  },
+  {
+   "order": 80,
+   "session": "v8erp__erp_N170_sub-022__with_aea__rep1",
+   "request_id": "erp_N170_sub-022",
+   "component": "N170",
+   "request_kind": "single_subject",
+   "arm": "with_aea",
+   "repetition": 1
+  },
+  {
+   "order": 81,
+   "session": "v8erp__erp_N170_sub-022__without_aea__rep1",
+   "request_id": "erp_N170_sub-022",
+   "component": "N170",
+   "request_kind": "single_subject",
+   "arm": "without_aea",
+   "repetition": 1
+  },
+  {
+   "order": 82,
+   "session": "v8erp__erp_ERN_sub-022__with_aea__rep2",
+   "request_id": "erp_ERN_sub-022",
+   "component": "ERN",
+   "request_kind": "single_subject",
+   "arm": "with_aea",
+   "repetition": 2
+  },
+  {
+   "order": 83,
+   "session": "v8erp__erp_ERN_sub-022__without_aea__rep2",
+   "request_id": "erp_ERN_sub-022",
+   "component": "ERN",
+   "request_kind": "single_subject",
+   "arm": "without_aea",
+   "repetition": 2
+  },
+  {
+   "order": 84,
+   "session": "v8erp__erp_ERN_sub-024__with_aea__rep2",
+   "request_id": "erp_ERN_sub-024",
+   "component": "ERN",
+   "request_kind": "single_subject",
+   "arm": "with_aea",
+   "repetition": 2
+  },
+  {
+   "order": 85,
+   "session": "v8erp__erp_ERN_sub-024__without_aea__rep2",
+   "request_id": "erp_ERN_sub-024",
+   "component": "ERN",
+   "request_kind": "single_subject",
+   "arm": "without_aea",
+   "repetition": 2
+  },
+  {
+   "order": 86,
+   "session": "v8erp__erp_N400_group__without_aea__rep3",
+   "request_id": "erp_N400_group",
+   "component": "N400",
+   "request_kind": "group",
+   "arm": "without_aea",
+   "repetition": 3
+  },
+  {
+   "order": 87,
+   "session": "v8erp__erp_N400_group__with_aea__rep3",
+   "request_id": "erp_N400_group",
+   "component": "N400",
+   "request_kind": "group",
+   "arm": "with_aea",
+   "repetition": 3
+  },
+  {
+   "order": 88,
+   "session": "v8erp__erp_ERN_group__with_aea__rep1",
+   "request_id": "erp_ERN_group",
+   "component": "ERN",
+   "request_kind": "group",
+   "arm": "with_aea",
+   "repetition": 1
+  },
+  {
+   "order": 89,
+   "session": "v8erp__erp_ERN_group__without_aea__rep1",
+   "request_id": "erp_ERN_group",
+   "component": "ERN",
+   "request_kind": "group",
+   "arm": "without_aea",
+   "repetition": 1
+  },
+  {
+   "order": 90,
+   "session": "v8erp__erp_ERN_sub-025__without_aea__rep1",
+   "request_id": "erp_ERN_sub-025",
+   "component": "ERN",
+   "request_kind": "single_subject",
+   "arm": "without_aea",
+   "repetition": 1
+  },
+  {
+   "order": 91,
+   "session": "v8erp__erp_ERN_sub-025__with_aea__rep1",
+   "request_id": "erp_ERN_sub-025",
+   "component": "ERN",
+   "request_kind": "single_subject",
+   "arm": "with_aea",
+   "repetition": 1
+  },
+  {
+   "order": 92,
+   "session": "v8erp__erp_N400_sub-025__without_aea__rep1",
+   "request_id": "erp_N400_sub-025",
+   "component": "N400",
+   "request_kind": "single_subject",
+   "arm": "without_aea",
+   "repetition": 1
+  },
+  {
+   "order": 93,
+   "session": "v8erp__erp_N400_sub-025__with_aea__rep1",
+   "request_id": "erp_N400_sub-025",
+   "component": "N400",
+   "request_kind": "single_subject",
+   "arm": "with_aea",
+   "repetition": 1
+  },
+  {
+   "order": 94,
+   "session": "v8erp__erp_N170_sub-023__without_aea__rep1",
+   "request_id": "erp_N170_sub-023",
+   "component": "N170",
+   "request_kind": "single_subject",
+   "arm": "without_aea",
+   "repetition": 1
+  },
+  {
+   "order": 95,
+   "session": "v8erp__erp_N170_sub-023__with_aea__rep1",
+   "request_id": "erp_N170_sub-023",
+   "component": "N170",
+   "request_kind": "single_subject",
+   "arm": "with_aea",
+   "repetition": 1
+  },
+  {
+   "order": 96,
+   "session": "v8erp__erp_N400_sub-021__with_aea__rep2",
+   "request_id": "erp_N400_sub-021",
+   "component": "N400",
+   "request_kind": "single_subject",
+   "arm": "with_aea",
+   "repetition": 2
+  },
+  {
+   "order": 97,
+   "session": "v8erp__erp_N400_sub-021__without_aea__rep2",
+   "request_id": "erp_N400_sub-021",
+   "component": "N400",
+   "request_kind": "single_subject",
+   "arm": "without_aea",
+   "repetition": 2
+  },
+  {
+   "order": 98,
+   "session": "v8erp__erp_P3b_sub-021__with_aea__rep2",
+   "request_id": "erp_P3b_sub-021",
+   "component": "P3b",
+   "request_kind": "single_subject",
+   "arm": "with_aea",
+   "repetition": 2
+  },
+  {
+   "order": 99,
+   "session": "v8erp__erp_P3b_sub-021__without_aea__rep2",
+   "request_id": "erp_P3b_sub-021",
+   "component": "P3b",
+   "request_kind": "single_subject",
+   "arm": "without_aea",
+   "repetition": 2
+  },
+  {
+   "order": 100,
+   "session": "v8erp__erp_N170_sub-022__without_aea__rep2",
+   "request_id": "erp_N170_sub-022",
+   "component": "N170",
+   "request_kind": "single_subject",
+   "arm": "without_aea",
+   "repetition": 2
+  },
+  {
+   "order": 101,
+   "session": "v8erp__erp_N170_sub-022__with_aea__rep2",
+   "request_id": "erp_N170_sub-022",
+   "component": "N170",
+   "request_kind": "single_subject",
+   "arm": "with_aea",
+   "repetition": 2
+  },
+  {
+   "order": 102,
+   "session": "v8erp__erp_P3b_sub-021__without_aea__rep1",
+   "request_id": "erp_P3b_sub-021",
+   "component": "P3b",
+   "request_kind": "single_subject",
+   "arm": "without_aea",
+   "repetition": 1
+  },
+  {
+   "order": 103,
+   "session": "v8erp__erp_P3b_sub-021__with_aea__rep1",
+   "request_id": "erp_P3b_sub-021",
+   "component": "P3b",
+   "request_kind": "single_subject",
+   "arm": "with_aea",
+   "repetition": 1
+  },
+  {
+   "order": 104,
+   "session": "v8erp__erp_ERN_sub-022__with_aea__rep1",
+   "request_id": "erp_ERN_sub-022",
+   "component": "ERN",
+   "request_kind": "single_subject",
+   "arm": "with_aea",
+   "repetition": 1
+  },
+  {
+   "order": 105,
+   "session": "v8erp__erp_ERN_sub-022__without_aea__rep1",
+   "request_id": "erp_ERN_sub-022",
+   "component": "ERN",
+   "request_kind": "single_subject",
+   "arm": "without_aea",
+   "repetition": 1
+  },
+  {
+   "order": 106,
+   "session": "v8erp__erp_N400_sub-023__with_aea__rep3",
+   "request_id": "erp_N400_sub-023",
+   "component": "N400",
+   "request_kind": "single_subject",
+   "arm": "with_aea",
+   "repetition": 3
+  },
+  {
+   "order": 107,
+   "session": "v8erp__erp_N400_sub-023__without_aea__rep3",
+   "request_id": "erp_N400_sub-023",
+   "component": "N400",
+   "request_kind": "single_subject",
+   "arm": "without_aea",
+   "repetition": 3
+  },
+  {
+   "order": 108,
+   "session": "v8erp__erp_N400_sub-025__with_aea__rep2",
+   "request_id": "erp_N400_sub-025",
+   "component": "N400",
+   "request_kind": "single_subject",
+   "arm": "with_aea",
+   "repetition": 2
+  },
+  {
+   "order": 109,
+   "session": "v8erp__erp_N400_sub-025__without_aea__rep2",
+   "request_id": "erp_N400_sub-025",
+   "component": "N400",
+   "request_kind": "single_subject",
+   "arm": "without_aea",
+   "repetition": 2
+  },
+  {
+   "order": 110,
+   "session": "v8erp__erp_N170_sub-025__with_aea__rep2",
+   "request_id": "erp_N170_sub-025",
+   "component": "N170",
+   "request_kind": "single_subject",
+   "arm": "with_aea",
+   "repetition": 2
+  },
+  {
+   "order": 111,
+   "session": "v8erp__erp_N170_sub-025__without_aea__rep2",
+   "request_id": "erp_N170_sub-025",
+   "component": "N170",
+   "request_kind": "single_subject",
+   "arm": "without_aea",
+   "repetition": 2
+  },
+  {
+   "order": 112,
+   "session": "v8erp__erp_N400_sub-022__with_aea__rep1",
+   "request_id": "erp_N400_sub-022",
+   "component": "N400",
+   "request_kind": "single_subject",
+   "arm": "with_aea",
+   "repetition": 1
+  },
+  {
+   "order": 113,
+   "session": "v8erp__erp_N400_sub-022__without_aea__rep1",
+   "request_id": "erp_N400_sub-022",
+   "component": "N400",
+   "request_kind": "single_subject",
+   "arm": "without_aea",
+   "repetition": 1
+  },
+  {
+   "order": 114,
+   "session": "v8erp__erp_N400_sub-022__with_aea__rep2",
+   "request_id": "erp_N400_sub-022",
+   "component": "N400",
+   "request_kind": "single_subject",
+   "arm": "with_aea",
+   "repetition": 2
+  },
+  {
+   "order": 115,
+   "session": "v8erp__erp_N400_sub-022__without_aea__rep2",
+   "request_id": "erp_N400_sub-022",
+   "component": "N400",
+   "request_kind": "single_subject",
+   "arm": "without_aea",
+   "repetition": 2
+  },
+  {
+   "order": 116,
+   "session": "v8erp__erp_ERN_group__with_aea__rep3",
+   "request_id": "erp_ERN_group",
+   "component": "ERN",
+   "request_kind": "group",
+   "arm": "with_aea",
+   "repetition": 3
+  },
+  {
+   "order": 117,
+   "session": "v8erp__erp_ERN_group__without_aea__rep3",
+   "request_id": "erp_ERN_group",
+   "component": "ERN",
+   "request_kind": "group",
+   "arm": "without_aea",
+   "repetition": 3
+  },
+  {
+   "order": 118,
+   "session": "v8erp__erp_N400_sub-024__without_aea__rep2",
+   "request_id": "erp_N400_sub-024",
+   "component": "N400",
+   "request_kind": "single_subject",
+   "arm": "without_aea",
+   "repetition": 2
+  },
+  {
+   "order": 119,
+   "session": "v8erp__erp_N400_sub-024__with_aea__rep2",
+   "request_id": "erp_N400_sub-024",
+   "component": "N400",
+   "request_kind": "single_subject",
+   "arm": "with_aea",
+   "repetition": 2
+  },
+  {
+   "order": 120,
+   "session": "v8erp__erp_N400_sub-024__without_aea__rep3",
+   "request_id": "erp_N400_sub-024",
+   "component": "N400",
+   "request_kind": "single_subject",
+   "arm": "without_aea",
+   "repetition": 3
+  },
+  {
+   "order": 121,
+   "session": "v8erp__erp_N400_sub-024__with_aea__rep3",
+   "request_id": "erp_N400_sub-024",
+   "component": "N400",
+   "request_kind": "single_subject",
+   "arm": "with_aea",
+   "repetition": 3
+  },
+  {
+   "order": 122,
+   "session": "v8erp__erp_P3b_sub-024__without_aea__rep1",
+   "request_id": "erp_P3b_sub-024",
+   "component": "P3b",
+   "request_kind": "single_subject",
+   "arm": "without_aea",
+   "repetition": 1
+  },
+  {
+   "order": 123,
+   "session": "v8erp__erp_P3b_sub-024__with_aea__rep1",
+   "request_id": "erp_P3b_sub-024",
+   "component": "P3b",
+   "request_kind": "single_subject",
+   "arm": "with_aea",
+   "repetition": 1
+  },
+  {
+   "order": 124,
+   "session": "v8erp__erp_P3b_sub-023__without_aea__rep3",
+   "request_id": "erp_P3b_sub-023",
+   "component": "P3b",
+   "request_kind": "single_subject",
+   "arm": "without_aea",
+   "repetition": 3
+  },
+  {
+   "order": 125,
+   "session": "v8erp__erp_P3b_sub-023__with_aea__rep3",
+   "request_id": "erp_P3b_sub-023",
+   "component": "P3b",
+   "request_kind": "single_subject",
+   "arm": "with_aea",
+   "repetition": 3
+  },
+  {
+   "order": 126,
+   "session": "v8erp__erp_ERN_sub-023__without_aea__rep1",
+   "request_id": "erp_ERN_sub-023",
+   "component": "ERN",
+   "request_kind": "single_subject",
+   "arm": "without_aea",
+   "repetition": 1
+  },
+  {
+   "order": 127,
+   "session": "v8erp__erp_ERN_sub-023__with_aea__rep1",
+   "request_id": "erp_ERN_sub-023",
+   "component": "ERN",
+   "request_kind": "single_subject",
+   "arm": "with_aea",
+   "repetition": 1
+  },
+  {
+   "order": 128,
+   "session": "v8erp__erp_N170_group__with_aea__rep3",
+   "request_id": "erp_N170_group",
+   "component": "N170",
+   "request_kind": "group",
+   "arm": "with_aea",
+   "repetition": 3
+  },
+  {
+   "order": 129,
+   "session": "v8erp__erp_N170_group__without_aea__rep3",
+   "request_id": "erp_N170_group",
+   "component": "N170",
+   "request_kind": "group",
+   "arm": "without_aea",
+   "repetition": 3
+  },
+  {
+   "order": 130,
+   "session": "v8erp__erp_N170_sub-024__without_aea__rep2",
+   "request_id": "erp_N170_sub-024",
+   "component": "N170",
+   "request_kind": "single_subject",
+   "arm": "without_aea",
+   "repetition": 2
+  },
+  {
+   "order": 131,
+   "session": "v8erp__erp_N170_sub-024__with_aea__rep2",
+   "request_id": "erp_N170_sub-024",
+   "component": "N170",
+   "request_kind": "single_subject",
+   "arm": "with_aea",
+   "repetition": 2
+  },
+  {
+   "order": 132,
+   "session": "v8erp__erp_P3b_sub-023__without_aea__rep1",
+   "request_id": "erp_P3b_sub-023",
+   "component": "P3b",
+   "request_kind": "single_subject",
+   "arm": "without_aea",
+   "repetition": 1
+  },
+  {
+   "order": 133,
+   "session": "v8erp__erp_P3b_sub-023__with_aea__rep1",
+   "request_id": "erp_P3b_sub-023",
+   "component": "P3b",
+   "request_kind": "single_subject",
+   "arm": "with_aea",
+   "repetition": 1
+  },
+  {
+   "order": 134,
+   "session": "v8erp__erp_P3b_sub-022__with_aea__rep3",
+   "request_id": "erp_P3b_sub-022",
+   "component": "P3b",
+   "request_kind": "single_subject",
+   "arm": "with_aea",
+   "repetition": 3
+  },
+  {
+   "order": 135,
+   "session": "v8erp__erp_P3b_sub-022__without_aea__rep3",
+   "request_id": "erp_P3b_sub-022",
+   "component": "P3b",
+   "request_kind": "single_subject",
+   "arm": "without_aea",
+   "repetition": 3
+  },
+  {
+   "order": 136,
+   "session": "v8erp__erp_P3b_sub-023__without_aea__rep2",
+   "request_id": "erp_P3b_sub-023",
+   "component": "P3b",
+   "request_kind": "single_subject",
+   "arm": "without_aea",
+   "repetition": 2
+  },
+  {
+   "order": 137,
+   "session": "v8erp__erp_P3b_sub-023__with_aea__rep2",
+   "request_id": "erp_P3b_sub-023",
+   "component": "P3b",
+   "request_kind": "single_subject",
+   "arm": "with_aea",
+   "repetition": 2
+  },
+  {
+   "order": 138,
+   "session": "v8erp__erp_ERN_sub-025__without_aea__rep3",
+   "request_id": "erp_ERN_sub-025",
+   "component": "ERN",
+   "request_kind": "single_subject",
+   "arm": "without_aea",
+   "repetition": 3
+  },
+  {
+   "order": 139,
+   "session": "v8erp__erp_ERN_sub-025__with_aea__rep3",
+   "request_id": "erp_ERN_sub-025",
+   "component": "ERN",
+   "request_kind": "single_subject",
+   "arm": "with_aea",
+   "repetition": 3
+  },
+  {
+   "order": 140,
+   "session": "v8erp__erp_P3b_sub-025__with_aea__rep3",
+   "request_id": "erp_P3b_sub-025",
+   "component": "P3b",
+   "request_kind": "single_subject",
+   "arm": "with_aea",
+   "repetition": 3
+  },
+  {
+   "order": 141,
+   "session": "v8erp__erp_P3b_sub-025__without_aea__rep3",
+   "request_id": "erp_P3b_sub-025",
+   "component": "P3b",
+   "request_kind": "single_subject",
+   "arm": "without_aea",
+   "repetition": 3
+  },
+  {
+   "order": 142,
+   "session": "v8erp__erp_P3b_sub-024__without_aea__rep3",
+   "request_id": "erp_P3b_sub-024",
+   "component": "P3b",
+   "request_kind": "single_subject",
+   "arm": "without_aea",
+   "repetition": 3
+  },
+  {
+   "order": 143,
+   "session": "v8erp__erp_P3b_sub-024__with_aea__rep3",
+   "request_id": "erp_P3b_sub-024",
+   "component": "P3b",
+   "request_kind": "single_subject",
+   "arm": "with_aea",
+   "repetition": 3
+  }
+ ]
+}

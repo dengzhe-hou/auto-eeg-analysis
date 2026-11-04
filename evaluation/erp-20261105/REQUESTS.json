@@ -1,0 +1,486 @@
+{
+ "selection_rule": "First five eligible subjects by number within sub-021 to sub-040, per component, using the trial minimum of tab:spec. Fixed before any model result.",
+ "selection": {
+  "P3b": {
+   "first_five_eligible": [
+    "sub-021",
+    "sub-022",
+    "sub-023",
+    "sub-024",
+    "sub-025"
+   ],
+   "eligible_count": 20,
+   "ineligible": {}
+  },
+  "N170": {
+   "first_five_eligible": [
+    "sub-021",
+    "sub-022",
+    "sub-023",
+    "sub-024",
+    "sub-025"
+   ],
+   "eligible_count": 20,
+   "ineligible": {}
+  },
+  "ERN": {
+   "first_five_eligible": [
+    "sub-021",
+    "sub-022",
+    "sub-023",
+    "sub-024",
+    "sub-025"
+   ],
+   "eligible_count": 20,
+   "ineligible": {}
+  },
+  "N400": {
+   "first_five_eligible": [
+    "sub-021",
+    "sub-022",
+    "sub-023",
+    "sub-024",
+    "sub-025"
+   ],
+   "eligible_count": 20,
+   "ineligible": {}
+  }
+ },
+ "requests": [
+  {
+   "request_id": "erp_P3b_sub-021",
+   "component": "P3b",
+   "request_kind": "single_subject",
+   "subject_factor": "sub-021",
+   "subjects": [
+    "sub-021"
+   ],
+   "role": "formal",
+   "cohort": "formal",
+   "public_contract_path": "/home/hou/Research/auto-eeg-analysis/review-stage/aea-erp-validation-20261101/requests/erp_P3b_sub-021.json",
+   "instruction": "Carry out a single-subject ERP analysis of the P3b component in the ERP CORE dataset (DOI 10.18115/D5JW4R, OSF component https://osf.io/9f5w7/) for sub-021. A read-only copy of the dataset's BIDS directory is at /input/erp_core_bids; BIDS task label P3. Starting from that directory, find the recordings and events yourself. The approved analysis plan is PUBLIC_CONTRACT.json in the working directory and is repeated below; apply every setting in it exactly."
+  },
+  {
+   "request_id": "erp_P3b_sub-022",
+   "component": "P3b",
+   "request_kind": "single_subject",
+   "subject_factor": "sub-022",
+   "subjects": [
+    "sub-022"
+   ],
+   "role": "formal",
+   "cohort": "formal",
+   "public_contract_path": "/home/hou/Research/auto-eeg-analysis/review-stage/aea-erp-validation-20261101/requests/erp_P3b_sub-022.json",
+   "instruction": "Carry out a single-subject ERP analysis of the P3b component in the ERP CORE dataset (DOI 10.18115/D5JW4R, OSF component https://osf.io/9f5w7/) for sub-022. A read-only copy of the dataset's BIDS directory is at /input/erp_core_bids; BIDS task label P3. Starting from that directory, find the recordings and events yourself. The approved analysis plan is PUBLIC_CONTRACT.json in the working directory and is repeated below; apply every setting in it exactly."
+  },
+  {
+   "request_id": "erp_P3b_sub-023",
+   "component": "P3b",
+   "request_kind": "single_subject",
+   "subject_factor": "sub-023",
+   "subjects": [
+    "sub-023"
+   ],
+   "role": "formal",
+   "cohort": "formal",
+   "public_contract_path": "/home/hou/Research/auto-eeg-analysis/review-stage/aea-erp-validation-20261101/requests/erp_P3b_sub-023.json",
+   "instruction": "Carry out a single-subject ERP analysis of the P3b component in the ERP CORE dataset (DOI 10.18115/D5JW4R, OSF component https://osf.io/9f5w7/) for sub-023. A read-only copy of the dataset's BIDS directory is at /input/erp_core_bids; BIDS task label P3. Starting from that directory, find the recordings and events yourself. The approved analysis plan is PUBLIC_CONTRACT.json in the working directory and is repeated below; apply every setting in it exactly."
+  },
+  {
+   "request_id": "erp_P3b_sub-024",
+   "component": "P3b",
+   "request_kind": "single_subject",
+   "subject_factor": "sub-024",
+   "subjects": [
+    "sub-024"
+   ],
+   "role": "formal",
+   "cohort": "formal",
+   "public_contract_path": "/home/hou/Research/auto-eeg-analysis/review-stage/aea-erp-validation-20261101/requests/erp_P3b_sub-024.json",
+   "instruction": "Carry out a single-subject ERP analysis of the P3b component in the ERP CORE dataset (DOI 10.18115/D5JW4R, OSF component https://osf.io/9f5w7/) for sub-024. A read-only copy of the dataset's BIDS directory is at /input/erp_core_bids; BIDS task label P3. Starting from that directory, find the recordings and events yourself. The approved analysis plan is PUBLIC_CONTRACT.json in the working directory and is repeated below; apply every setting in it exactly."
+  },
+  {
+   "request_id": "erp_P3b_sub-025",
+   "component": "P3b",
+   "request_kind": "single_subject",
+   "subject_factor": "sub-025",
+   "subjects": [
+    "sub-025"
+   ],
+   "role": "formal",
+   "cohort": "formal",
+   "public_contract_path": "/home/hou/Research/auto-eeg-analysis/review-stage/aea-erp-validation-20261101/requests/erp_P3b_sub-025.json",
+   "instruction": "Carry out a single-subject ERP analysis of the P3b component in the ERP CORE dataset (DOI 10.18115/D5JW4R, OSF component https://osf.io/9f5w7/) for sub-025. A read-only copy of the dataset's BIDS directory is at /input/erp_core_bids; BIDS task label P3. Starting from that directory, find the recordings and events yourself. The approved analysis plan is PUBLIC_CONTRACT.json in the working directory and is repeated below; apply every setting in it exactly."
+  },
+  {
+   "request_id": "erp_P3b_group",
+   "component": "P3b",
+   "request_kind": "group",
+   "subject_factor": "all_subjects_group_request",
+   "subjects": [
+    "sub-021",
+    "sub-022",
+    "sub-023",
+    "sub-024",
+    "sub-025",
+    "sub-026",
+    "sub-027",
+    "sub-028",
+    "sub-029",
+    "sub-030",
+    "sub-031",
+    "sub-032",
+    "sub-033",
+    "sub-034",
+    "sub-035",
+    "sub-036",
+    "sub-037",
+    "sub-038",
+    "sub-039",
+    "sub-040"
+   ],
+   "role": "formal",
+   "cohort": "formal",
+   "public_contract_path": "/home/hou/Research/auto-eeg-analysis/review-stage/aea-erp-validation-20261101/requests/erp_P3b_group.json",
+   "instruction": "Carry out a group-level ERP analysis of the P3b component in the ERP CORE dataset (DOI 10.18115/D5JW4R, OSF component https://osf.io/9f5w7/) for the 20 subjects listed in the plan. A read-only copy of the dataset's BIDS directory is at /input/erp_core_bids; BIDS task label P3. Starting from that directory, find the recordings and events yourself. The approved analysis plan is PUBLIC_CONTRACT.json in the working directory and is repeated below; apply every setting in it exactly."
+  },
+  {
+   "request_id": "erp_N170_sub-021",
+   "component": "N170",
+   "request_kind": "single_subject",
+   "subject_factor": "sub-021",
+   "subjects": [
+    "sub-021"
+   ],
+   "role": "formal",
+   "cohort": "formal",
+   "public_contract_path": "/home/hou/Research/auto-eeg-analysis/review-stage/aea-erp-validation-20261101/requests/erp_N170_sub-021.json",
+   "instruction": "Carry out a single-subject ERP analysis of the N170 component in the ERP CORE dataset (DOI 10.18115/D5JW4R, OSF component https://osf.io/9f5w7/) for sub-021. A read-only copy of the dataset's BIDS directory is at /input/erp_core_bids; BIDS task label N170. Starting from that directory, find the recordings and events yourself. The approved analysis plan is PUBLIC_CONTRACT.json in the working directory and is repeated below; apply every setting in it exactly."
+  },
+  {
+   "request_id": "erp_N170_sub-022",
+   "component": "N170",
+   "request_kind": "single_subject",
+   "subject_factor": "sub-022",
+   "subjects": [
+    "sub-022"
+   ],
+   "role": "formal",
+   "cohort": "formal",
+   "public_contract_path": "/home/hou/Research/auto-eeg-analysis/review-stage/aea-erp-validation-20261101/requests/erp_N170_sub-022.json",
+   "instruction": "Carry out a single-subject ERP analysis of the N170 component in the ERP CORE dataset (DOI 10.18115/D5JW4R, OSF component https://osf.io/9f5w7/) for sub-022. A read-only copy of the dataset's BIDS directory is at /input/erp_core_bids; BIDS task label N170. Starting from that directory, find the recordings and events yourself. The approved analysis plan is PUBLIC_CONTRACT.json in the working directory and is repeated below; apply every setting in it exactly."
+  },
+  {
+   "request_id": "erp_N170_sub-023",
+   "component": "N170",
+   "request_kind": "single_subject",
+   "subject_factor": "sub-023",
+   "subjects": [
+    "sub-023"
+   ],
+   "role": "formal",
+   "cohort": "formal",
+   "public_contract_path": "/home/hou/Research/auto-eeg-analysis/review-stage/aea-erp-validation-20261101/requests/erp_N170_sub-023.json",
+   "instruction": "Carry out a single-subject ERP analysis of the N170 component in the ERP CORE dataset (DOI 10.18115/D5JW4R, OSF component https://osf.io/9f5w7/) for sub-023. A read-only copy of the dataset's BIDS directory is at /input/erp_core_bids; BIDS task label N170. Starting from that directory, find the recordings and events yourself. The approved analysis plan is PUBLIC_CONTRACT.json in the working directory and is repeated below; apply every setting in it exactly."
+  },
+  {
+   "request_id": "erp_N170_sub-024",
+   "component": "N170",
+   "request_kind": "single_subject",
+   "subject_factor": "sub-024",
+   "subjects": [
+    "sub-024"
+   ],
+   "role": "formal",
+   "cohort": "formal",
+   "public_contract_path": "/home/hou/Research/auto-eeg-analysis/review-stage/aea-erp-validation-20261101/requests/erp_N170_sub-024.json",
+   "instruction": "Carry out a single-subject ERP analysis of the N170 component in the ERP CORE dataset (DOI 10.18115/D5JW4R, OSF component https://osf.io/9f5w7/) for sub-024. A read-only copy of the dataset's BIDS directory is at /input/erp_core_bids; BIDS task label N170. Starting from that directory, find the recordings and events yourself. The approved analysis plan is PUBLIC_CONTRACT.json in the working directory and is repeated below; apply every setting in it exactly."
+  },
+  {
+   "request_id": "erp_N170_sub-025",
+   "component": "N170",
+   "request_kind": "single_subject",
+   "subject_factor": "sub-025",
+   "subjects": [
+    "sub-025"
+   ],
+   "role": "formal",
+   "cohort": "formal",
+   "public_contract_path": "/home/hou/Research/auto-eeg-analysis/review-stage/aea-erp-validation-20261101/requests/erp_N170_sub-025.json",
+   "instruction": "Carry out a single-subject ERP analysis of the N170 component in the ERP CORE dataset (DOI 10.18115/D5JW4R, OSF component https://osf.io/9f5w7/) for sub-025. A read-only copy of the dataset's BIDS directory is at /input/erp_core_bids; BIDS task label N170. Starting from that directory, find the recordings and events yourself. The approved analysis plan is PUBLIC_CONTRACT.json in the working directory and is repeated below; apply every setting in it exactly."
+  },
+  {
+   "request_id": "erp_N170_group",
+   "component": "N170",
+   "request_kind": "group",
+   "subject_factor": "all_subjects_group_request",
+   "subjects": [
+    "sub-021",
+    "sub-022",
+    "sub-023",
+    "sub-024",
+    "sub-025",
+    "sub-026",
+    "sub-027",
+    "sub-028",
+    "sub-029",
+    "sub-030",
+    "sub-031",
+    "sub-032",
+    "sub-033",
+    "sub-034",
+    "sub-035",
+    "sub-036",
+    "sub-037",
+    "sub-038",
+    "sub-039",
+    "sub-040"
+   ],
+   "role": "formal",
+   "cohort": "formal",
+   "public_contract_path": "/home/hou/Research/auto-eeg-analysis/review-stage/aea-erp-validation-20261101/requests/erp_N170_group.json",
+   "instruction": "Carry out a group-level ERP analysis of the N170 component in the ERP CORE dataset (DOI 10.18115/D5JW4R, OSF component https://osf.io/9f5w7/) for the 20 subjects listed in the plan. A read-only copy of the dataset's BIDS directory is at /input/erp_core_bids; BIDS task label N170. Starting from that directory, find the recordings and events yourself. The approved analysis plan is PUBLIC_CONTRACT.json in the working directory and is repeated below; apply every setting in it exactly."
+  },
+  {
+   "request_id": "erp_ERN_sub-021",
+   "component": "ERN",
+   "request_kind": "single_subject",
+   "subject_factor": "sub-021",
+   "subjects": [
+    "sub-021"
+   ],
+   "role": "formal",
+   "cohort": "formal",
+   "public_contract_path": "/home/hou/Research/auto-eeg-analysis/review-stage/aea-erp-validation-20261101/requests/erp_ERN_sub-021.json",
+   "instruction": "Carry out a single-subject ERP analysis of the ERN component in the ERP CORE dataset (DOI 10.18115/D5JW4R, OSF component https://osf.io/9f5w7/) for sub-021. A read-only copy of the dataset's BIDS directory is at /input/erp_core_bids; BIDS task label ERN. Starting from that directory, find the recordings and events yourself. The approved analysis plan is PUBLIC_CONTRACT.json in the working directory and is repeated below; apply every setting in it exactly."
+  },
+  {
+   "request_id": "erp_ERN_sub-022",
+   "component": "ERN",
+   "request_kind": "single_subject",
+   "subject_factor": "sub-022",
+   "subjects": [
+    "sub-022"
+   ],
+   "role": "formal",
+   "cohort": "formal",
+   "public_contract_path": "/home/hou/Research/auto-eeg-analysis/review-stage/aea-erp-validation-20261101/requests/erp_ERN_sub-022.json",
+   "instruction": "Carry out a single-subject ERP analysis of the ERN component in the ERP CORE dataset (DOI 10.18115/D5JW4R, OSF component https://osf.io/9f5w7/) for sub-022. A read-only copy of the dataset's BIDS directory is at /input/erp_core_bids; BIDS task label ERN. Starting from that directory, find the recordings and events yourself. The approved analysis plan is PUBLIC_CONTRACT.json in the working directory and is repeated below; apply every setting in it exactly."
+  },
+  {
+   "request_id": "erp_ERN_sub-023",
+   "component": "ERN",
+   "request_kind": "single_subject",
+   "subject_factor": "sub-023",
+   "subjects": [
+    "sub-023"
+   ],
+   "role": "formal",
+   "cohort": "formal",
+   "public_contract_path": "/home/hou/Research/auto-eeg-analysis/review-stage/aea-erp-validation-20261101/requests/erp_ERN_sub-023.json",
+   "instruction": "Carry out a single-subject ERP analysis of the ERN component in the ERP CORE dataset (DOI 10.18115/D5JW4R, OSF component https://osf.io/9f5w7/) for sub-023. A read-only copy of the dataset's BIDS directory is at /input/erp_core_bids; BIDS task label ERN. Starting from that directory, find the recordings and events yourself. The approved analysis plan is PUBLIC_CONTRACT.json in the working directory and is repeated below; apply every setting in it exactly."
+  },
+  {
+   "request_id": "erp_ERN_sub-024",
+   "component": "ERN",
+   "request_kind": "single_subject",
+   "subject_factor": "sub-024",
+   "subjects": [
+    "sub-024"
+   ],
+   "role": "formal",
+   "cohort": "formal",
+   "public_contract_path": "/home/hou/Research/auto-eeg-analysis/review-stage/aea-erp-validation-20261101/requests/erp_ERN_sub-024.json",
+   "instruction": "Carry out a single-subject ERP analysis of the ERN component in the ERP CORE dataset (DOI 10.18115/D5JW4R, OSF component https://osf.io/9f5w7/) for sub-024. A read-only copy of the dataset's BIDS directory is at /input/erp_core_bids; BIDS task label ERN. Starting from that directory, find the recordings and events yourself. The approved analysis plan is PUBLIC_CONTRACT.json in the working directory and is repeated below; apply every setting in it exactly."
+  },
+  {
+   "request_id": "erp_ERN_sub-025",
+   "component": "ERN",
+   "request_kind": "single_subject",
+   "subject_factor": "sub-025",
+   "subjects": [
+    "sub-025"
+   ],
+   "role": "formal",
+   "cohort": "formal",
+   "public_contract_path": "/home/hou/Research/auto-eeg-analysis/review-stage/aea-erp-validation-20261101/requests/erp_ERN_sub-025.json",
+   "instruction": "Carry out a single-subject ERP analysis of the ERN component in the ERP CORE dataset (DOI 10.18115/D5JW4R, OSF component https://osf.io/9f5w7/) for sub-025. A read-only copy of the dataset's BIDS directory is at /input/erp_core_bids; BIDS task label ERN. Starting from that directory, find the recordings and events yourself. The approved analysis plan is PUBLIC_CONTRACT.json in the working directory and is repeated below; apply every setting in it exactly."
+  },
+  {
+   "request_id": "erp_ERN_group",
+   "component": "ERN",
+   "request_kind": "group",
+   "subject_factor": "all_subjects_group_request",
+   "subjects": [
+    "sub-021",
+    "sub-022",
+    "sub-023",
+    "sub-024",
+    "sub-025",
+    "sub-026",
+    "sub-027",
+    "sub-028",
+    "sub-029",
+    "sub-030",
+    "sub-031",
+    "sub-032",
+    "sub-033",
+    "sub-034",
+    "sub-035",
+    "sub-036",
+    "sub-037",
+    "sub-038",
+    "sub-039",
+    "sub-040"
+   ],
+   "role": "formal",
+   "cohort": "formal",
+   "public_contract_path": "/home/hou/Research/auto-eeg-analysis/review-stage/aea-erp-validation-20261101/requests/erp_ERN_group.json",
+   "instruction": "Carry out a group-level ERP analysis of the ERN component in the ERP CORE dataset (DOI 10.18115/D5JW4R, OSF component https://osf.io/9f5w7/) for the 20 subjects listed in the plan. A read-only copy of the dataset's BIDS directory is at /input/erp_core_bids; BIDS task label ERN. Starting from that directory, find the recordings and events yourself. The approved analysis plan is PUBLIC_CONTRACT.json in the working directory and is repeated below; apply every setting in it exactly."
+  },
+  {
+   "request_id": "erp_N400_sub-021",
+   "component": "N400",
+   "request_kind": "single_subject",
+   "subject_factor": "sub-021",
+   "subjects": [
+    "sub-021"
+   ],
+   "role": "formal",
+   "cohort": "formal",
+   "public_contract_path": "/home/hou/Research/auto-eeg-analysis/review-stage/aea-erp-validation-20261101/requests/erp_N400_sub-021.json",
+   "instruction": "Carry out a single-subject ERP analysis of the N400 component in the ERP CORE dataset (DOI 10.18115/D5JW4R, OSF component https://osf.io/9f5w7/) for sub-021. A read-only copy of the dataset's BIDS directory is at /input/erp_core_bids; BIDS task label N400. Starting from that directory, find the recordings and events yourself. The approved analysis plan is PUBLIC_CONTRACT.json in the working directory and is repeated below; apply every setting in it exactly."
+  },
+  {
+   "request_id": "erp_N400_sub-022",
+   "component": "N400",
+   "request_kind": "single_subject",
+   "subject_factor": "sub-022",
+   "subjects": [
+    "sub-022"
+   ],
+   "role": "formal",
+   "cohort": "formal",
+   "public_contract_path": "/home/hou/Research/auto-eeg-analysis/review-stage/aea-erp-validation-20261101/requests/erp_N400_sub-022.json",
+   "instruction": "Carry out a single-subject ERP analysis of the N400 component in the ERP CORE dataset (DOI 10.18115/D5JW4R, OSF component https://osf.io/9f5w7/) for sub-022. A read-only copy of the dataset's BIDS directory is at /input/erp_core_bids; BIDS task label N400. Starting from that directory, find the recordings and events yourself. The approved analysis plan is PUBLIC_CONTRACT.json in the working directory and is repeated below; apply every setting in it exactly."
+  },
+  {
+   "request_id": "erp_N400_sub-023",
+   "component": "N400",
+   "request_kind": "single_subject",
+   "subject_factor": "sub-023",
+   "subjects": [
+    "sub-023"
+   ],
+   "role": "formal",
+   "cohort": "formal",
+   "public_contract_path": "/home/hou/Research/auto-eeg-analysis/review-stage/aea-erp-validation-20261101/requests/erp_N400_sub-023.json",
+   "instruction": "Carry out a single-subject ERP analysis of the N400 component in the ERP CORE dataset (DOI 10.18115/D5JW4R, OSF component https://osf.io/9f5w7/) for sub-023. A read-only copy of the dataset's BIDS directory is at /input/erp_core_bids; BIDS task label N400. Starting from that directory, find the recordings and events yourself. The approved analysis plan is PUBLIC_CONTRACT.json in the working directory and is repeated below; apply every setting in it exactly."
+  },
+  {
+   "request_id": "erp_N400_sub-024",
+   "component": "N400",
+   "request_kind": "single_subject",
+   "subject_factor": "sub-024",
+   "subjects": [
+    "sub-024"
+   ],
+   "role": "formal",
+   "cohort": "formal",
+   "public_contract_path": "/home/hou/Research/auto-eeg-analysis/review-stage/aea-erp-validation-20261101/requests/erp_N400_sub-024.json",
+   "instruction": "Carry out a single-subject ERP analysis of the N400 component in the ERP CORE dataset (DOI 10.18115/D5JW4R, OSF component https://osf.io/9f5w7/) for sub-024. A read-only copy of the dataset's BIDS directory is at /input/erp_core_bids; BIDS task label N400. Starting from that directory, find the recordings and events yourself. The approved analysis plan is PUBLIC_CONTRACT.json in the working directory and is repeated below; apply every setting in it exactly."
+  },
+  {
+   "request_id": "erp_N400_sub-025",
+   "component": "N400",
+   "request_kind": "single_subject",
+   "subject_factor": "sub-025",
+   "subjects": [
+    "sub-025"
+   ],
+   "role": "formal",
+   "cohort": "formal",
+   "public_contract_path": "/home/hou/Research/auto-eeg-analysis/review-stage/aea-erp-validation-20261101/requests/erp_N400_sub-025.json",
+   "instruction": "Carry out a single-subject ERP analysis of the N400 component in the ERP CORE dataset (DOI 10.18115/D5JW4R, OSF component https://osf.io/9f5w7/) for sub-025. A read-only copy of the dataset's BIDS directory is at /input/erp_core_bids; BIDS task label N400. Starting from that directory, find the recordings and events yourself. The approved analysis plan is PUBLIC_CONTRACT.json in the working directory and is repeated below; apply every setting in it exactly."
+  },
+  {
+   "request_id": "erp_N400_group",
+   "component": "N400",
+   "request_kind": "group",
+   "subject_factor": "all_subjects_group_request",
+   "subjects": [
+    "sub-021",
+    "sub-022",
+    "sub-023",
+    "sub-024",
+    "sub-025",
+    "sub-026",
+    "sub-027",
+    "sub-028",
+    "sub-029",
+    "sub-030",
+    "sub-031",
+    "sub-032",
+    "sub-033",
+    "sub-034",
+    "sub-035",
+    "sub-036",
+    "sub-037",
+    "sub-038",
+    "sub-039",
+    "sub-040"
+   ],
+   "role": "formal",
+   "cohort": "formal",
+   "public_contract_path": "/home/hou/Research/auto-eeg-analysis/review-stage/aea-erp-validation-20261101/requests/erp_N400_group.json",
+   "instruction": "Carry out a group-level ERP analysis of the N400 component in the ERP CORE dataset (DOI 10.18115/D5JW4R, OSF component https://osf.io/9f5w7/) for the 20 subjects listed in the plan. A read-only copy of the dataset's BIDS directory is at /input/erp_core_bids; BIDS task label N400. Starting from that directory, find the recordings and events yourself. The approved analysis plan is PUBLIC_CONTRACT.json in the working directory and is repeated below; apply every setting in it exactly."
+  }
+ ],
+ "pilot_requests": [
+  {
+   "request_id": "pilot_N400_sub-026",
+   "component": "N400",
+   "request_kind": "single_subject",
+   "subject_factor": "sub-026",
+   "subjects": [
+    "sub-026"
+   ],
+   "role": "pilot",
+   "cohort": "formal",
+   "public_contract_path": "/home/hou/Research/auto-eeg-analysis/review-stage/aea-erp-validation-20261101/requests/pilot_N400_sub-026.json",
+   "instruction": "Carry out a single-subject ERP analysis of the N400 component in the ERP CORE dataset (DOI 10.18115/D5JW4R, OSF component https://osf.io/9f5w7/) for sub-026. A read-only copy of the dataset's BIDS directory is at /input/erp_core_bids; BIDS task label N400. Starting from that directory, find the recordings and events yourself. The approved analysis plan is PUBLIC_CONTRACT.json in the working directory and is repeated below; apply every setting in it exactly."
+  },
+  {
+   "request_id": "pilot_N170_group_sub001to020",
+   "component": "N170",
+   "request_kind": "group",
+   "subject_factor": "all_subjects_group_request",
+   "subjects": [
+    "sub-001",
+    "sub-002",
+    "sub-003",
+    "sub-004",
+    "sub-005",
+    "sub-006",
+    "sub-007",
+    "sub-008",
+    "sub-009",
+    "sub-010",
+    "sub-011",
+    "sub-012",
+    "sub-013",
+    "sub-014",
+    "sub-015",
+    "sub-016",
+    "sub-017",
+    "sub-018",
+    "sub-019",
+    "sub-020"
+   ],
+   "role": "pilot",
+   "cohort": "certified",
+   "public_contract_path": "/home/hou/Research/auto-eeg-analysis/review-stage/aea-erp-validation-20261101/requests/pilot_N170_group_sub001to020.json",
+   "instruction": "Carry out a group-level ERP analysis of the N170 component in the ERP CORE dataset (DOI 10.18115/D5JW4R, OSF component https://osf.io/9f5w7/) for the 20 subjects listed in the plan. A read-only copy of the dataset's BIDS directory is at /input/erp_core_bids; BIDS task label N170. Starting from that directory, find the recordings and events yourself. The approved analysis plan is PUBLIC_CONTRACT.json in the working directory and is repeated below; apply every setting in it exactly."
+  }
+ ]
+}
