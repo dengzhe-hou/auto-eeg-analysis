@@ -6,11 +6,12 @@ import re
 import runpy
 import textwrap
 
-import antropy
 import mne
-import mne_connectivity
 import numpy as np
 import pytest
+
+antropy = pytest.importorskip("antropy")
+mne_connectivity = pytest.importorskip("mne_connectivity")
 
 ROOT = Path(__file__).resolve().parents[2]
 lz = runpy.run_path(str(ROOT/'skills/eeg-complexity/scripts/lempel_ziv.py'))
@@ -20,7 +21,7 @@ mne.set_log_level('ERROR')
 
 
 def example(skill, label, **context):
-    source = (ROOT/f'skills/{skill}/references/procedure.md').read_text()
+    source = (ROOT/f'skills/{skill}/references/procedure.md').read_text(encoding="utf-8-sig")
     code, = [textwrap.dedent(block) for block in re.findall(r'```python\n(.*?)```', source, re.S)
              if f'# AEA example: {label}\n' in block]
     ns = {'np':np, 'AEA_ROOT':str(ROOT), **context}

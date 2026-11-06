@@ -45,7 +45,7 @@ def write_outputs(result, evidence, workspace):
                 raise ValueError(f"Evidence {key!r} must be a numeric or string array, not objects")
     workspace = Path(workspace)
     workspace.mkdir(parents=True, exist_ok=True)
-    (workspace / "result.json").write_text(text + "\n")
+    (workspace / "result.json").write_text(text + "\n", encoding="utf-8")
     np.savez(workspace / "analysis_evidence.npz", **arrays)
     return json.loads(text)
 
@@ -123,7 +123,7 @@ def check_outputs(plan, workspace, *, raw_input=None, final_result=None):
     checks = []
     def add(name, passed):
         checks.append({"name": name, "passed": bool(passed)})
-    result = json.loads((workspace / "result.json").read_text())
+    result = json.loads((workspace / "result.json").read_text(encoding="utf-8-sig"))
     if not isinstance(result, dict):
         raise ValueError("result.json must contain an object")
     status = result.get("status")
@@ -357,13 +357,13 @@ def main():
     if args.raw_input:
         import mne
         raw = mne.io.read_raw(args.raw_input, preload=False, verbose=False)
-    report = result_from_report(args.report.read_text()) if args.report else None
+    report = result_from_report(args.report.read_text(encoding="utf-8-sig")) if args.report else None
     try:
-        result = check_outputs(json.loads(args.plan.read_text()), args.workspace, raw_input=raw, final_result=report)
+        result = check_outputs(json.loads(args.plan.read_text(encoding="utf-8-sig")), args.workspace, raw_input=raw, final_result=report)
     finally:
         if raw is not None:
             raw.close()
-    args.output.write_text(json.dumps(result, indent=2) + "\n")
+    args.output.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(result))
     raise SystemExit(0 if result["passed"] else 1)
 

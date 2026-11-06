@@ -10,8 +10,12 @@ def welch_parameters(sfreq, n_times, *, segment_seconds, window,
     samples = round(segment_seconds * sfreq)
     overlap = round(samples * overlap_fraction)
     fft = samples if n_fft is None else int(n_fft)
-    if samples < 2 or samples > n_times or not 0 <= overlap < samples or fft < samples:
-        raise ValueError("Approved Welch settings must fit the actual segment")
+    if fft < samples:
+        raise ValueError("N_FFT must be >= n_per_seg")
+    if samples < 2 or samples > n_times:
+        raise ValueError("Approved Welch segment duration does not fit the actual segment")
+    if not 0 <= overlap < samples:
+        raise ValueError("Approved Welch overlap must be shorter than the segment")
     return dict(n_fft=fft, n_per_seg=samples, n_overlap=overlap,
                 window=window, remove_dc=remove_dc, average=average)
 
@@ -124,6 +128,12 @@ def resolved_welch_settings(plan):
     These two interfaces already occur in AEA. Missing scientific choices are
     not filled. A contradictory declaration is an error, not an override.
     """
+    required = {"segment_seconds", "window", "overlap_fraction", "n_fft"}
+    if "detrend" not in plan:
+        required.add("remove_dc")
+    missing = required - plan.keys()
+    if missing:
+        raise ValueError(f"Missing approved Welch settings: {sorted(missing)}")
     if "detrend" in plan and plan["detrend"] not in ("constant", False):
         raise ValueError("This Welch implementation supports constant or no detrending")
     if "remove_dc" in plan:

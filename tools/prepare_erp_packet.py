@@ -82,7 +82,7 @@ def main():
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--receipt', type=Path, required=True)
     args = parser.parse_args()
-    packet, receipt = prepare_erp_packet(args.root, json.loads(args.plan.read_text(encoding='utf-8')))
+    packet, receipt = prepare_erp_packet(args.root, json.loads(args.plan.read_text(encoding="utf-8-sig")))
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(packet, encoding='utf-8')
     args.receipt.parent.mkdir(parents=True, exist_ok=True)

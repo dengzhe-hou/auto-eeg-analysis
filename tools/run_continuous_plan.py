@@ -145,11 +145,11 @@ def _compute_plan(plan, original_raw, output_directory, execution):
     stage('check_outputs')
     checked = check_outputs(plan, output_directory, raw_input=original_raw, final_result=final_result)
     output = Path(output_directory)
-    (output / "SELF_CHECK.json").write_text(json.dumps(checked, indent=2) + "\n")
+    (output / "SELF_CHECK.json").write_text(json.dumps(checked, indent=2) + "\n", encoding="utf-8")
     if not checked["passed"]:
         raise ValueError("Delivery check failed; retain SELF_CHECK.json and the actual artifacts")
     stage('write_final_submission')
-    (output / "FINAL_SUBMISSION.md").write_text(json.dumps(final_result, indent=2) + "\n")
+    (output / "FINAL_SUBMISSION.md").write_text(json.dumps(final_result, indent=2) + "\n", encoding="utf-8")
     return final_result, checked
 
 
@@ -203,7 +203,7 @@ def main():
     parser.add_argument("--input", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
-    plan = json.loads(args.plan.read_text())
+    plan = json.loads(args.plan.read_text(encoding="utf-8-sig"))
     with mne.io.read_raw(args.input, preload=False, verbose=False) as original:
         result, _ = run_plan(plan, original, args.output)
     print(json.dumps(result))

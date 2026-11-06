@@ -83,9 +83,9 @@ def main():
     parser.add_argument("--plot-sample-hz", type=float, nargs="+")
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
-    contract = json.loads(args.contract.read_text())
-    direct = json.loads(args.direct.read_text())
-    submission = args.submission.read_text()
+    contract = json.loads(args.contract.read_text(encoding="utf-8-sig"))
+    direct = json.loads(args.direct.read_text(encoding="utf-8-sig"))
+    submission = args.submission.read_text(encoding="utf-8-sig")
     result = {"semantic_prompt": semantic_review_prompt(contract, direct, submission),
               "scope": "Context preparation only; no model call, new verdict or score change."}
     if direct.get("image_path"):
@@ -98,7 +98,7 @@ def main():
         result.update(image_path=direct["image_path"],
                       image_prompt=image_review_prompt(contract, direct, submission, plot_context))
     args.output.parent.mkdir(parents=True, exist_ok=True)
-    args.output.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n")
+    args.output.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
 if __name__ == "__main__":

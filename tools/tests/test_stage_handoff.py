@@ -24,7 +24,7 @@ area_latency = runpy.run_path(str(
 
 def run_example(skill, label, **context):
     """Labels locate source; assertions below check actual numerical behavior."""
-    source = (ROOT / f'skills/{skill}/references/procedure.md').read_text()
+    source = (ROOT / f'skills/{skill}/references/procedure.md').read_text(encoding="utf-8-sig")
     block, = [textwrap.dedent(block) for block in
               re.findall(r'```python\n(.*?)```', source, flags=re.S)
               if f'# AEA example: {label}\n' in block]
@@ -86,6 +86,7 @@ def test_stim_branch_does_not_overwrite_events_with_empty_annotations():
 
 
 def test_real_bids_sidecar_import_and_documented_event_branch(tmp_path):
+    pytest.importorskip("mne_bids")
     from mne_bids import BIDSPath, write_raw_bids
     raw = mne.io.RawArray(np.zeros((2, 1000)),
         mne.create_info(['Cz', 'Oz'], 250, 'eeg'), verbose=False)
@@ -244,12 +245,12 @@ def test_area_latency_never_selects_a_missing_convention_or_replaces_nonpositive
 
 @pytest.fixture
 def plan_evidence(tmp_path):
-    plan = tmp_path/'ANALYSIS_PLAN.md'; plan.write_text('Condition A minus B\n')
+    plan = tmp_path/'ANALYSIS_PLAN.md'; plan.write_text('Condition A minus B\n', encoding="utf-8")
     approved = tmp_path/'approved-plan.md'; shutil.copyfile(plan, approved)
     approval = tmp_path/'approval.json'; approval.write_text(json.dumps(
-        {'approved': True, 'timestamp': '2026-10-29T10:00:00+09:00'}))
+        {'approved': True, 'timestamp': '2026-10-29T10:00:00+09:00'}), encoding="utf-8")
     run = tmp_path/'run.json'; run.write_text(json.dumps(
-        {'analysis_started_at': '2026-10-29T10:01:00+09:00'}))
+        {'analysis_started_at': '2026-10-29T10:01:00+09:00'}), encoding="utf-8")
     return plan, dict(approved_plan=approved, approval_record=approval,
                      analysis_record=run, approved_at='2026-10-29T10:00:00+09:00',
                      analysis_started_at='2026-10-29T10:01:00+09:00')
@@ -258,7 +259,7 @@ def plan_evidence(tmp_path):
 def test_copied_plan_mtime_is_only_an_observation(plan_evidence, tmp_path):
     plan, settings = plan_evidence
     now = time.time(); os.utime(plan, (now-60, now-60))
-    stats = tmp_path/'stats.json'; stats.write_text('{}'); os.utime(stats, (now-30, now-30))
+    stats = tmp_path/'stats.json'; stats.write_text('{}', encoding="utf-8"); os.utime(stats, (now-30, now-30))
     copied = tmp_path/'copied-plan.md'; shutil.copyfile(plan, copied)
     out = check_plan_provenance(copied, outputs=[stats], **settings)
     assert out['status'] == 'consistent'
@@ -277,7 +278,7 @@ def test_early_mtime_does_not_establish_approval(plan_evidence):
 
 def test_plan_difference_requires_review_even_with_early_mtime(plan_evidence):
     plan, settings = plan_evidence
-    plan.write_text('Condition B minus A\n'); os.utime(plan, (1, 1))
+    plan.write_text('Condition B minus A\n', encoding="utf-8"); os.utime(plan, (1, 1))
     out = check_plan_provenance(plan, **settings)
     assert out['status'] == 'needs_review'
     assert 'run_plan_differs_from_supplied_approved_snapshot' in out['issues']
@@ -287,7 +288,7 @@ def test_recorded_late_approval_requires_review(plan_evidence):
     plan, settings = plan_evidence
     settings['approved_at'] = '2026-10-29T10:02:00+09:00'
     settings['approval_record'].write_text(json.dumps(
-        {'approved': True, 'timestamp': settings['approved_at']}))
+        {'approved': True, 'timestamp': settings['approved_at']}), encoding="utf-8")
     out = check_plan_provenance(plan, **settings)
     assert out['status'] == 'needs_review'
     assert out['recorded_approval_before_analysis'] is False
@@ -298,5 +299,5 @@ def test_provenance_cli_retains_sources_and_writes_an_unverified_result(plan_evi
     out = tmp_path/'audit-stage/PLAN_PROVENANCE.json'
     result = subprocess.run([sys.executable, str(ROOT/'tools/check_plan_provenance.py'),
         '--plan', str(plan), '--out', str(out)], check=True, capture_output=True, text=True)
-    assert json.loads(result.stdout) == json.loads(out.read_text())
-    assert json.loads(out.read_text())['status'] == 'unverified'
+    assert json.loads(result.stdout) == json.loads(out.read_text(encoding="utf-8-sig"))
+    assert json.loads(out.read_text(encoding="utf-8-sig"))['status'] == 'unverified'

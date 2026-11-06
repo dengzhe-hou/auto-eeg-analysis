@@ -8,8 +8,10 @@ import textwrap
 
 import mne
 import numpy as np
-import pandas as pd
 import pytest
+
+pd = pytest.importorskip("pandas")
+pytest.importorskip("mne_bids")
 from mne_bids import BIDSPath, write_raw_bids
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -25,7 +27,7 @@ def example(skill, label, **context):
         path = ROOT/'recipes'/skill.split(':')[1]/'RECIPE.md'
     else:
         path = ROOT/f'skills/{skill}/references/procedure.md'
-    code, = [textwrap.dedent(x) for x in re.findall(r'```python\n(.*?)```', path.read_text(), re.S)
+    code, = [textwrap.dedent(x) for x in re.findall(r'```python\n(.*?)```', path.read_text(encoding="utf-8-sig"), re.S)
              if f'# AEA example: {label}\n' in x]
     ns = dict(mne=mne, np=np, AEA_ROOT=str(ROOT), preparation=preparation)
     ns.update(context)
@@ -167,21 +169,21 @@ def test_qc_verdict_preserves_measured_failures_and_missing_coverage(gates,verdi
 
 def make_run(tmp_path, stages):
     for name in ('ANALYSIS_PLAN.md','DATASET_BRIEF.md','ENVIRONMENT.json'):
-        (tmp_path/name).write_text('{}')
+        (tmp_path/name).write_text('{}', encoding="utf-8")
     required={}
     for stage in stages:
         file=tmp_path/f'{stage}-stage/S1/actual-output.json';file.parent.mkdir(parents=True)
-        file.write_text('{}');required[stage]=[f'{stage}-stage/S1/actual-output.json']
+        file.write_text('{}', encoding="utf-8");required[stage]=[f'{stage}-stage/S1/actual-output.json']
     return required
 
 
 def test_continuous_methods_and_report_cover_all_five_previously_missing_stages(tmp_path):
     stages=['spectral','complexity','microstate','qc','behavior']
     required=make_run(tmp_path,stages)
-    old=tmp_path/'epoch-stage';old.mkdir();(old/'old-output.txt').write_text('old run')
+    old=tmp_path/'epoch-stage';old.mkdir();(old/'old-output.txt').write_text('old run', encoding="utf-8")
     out=example('eeg-report','report-stage-inventory',run_dir=tmp_path,
         approved_reporting_stages=stages,recorded_required_stage_sources=required)
-    saved=json.loads((tmp_path/'report-stage/STAGE_INVENTORY.json').read_text())
+    saved=json.loads((tmp_path/'report-stage/STAGE_INVENTORY.json').read_text(encoding="utf-8-sig"))
     assert all(saved[stage]['status']=='available' for stage in stages)
     assert saved['epoch']['status']=='not_applicable' and saved['epoch']['directory_present']
     methods=example('eeg-methods-text','methods-stage-inputs',run_dir=tmp_path,
@@ -215,6 +217,7 @@ def test_missing_core_provenance_is_not_filled_from_an_unrelated_run(tmp_path):
 
 
 def microstate_raw(sfreq=250.):
+    pytest.importorskip("pycrostates")
     time=np.arange(round(6*sfreq))/sfreq
     data=1e-6*(np.sin(2*np.pi*18*time)[None,:]*np.array([[3.],[-2.],[-1.]])+
                .4*np.cos(2*np.pi*7*time)[None,:]*np.array([[1.],[1.],[-2.]]))
@@ -261,6 +264,7 @@ def test_approved_sample_units_are_not_replaced_by_physical_example():
 
 
 def test_recipe_preparation_and_real_backfit_use_the_same_shared_helpers():
+    pytest.importorskip("pycrostates")
     from pycrostates.cluster import ModKMeans
     raw=microstate_raw();original=raw.get_data().copy();policy=prepare_params()
     recipe=example('recipe:resting-microstate','recipe-microstate-preparation',raw=raw,

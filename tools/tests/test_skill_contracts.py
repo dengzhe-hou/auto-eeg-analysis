@@ -51,7 +51,7 @@ def test_existing_and_canonical_welch_forms_are_numerically_identical(remove_dc,
 
 
 def test_full_study_example_and_bounded_helper_share_the_same_settings():
-    doc = (ROOT / 'skills/eeg-spectral/references/procedure.md').read_text()
+    doc = (ROOT / 'skills/eeg-spectral/references/procedure.md').read_text(encoding="utf-8-sig")
     example = json.loads(doc.split('```json\n', 1)[1].split('```', 1)[0])
     settings = spectral['resolved_welch_settings'](example['welch'])
     data = np.random.default_rng(3).normal(size=(2, 1000)) * 1e-6
@@ -160,12 +160,12 @@ def test_complete_multiband_example_preserves_independent_inputs_and_checks_summ
     out = tmp_path / 'output'
     namespace = {'AEA_ROOT': ROOT, 'approved_public_plan': plan, 'output_directory': out}
     exec(compile(code, 'continuous.md multiband example', 'exec'), namespace)
-    check = json.loads((out / 'SELF_CHECK.json').read_text())
+    check = json.loads((out / 'SELF_CHECK.json').read_text(encoding="utf-8-sig"))
     assert check['passed'] and check['coverage']['connectivity_summary_recomputed']
     assert check['coverage']['hemisphere_contrast_recomputed']
     assert not check['coverage']['approved_processing_recomputed']
     assert check['coverage']['hilbert_matrices_recomputed'] == ['alpha', 'beta']
-    result = json.loads((out / 'result.json').read_text())
+    result = json.loads((out / 'result.json').read_text(encoding="utf-8-sig"))
     with np.load(out / 'analysis_evidence.npz') as arrays:
         for label in ['alpha', 'beta']:
             expected_segment = mne.filter.filter_data(source_data.copy(), sfreq,

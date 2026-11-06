@@ -62,7 +62,7 @@ def test_no_corroboration_policy_is_only_used_when_explicitly_supplied():
 
 
 def test_actual_ica_decision_example_uses_the_policy_and_class_evidence():
-    text = (ROOT / 'skills/eeg-ica/references/procedure.md').read_text()
+    text = (ROOT / 'skills/eeg-ica/references/procedure.md').read_text(encoding="utf-8-sig")
     code = textwrap.dedent(next(b for b in re.findall(r'```python\n(.*?)```',text,re.S)
                                if 'selection = choose' in b))
     policy = dict(reject_classes=['eye blink'], probability_threshold=.7, require_corroboration=True)
@@ -124,7 +124,7 @@ def test_actual_group_erp_example_and_mne_callback_draw_the_captioned_bounds(spe
     observations=np.array([1.,2.,4.,6.,10.])
     info=mne.create_info(['Cz','Pz'],100.,'eeg')
     evokeds=[mne.EvokedArray(np.full((2,20),v*1e-6),info,tmin=-.1,verbose=False) for v in observations]
-    text=(ROOT/'skills/eeg-figure/references/procedure.md').read_text()
+    text=(ROOT/'skills/eeg-figure/references/procedure.md').read_text(encoding="utf-8-sig")
     section=read_section(text,'Group ERP with the approved uncertainty band')
     blocks=re.findall(r'```python\n(.*?)```',section,re.S)
     fig,ax=plt.subplots()
@@ -166,12 +166,12 @@ def test_configuration_source_priority_preserves_actual_controls(isolated_config
     default=load_run_settings(project)
     assert default['source'] is None and default['auto_proceed'] is True and default['timeout_seconds']==300
     legacy=fake_home/'.claude/checkpoint.json'; legacy.parent.mkdir()
-    legacy.write_text(json.dumps({'auto_proceed':False,'timeout_seconds':19,'gates':{'ica':'always_wait'}}))
+    legacy.write_text(json.dumps({'auto_proceed':False,'timeout_seconds':19,'gates':{'ica':'always_wait'}}), encoding="utf-8")
     out=load_run_settings(project)
     assert out['source']==str(legacy) and out['gates']=={'ica':'always_wait'}
-    own=project/'AEA_RUN.json'; own.write_text(json.dumps({'auto_proceed':True,'timeout_seconds':51}))
+    own=project/'AEA_RUN.json'; own.write_text(json.dumps({'auto_proceed':True,'timeout_seconds':51}), encoding="utf-8")
     assert load_run_settings(project)['source']==str(own)
-    explicit=tmp_path/'chosen.json'; explicit.write_text(json.dumps({'auto_proceed':False,'timeout_seconds':73}))
+    explicit=tmp_path/'chosen.json'; explicit.write_text(json.dumps({'auto_proceed':False,'timeout_seconds':73}), encoding="utf-8")
     out=load_run_settings(project,config_path=explicit)
     assert out['source']==str(explicit) and out['timeout_seconds']==73 and out['auto_proceed'] is False
     with pytest.raises(FileNotFoundError):
@@ -180,7 +180,7 @@ def test_configuration_source_priority_preserves_actual_controls(isolated_config
 
 def test_settings_cli_reads_the_named_project_file(isolated_config):
     project,_=isolated_config
-    config=project/'AEA_RUN.json'; config.write_text(json.dumps({'auto_proceed':False,'timeout_seconds':41}))
+    config=project/'AEA_RUN.json'; config.write_text(json.dumps({'auto_proceed':False,'timeout_seconds':41}), encoding="utf-8")
     run=subprocess.run([sys.executable,str(ROOT/'tools/run_settings.py'),'--project',str(project),
                         '--config',str(config)],check=True,capture_output=True,text=True)
     result=json.loads(run.stdout)

@@ -80,7 +80,7 @@ def check_outputs(plan, workspace, *, atol_uv=None):
     result = {}
     if path.is_file():
         try:
-            result = json.loads(path.read_text())
+            result = json.loads(path.read_text(encoding="utf-8-sig"))
         except json.JSONDecodeError as exc:
             problems.append('result.json is unreadable: ' + str(exc))
     else:
@@ -137,7 +137,7 @@ def check_outputs(plan, workspace, *, atol_uv=None):
     if not description.is_file():
         problems.append("derivative dataset_description.json is missing")
     else:
-        value = json.loads(description.read_text())
+        value = json.loads(description.read_text(encoding="utf-8-sig"))
         if value.get("DatasetType") != "derivative":
             problems.append('derivative DatasetType must be "derivative"')
         if not value.get("SourceDatasets"):
@@ -161,8 +161,8 @@ def main():
     parser.add_argument("--workspace", required=True, type=Path)
     parser.add_argument('--atol-uv', type=float, help='Explicit tolerance for internal result-to-evidence arithmetic, not reference accuracy')
     args = parser.parse_args()
-    report = check_outputs(json.loads(args.plan.read_text()), args.workspace, atol_uv=args.atol_uv)
-    (args.workspace / "SELF_CHECK.json").write_text(json.dumps(report, indent=2) + "\n")
+    report = check_outputs(json.loads(args.plan.read_text(encoding="utf-8-sig")), args.workspace, atol_uv=args.atol_uv)
+    (args.workspace / "SELF_CHECK.json").write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(report, indent=2))
     return 0 if report['passed'] else 1
 

@@ -36,14 +36,14 @@ def test_replay_saves_completed_steps_while_next_real_child_is_running(tmp_path)
     analysis = bundle / 'analysis'; analysis.mkdir(parents=True)
     data = tmp_path / 'data'; data.mkdir()
     (bundle / 'capture.json').write_text(json.dumps({
-        'python': replay.platform.python_version(), 'packages': {}, 'data': str(data)}))
+        'python': replay.platform.python_version(), 'packages': {}, 'data': str(data)}), encoding="utf-8")
     (analysis / 'run.json').write_text(json.dumps({'commands': [
         ['{python}', '-c', "from pathlib import Path; Path(r'{out}/first.txt').write_text('kept')"],
-        ['{python}', 'second.py', '{out}']]}))
+        ['{python}', 'second.py', '{out}']]}), encoding="utf-8")
     (analysis / 'second.py').write_text(
         "from pathlib import Path\nimport sys,time\no=Path(sys.argv[1])\n"
         "while not (o/'release').exists(): time.sleep(.02)\n"
-        "(o/'second.txt').write_text('done')\n")
+        "(o/'second.txt').write_text('done')\n", encoding="utf-8")
     out = tmp_path / 'out with spaces'
     with ThreadPoolExecutor(max_workers=1) as pool:
         future = pool.submit(replay.run, bundle, out)
@@ -51,22 +51,22 @@ def test_replay_saves_completed_steps_while_next_real_child_is_running(tmp_path)
             def second_running():
                 p = out / 'execution.json'
                 if not p.exists(): return False
-                value = json.loads(p.read_text())
+                value = json.loads(p.read_text(encoding="utf-8-sig"))
                 return value if len(value['steps']) == 2 and value['steps'][1]['status'] == 'running' else False
             record = wait_for(second_running)
             assert record['steps'][0]['status'] == 'completed'
             assert record['steps'][0]['exit_code'] == 0
             assert record['steps'][0]['finished_at']
-            assert (out / 'first.txt').read_text() == 'kept'
+            assert (out / 'first.txt').read_text(encoding="utf-8-sig") == 'kept'
             status = replay.inspect_run(out)
             assert status['recorded_status'] == 'running'
             assert status['coordinator_running'] and status['child_running']
             assert status['active_step']['argv'] == [sys.executable, 'second.py', str(out.resolve())]
         finally:
             out.mkdir(exist_ok=True)
-            (out / 'release').write_text('continue test child')
+            (out / 'release').write_text('continue test child', encoding="utf-8")
         assert future.result(timeout=10) == 0
-    final = json.loads((out / 'execution.json').read_text())
+    final = json.loads((out / 'execution.json').read_text(encoding="utf-8-sig"))
     assert all(s['status'] == 'completed' and s['exit_code'] == 0 for s in final['steps'])
 
 
@@ -76,7 +76,7 @@ def test_stale_record_distinguishes_dead_coordinator_from_live_child(tmp_path):
         try:
             record = {'status': 'running', 'hostname': socket.gethostname(),
                       'coordinator_pid': dead.pid, 'steps': [{'status': 'running', 'pid': child.pid}]}
-            (tmp_path / 'execution.json').write_text(json.dumps(record))
+            (tmp_path / 'execution.json').write_text(json.dumps(record), encoding="utf-8")
             before = (tmp_path / 'execution.json').read_bytes()
             status = replay.inspect_run(tmp_path)
             assert status['coordinator_running'] is False and status['child_running'] is True
@@ -87,7 +87,7 @@ def test_stale_record_distinguishes_dead_coordinator_from_live_child(tmp_path):
 
 def test_status_on_another_host_never_probes_local_pids(tmp_path, monkeypatch):
     (tmp_path / 'execution.json').write_text(json.dumps({
-        'status': 'running', 'hostname': 'another-host', 'coordinator_pid': os.getpid(), 'steps': []}))
+        'status': 'running', 'hostname': 'another-host', 'coordinator_pid': os.getpid(), 'steps': []}), encoding="utf-8")
     monkeypatch.setattr(replay, 'process_running', lambda pid: pytest.fail('wrong host PID query'))
     assert replay.inspect_run(tmp_path)['coordinator_running'] is None
 
@@ -95,7 +95,7 @@ def test_status_on_another_host_never_probes_local_pids(tmp_path, monkeypatch):
 def test_status_cli_does_not_execute_or_rewrite_any_step(tmp_path):
     path = tmp_path / 'execution.json'
     path.write_text(json.dumps({'status': 'failed', 'hostname': socket.gethostname(),
-                               'coordinator_pid': os.getpid(), 'steps': []}))
+                               'coordinator_pid': os.getpid(), 'steps': []}), encoding="utf-8")
     before = path.read_bytes()
     checked = subprocess.run([sys.executable, '-B', str(ROOT / 'tools/replay.py'),
                               'status', '--out', str(tmp_path)], capture_output=True, text=True)
@@ -159,10 +159,10 @@ def welch_plan():
 
 
 def test_continuous_runner_refuses_existing_output_before_processing(raw, tmp_path):
-    (tmp_path / 'result.json').write_text('first delivery')
+    (tmp_path / 'result.json').write_text('first delivery', encoding="utf-8")
     with pytest.raises(FileExistsError):
         run_plan(welch_plan(), raw, tmp_path)
-    assert (tmp_path / 'result.json').read_text() == 'first delivery'
+    assert (tmp_path / 'result.json').read_text(encoding="utf-8-sig") == 'first delivery'
 
 
 def test_later_branch_failure_preserves_first_band_and_marks_run_failed(raw, tmp_path):
@@ -174,14 +174,14 @@ def test_later_branch_failure_preserves_first_band_and_marks_run_failed(raw, tmp
         'required_results': {}, 'required_evidence': {}, 'numeric_tolerance': {}}
     with pytest.raises(ValueError, match='approved procedure'):
         run_plan(plan, raw, tmp_path)
-    assert json.loads((tmp_path / 'result.json').read_text())['status'] == 'incomplete'
+    assert json.loads((tmp_path / 'result.json').read_text(encoding="utf-8-sig"))['status'] == 'incomplete'
     phase = hilbert(original, axis=-1)
     phase = phase / np.abs(phase)
     expected = abs(phase @ phase.conj().T / phase.shape[-1])
     with np.load(tmp_path / 'analysis_evidence.npz', allow_pickle=False) as arrays:
         np.testing.assert_allclose(arrays['first_matrix'], expected)
         assert 'second_matrix' not in arrays.files
-    execution = json.loads((tmp_path / 'execution.json').read_text())
+    execution = json.loads((tmp_path / 'execution.json').read_text(encoding="utf-8-sig"))
     assert execution['status'] == 'failed'
     assert execution['steps'][-1]['name'] == 'compute:second'
     assert execution['error']['type'] == 'ValueError'
@@ -196,7 +196,7 @@ def test_saved_actual_source_and_plan_replay_in_new_directory(raw, tmp_path):
     with mne.io.read_raw_fif(source, preload=False, verbose=False) as loaded:
         result, check = run_plan(welch_plan(), loaded, first)
     assert check['passed']
-    record = json.loads((first / 'execution.json').read_text())
+    record = json.loads((first / 'execution.json').read_text(encoding="utf-8-sig"))
     assert record['status'] == 'completed'
     assert record['input_metadata']['channels'] == ['Cz', 'Pz']
     for relative in record['source_files']:
@@ -206,7 +206,7 @@ def test_saved_actual_source_and_plan_replay_in_new_directory(raw, tmp_path):
         '--plan', str(first / 'APPROVED_PLAN.json'), '--input', str(source), '--output', str(second)],
         capture_output=True, text=True)
     assert repeated.returncode == 0, repeated.stderr
-    assert json.loads((second / 'result.json').read_text()) == result
+    assert json.loads((second / 'result.json').read_text(encoding="utf-8-sig")) == result
     with np.load(first / 'analysis_evidence.npz') as a, np.load(second / 'analysis_evidence.npz') as b:
         assert a.files == b.files
         for key in a.files:

@@ -15,9 +15,9 @@ def start_derivative(root, *, pipeline, source_doi, source_version, name=None):
     (root / "dataset_description.json").write_text(json.dumps({
         "Name": name or pipeline, "BIDSVersion": "1.10.0", "DatasetType": "derivative",
         "GeneratedBy": [{"Name": pipeline}],
-        "SourceDatasets": [{"DOI": doi, "Version": str(source_version)}]}, indent=2) + "\n")
-    (root / ".bidsignore").write_text("*_erp.tsv\n*_erp.json\n")
-    (root / "README").write_text(f"Derivatives of {doi} (version {source_version}) written by {pipeline}.\n")
+        "SourceDatasets": [{"DOI": doi, "Version": str(source_version)}]}, indent=2) + "\n", encoding="utf-8")
+    (root / ".bidsignore").write_text("*_erp.tsv\n*_erp.json\n", encoding="utf-8")
+    (root / "README").write_text(f"Derivatives of {doi} (version {source_version}) written by {pipeline}.\n", encoding="utf-8")
     return root
 
 
@@ -31,11 +31,11 @@ def write_subject_erp(root, *, subject, task, contrast, times_s, values_uv):
     folder = Path(root) / subject / "eeg"
     folder.mkdir(parents=True, exist_ok=True)
     stem = f"{subject}_task-{task}_desc-{contrast}_erp"
-    with (folder / (stem + ".tsv")).open("w", newline="") as stream:
+    with (folder / (stem + ".tsv")).open("w", newline="", encoding="utf-8") as stream:
         writer = csv.writer(stream, delimiter="\t")
         writer.writerow(["time_s", "value_uv"])
         writer.writerows(zip(map(float, times_s), map(float, values_uv)))
     (folder / (stem + ".json")).write_text(json.dumps({
         "Description": f"{contrast} difference wave averaged over the planned ROI",
-        "time_s": {"Units": "s"}, "value_uv": {"Units": "uV"}}, indent=2) + "\n")
+        "time_s": {"Units": "s"}, "value_uv": {"Units": "uV"}}, indent=2) + "\n", encoding="utf-8")
     return folder / (stem + ".tsv")

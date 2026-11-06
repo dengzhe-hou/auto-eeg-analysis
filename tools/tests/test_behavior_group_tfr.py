@@ -10,8 +10,9 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import mne
 import numpy as np
-import pandas as pd
 import pytest
+
+pd = pytest.importorskip("pandas")
 from scipy.stats import t, ttest_rel
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -21,7 +22,7 @@ mne.set_log_level('ERROR')
 
 
 def example(skill, label, **context):
-    source = (ROOT/f'skills/{skill}/references/procedure.md').read_text()
+    source = (ROOT/f'skills/{skill}/references/procedure.md').read_text(encoding="utf-8-sig")
     code, = [textwrap.dedent(x) for x in re.findall(r'```python\n(.*?)```', source, re.S)
              if f'# AEA example: {label}\n' in x]
     ns = {'mne':mne, 'np':np, 'pd':pd, 'AEA_ROOT':str(ROOT), **context}

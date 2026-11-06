@@ -19,7 +19,7 @@ def load_run_settings(project_dir, *, config_path=None):
         path = Path.home() / ".claude/checkpoint.json"
     else:
         path = None
-    settings = json.loads(path.read_text()) if path is not None else {}
+    settings = json.loads(path.read_text(encoding="utf-8-sig")) if path is not None else {}
     auto = settings.get("auto_proceed", True)
     timeout = settings.get("timeout_seconds", 300)
     if not isinstance(auto, bool) or not isinstance(timeout, (int, float)) or timeout <= 0:

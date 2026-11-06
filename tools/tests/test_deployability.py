@@ -158,7 +158,8 @@ def test_no_unguarded_non_core_imports(path):
     }
     # Local project modules resolved via sys.path manipulation are not third-party.
     # Reusable numerical and figure checks live under tools/tests/support/.
-    local = {p.stem for p in (ROOT / "tools").rglob("*.py")}
+    local = {p.stem for folder in ("tools", "skills")
+             for p in (ROOT / folder).rglob("*.py")}
     offenders = sorted({
         m for _, m in _module_roots(tree)
         if m not in ALWAYS_OK and m not in guarded and m not in local and not m.startswith("_")

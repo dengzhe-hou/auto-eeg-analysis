@@ -78,7 +78,7 @@ def test_complete_packet_contains_selected_procedure_and_callable_source():
 def test_public_self_check_catches_wrong_channel_axis_and_variance(tmp_path):
     plan = {'analysis_channels': ['F3', 'F4'], 'required_results': {'status': '', 'explanation': ''},
             'required_evidence': {'channels': '', 'freqs': '', 'psd': '', 'processed': '', 'variance': ''}}
-    (tmp_path/'result.json').write_text(json.dumps({'status': 'computed', 'explanation': 'Measured approved data.'}))
+    (tmp_path/'result.json').write_text(json.dumps({'status': 'computed', 'explanation': 'Measured approved data.'}), encoding="utf-8")
     arrays = {'channels': np.array(['F3', 'F4']), 'freqs': np.arange(3.), 'psd': np.ones((2, 3)),
               'processed': np.array([[1., 2., 3.], [2., 4., 6.]]), 'variance': np.array([2/3, 8/3])}
     np.savez(tmp_path/'analysis_evidence.npz', **arrays)

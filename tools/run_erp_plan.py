@@ -89,9 +89,9 @@ def _participant(plan, metadata, subject, state_directory, operations):
         operations.append({'operation': 'resample_and_average_reference',
                            'sfreq_hz': raw.info['sfreq'], 'n_samples': int(raw.n_times),
                            'first_samp': int(raw.first_samp)})
-        with open(source['events']) as stream:
+        with open(source['events'], encoding="utf-8-sig") as stream:
             rows = list(csv.DictReader(stream, delimiter='\t'))
-        levels = json.loads(Path(metadata['events_sidecar']).read_text())['value']['Levels']
+        levels = json.loads(Path(metadata['events_sidecar']).read_text(encoding="utf-8-sig"))['value']['Levels']
         selected = erp_core_conditions(plan['dataset']['bids_task_label'], rows, levels)
         samples = np.rint(np.asarray([r['onset_s'] for r in selected]) * raw.info['sfreq']).astype(int)
         keep = (samples > 0) & (samples < raw.n_times)
@@ -132,7 +132,7 @@ def _group_statistics(plan, state, workspace, replay_rng=None):
     rng_path = workspace / 'cluster_rng_before.json'
     restore = Path(replay_rng) if replay_rng else rng_path if rng_path.exists() else None
     if restore:
-        saved = json.loads(restore.read_text())
+        saved = json.loads(restore.read_text(encoding="utf-8-sig"))
         np.random.set_state((saved['algorithm'], np.asarray(saved['keys'], np.uint32),
                              saved['position'], saved['has_gauss'], saved['cached_gaussian']))
     rng = np.random.get_state()
@@ -169,7 +169,7 @@ def run_plan(plan, dataset_root, workspace, *, atol_uv, resume=False, replay_rng
     if (workspace / 'FINAL_SUBMISSION.md').exists():
         raise FileExistsError('Completed delivery exists; preserve it and use a new workspace')
     if execution_path.exists():
-        execution = json.loads(execution_path.read_text())
+        execution = json.loads(execution_path.read_text(encoding="utf-8-sig"))
         if not resume:
             raise FileExistsError('Execution exists; inspect it and explicitly resume only a stopped run')
         if execution['plan'] != plan or execution['dataset_root'] != str(Path(dataset_root).resolve()):
@@ -215,7 +215,7 @@ def run_plan(plan, dataset_root, workspace, *, atol_uv, resume=False, replay_rng
         start('event_metadata')
         metadata = inspect_inputs(plan,dataset_root)
         inputs = workspace/'ERP_INPUTS.json'
-        if inputs.exists() and json.loads(inputs.read_text()) != metadata:
+        if inputs.exists() and json.loads(inputs.read_text(encoding="utf-8-sig")) != metadata:
             raise ValueError('Existing input check differs from actual current metadata')
         if not inputs.exists(): _write(inputs,metadata)
         done()
@@ -251,7 +251,7 @@ def run_plan(plan, dataset_root, workspace, *, atol_uv, resume=False, replay_rng
             state=load_group_state(states,plan=plan);result.update(state['result_fields']);evidence=state['evidence']
             group_file=workspace/'group_statistics.json'
             if group_file.exists():
-                measured=json.loads(group_file.read_text())
+                measured=json.loads(group_file.read_text(encoding="utf-8-sig"))
             else:
                 measured=_group_statistics(plan,state,workspace,replay_rng);_write(group_file,measured)
             result.update({k:v for k,v in measured.items() if k!='actual_cluster_arguments'})
@@ -285,7 +285,7 @@ def run_plan(plan, dataset_root, workspace, *, atol_uv, resume=False, replay_rng
         if not check['passed']:raise ValueError('Final delivery check failed; inspect the retained numbered check')
         done();execution.update(status='completed',finished_at=now());execution['attempts'][-1]['finished_at']=now()
         _write(execution_path,execution)
-        return json.loads((workspace/'result.json').read_text()),check
+        return json.loads((workspace/'result.json').read_text(encoding="utf-8-sig")),check
     except Exception as exc:
         execution.update(status='failed',error={'type':type(exc).__name__,'message':str(exc)},finished_at=now())
         if execution['steps']:execution['steps'][-1].update(status='failed',error=execution['error'])
@@ -302,7 +302,7 @@ def main():
     parser.add_argument('--resume',action='store_true',help='Resume saved stages only after confirming the prior process stopped')
     parser.add_argument('--replay-rng',type=Path,help='Use the actual saved pre-cluster NumPy state for a new-directory replay')
     args=parser.parse_args()
-    result,check=run_plan(json.loads(args.plan.read_text()),args.dataset_root,args.workspace,
+    result,check=run_plan(json.loads(args.plan.read_text(encoding="utf-8-sig")),args.dataset_root,args.workspace,
                           atol_uv=args.atol_uv,resume=args.resume,replay_rng=args.replay_rng)
     print(json.dumps({'result':result,'delivery_check_passed':check['passed'],
                       'final_submission':str(args.workspace/'FINAL_SUBMISSION.md')},indent=2))

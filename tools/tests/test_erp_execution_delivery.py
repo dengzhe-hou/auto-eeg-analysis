@@ -62,12 +62,12 @@ def dataset(tmp_path, plan, task):
         codes = [111,112,121,122,211,212,221,222]
         levels = {str(c): 'Response - documented ERP CORE response' for c in codes}
     root = tmp_path / 'bids';root.mkdir()
-    (root/'CHANGES').write_text('Revision history for ERP CORE\n\nversion 1.0 - 20 Jul 2020\n')
-    (root/f'task-{task}_events.json').write_text(json.dumps({'value':{'Levels':levels}}))
+    (root/'CHANGES').write_text('Revision history for ERP CORE\n\nversion 1.0 - 20 Jul 2020\n', encoding="utf-8")
+    (root/f'task-{task}_events.json').write_text(json.dumps({'value':{'Levels':levels}}), encoding="utf-8")
     for subject in plan['subjects']:
         d = root/subject/f'ses-{task}'/'eeg';d.mkdir(parents=True)
-        (d/f'{subject}_ses-{task}_task-{task}_eeg.set').write_text('metadata-only fixture, not loaded as EEG')
-        with (d/f'{subject}_ses-{task}_task-{task}_events.tsv').open('w',newline='') as f:
+        (d/f'{subject}_ses-{task}_task-{task}_eeg.set').write_text('metadata-only fixture, not loaded as EEG', encoding="utf-8")
+        with (d/f'{subject}_ses-{task}_task-{task}_events.tsv').open('w',newline='', encoding="utf-8") as f:
             w=csv.DictWriter(f,fieldnames=['trial_type','value','onset'],delimiter='\t');w.writeheader()
             for i,c in enumerate(codes):w.writerow({'trial_type':'response' if task=='ERN' else 'stimulus','value':c,'onset':.1*(i+1)})
     return root
@@ -85,8 +85,8 @@ def test_metadata_executes_documented_condition_checks_and_reads_version(tmp_pat
 
 def test_metadata_names_actual_missing_subject_and_rejects_changed_mapping(tmp_path, plan):
     root=dataset(tmp_path,plan,'P3')
-    sidecar=root/'task-P3_events.json';value=json.loads(sidecar.read_text())
-    value['value']['Levels']['11']='unknown code';sidecar.write_text(json.dumps(value))
+    sidecar=root/'task-P3_events.json';value=json.loads(sidecar.read_text(encoding="utf-8-sig"))
+    value['value']['Levels']['11']='unknown code';sidecar.write_text(json.dumps(value), encoding="utf-8")
     with pytest.raises(ValueError,match='sidecar does not confirm row 0, code 11'):
         inspect_inputs(plan,root)
     plan['subjects']=['sub-absent']
@@ -137,7 +137,7 @@ def deliver(workspace, plan, epochs):
             **{k:measured[k] for k in ('roi_amplitude_uv','n_trials_plus','n_trials_minus')}}
     save_erp_outputs(workspace,result=result,evidence={k:measured[k] for k in ('times_s','roi_difference_uv','amplitude_unit','sfreq_hz')})
     d=workspace/plan['derivatives']['root'];(d/'sub-001/eeg').mkdir(parents=True)
-    (d/'dataset_description.json').write_text(json.dumps({'DatasetType':'derivative','SourceDatasets':[{'DOI':'synthetic'}]}))
+    (d/'dataset_description.json').write_text(json.dumps({'DatasetType':'derivative','SourceDatasets':[{'DOI':'synthetic'}]}), encoding="utf-8")
     np.savetxt(d/'sub-001/eeg/erp.tsv',np.column_stack([measured['times_s'],measured['roi_difference_uv']]),delimiter='\t')
     return result
 
@@ -148,7 +148,7 @@ def test_submission_preserves_failed_check_then_uses_only_actual_result(tmp_path
     original_check=(tmp_path/'delivery-checks/check-001.json').read_bytes()
     result=deliver(tmp_path,plan,epochs)
     assert finalize_delivery(plan,tmp_path,atol_uv=1e-9)['passed']
-    assert json.loads((tmp_path/'FINAL_SUBMISSION.md').read_text())==result
+    assert json.loads((tmp_path/'FINAL_SUBMISSION.md').read_text(encoding="utf-8-sig"))==result
     assert (tmp_path/'delivery-checks/check-001.json').read_bytes()==original_check
     assert (tmp_path/'delivery-checks/check-002.json').is_file()
     with pytest.raises(FileExistsError):finalize_delivery(plan,tmp_path,atol_uv=1e-9)
@@ -157,15 +157,15 @@ def test_submission_preserves_failed_check_then_uses_only_actual_result(tmp_path
 def test_submission_rejects_revision_as_dataset_version(tmp_path, plan, epochs):
     root=dataset(tmp_path,plan,'P3');workspace=tmp_path/'run'
     result=deliver(workspace,plan,epochs)
-    (workspace/'ERP_INPUTS.json').write_text(json.dumps(inspect_inputs(plan,root)))
-    result['dataset_version']='Revision';(workspace/'result.json').write_text(json.dumps(result))
+    (workspace/'ERP_INPUTS.json').write_text(json.dumps(inspect_inputs(plan,root)), encoding="utf-8")
+    result['dataset_version']='Revision';(workspace/'result.json').write_text(json.dumps(result), encoding="utf-8")
     report=finalize_delivery(plan,workspace,atol_uv=1e-9)
     assert not report['passed'] and any('CHANGES version' in s for s in report['problems'])
     assert not (workspace/'FINAL_SUBMISSION.md').exists()
 
 
 def test_submission_cli_returns_failure_for_an_early_incomplete_delivery(tmp_path, plan):
-    p=tmp_path/'plan.json';p.write_text(json.dumps(plan))
+    p=tmp_path/'plan.json';p.write_text(json.dumps(plan), encoding="utf-8")
     run=subprocess.run([sys.executable,'-B',str(ROOT/'tools/erp_execution.py'),'finalize','--plan',str(p),'--workspace',str(tmp_path),'--atol-uv','1e-9'],capture_output=True,text=True)
     assert run.returncode==1,run.stderr
     assert 'result.json is missing' in json.loads(run.stdout)['problems']
@@ -175,11 +175,11 @@ def test_submission_cli_returns_failure_for_an_early_incomplete_delivery(tmp_pat
 def test_checker_rejects_ineligible_without_retained_counts_and_empty_derivative_dirs(tmp_path, plan, epochs):
     result=deliver(tmp_path,plan,epochs)
     result.update(status='ineligible',n_trials_plus=None,n_trials_minus=None)
-    (tmp_path/'result.json').write_text(json.dumps(result))
+    (tmp_path/'result.json').write_text(json.dumps(result), encoding="utf-8")
     assert any('actual retained counts' in x for x in check_outputs(plan,tmp_path)['problems'])
-    result.update(n_trials_plus=2,n_trials_minus=2);(tmp_path/'result.json').write_text(json.dumps(result))
+    result.update(n_trials_plus=2,n_trials_minus=2);(tmp_path/'result.json').write_text(json.dumps(result), encoding="utf-8")
     assert any('contradicts' in x for x in check_outputs(plan,tmp_path)['problems'])
-    result['status']='computed';(tmp_path/'result.json').write_text(json.dumps(result))
+    result['status']='computed';(tmp_path/'result.json').write_text(json.dumps(result), encoding="utf-8")
     (tmp_path/plan['derivatives']['root']/'sub-001/eeg/erp.tsv').unlink()
     assert any('no derivative files' in x for x in check_outputs(plan,tmp_path)['problems'])
 

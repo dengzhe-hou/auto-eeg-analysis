@@ -47,14 +47,14 @@ def plan():
 
 def synthetic_inputs(tmp_path, plan, monkeypatch):
     root=tmp_path/'input';root.mkdir()
-    (root/'CHANGES').write_text('Revision history\nversion 1.0 - 20 Jul 2020\n')
+    (root/'CHANGES').write_text('Revision history\nversion 1.0 - 20 Jul 2020\n', encoding="utf-8")
     (root/'task-P3_events.json').write_text(json.dumps({'value':{'Levels':{
         '11':'Stimulus - block target A, trial stimulus A',
-        '12':'Stimulus - block target A, trial stimulus B'}}}))
+        '12':'Stimulus - block target A, trial stimulus B'}}}), encoding="utf-8")
     for subject in plan['subjects']:
         folder=root/subject/'ses-P3/eeg';folder.mkdir(parents=True)
-        (folder/f'{subject}_task-P3_eeg.set').write_text('Synthetic read_raw fixture; not a real SET file')
-        with (folder/f'{subject}_task-P3_events.tsv').open('w',newline='') as stream:
+        (folder/f'{subject}_task-P3_eeg.set').write_text('Synthetic read_raw fixture; not a real SET file', encoding="utf-8")
+        with (folder/f'{subject}_task-P3_events.tsv').open('w',newline='', encoding="utf-8") as stream:
             writer=csv.writer(stream,delimiter='\t');writer.writerow(['trial_type','value','onset'])
             writer.writerows([['stimulus',11,5],['stimulus',12,15],['stimulus',11,25],['stimulus',12,35]])
     channels='Fp1 Fp2 F7 F3 Fz F4 F8 FC5 FC1 FCz FC2 FC6 T7 C3 Cz C4 T8 CP5 CP1 CPz CP2 CP6 P7 P3 Pz P4 P8 PO7 PO8 Oz'.split()
@@ -79,9 +79,9 @@ def test_complete_entry_executes_order_and_delivers_real_named_roi(tmp_path,plan
     state=entry.load_group_state(out/'participant-state',plan=plan)
     assert result['roi_amplitude_uv']==pytest.approx(state['result_fields']['group_mean_uv'])
     assert result['roi_amplitude_uv']>1 and abs(state['differences_uv'].mean())<1e-12
-    assert json.loads((out/'FINAL_SUBMISSION.md').read_text())==result
+    assert json.loads((out/'FINAL_SUBMISSION.md').read_text(encoding="utf-8-sig"))==result
     np.testing.assert_array_equal(raw.get_data(),original)
-    operations=json.loads((out/'execution.json').read_text())['steps'][1]['operations']
+    operations=json.loads((out/'execution.json').read_text(encoding="utf-8-sig"))['steps'][1]['operations']
     assert [s['operation'] for s in operations]==['read','drop_EOG_and_set_montage','filter','resample_and_average_reference','epoch']
     assert operations[2]['actual_arguments']['l_trans_bandwidth']==.1
     assert operations[-1]['event_rows_retained_for_epoching']==[0,1,2,3]
@@ -102,13 +102,13 @@ def test_resume_reuses_each_saved_participant_after_statistics_error(tmp_path,pl
     monkeypatch.setattr(entry,'_group_statistics',fail)
     with pytest.raises(NameError):entry.run_plan(plan,root,out,atol_uv=1e-9)
     first=[(out/'participant-state'/f'{s}.npz').read_bytes() for s in plan['subjects']]
-    assert len(calls)==2 and json.loads((out/'execution.json').read_text())['status']=='failed'
+    assert len(calls)==2 and json.loads((out/'execution.json').read_text(encoding="utf-8-sig"))['status']=='failed'
     monkeypatch.setattr(entry,'_group_statistics',lambda *args:{'ttest_t':2.,'ttest_p':.1,'ttest_significant':False,
                                                             'cluster_min_p':1.,'cluster_significant':False})
     result,check=entry.run_plan(plan,root,out,atol_uv=1e-9,resume=True)
     assert check['passed'] and result['n_subjects']==2 and len(calls)==2
     assert first==[(out/'participant-state'/f'{s}.npz').read_bytes() for s in plan['subjects']]
-    attempts=json.loads((out/'execution.json').read_text())['attempts']
+    attempts=json.loads((out/'execution.json').read_text(encoding="utf-8-sig"))['attempts']
     assert len(attempts)==2 and attempts[0]['error']['type']=='NameError'
 
 

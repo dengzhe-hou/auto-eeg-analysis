@@ -8,6 +8,8 @@ import mne
 import numpy as np
 import pytest
 from scipy.stats import ttest_1samp
+pytest.importorskip("sklearn")
+
 from sklearn.dummy import DummyClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import GroupKFold, StratifiedKFold
@@ -22,7 +24,7 @@ mne.set_log_level('ERROR')
 
 
 def example(skill, label, **context):
-    source = (ROOT/f'skills/{skill}/references/procedure.md').read_text()
+    source = (ROOT/f'skills/{skill}/references/procedure.md').read_text(encoding="utf-8-sig")
     code, = [textwrap.dedent(x) for x in re.findall(r'```python\n(.*?)```', source, re.S)
              if f'# AEA example: {label}\n' in x]
     ns = dict(mne=mne, np=np, AEA_ROOT=str(ROOT), validation=validation,
@@ -203,6 +205,7 @@ def test_other_decoding_routes_reuse_actual_grouped_splits(label):
 
 
 def microstate_raw(seconds=60.):
+    pytest.importorskip("pycrostates")
     times=np.arange(round(250*seconds))/250
     amplitudes=1.2+.6*np.sin(2*np.pi*.3*times)
     data=1e-6*amplitudes*np.sin(2*np.pi*18*times)[None,:]*np.array([[3.],[-2.],[-1.]])
@@ -233,6 +236,7 @@ def test_microstate_preparation_applies_real_cap_and_preserves_input():
 
 @pytest.mark.parametrize('reference',['continuous','peaks'])
 def test_gfp_threshold_uses_the_explicit_reference_distribution(reference):
+    pytest.importorskip("pycrostates")
     from pycrostates.preprocessing import extract_gfp_peaks
     prepared,peaks,audit=preparation['prepare_peaks'](microstate_raw(4),
         **peak_policy(gfp_reject_sd=.5,gfp_reference=reference,max_peaks=None))
@@ -245,6 +249,7 @@ def test_gfp_threshold_uses_the_explicit_reference_distribution(reference):
 
 
 def physical_peak_records():
+    pytest.importorskip("pycrostates")
     from pycrostates.io import ChData
     info=microstate_raw(.1).info
     values=np.array([[3.,6.],[-2.,-4.],[-1.,-2.]])*1e-6
@@ -266,6 +271,7 @@ def test_group_map_pooling_restores_physical_maps_with_different_channel_orders(
 
 @pytest.mark.parametrize('defect',['channel_set','position','unapplied_cap'])
 def test_pooling_refuses_mismatched_metadata_or_unapplied_preparation(defect):
+    pytest.importorskip("pycrostates")
     from pycrostates.io import ChData
     records=physical_peak_records()
     if defect=='channel_set':
@@ -292,6 +298,7 @@ def test_individual_and_group_documented_preparation_use_same_selection(tmp_path
 
 
 def test_documented_group_model_fits_and_reopens_native_fif(tmp_path):
+    pytest.importorskip("pycrostates")
     from pycrostates.io import read_cluster
     _,peaks,audit=preparation['prepare_peaks'](microstate_raw(4),**peak_policy(max_peaks=80))
     out=example('eeg-microstate','microstate-group-fitting',group_peaks=peaks,

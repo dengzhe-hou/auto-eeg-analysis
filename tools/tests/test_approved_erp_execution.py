@@ -45,9 +45,9 @@ def deliver(path, measured):
     save_erp_outputs(path, result=result, evidence=evidence)
     derivative = path / 'derivatives/erp-analysis'
     (derivative / 'sub-test').mkdir(parents=True)
-    (derivative / 'sub-test/result.tsv').write_text('actual synthetic fixture\n')
+    (derivative / 'sub-test/result.tsv').write_text('actual synthetic fixture\n', encoding="utf-8")
     (derivative / 'dataset_description.json').write_text(json.dumps(
-        {'DatasetType': 'derivative', 'SourceDatasets': [{'DOI': 'synthetic-test'}]}))
+        {'DatasetType': 'derivative', 'SourceDatasets': [{'DOI': 'synthetic-test'}]}), encoding="utf-8")
     return result, evidence
 
 
@@ -127,7 +127,7 @@ def test_output_check_catches_observed_and_unit_defects(tmp_path, epochs, plan, 
         evidence['amplitude_unit'] = np.asarray('V')
     elif defect == 'grid':
         evidence['times_s'] = evidence['times_s'] + .001
-    (tmp_path / 'result.json').write_text(json.dumps(result))
+    (tmp_path / 'result.json').write_text(json.dumps(result), encoding="utf-8")
     np.savez(tmp_path / 'analysis_evidence.npz', **evidence)
     report = check_outputs(plan, tmp_path, atol_uv=1e-9)
     assert not report['passed']
@@ -143,15 +143,15 @@ def test_coverage_reports_arithmetic_not_run_without_tolerance(tmp_path, epochs,
 def test_checker_cli_returns_failure_and_preserves_artifacts(tmp_path, epochs, plan):
     result, _ = deliver(tmp_path, mean_roi_amplitude(epochs, plus='B', minus='A', roi=['Cz', 'Pz'], window_s=[.1, .3]))
     result['roi_amplitude_uv'] = None
-    (tmp_path / 'result.json').write_text(json.dumps(result))
+    (tmp_path / 'result.json').write_text(json.dumps(result), encoding="utf-8")
     before = (tmp_path / 'result.json').read_bytes()
-    p = tmp_path / 'PLAN.json';p.write_text(json.dumps(plan))
+    p = tmp_path / 'PLAN.json';p.write_text(json.dumps(plan), encoding="utf-8")
     run = subprocess.run([sys.executable, '-B', str(ROOT / 'tools/check_erp_outputs.py'),
                           '--plan', str(p), '--workspace', str(tmp_path), '--atol-uv', '1e-9'],
                          capture_output=True, text=True)
     assert run.returncode == 1, run.stderr
     assert (tmp_path / 'result.json').read_bytes() == before
-    assert not json.loads((tmp_path / 'SELF_CHECK.json').read_text())['passed']
+    assert not json.loads((tmp_path / 'SELF_CHECK.json').read_text(encoding="utf-8-sig"))['passed']
 
 
 def test_packet_selection_uses_only_public_task_and_preserves_full_delivery(plan):
@@ -184,9 +184,9 @@ def test_group_result_and_participant_arithmetic(tmp_path, epochs, plan):
                 'amplitude_unit': np.asarray('uV'), 'sfreq_hz': np.asarray(100.)}
     save_erp_outputs(tmp_path, result=result, evidence=evidence)
     derivative = tmp_path / 'derivatives/erp-analysis';derivative.mkdir(parents=True)
-    (derivative / 'dataset_description.json').write_text(json.dumps({'DatasetType': 'derivative', 'SourceDatasets': [{}]}))
+    (derivative / 'dataset_description.json').write_text(json.dumps({'DatasetType': 'derivative', 'SourceDatasets': [{}]}), encoding="utf-8")
     for subject in ['s1', 's2']:
-        (derivative / subject).mkdir();(derivative / subject / 'wave.tsv').write_text('fixture')
+        (derivative / subject).mkdir();(derivative / subject / 'wave.tsv').write_text('fixture', encoding="utf-8")
     assert check_outputs(plan, tmp_path, atol_uv=1e-9)['passed']
     evidence['subjects'] = np.asarray(['s2', 's1'])
     np.savez(tmp_path / 'analysis_evidence.npz', **evidence)

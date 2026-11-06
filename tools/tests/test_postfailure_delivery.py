@@ -63,7 +63,7 @@ def test_runner_preserves_processing_order_and_exports_actual_interval(raw, tmp_
     assert steps[1]["input_n_samples"] == 1200 and steps[1]["output_n_samples"] == 600
     assert steps[-1]["output_time_origin_s"] == 2.
     assert checked["coverage"]["approved_processing_recomputed"]
-    assert json.loads((tmp_path / "FINAL_SUBMISSION.md").read_text()) == final
+    assert json.loads((tmp_path / "FINAL_SUBMISSION.md").read_text(encoding="utf-8-sig")) == final
     np.testing.assert_array_equal(raw.get_data(), original)
 
 

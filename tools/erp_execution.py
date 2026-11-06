@@ -82,8 +82,8 @@ def inspect_inputs(plan, dataset_root):
     if not supports_input_check(plan):
         raise ValueError('This metadata reader supports the four documented ERP CORE contrasts only')
     sidecar = root / f'task-{task}_events.json'
-    levels = json.loads(sidecar.read_text())['value']['Levels']
-    changes = (root / 'CHANGES').read_text()
+    levels = json.loads(sidecar.read_text(encoding="utf-8-sig"))['value']['Levels']
+    changes = (root / 'CHANGES').read_text(encoding="utf-8-sig")
     version = re.search(r'(?im)^\s*version\s+(\d+(?:\.\d+)+)\b', changes)
     if version is None:
         raise ValueError('No dataset version found in an actual CHANGES version line')
@@ -93,7 +93,7 @@ def inspect_inputs(plan, dataset_root):
         if len(matches) != 1:
             raise ValueError(f'Expected one {task} recording for {subject}, found {len(matches)}')
         events = matches[0].with_name(matches[0].name.replace('_eeg.set', '_events.tsv'))
-        with events.open() as stream:
+        with events.open(encoding="utf-8-sig") as stream:
             classified = erp_core_conditions(task, list(csv.DictReader(stream, delimiter='\t')), levels)
         subjects[subject] = {'recording': str(matches[0]), 'events': str(events),
                              'raw_n_plus': sum(x['condition'] == 'plus' for x in classified),
@@ -211,8 +211,8 @@ def finalize_delivery(plan, workspace, *, atol_uv):
         if not preflight.is_file():
             report['problems'].append('Run ERP CORE preflight and save ERP_INPUTS.json before delivery')
         elif (workspace / 'result.json').is_file():
-            metadata = json.loads(preflight.read_text())
-            result = json.loads((workspace / 'result.json').read_text())
+            metadata = json.loads(preflight.read_text(encoding="utf-8-sig"))
+            result = json.loads((workspace / 'result.json').read_text(encoding="utf-8-sig"))
             if metadata['plan'] != plan:
                 report['problems'].append('Input check belongs to a different approved plan')
             if result.get('dataset_version') != metadata['dataset_version']:
@@ -224,7 +224,7 @@ def finalize_delivery(plan, workspace, *, atol_uv):
     with record.open('x', encoding='utf-8') as stream:
         stream.write(json.dumps(report, indent=2) + '\n')
     if report['passed']:
-        result = json.loads((workspace / 'result.json').read_text())
+        result = json.loads((workspace / 'result.json').read_text(encoding="utf-8-sig"))
         with final.open('x', encoding='utf-8') as stream:
             stream.write(json.dumps(result, indent=2, allow_nan=False) + '\n')
     return report
@@ -242,7 +242,7 @@ def main():
     finish.add_argument('--workspace', type=Path, required=True)
     finish.add_argument('--atol-uv', type=float, required=True)
     args = parser.parse_args()
-    plan = json.loads(args.plan.read_text())
+    plan = json.loads(args.plan.read_text(encoding="utf-8-sig"))
     if args.command == 'preflight':
         report = inspect_inputs(plan, args.dataset_root)
         args.workspace.mkdir(parents=True, exist_ok=True)

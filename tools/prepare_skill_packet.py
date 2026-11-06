@@ -35,7 +35,7 @@ def main():
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--receipt", type=Path, required=True)
     args = parser.parse_args()
-    packet, receipt = prepare_packet(args.root, json.loads(args.selection_file.read_text()))
+    packet, receipt = prepare_packet(args.root, json.loads(args.selection_file.read_text(encoding="utf-8-sig")))
     args.output.write_text(packet, encoding="utf-8")
     args.receipt.write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf-8")
 
