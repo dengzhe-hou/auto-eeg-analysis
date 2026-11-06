@@ -1,18 +1,41 @@
 ## Why this skill is non-optional
 
-The same model that produced an analysis cannot impartially grade it — there's a documented confirmation bias even when the reviewer is a fresh context. This skill runs an **external LLM** (Codex CLI, gpt-6-astra, max effort by default) with **no prior session context** to re-check:
+The same model that produced an analysis cannot impartially grade it — there's a documented confirmation bias even when the reviewer is a fresh context. This skill runs an **external LLM** through the approved configured connection with **no prior session context** to re-check:
 
 1. Every numeric claim in `report-stage/REPORT.md` traces to a value in `stats-stage/*.json`.
-2. `ANALYSIS_PLAN.md` was frozen *before* `stats-stage/` files were written (mtime check).
+2. The run used the approved plan, supported by the existing approved snapshot and approval/execution records. Missing evidence is reported as unverified, not inferred from file timestamps.
 3. No claim's reported direction silently flipped between plan and findings.
 4. Reported p-values come with their permutation count, seed, threshold, and tail.
 5. Figures don't use `jet`, asymmetric color limits on diff plots, or de-saturation that hides significance.
 6. Exploratory observations are clearly labeled in the report.
 7. Backend and software version information are disclosed.
 
+## Continuous delivery checks
+
+Use the same approved ordered operations for execution and source-data checks.
+The public `check_outputs` checker recomputes only the quantities named in its
+`coverage`. For GFP/PSD require the corresponding processing checks when full
+verification is requested; for Hilbert matrices inspect the actual band labels
+in `hilbert_matrices_recomputed`. An empty list or
+`approved_processing_recomputed=false` records absent coverage, even if the
+structural `passed` result is true. These shared-helper checks are not independent
+numerical certification. Do not turn a missing key or a tool error into a claimed
+scientific limitation, or omit a required check because another check passed.
+
+Check the actual final report JSON using `--report`, including its explanation,
+and use real selected channel names and the requested saved interval. Recompute
+band summaries only under explicit absolute/relative and aggregation choices;
+do not reinterpret an ambiguous plan to improve a score.
+
+For semantic/image review use the
+[complete context builder](../../../tools/prepare_analysis_review.py). It retains
+the saved explanation, final JSON and complete final message, while numeric
+values remain the direct checker's responsibility. Retain disputed verdicts and
+their actual context; preparing corrected context does not regrade a frozen run.
+
 ## Constants
 
-- **REVIEWER_BACKEND = `codex-cli`** (a fresh `codex exec` process, gpt-6-astra, max effort, read-only sandbox). Use `codex` only for an already configured Codex MCP connection, or `llm-chat` for a configured OpenAI-compatible proxy. Record the actual transport; do not silently substitute a model.
+- **REVIEWER_BACKEND** — read the already approved connection/model from the resolved run settings or existing explicit session authorization; record it before launch. Supported transports are `codex-cli`, existing `codex` MCP and configured `llm-chat`. No selected target or missing access means an incomplete review, not permission to substitute another model. See [run settings](../../../docs/RUN_SETTINGS.md).
 - **MAX_REVIEW_ROUNDS = `2`** — initial + one rebuttal/refinement.
 - **VERDICT_VALUES = `pass | pass-with-caveats | revise | fail`** — per claim AND global.
 - **OUTPUT_DIR = `audit-stage/`** — Create if missing.
@@ -24,6 +47,7 @@ Collect all audit-relevant files into a structured bundle:
 ```
 audit_bundle = {
     "plan": ANALYSIS_PLAN.md (full text),
+    "approval_sources": existing approved snapshot and approval/run records (if retained),
     "stats": {claim_id: stats-stage/<claim_id>_cluster_perm.json for each},
     "findings": FINDINGS.md,
     "report": report-stage/REPORT.md,
@@ -34,52 +58,59 @@ audit_bundle = {
 }
 ```
 
-## Phase B — mtime verification (MACHINE CHECK, not LLM)
+## Phase B — Plan provenance and consistency (direct check)
 
-This is a deterministic check. Do NOT delegate to the LLM reviewer.
+Compare the run's plan to the already retained approved snapshot and inspect
+the actual approval and run-start records. A directory name, a drafted plan,
+or an earlier filesystem timestamp is not an approval. Do not create evidence
+retroactively just to pass this check.
+
+Use [the direct comparison tool](../../../tools/check_plan_provenance.py) with
+the existing evidence paths and timestamps extracted from those records:
 
 ```bash
-# Get ANALYSIS_PLAN mtime
-plan_mtime=$(stat -c %Y ANALYSIS_PLAN.md)
-
-# Check every stats-stage JSON
-for f in stats-stage/*_cluster_perm.json; do
-    file_mtime=$(stat -c %Y "$f")
-    if [ "$plan_mtime" -gt "$file_mtime" ]; then
-        echo "CRITICAL: ANALYSIS_PLAN.md was modified AFTER $f was written."
-        echo "  Plan mtime: $(stat -c %y ANALYSIS_PLAN.md)"
-        echo "  File mtime: $(stat -c %y $f)"
-        echo "  This suggests post-hoc plan editing. Flagging as FAIL."
-    fi
-done
-
-# Also check ERP measures
-for f in erp-stage/component_measures.csv; do
-    file_mtime=$(stat -c %Y "$f")
-    if [ "$plan_mtime" -gt "$file_mtime" ]; then
-        echo "WARNING: ANALYSIS_PLAN.md was modified after ERP measurements."
-    fi
-done
+python tools/check_plan_provenance.py --plan <run-dir>/ANALYSIS_PLAN.md --approved-plan <existing-approved-snapshot> --approval-record <existing-approval-record> --analysis-record <existing-run-record> --approved-at <recorded-approval-time-with-timezone> --analysis-started-at <recorded-start-time-with-timezone> --out <run-dir>/audit-stage/PLAN_PROVENANCE.json
 ```
 
-Write result to `audit-stage/MTIME_CHECK.json`:
-```json
-{
-  "plan_mtime": "2026-05-20T14:32:00",
-  "stats_files": [
-    {"file": "C1_cluster_perm.json", "mtime": "2026-05-20T15:01:00", "plan_before_stats": true}
-  ],
-  "mtime_verdict": "pass"
-}
-```
+The tool compares contents directly and checks the supplied time ordering; it
+does not authenticate records or determine whether a user actually approved
+their contents. Retain and inspect those sources. Optional `--outputs` paths
+add mtime observations, using Python on Linux, Windows and macOS. There is no
+GNU `stat` requirement and mtime does not determine the status.
 
-If any file fails the mtime check, set `mtime_verdict: "fail"` and include it as a critical finding in the audit. **Do not proceed to the LLM review if the mtime check fails** — surface immediately to the user.
+- `consistent`: supplied snapshot matches and recorded approval precedes the
+  analysis, with the evidence paths retained. Report the limited scope of this
+  consistency check alongside the actual approval evidence.
+- `unverified`: an approved snapshot, approval/run record or recorded time is
+  missing. Omit absent arguments rather than inventing values. Continue the
+  independent numerical/report checks; do not describe plan freezing as verified.
+- `needs_review`: the supplied plan differs or the recorded approval is later.
+  Inspect the actual content/history. A discrepancy needs explanation, not an
+  automatic misconduct finding. A genuine unapproved scientific change remains
+  a substantive finding once established.
 
-## Phase C — Hand off to Codex MCP reviewer
+Copying an unchanged plan can update its mtime. Conversely, an early mtime does
+not prove approval. Include `PLAN_PROVENANCE.json` and the sources in the review
+bundle; never stop numerical checks solely because of mtime order.
+
+## Phase C — Hand off to the configured reviewer
 
 ### Structured prompt template
 
-Send the following structured prompt to the Codex MCP reviewer. The reviewer has NO prior context.
+Send the following structured prompt through the approved reviewer connection.
+The reviewer has no prior analysis-session context. Resolve `reviewer` from the
+saved run controls and check only the selected transport before launching:
+
+```python
+from pathlib import Path
+import runpy
+select_reviewer = runpy.run_path(str(Path(AEA_ROOT) / "tools/run_settings.py"))["select_reviewer"]
+reviewer = select_reviewer(run_controls, available_transports=detected_transports)
+```
+
+`detected_transports` contains connections the client actually found. Availability
+alone does not establish authorization, authentication or successful review;
+retain the configured model and actual execution/response checks below.
 
 ```
 You are an independent EEG methods reviewer. You have been given the analysis plan, statistical results, findings, report text, and figure captions from an EEG study. Your job is to verify that every claim is evidence-supported and that the methodology is sound.
@@ -87,6 +118,11 @@ You are an independent EEG methods reviewer. You have been given the analysis pl
 ## Your audit checklist
 
 For EACH claim row in the ANALYSIS_PLAN:
+
+Read the direct plan-consistency result and its source records. Record absent
+approval evidence as unverified. Do not infer approval or post-hoc plan editing
+from mtime, and do not treat the comparison tool as authentication. Numerical
+matches must be checked directly; use review for interpretation and context.
 
 ### 1. Numeric traceability
 - Does the p-value in FINDINGS/REPORT match the p-value in stats-stage JSON?
@@ -207,10 +243,13 @@ Return a JSON object:
 
 ### Invocation pattern
 
-**Default: Codex CLI.** Install and sign in to Codex CLI using the
+**Selected Codex CLI route.** Install and sign in to Codex CLI using the
 [reviewer setup in Getting started](../../../docs/GETTING_STARTED.md#configure-the-reviewer).
 This route works from either a Codex or Claude Code analysis session; it does not
-require an MCP server.
+require an MCP server. Use this route when it is the approved selection. The
+command below illustrates the previously documented model/effort; substitute
+the actual approved settings, not a newly chosen model. The run-settings loader
+does not establish access or execute this command.
 
 1. Save the complete Phase C reviewer prompt and Phase A audit bundle to
    `<project-dir>/audit-stage/REVIEW_PROMPT.md`. Include the Phase B machine-check
@@ -244,8 +283,8 @@ mcp__codex__codex(prompt=structured_prompt + audit_bundle_text)
 mcp__codex__codex-reply(thread_id=...)
 ```
 
-The CLI route above is the setup path for a fresh installation. An existing
-`llm-chat` route requires its own configured endpoint and credentials.
+Use the setup for the actually selected route. A selected `llm-chat` connection
+uses its configured endpoint and credentials and does not require Codex CLI.
 
 ## Phase D — Parse verdict and write outputs
 
@@ -255,8 +294,8 @@ The raw JSON verdict from the reviewer, augmented with:
 ```json
 {
   "audit_round": 1,
-  "reviewer_backend": "codex-cli (gpt-6-astra, max effort)",
-  "mtime_check": "pass",
+  "reviewer_backend": "actual selected transport, model and effort",
+  "plan_provenance": "consistent | unverified | needs_review",
   "reviewer_verdict": { ... },
   "timestamp": "2026-05-22T10:00:00Z"
 }
@@ -269,12 +308,13 @@ Human-readable audit report:
 ```markdown
 # EEG Pipeline Audit — Round 1
 **Date**: 2026-05-22
-**Reviewer**: Codex CLI (gpt-6-astra, max effort; record actual transport)
+**Reviewer**: [actual selected transport, model and effort]
 **Global verdict**: pass-with-caveats
 
-## mtime check
-- ANALYSIS_PLAN.md: 2026-05-20T14:32:00
-- All stats files written after plan: YES
+## Plan provenance
+- Approved snapshot and approval/run records: [actual paths]
+- Direct consistency status: [consistent / unverified / needs_review]
+- Scope and unresolved evidence: [actual findings; mtime alone is insufficient]
 
 ## Per-claim verdicts
 
@@ -307,15 +347,15 @@ Human-readable audit report:
 | `pass` | Pipeline complete. Proceed to submission prep. |
 | `pass-with-caveats` | Surface caveats to user. Pipeline can proceed if user acknowledges. |
 | `revise` | Surface specific fixes. User or re-run of analysis stages must address them. **This skill does NOT auto-edit results.** |
-| `fail` | **Stop the pipeline.** Critical integrity issue (e.g., mtime violation, direction flip, p-value mismatch). Must be resolved before any further steps. |
+| `fail` | **Stop the affected pipeline.** An established critical issue (e.g., an unapproved scientific change, direction flip or p-value mismatch) must be resolved. A timestamp discrepancy alone does not establish such an issue. |
 
 ## Phase E — Re-audit protocol (Round 2)
 
 If the user fixes issues and requests a re-audit (`— round: 2`):
 
-1. **Re-run mtime check** — the plan should still predate all stats files. If the user edited the plan to match results, this is a new mtime violation.
+1. **Re-check plan provenance** — compare the actual plan/content and approval/run records. Identify approved amendments versus unexplained changes; copied-file mtime is not proof of a new violation.
 2. **Diff the bundle** — compare the current bundle against `audit-stage/AUDIT_ROUND1_BUNDLE.md` (saved during round 1). Identify what changed.
-3. **Send to Codex** with an augmented prompt:
+3. **Send to the same approved reviewer connection/model** with an augmented prompt:
    ```
    This is a RE-AUDIT (round 2). The previous audit found the following issues:
    [paste round 1 action items]
@@ -336,7 +376,7 @@ If the user fixes issues and requests a re-audit (`— round: 2`):
 | Aspect | Round 1 | Round 2 |
 |---|---|---|
 | Prompt | Full audit checklist | Focused on round 1 action items + regression check |
-| mtime check | Initial check | Re-check + verify no plan edits |
+| Plan provenance | Compare existing approval/run evidence | Compare content changes and amendment records; no timestamp-only verdict |
 | Bundle | Full | Full + diff from round 1 |
 | Expected outcome | Identify all issues | Verify fixes, catch regressions |
 | Max rounds | 2 (configurable) | No auto-round-3 |
@@ -347,8 +387,9 @@ If the user fixes issues and requests a re-audit (`— round: 2`):
 |---|---|
 | ANALYSIS_PLAN missing | Stop. Cannot audit without the plan. |
 | stats-stage/ empty | Stop. Nothing to audit. |
-| mtime violation detected | Flag as FAIL. Surface immediately — do not proceed to LLM review. |
-| Codex MCP unavailable | Fall back to `llm-chat` if configured. Otherwise stop and report. |
+| Plan mtime is later than output mtime | Record the observation and inspect existing approval/run evidence; copying can cause it. Continue independent checks and do not infer misconduct from this alone. |
+| Approval evidence missing or plan differs | Report unverified/needs_review with actual sources; inspect content and amendments. Do not fabricate an approval or mark the freezing claim verified. |
+| Selected reviewer transport unavailable | Keep the review incomplete, preserve the error and identify the selected connection/model. Do not switch automatically. An unavailable unselected Codex MCP does not block a selected CLI or llm-chat connection. |
 | Reviewer returns malformed JSON | Parse what is possible. Log the raw response. Ask for re-review if critical fields missing. |
 | Round 2 introduces new issues | Report new issues alongside unresolved ones. Do not auto-fix. |
 | Report text mentions results not in any stats JSON | Flag as "unreported analysis" — may be exploratory results not labeled as such. |

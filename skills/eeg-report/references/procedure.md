@@ -1,3 +1,34 @@
+## Final JSON and interpretation
+
+Use `tools/check_analysis_outputs.py`'s `write_outputs` on actual computed values
+and metadata. It returns the same complete object saved in `result.json`.
+Include that object in the final report, with its nonempty `explanation` field.
+Do not manually create a shorter JSON after writing the file. Construct channel
+counts, sample counts and labels from the selected data, not guessed variables.
+
+Answer the requested interpretation in the saved explanation as well as the
+human-readable report. For a hemispheric comparison give each measured
+left-minus-right value, its direction and whether directions agree across bands.
+For GFP state the requested absolute peak times and saved interval. A methods
+description alone does not answer a question about the results. Undefined
+quantities and unresolved choices remain explicit; do not invent a conclusion.
+
+The MNE [continuous-plan runner](../../../docs/PRELOADED_SKILLS.md#execute-and-check-a-complete-continuous-plan)
+saves `FINAL_SUBMISSION.md` from this same object and runs source-data checks.
+When checking an actual final message separately, pass that report to
+`check_analysis_outputs.py --report FINAL_SUBMISSION.md`; the parser retains
+which fields were present inside its JSON rather than importing nearby prose.
+
+For external semantic review, preserve the saved explanation, final JSON
+explanation and complete final submission as separate inputs. The
+[review-context builder](../../../tools/prepare_analysis_review.py) prepares
+these inputs without calling a model or changing any score. Missing required
+structured fields remain objective delivery failures. Plot review should also
+receive the checked channel range when channel curves are allowed, not just a
+mean that can differ greatly from an actual channel curve. Inspect the actual
+image for a disputed rejection; record uncertainty instead of modifying the
+scientific output to match a judge.
+
 ## Constants
 
 - **HTML_BACKEND = `mne.Report`** — self-contained HTML, embeds all figures/topomaps/PSD.
@@ -10,33 +41,35 @@
 
 ## Phase A — Collect stage outputs
 
-Scan the project directory and inventory all available stage outputs:
+Use the approved plan and actual execution ledger to identify planned stages
+and their required file paths/patterns. Do not infer the analysis design from
+which directories happen to exist. Inventory all supported stages, including
+spectral, complexity, microstate, QC and behavior, even when not applicable.
 
 ```python
-stages = {
-    'dataset': 'DATASET_BRIEF.md',
-    'plan': 'ANALYSIS_PLAN.md',
-    'environment': 'ENVIRONMENT.json',
-    'preprocess': 'preprocess-stage/',
-    'ica': 'ica-stage/',
-    'epoch': 'epoch-stage/',
-    'erp': 'erp-stage/',
-    'tfr': 'tfr-stage/',
-    'stats': 'stats-stage/',
-    'figures': 'figure-stage/',
-    'decoding': 'decoding-stage/',
-    'connectivity': 'connectivity-stage/',
-    'source': 'source-stage/',
-    'findings': 'FINDINGS.md',
-}
+# AEA example: report-stage-inventory
+import json
+import runpy
+from pathlib import Path
+input_helpers = runpy.run_path(str(Path(AEA_ROOT) / 'skills/eeg-report/scripts/inputs.py'))
+stage_inventory = input_helpers['collect_stage_inputs'](
+    run_dir, planned_stages=approved_reporting_stages,
+    required_sources=recorded_required_stage_sources)
+report_dir = Path(run_dir) / 'report-stage'
+report_dir.mkdir(parents=True, exist_ok=True)
+(report_dir / 'STAGE_INVENTORY.json').write_text(json.dumps(stage_inventory, indent=2))
 ```
 
-For each stage, record:
-- Whether it exists.
-- File count and total size.
-- Key metadata (e.g., N subjects processed, N epochs retained).
-
-Write `report-stage/STAGE_INVENTORY.json`.
+Each planned stage needs explicit actual sources, not a universal
+`*_cluster_perm.json` filename. The helper records file names/counts/bytes and
+which required patterns match. `available` means input files are present, not
+that execution/verification passed; retain actual saved execution/check states.
+Unplanned stages are `not_applicable`, even if old directories exist (their
+presence is still inventoried). Planned missing sources are `unavailable` and
+must be named in an explicitly incomplete/partial report; never claim completion
+or fabricate outputs. Report numerical participant/epoch counts from the stage
+records, not file count. Core plan, dataset brief and environment provenance are
+collected separately from the analysis-stage inventory.
 
 ## Phase B — Build HTML report via mne.Report
 
@@ -95,7 +128,7 @@ report.add_ica(ica, title="ICA decomposition",
                tags=('ica',))
 ```
 
-### B.5 — Epoching summary
+### B.5 — Epoching summary (only for a planned event/trial route)
 
 From `epoch-stage/`:
 
@@ -125,9 +158,10 @@ for fig_path in tfr_figures:
 
 ### B.7 — Statistical results section
 
-For each claim in `ANALYSIS_PLAN.md`:
+For each statistical claim in `ANALYSIS_PLAN.md` (skip this statistical panel
+for a purely descriptive workflow):
 
-1. Load `stats-stage/<claim_id>_cluster_perm.json`.
+1. Load the recorded output of that claim's approved test. `stats-stage/<claim_id>_cluster_perm.json` applies only to a cluster-permutation route.
 2. Render a summary block:
    - Claim text
    - Test used, N permutations, seed, alpha
@@ -185,9 +219,22 @@ Report the distribution of effect sizes and p-values across forks and the **frac
 - Cite: Bartlett, J. E., et al. (2025). Sampling the specification space for tractable multiverse EEG analysis. bioRxiv 2025.04.08.647779.
 - Cite: Trubutschek, D., et al. (2024). EEGManyPipelines: a large-scale analysis of analytic flexibility in EEG. Journal of Cognitive Neuroscience, 36(2), 217–224.
 
+### B.7c — Continuous and descriptive analysis sections
+
+For planned spectral/connectivity/complexity/microstate analyses, render their
+actual numerical outputs, channel/ROI identities, retained recording duration,
+windowing, fitted-template source where relevant, and saved checks. Include the
+QC and behavior outputs when those stages were planned. Reuse saved figures;
+do not recompute analyses while composing the report. Keep missing planned
+stages visible. A descriptive microstate report can be complete without event
+epochs, ERP or cluster statistics, and must not imply those stages ran.
+
 ### B.8 — COBIDAS self-check section
 
-Generate a checklist verifying COBIDAS-MEEG compliance (Pernet et al. 2020):
+Generate a checklist for the applicable executed/planned methods. Mark
+unplanned trial/ICA/source/statistical items not_applicable; an applicable missing
+record remains missing/unavailable. Do not claim compliance from a directory
+listing alone (Pernet et al. 2020):
 
 | Item | Status | Details |
 |---|---|---|
