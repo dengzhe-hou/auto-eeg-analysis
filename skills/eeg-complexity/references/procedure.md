@@ -87,8 +87,8 @@ else:
 | Metric | Recommended backend | Documented call | Caveat / degradation |
 |---|---|---|---|
 | Permutation entropy | `antropy` | `ant.perm_entropy(x, order=3, delay=1, normalize=True)` | lightest dependency; if missing, PE is computable from `scipy` (ordinal histogram → Shannon) as a numpy fallback |
-| LZC | `antropy` (+ manual binarize) / `neurokit2` | `ant.lziv_complexity(bin, normalize=True)` or `nk.complexity_lempelziv(x, symbolize='median')` | antropy expects an **already-binarized** 0/1 sequence; the LZ parse is short enough to implement in numpy if neither lib is present |
-| PLZC | `neurokit2` | `nk.complexity_lempelziv(x, dimension=4, delay=1, permutation=True)` | normalization base must be `m!`, **not 2** |
+| LZC | `antropy` (+ approved symbolization) / `neurokit2` | raw AntroPy count + `scripts/lempel_ziv.py`, or the approved NeuroKit2 route | record symbolization and normalization; normalized finite values can exceed 1 |
+| PLZC | approved ordinal symbols + `antropy`, or `neurokit2` | raw count + explicit alphabet, or `nk.complexity_lempelziv(..., permutation=True)` | theoretical alphabet is `m!`; observed-alphabet normalization is separately labeled; never normalize twice |
 | SampEn on a specified segment | bundled NumPy/SciPy helper | `scripts/sample_entropy.py`: `sample_entropy(x, m=2, r_fraction=0.2, closed=True)` | N-m templates for both dimensions; records counts and conventions; no dense distance matrix |
 | SampEn / ApEn alternatives (tunable r) | `neurokit2` or `EntropyHub` | `nk.entropy_sample(x, dimension=2, tolerance=0.2*np.std(x))` / `EH.SampEn(x, m=2, r=0.2*np.std(x))` | Check the installed backend's radius and embedding conventions before comparing outputs |
 | Dispersion entropy (DispEn) | `EntropyHub` | `EH.DispEn(x, m=2, tau=1, c=6, Typex='ncdf')` | amplitude-aware, `O(N)`; if missing, fall back to PE (loses amplitude info) |
@@ -150,19 +150,33 @@ NumPy/SciPy and does not need an optional entropy package.
 
 ### Lempel-Ziv complexity (LZC)
 
-Binarize the 1-D signal to a 0/1 string, count distinct substrings via the LZ parse, then normalize by `n / log2(n)` (values ≈ [0,1], comparable across window lengths).
+Binarize the 1-D signal under the approved rule, obtain the unnormalized LZ
+parse count `c`, then compute `c * log_base(n) / n` once. Binary LZC uses
+base 2. This is an asymptotic normalization: finite sequences can exceed 1,
+including ordinary 5-second EEG-sized windows. Do not clip values to 1 or
+claim that normalization removes finite-length dependence.
 
 ```python
-import antropy as ant   # OPTIONAL — guard with check_backend("antropy")
+# AEA example: complexity-lzc
+from pathlib import Path
+import runpy
 import numpy as np
 
-# Default binarization: MEDIAN threshold (amplitude/outlier robust, literature default)
-binseq = (x > np.median(x)).astype(int)
-lzc = ant.lziv_complexity(binseq, normalize=True)   # n/log2(n) normalization
+params = approved_lzc_params
+# This example implements a median rule only when the plan selects it.
+if params['symbolization'] != 'median' or params['alphabet_size'] != 2:
+    raise ValueError('Use the approved symbolization and alphabet; this example is median/binary')
+if np.ndim(x) != 1 or not np.all(np.isfinite(x)):
+    raise ValueError('Provide one finite channel segment')
+lz = runpy.run_path(str(Path(AEA_ROOT) / 'skills/eeg-complexity/scripts/lempel_ziv.py'))
+symbols = (x > np.median(x)).astype(int)
+lzc_result = lz['symbolic_lzc'](symbols, alphabet_size=params['alphabet_size'])
+lz['check_normalized_complexity']([lzc_result['value']], metric='lzc')
+# Save lzc_result with the actual segment and symbolization metadata.
 ```
 
-Binarization rules (default = median):
-- **median** (default) — `x > median(x)`; robust to amplitude outliers.
+Binarization choices, resolved from the task/plan rather than this example:
+- **median** — `x > median(x)`; robust to amplitude outliers.
 - **mean** — `x > mean(x)`; sensitive to skew/outliers.
 - **midpoint** — `x > (max+min)/2`; very outlier-sensitive.
 - **kmeans** — two centroids near the mean; data-adaptive but slowest.
@@ -171,14 +185,47 @@ Compute LZC **per channel on the 1-D series**, never across channels. Use fixed-
 
 ### Permutation LZC (PLZC)
 
-Permutation-symbolize first (ordinal patterns, `m=4, tau=1` ⇒ 24 motifs), then run the LZ parse normalized by `log_{m!}(n)` (i.e. base `m! = 24`, **not 2**).
+Permutation-symbolize first, using the approved embedding dimension, delay and
+ordinal-tie rule. For theoretical-alphabet normalization the base is `m!`:
+for example, `m=4` permits 24 motifs. Here `n` is the length of the **symbol
+sequence**, not the original EEG sample count. An explicitly approved
+observed-alphabet definition is different when some motifs are absent.
 
 ```python
-import neurokit2 as nk   # OPTIONAL — guard with check_backend("neurokit2")
-plzc, _ = nk.complexity_lempelziv(x, dimension=4, delay=1, permutation=True)
+# AEA example: complexity-plzc-normalization
+from pathlib import Path
+import math
+import runpy
+
+params = approved_plzc_params
+# ordinal_symbols were generated from this segment with the recorded m,
+# delay and tie policy; do not feed continuous EEG samples to this helper.
+if params['alphabet_policy'] == 'theoretical':
+    alphabet = math.factorial(params['embedding_dimension'])
+elif params['alphabet_policy'] == 'observed':
+    alphabet = 'observed'
+else:
+    raise ValueError('Resolve the approved PLZC alphabet policy')
+lz = runpy.run_path(str(Path(AEA_ROOT) / 'skills/eeg-complexity/scripts/lempel_ziv.py'))
+plzc_result = lz['symbolic_lzc'](ordinal_symbols, alphabet_size=alphabet)
+lz['check_normalized_complexity']([plzc_result['value']], metric='plzc')
+plzc_result.update(embedding_dimension=params['embedding_dimension'],
+                   delay=params['delay'], ordinal_tie_policy=params['ordinal_tie_policy'])
 ```
 
-PLZC is **amplitude-independent** (preferred when amplitude differs across conditions/electrodes) and more noise-robust than amplitude-thresholded LZC. Default `m=4`; `m=3` also common. If you build the ordinal sequence manually and feed `antropy.lziv_complexity`, it assumes 2 symbols — you **must renormalize** by `log2 / log(m!)` yourself.
+AntroPy 0.2.2 `normalize=True` already uses the number of observed symbols
+(minimum 2), not a universal base 2. Multiplying that output by
+`log(2)/log(m!)` can normalize it a second time. The helper above requests
+`normalize=False` and applies the declared base once. Retain `raw_count`,
+`n_symbols`, `observed_alphabet`, `normalization_base` and backend version.
+See [AntroPy's definition and finite-sequence example](https://raphaelvallat.com/antropy/generated/antropy.lziv_complexity.html).
+
+The optional NeuroKit2 `complexity_lempelziv(..., permutation=True)` route
+remains available when it is the approved backend. Supply the planned
+dimension/delay, record its normalization definition and version, and do not
+apply a conversion inferred only from the shared metric name. Ordinal
+symbolization removes amplitude magnitude but still depends on dimension,
+delay, ties and sequence length.
 
 ### Multichannel signal diversity: spatiotemporal LZc, ACE, SCE
 
@@ -464,10 +511,10 @@ lcd = np.array([nsc - nsc_without_channel(data, i) for i in range(data.shape[0])
 - [ ] `DATASET_BRIEF.md` ticks Complexity (skill was correctly invoked).
 - [ ] `BACKEND_RESOLUTION.md` lists each optional lib as available / missing; every skipped metric is logged with a `pip install` hint.
 - [ ] Every subject has a complexity time course for all conditions and channels (for metrics whose backend was available).
-- [ ] Normalized metrics (PE, LZC, PLZC, NSC) are within `[0, 1]`; SampEn/ApEn ≥ 0.
+- [ ] Computed normalized PE/NSC are within `[0, 1]`; computed LZC/PLZC are finite and nonnegative, with no upper-1 rejection or clipping. SampEn/ApEn use their own estimator/status contract.
 - [ ] No NaN/Inf (guard `log(0)`; drop empty histogram bins / zero eigenvalues).
 - [ ] `r` (SampEn/ApEn) was recomputed per window from that window's SD — not a global SD.
-- [ ] PLZC normalization base is `m!` (not 2); LZC base is 2.
+- [ ] LZC/PLZC preserve raw count, symbol count, alphabet policy/base and backend version; normalization is applied once. Binary LZC uses 2, theoretical-alphabet PLZC uses `m!`; an approved observed-alphabet analysis is labeled separately.
 - [ ] Spatial complexity used **average reference**.
 - [ ] Scale-free metrics used the longer (≥16 s) windows and z-scored input.
 - [ ] **Built-in validation**: eyes-open resting EEG shows higher temporal complexity (PE/LZC/SampEn) than eyes-closed; if the data has this contrast, confirm the expected direction.
@@ -479,8 +526,8 @@ lcd = np.array([nsc - nsc_without_channel(data, i) for i in range(data.shape[0])
 |---|---|
 | `ANALYSIS_PLAN.md` missing or unfrozen | Stop. Ask user to fill and freeze the plan. |
 | `DATASET_BRIEF.md` does not tick Complexity | Skill out of scope — return to dispatcher without running. |
-| `antropy` not installed | `pip install antropy`. Log in BACKEND_RESOLUTION.md; for PE/LZC fall back to the numpy implementation, else skip metric. |
-| `neurokit2` not installed | `pip install neurokit2`. SampEn/ApEn with custom `r`, PLZC, and RQA are unavailable — log skip + hint. |
+| `antropy` not installed | `pip install antropy`. Log in BACKEND_RESOLUTION.md; the symbolic LZ helper is unavailable. Use an already approved alternative implementation only if available and definition-matched, otherwise mark the requested metric unavailable. |
+| `neurokit2` not installed | `pip install neurokit2`. Log unavailable NeuroKit2 routes + hint. The separate AntroPy ordinal-symbol PLZC route is usable only when approved and available; do not silently change the backend/definition. |
 | `EntropyHub` not installed | `pip install EntropyHub`. Use as the alternative tunable-`r` backend; if also missing, skip tunable-`r` SampEn/ApEn. |
 | `nolds` not installed | `pip install nolds`. DFA/Hurst/corr-dim/Lyapunov unavailable; use `antropy.detrended_fluctuation` for DFA if antropy present, else skip scale-free. |
 | `mne-features` not installed | `pip install mne-features`. Fractal/Hjorth/line-length features for eeg-decoding skipped — log and continue. |
@@ -494,7 +541,7 @@ lcd = np.array([nsc - nsc_without_channel(data, i) for i in range(data.shape[0])
 | MSE/RCMSE entropy `inf`/undefined at coarse scales | Plain MSE on short windows has no `m+1` matches. Switch to RCMSE and report scales-defined. |
 | LRTC exponent equals broadband DFA / implausible | DFA was run on broadband, not the narrow-band amplitude envelope. Band-pass → Hilbert envelope → DFA. |
 | SampEn/ApEn give identical results regardless of `r` | You are using `antropy` (hardcoded r=0.2*SD). Switch to `neurokit2`/`EntropyHub`. |
-| PLZC values look wrong / out of range | Normalization base is 2 instead of `m!`. Use `nk.complexity_lempelziv(..., permutation=True)` or renormalize by `log2/log(m!)`. |
+| LZC/PLZC exceeds 1 or differs from another backend | A finite value above 1 is not itself an error. Inspect raw count, symbol length, symbolization/ties, backend and observed/theoretical alphabet definition. Recompute once from the raw count with the approved base; do not apply a blind `log(2)/log(m!)` correction or switch estimators. |
 | `nan`/`inf` in entropy | A histogram/eigenvalue/probability bin is 0 → `log(0)`. Drop empty bins, clip zero eigenvalues (e.g. to 1e-20). |
 | SampEn = `inf` or `nan` | No template matches at `m+1` (window too short or `r` too small). Lengthen window or raise `r`. |
 | Complexity differs across conditions but so does amplitude/montage | Amplitude confound. Switch to PE or PLZC (amplitude-blind) and re-test. |

@@ -11,13 +11,12 @@ import numpy as np
 from scipy.integrate import trapezoid
 
 def integrated_band_power_ratio(psd_data, frequencies, band, total_band):
-    band_mask = (frequencies >= band[0]) & (frequencies <= band[1])
-    total_mask = (frequencies >= total_band[0]) & (frequencies <= total_band[1])
-    band_power_int = trapezoid(psd_data[..., band_mask], frequencies[band_mask], axis=-1)
-    total_power_int = trapezoid(psd_data[..., total_mask], frequencies[total_mask], axis=-1)
-    if np.any(total_power_int <= 0):
-        raise ValueError("Relative power needs a positive integrated denominator.")
-    return band_power_int / total_power_int
+    # This example uses approved inclusive band boundaries.
+    from pathlib import Path
+    import runpy
+    helpers = runpy.run_path(str(Path(AEA_ROOT) / "skills/eeg-spectral/scripts/continuous.py"))
+    return helpers["channel_relative_power"](psd_data, frequencies,
+        band=band, total_band=total_band, upper_closed=True, total_upper_closed=True)
 ```
 
 Resolve channel identity, filtering, Welch parameters, DC removal and the
@@ -33,7 +32,7 @@ Keep fixed recipe/study settings when they have already been approved.
 | Setting in `SPECTRAL_PLAN.json` | Required when |
 | --- | --- |
 | `method`, `frequency_range_hz` | Computing a PSD; choose the matching template, not another estimator as a silent fallback |
-| `welch.segment_seconds`, `window`, `overlap_fraction`, `n_fft`, `remove_dc` | Welch; explicit `n_fft: null` means equal to the selected segment length |
+| `welch.segment_seconds`, `window`, `overlap_fraction`, `n_fft`, `remove_dc`, `average` | Welch; explicit `n_fft: null` means equal to the selected segment length; window averaging must be approved |
 | `bands`, `band_measure` (`mean_density` or `integrated_power`) | Extracting band values; relative power additionally needs its denominator and aggregation order |
 | `alpha.method`, `band_hz`, channels/aggregation and method-specific parameters | Estimating alpha frequency; name peak versus center of gravity, smoothing and missing-peak rules |
 | Aperiodic fit range and model parameters | Requesting specparam/FOOOF; see Phase C for fit-border considerations |
@@ -53,7 +52,7 @@ or evidence of researcher approval:
   "frequency_range_hz": [1, 40],
   "welch": {
     "segment_seconds": 2.0, "window": "hann", "overlap_fraction": 0.5,
-    "n_fft": null, "remove_dc": true
+    "n_fft": null, "remove_dc": true, "average": "mean"
   },
   "bands": {"alpha": [8, 13]},
   "band_measure": "mean_density"
@@ -84,6 +83,9 @@ Write and execute a Python script. For each subject:
 import mne
 import numpy as np
 from scipy.integrate import trapezoid
+from pathlib import Path
+import runpy
+spectral = runpy.run_path(str(Path(AEA_ROOT) / "skills/eeg-spectral/scripts/continuous.py"))
 
 # SPECTRAL_PLAN is the resolved JSON from this task/approved study plan.
 required = {'method', 'frequency_range_hz', 'welch'}
@@ -95,22 +97,8 @@ if SPECTRAL_PLAN['method'] != 'welch':
 FMIN, FMAX = SPECTRAL_PLAN['frequency_range_hz']
 
 def welch_parameters(sfreq, n_times):
-    settings = SPECTRAL_PLAN['welch']
-    missing = {'segment_seconds', 'window', 'overlap_fraction', 'n_fft', 'remove_dc'} - settings.keys()
-    if missing:
-        raise ValueError(f"Missing approved Welch settings: {sorted(missing)}")
-    n_per_seg = round(settings['segment_seconds'] * sfreq)
-    if not 1 <= n_per_seg <= n_times:
-        raise ValueError("Approved segment duration does not fit the data; resolve it explicitly.")
-    n_fft = n_per_seg if settings['n_fft'] is None else settings['n_fft']
-    if n_fft < n_per_seg:
-        raise ValueError("N_FFT must be >= n_per_seg; choose the segment duration explicitly.")
-    overlap = settings['overlap_fraction']
-    if not 0 <= overlap < 1:
-        raise ValueError("Approved overlap_fraction must be in [0, 1).")
-    return dict(n_fft=n_fft, n_per_seg=n_per_seg,
-                n_overlap=int(overlap * n_per_seg), window=settings['window'],
-                remove_dc=settings['remove_dc'])
+    settings = spectral['resolved_welch_settings'](SPECTRAL_PLAN['welch'])
+    return spectral['welch_parameters'](sfreq, n_times, **settings)
 
 # Resting-state: continuous data
 raw = mne.io.read_raw_fif(preprocessed_path, preload=True)
@@ -134,11 +122,12 @@ bands = SPECTRAL_PLAN.get('bands', {})  # omitted when no band summary is reques
 if bands and SPECTRAL_PLAN.get('band_measure') not in {'mean_density', 'integrated_power'}:
     raise ValueError("Specify band_measure for the requested band values.")
 for band_name, (fmin_b, fmax_b) in bands.items():
-    freq_mask = (psd.freqs >= fmin_b) & (psd.freqs <= fmax_b)
+    freq_mask = spectral['band_bins'](psd.freqs, band=(fmin_b, fmax_b), upper_closed=True)
     if SPECTRAL_PLAN['band_measure'] == 'mean_density':
         band_power = psd.get_data()[..., freq_mask].mean(axis=-1)
     else:
-        band_power = trapezoid(psd.get_data()[..., freq_mask], psd.freqs[freq_mask], axis=-1)
+        band_power = spectral['integrated_power'](psd.get_data(), psd.freqs,
+            band=(fmin_b, fmax_b), upper_closed=True)
     # Convert to dB: 10 * np.log10(band_power)
 ```
 
@@ -147,6 +136,17 @@ epochs and every condition, so their frequency grids agree. If an epoch is
 shorter than the approved segment, the template raises instead of silently
 shortening it. A shorter segment requires an explicit task/plan choice; record
 its actual duration and resolution. An FFT below the segment length also raises.
+Both templates use this same parameter translation, including nearest-sample
+rounding of segment and overlap durations. Record actual sample counts. Preserve
+an approved different sample-count convention explicitly rather than silently
+changing existing study code. The retained `detrend: "constant"`/false and
+`n_fft: "n_per_seg"` interface maps to the same settings. No `average` is inferred.
+
+Keep enough of the PSD frequency axis to cover every requested numerator,
+denominator and peak-search band. The helpers reject bounds beyond that axis;
+they do not fill missing frequencies, integrate only the intersection, or
+interpolate endpoints. A half-open band mask is applied after this coverage
+check. Grid support does not establish scientific support after filtering.
 
 ### Frequency resolution, zero-padding, and the Nyquist/low-pass cap
 

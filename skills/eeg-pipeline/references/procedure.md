@@ -1,14 +1,16 @@
 ## Constants
 
-- **AUTO_PROCEED** — read from `~/.claude/checkpoint.json`. If `auto_proceed: true` and the gate is `"auto"`, run gates auto-pass. If `auto_proceed: false` or gate is `"always_wait"`, pause for user OK between stages. If `~/.claude/checkpoint.json` does not exist, default to `true`.
+- **RUN_CONTROLS** — read with `tools/run_settings.py`: explicit config, project `AEA_RUN.json`, existing legacy checkpoint, then prior execution defaults. Retain its actual source; see [run settings](../../../docs/RUN_SETTINGS.md).
+- **AUTO_PROCEED** — use the resolved `auto_proceed` and stage gate. These control already authorized execution only. `always_wait` retains an interactive checkpoint; neither auto mode nor timeout approves a scientific choice.
 - **FAIL_FAST = `false`** — when `true`, abort on first per-subject failure; otherwise log and continue.
 - **STAGES_DEFAULT** — preparation stages plus only the analysis branches named in the approved plan, then `stats, figure, report, audit`. ERP, TFR, connectivity, microstate and source are selected explicitly; an example stage list does not request all of them.
 - **STATE_FILE = `<project-dir>/PIPELINE_STATE.json`** — crash recovery persistence (see Phase B).
-- **TIMEOUT_SECONDS** — read from `~/.claude/checkpoint.json`, default `300`.
+- **TIMEOUT_SECONDS** — use resolved `timeout_seconds` (previous execution default `300`).
 
 ## Stage dependency graph
 
-Some stages have strict sequential dependencies; others can run in parallel when their inputs are ready:
+Resolve the ICA route from the approved plan. The following diagram illustrates
+continuous ICA; it is not a mandatory route for every study:
 
 ```
 bids ──→ preprocess ──→ ica ──→ epoch ──┬──→ erp ────────┐
@@ -18,7 +20,13 @@ bids ──→ preprocess ──→ ica ──→ epoch ──┬──→ erp �
                                          └──→ source ─────┘
 ```
 
-- **Parallel group**: After `epoch` completes, `erp`, `tfr`, `connectivity`, `microstate`, and `source` can all run independently.
+- With epoch-first ICA, order preprocessing → initial epoch cut → ICA → epoch
+  finalization. Give the two epoch operations distinct state entries such as
+  `epoch_pre_ica` and `epoch_finalize`, both invoking `eeg-epoch` with the selected
+  operation. Retain pre-ICA and cleaned/final epochs at separate paths; finalization
+  does not extract events or cut epochs again. No-ICA analyses go directly from
+  preprocessing to epoching. An unresolved route blocks dependent work.
+- **Parallel group**: After final epochs are ready, the approved analysis branches can run independently.
 - **Sync point**: `stats` waits for ALL analysis branches to finish before starting.
 - In practice, invoke these branches sequentially through the client's skill mechanism, but log that they have no data dependency. If no child-skill invocation tool is available, read the corresponding `skills/eeg-<stage>/SKILL.md` directly and follow it from the repository root.
 
@@ -28,11 +36,17 @@ Individual child skills enforce their own internal order, but the orchestrator m
 
 - **Sampling and event alignment.** Keep the planned sampling rate and downsampling stage; do not add resampling as an optimization. MNE's `resample` includes anti-alias filtering, whereas `decimate` does not. Raw resampling reduces event-time precision: pass the corresponding events to `raw.resample(..., events=events)` and retain their original identities. Epoch resampling is supported but needs sufficient padding to keep filtering edge effects outside the analyzed interval. For planned integer decimation after epoching, filter the continuous data with an appropriate transition band first. Record the actual rate, method and event mapping; missing prerequisites block this step. See [MNE resampling guidance](https://mne.tools/stable/auto_tutorials/preprocessing/30_filtering_resampling.html#resampling).
 - **Reference / ICA-rank consistency.** Pass the actual reference state, channel order, interpolation and effective rank from preprocessing to ICA. An applied average reference reduces rank; `set_eeg_reference(projection=True)` only adds a pending projector until it is applied. Do not claim that a pending projector has already re-referenced the samples or blindly subtract one twice. Compare the ICA fitting input and the data to which that decomposition is applied with the approved configuration.
+- **Epoch / ICA handoff.** Record the fitting domain, input/output paths, actual
+  event identities, baseline stage and rejection stage in the resolved stage
+  records. Neither short ISI nor a missing ICA directory authorizes changing
+  the route. Check saved baseline state before finalization to prevent duplicate
+  correction, and preserve any unresolved inclusion policy without silently
+  excluding participants.
 
 ## Phases
 
 ### A. Pre-flight (mandatory)
-1. **Checkpoint config**: Read `~/.claude/checkpoint.json`. Set `AUTO_PROCEED` and `TIMEOUT_SECONDS` from the file. If file missing, default `AUTO_PROCEED=true`, `TIMEOUT_SECONDS=300`.
+1. **Run settings**: Execute `python tools/run_settings.py --project <project-dir>` with `--config <path>` if explicitly supplied. Consume its `auto_proceed`, `timeout_seconds` and `gates`, record the complete result under `PIPELINE_STATE.json.run_controls`, and pass `reviewer` to `eeg-audit`. Do not replace a selected reviewer with a different connection/model. The loader reads controls only; it does not authorize or execute analyses/reviews.
 2. **Auto-brief**: If `DATASET_BRIEF.md` does not exist but `raw/` does, run `python tools/auto_brief.py --raw-dir <project-dir>/raw/ --out <project-dir>/DATASET_BRIEF.md --json <project-dir>/auto_brief_scan.json`. Then ask the user conversationally about remaining `[USER]` fields (paradigm, condition→marker mapping, epoch window, hypothesis). Do NOT dump the full template.
 3. Read `DATASET_BRIEF.md`. Resolve scientific fields against the approved plan, including events, blocks, channel roles and coordinate units, filtering, reference, epoch/baseline, inclusion rules and statistics. A suggested bandpass, reference or test is not a non-critical execution default. Ask about unresolved fields in an interactive run; use the blocked-work record above in an unattended run.
 4. Read or generate `ENVIRONMENT.json` via `tools/env/check_env.{sh,ps1}`.
@@ -103,7 +117,7 @@ For each scientific stage in the resolved list, in order (methods/report/audit r
 
 1. **Update state**: Write `current_stage` to `PIPELINE_STATE.json`.
 2. **Record start time**: `stage_start = now()`.
-3. **Invoke skill**: Use the client's skill mechanism or read the matching `skills/eeg-<stage>/SKILL.md` directly, passing `<run-dir>` + relevant overrides. The agent stays at the repository root; saved programs execute from `analysis/` as specified above.
+3. **Invoke skill**: Use the client's skill mechanism or read the matching `skills/eeg-<stage>/SKILL.md` directly, passing `<run-dir>` + relevant overrides. The state entries `epoch_pre_ica` and `epoch_finalize` both map to `skills/eeg-epoch/SKILL.md`, with initial-cut versus finalization explicitly recorded; they are not separate skill names. The agent stays at the repository root; saved programs execute from `analysis/` as specified above.
 4. **Record end time**: `stage_end = now()`. Compute `duration_s = stage_end - stage_start`.
 5. **Progress report**: Print to user:
    ```

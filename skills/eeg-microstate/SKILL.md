@@ -46,6 +46,9 @@ Before running, these must exist:
 
 ## Critical Rules
 
+- Use [the shared preparation helpers](scripts/preparation.py) for resting GFP-map preparation in both individual and group fitting. Pass the approved filtering, GFP-threshold reference, cap and seed explicitly; record actual selected counts.
+- Use the same helper's `backfit_microstates` from recipes and this skill. Specify smoothing values with their approved units (samples, ms or s) and save the actual converted sample counts; do not substitute another example's policy.
+- Align group maps by channel names and verify positions before concatenation. Different channel sets/positions require approved upstream handling; array shape alone is insufficient. A per-person cap limits dominance but does not ensure equal weights when some recordings supply fewer maps.
 - **Resting microstate defaults (GFP-peak selection, polarity-invariant modified k-means, no smoothing during clustering) do NOT apply to ERP / event-locked data.** Topographic ERP microstate segmentation is a distinct, well-established method — do not blanket-forbid it. For evoked data: cluster on **all time points** of the grand-average Evoked (not GFP peaks), use **polarity-aware standard k-means** (Euclidean), and **smooth at the segmentation step** (timepoints are time-ordered). ERP microstate classes map to ERP component latency windows, not the canonical A–D. See `eeg-erp` and Murray et al. 2008 (TANOVA, GFP, topographic segmentation).
 - **Never** compare microstate parameters across studies with different K values.
 - **Never** skip GFP-peak extraction and fit on all time points — this inflates GEV and produces unstable maps.

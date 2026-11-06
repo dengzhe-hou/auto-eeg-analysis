@@ -44,3 +44,24 @@ def sample_entropy(x, m=2, r_fraction=0.2, *, closed=True):
         "sd_ddof": 0,
         "comparison": "<= r" if closed else "< r",
     }
+
+
+def sample_entropy_raw(raw, *, analysis_channels, operations, m, r_fraction, closed):
+    """Use the bounded SI-unit/time-selection path before per-channel SampEn.
+
+    Return individual values and their actual segment; aggregation and missing
+    value policy remain with the approved analysis. The array-only helper above
+    still needs only NumPy/SciPy; this Raw entry point uses the library's MNE path.
+    """
+    from pathlib import Path
+    import runpy
+    helpers = runpy.run_path(str(Path(__file__).resolve().parents[2] /
+                                "eeg-preprocess/scripts/continuous.py"))
+    with helpers["prepare_continuous"](raw, analysis_channels=analysis_channels,
+                                       operations=operations) as prepared:
+        segment = helpers["data_in_volts"](prepared)
+        metadata = helpers["recording_metadata"](prepared)
+    details = [sample_entropy(row, m=m, r_fraction=r_fraction, closed=closed) for row in segment]
+    return {"segment": segment, "channels": metadata["channels"],
+            "channel_entropy": np.asarray([value["sample_entropy"] for value in details]),
+            "details": details, "metadata": metadata}

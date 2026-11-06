@@ -189,12 +189,18 @@ def test_connectivity_api(raw):
         conn_epochs, method="wpli2_debiased", mode="multitaper",
         fmin=8.0, fmax=13.0, faverage=True, verbose=False)
     assert con.get_data(output="dense").ndim >= 2
-    # time-resolved estimator (capability eeg-connectivity adds); few cycles so the
-    # Morlet wavelet fits inside the epoch
+    # Within-epoch time-averaged spectra; this API has no output time-course axis.
+    # Few cycles keep the Morlet wavelet inside the epoch.
     freqs = np.arange(8.0, 13.0, 1.0)
     cont = mnc.spectral_connectivity_time(conn_epochs, freqs=freqs, method="coh",
                                           mode="cwt_morlet", n_cycles=3.0, verbose=False)
-    assert cont is not None
+    values = cont.get_data()
+    assert values.ndim == 3
+    assert values.shape[0] == len(conn_epochs) and values.shape[-1] == len(freqs)
+    averaged = mnc.spectral_connectivity_time(conn_epochs, freqs=freqs, method="coh",
+        mode="cwt_morlet", n_cycles=3.0, average=True, verbose=False)
+    assert averaged.get_data().ndim == 2
+    np.testing.assert_allclose(averaged.get_data(), values.mean(axis=0), rtol=1e-12, atol=1e-15)
 
 
 def test_connectivity_csd_api(raw):

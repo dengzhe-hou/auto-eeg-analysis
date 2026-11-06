@@ -38,6 +38,14 @@ Before running, these must exist:
 2. `raw/` directory — containing raw EEG files (`.set`, `.vhdr`, `.edf`, `.bdf`, `.fif`, `.cnt`, `.mff`).
 3. `ENVIRONMENT.json` — to verify `mne_bids` is available.
 
+## Event identity
+
+Use [the event export helper](scripts/events.py) to normalize the approved
+annotation, stim or external event source. Keep declared auxiliary annotations;
+do not feed the same task events through both annotations and an events array.
+Keep codes and descriptions together, and read back the exported table to check
+each event's identity, onset, duration and count. See Phase B of the procedure.
+
 
 ## Procedure reference
 

@@ -1,10 +1,15 @@
 ## Constants
 
+Values below are literature/example settings, not approval for a study. The
+executable resting-map path reads explicit approved preparation/clustering
+parameters, including the GFP-threshold reference distribution, cap and seed.
+ERP segmentation remains the separate route described in the entrypoint.
+
 - **BACKEND = `pycrostates`** (Python). The primary backend for microstate analysis.
 - **K = `4`** unless DATASET_BRIEF specifies otherwise (Koenig's canonical four: A, B, C, D). `5` and `6` also common in resting-state literature.
 - **USE_GFP_PEAKS = `true`** — fit only on GFP-peak topographies (standard practice; reduces redundancy and noise).
 - **FILTER_BAND = `(2, 20)` Hz** — band-pass for resting microstate analysis. This is the field default taught for microstate clustering (Murray/Michel/CARTOOL practice); `(1, 40)` Hz broadband is used only by a minority of studies. Van de Ville and Khanna 2014 used 1–30 / 2–20 Hz. The narrow 2–20 Hz band suppresses slow drifts and high-frequency muscle/line noise that destabilize topographies.
-- **N_PEAKS_PER_SUBJECT = `1000`** — randomly subsample at most this many GFP-peak maps per subject before group clustering (Poulsen et al. 2018, §3.3.2). Capping peaks per subject equalizes each subject's weight in the pooled clustering so longer recordings do not dominate the group template.
+- **N_PEAKS_PER_SUBJECT = `1000`** — randomly subsample at most this many GFP-peak maps per subject before group clustering (Poulsen et al. 2018, §3.3.2). A cap limits longer recordings' contribution; it does not equalize weights when a participant supplies fewer than the cap. Record actual map counts; any further weighting is a scientific choice.
 - **GFP_REJECT_SD = `1.0`** — drop GFP-peak maps whose GFP exceeds mean + 1·SD of all GFP values; extreme-GFP maps are usually non-neural artifacts (Poulsen et al. 2018, `GFPthresh=1`).
 - **MIN_SEGMENT_MS = `30`** — minimum microstate segment length for small-segment rejection on back-fit labels (Poulsen toolbox default `minTime=30 ms`). Convert to samples: `int(round(0.030 * sfreq))`.
 - **SMOOTH_HALF_WINDOW = `3`** samples each side (Pascual-Marqui et al. 1995 windowed-smoothing default). With the pycrostates `factor` (≈ λ) smoothing weight, λ=5 is the original recommendation.
@@ -18,41 +23,30 @@
 
 ## Phase A — Data preparation
 
-1. Load cleaned continuous EEG (or concatenated epochs) per subject.
-2. Band-pass filter to **2–20 Hz** (`FILTER_BAND`, the resting-microstate default). Use 1–40 Hz only if DATASET_BRIEF/ANALYSIS_PLAN explicitly calls for broadband; note it in the methods text. Do **not** silently assume broadband.
-3. Re-reference to average reference (required for microstate analysis).
-4. Compute Global Field Power (GFP) = spatial standard deviation across channels at each time point.
-5. Extract GFP-peak topographies: local maxima of GFP with a **minimum inter-peak distance of ~10 ms** (converted to samples), reject extreme-GFP maps (> mean + `GFP_REJECT_SD`·SD), and randomly subsample to `N_PEAKS_PER_SUBJECT`.
+1. Load cleaned continuous EEG, with actual participant identity and channel metadata.
+2. Resolve the approved EEG channel set/order, band-pass settings, applied average reference, peak separation **in samples**, annotation exclusion, GFP rejection, cap and seed.
+3. Specify whether the rejection mean/SD comes from **all retained continuous samples** (`continuous`) or **GFP-peak maps** (`peaks`). These are different definitions; no silent substitution is allowed. The helper uses population SD (`ddof=0`) and records the threshold. An explicitly approved `None` disables rejection or the cap.
+4. Reuse this exact preparation for individual and group clustering, and use the returned prepared Raw for back-fitting. It copies the input; it does not reprocess an already prepared copy in the group step.
 
 ```python
+# AEA example: microstate-preparation
+import runpy
+from pathlib import Path
 import mne
-import numpy as np
-from pycrostates.preprocessing import extract_gfp_peaks
-from pycrostates.io import ChData
-
-# Load continuous data
+preparation = runpy.run_path(str(Path(AEA_ROOT) / 'skills/eeg-microstate/scripts/preparation.py'))
 raw = mne.io.read_raw_fif(raw_fif_path, preload=True)
-raw.filter(2, 20)                       # FILTER_BAND = (2, 20) Hz (resting default)
-raw.set_eeg_reference('average')
-
-sfreq = raw.info['sfreq']
-min_dist = int(round(0.010 * sfreq))    # 10 ms expressed in SAMPLES (>=1)
-
-# Extract GFP peaks (min_peak_distance is in SAMPLES, not ms)
-gfp_peaks = extract_gfp_peaks(raw, min_peak_distance=max(min_dist, 1))
-
-# --- Reject extreme-GFP (artifact) peaks: GFP > mean + GFP_REJECT_SD*SD ---
-maps = gfp_peaks.get_data()             # (n_channels, n_peaks)
-gfp = maps.std(axis=0, ddof=0)          # GFP per peak map
-keep = gfp <= (gfp.mean() + 1.0 * gfp.std())     # GFP_REJECT_SD = 1.0
-
-# --- Cap to N_PEAKS_PER_SUBJECT (equalize each subject's weight) ---
-idx = np.flatnonzero(keep)
-rng = np.random.default_rng(42)         # SEED
-if idx.size > 1000:                     # N_PEAKS_PER_SUBJECT
-    idx = rng.choice(idx, size=1000, replace=False)
-gfp_peaks = ChData(maps[:, np.sort(idx)], gfp_peaks.info)
+prepared_raw, gfp_peaks, peak_audit = preparation['prepare_peaks'](
+    raw, **approved_microstate_preparation)
+# Save peak_audit, including actual selected indices and counts, with participant_id.
 ```
+
+`approved_microstate_preparation` supplies `channels`, `filter_kwargs`,
+`reference`, `min_peak_distance`, `reject_by_annotation`, `gfp_reject_sd`,
+`gfp_reference`, `max_peaks` and `seed`. Missing settings do not inherit the
+literature values above. Complete filtering options belong to the approved
+`filter_kwargs`; nondefault values pass through to MNE. Selected bad channels
+must be handled upstream under the approved policy. No interpolation or automatic
+extra channel removal is performed here.
 
 ## Phase B — Backend resolution
 
@@ -73,32 +67,36 @@ Modified k-means ignores map polarity (a topography and its polarity-inverted ve
 ### Pycrostates path (default)
 
 ```python
-from pycrostates.cluster import ModKMeans
-from pycrostates.io import ChData
-import numpy as np
-
-# Collect (filtered, average-ref, GFP-peak, capped) topographies across subjects.
-# Reuse the Phase A extraction (2-20 Hz, 10 ms min distance, GFP rejection, cap).
-all_peaks = []  # list of ChData, one per subject (see Phase A)
+# AEA example: microstate-group-preparation
+# Each source path and participant ID comes from the actual recording ledger.
+peak_records, prepared_raws = [], {}
 for sub in subjects:
-    raw = mne.io.read_raw_fif(f'clean-stage/{sub}/{sub}-clean.fif', preload=True)
-    raw.filter(2, 20)                   # FILTER_BAND, NOT 1-40 Hz
-    raw.set_eeg_reference('average')
-    peaks = extract_gfp_peaks(raw, min_peak_distance=max(int(round(0.010 * raw.info['sfreq'])), 1))
-    all_peaks.append(peaks)             # apply GFP rejection + cap as in Phase A
+    raw = mne.io.read_raw_fif(raw_paths[sub], preload=True)
+    prepared, peaks, audit = preparation['prepare_peaks'](
+        raw, **approved_preparation_by_participant[sub])
+    prepared_raws[sub] = prepared
+    peak_records.append({'participant_id':sub, 'peaks':peaks, 'audit':audit})
 
-# Stack subject peak-map arrays into one ChData for single-pass group fitting
-group_arr = np.hstack([p.get_data() for p in all_peaks])
-group_peaks = ChData(group_arr, all_peaks[0].info)
-
-# Fit modified k-means (polarity-invariant)
-ModK = ModKMeans(n_clusters=4, n_init=100, max_iter=1000, random_state=42)
-ModK.fit(group_peaks, n_jobs=4)
-
-ModK.plot()                              # topographic maps A, B, C, D
-print(f"GEV: {ModK.GEV_:.3f}")
-ModK.save('microstate-stage/group/fitted_model.pkl')
+# Same names but a different stored order are reordered before concatenation.
+# Different sets or positions require approved upstream handling, not hstack.
+group_peaks, all_peaks, group_peak_audit = preparation['pool_peaks'](
+    peak_records, channels=approved_group_channels)
+# Save group_peak_audit before fitting. all_peaks is aligned per-participant input.
 ```
+
+```python
+# AEA example: microstate-group-fitting
+from pycrostates.cluster import ModKMeans
+ModK = ModKMeans(**approved_modkmeans_params)
+ModK.fit(group_peaks, n_jobs=approved_n_jobs)
+ModK.save(str(group_model_path))  # native Pycrostates FIF file, e.g. group-model.fif
+```
+
+Plot the fitted model and report measured GEV after fitting. The group path now
+performs the same rejection and cap as the individual path; they are not a
+comment-only instruction. The audit retains each participant's original channel
+order and preparation record. Channel location/unit/frame mismatches stop
+pooling rather than attaching the first participant's metadata to different maps.
 
 ### Alternative clustering methods
 
@@ -139,19 +137,22 @@ for k in range(2, 9):
 The single-pass concatenation above is a valid lighter variant, but the canonical and most-reliable group strategy is hierarchical (Khanna et al. 2014 'global maps'): cluster each subject first, pool the per-subject maps, then re-cluster the pool into group templates.
 
 ```python
-# 1) Per-subject clustering on that subject's GFP peaks
+from pycrostates.io import ChData
+import numpy as np
+# all_peaks is the name-aligned, actually filtered/rejected/capped output above.
+# 1) Per-subject clustering on that subject's prepared GFP peaks
 subject_centers = []
 for sub, peaks in zip(subjects, all_peaks):
-    mk = ModKMeans(n_clusters=4, n_init=100, max_iter=1000, random_state=42)
-    mk.fit(peaks, n_jobs=4)
+    mk = ModKMeans(**approved_subject_modkmeans_params)
+    mk.fit(peaks, n_jobs=approved_n_jobs)
     subject_centers.append(mk.cluster_centers_)        # (4, n_channels)
 
 # 2) Pool subject-level maps (e.g. 4 x N_subjects) into one ChData
 pooled = ChData(np.vstack(subject_centers).T, all_peaks[0].info)
 
 # 3) Re-cluster the pooled maps into the 4 GROUP templates
-group_ModK = ModKMeans(n_clusters=4, n_init=100, max_iter=1000, random_state=42)
-group_ModK.fit(pooled, n_jobs=4)
+group_ModK = ModKMeans(**approved_group_modkmeans_params)
+group_ModK.fit(pooled, n_jobs=approved_n_jobs)
 
 # 4) Back-fit the group templates to every subject's continuous data (Phase E)
 ```
@@ -182,20 +183,21 @@ from pycrostates.utils import _correlation  # internal, or compute manually
 Assign each time point to the closest microstate class:
 
 ```python
-# Back-fit the fitted (group) model to ALL samples of continuous data.
-# Clustering used only GFP peaks, but predict() assigns EVERY time point.
-sfreq = raw.info['sfreq']
-segmentation = ModK.predict(
-    raw,
-    factor=10,                                  # label-smoothing weight (lambda-like); 0 = none
-    half_window_size=3,                         # SMOOTH_HALF_WINDOW: 3 samples each side (Pascual-Marqui)
-    min_segment_length=int(round(0.030 * sfreq)),  # MIN_SEGMENT_MS=30 -> small-segment rejection
-    reject_edges=True,
-)
-# segmentation.labels: microstate label per sample (-1 = unlabeled / rejected)
+# AEA example: microstate-backfit
+# raw is prepared_raws[sub] or prepared_raw from the same preparation contract.
+segmentation, backfit_audit = preparation['backfit_microstates'](
+    raw, approved_fitted_model, settings=approved_microstate_backfit)
+# Save the approved units/values and actual converted sample counts in backfit_audit.
 ```
 
-**Smoothing provenance & scope.** `half_window_size=3` and λ≈5 follow Pascual-Marqui et al. 1995 windowed smoothing; `min_segment_length` implements toolbox small-segment rejection (`minTime=30 ms`), recursively reassigning segments shorter than 30 ms to the most-correlated neighbour. Temporal smoothing is applied to **continuous back-fit labels and to ERP segmentation**, but **NOT** when clustering temporally-independent resting GFP peaks (peaks are not consecutive in time).
+`approved_microstate_backfit` declares factor, tol, half_window, min_segment,
+reject_edges and reject_by_annotation. Each window has an explicit value and
+unit (`samples`, `ms` or `s`). Both this skill and the recipe use this exact helper.
+It does not select or fit a template, change duration policy, clamp a rounded
+window, or infer the settings from a historical example. Read its returned
+`predict_kwargs` as the actual native call configuration.
+
+**Smoothing provenance & scope.** The literature example `half_window_size=3` and λ≈5 follows Pascual-Marqui et al. 1995 windowed smoothing; the example `minTime=30 ms` specifies toolbox small-segment rejection, recursively reassigning segments shorter than 30 ms to the most-correlated neighbour. Temporal smoothing is applied to **continuous back-fit labels and to ERP segmentation**, but **NOT** when clustering temporally-independent resting GFP peaks (peaks are not consecutive in time).
 
 **Boundary / duration convention (midpoint rule).** Back-fitting labels every sample by maximum |spatial correlation| with the templates. The microstate-duration boundary between two *unlike* adjacent GFP-peak maps falls at the **midpoint** of the interval (first half → preceding class, second half → following class); this midpoint rule is what `mean_duration` measures (Khanna et al. 2014, Fig. 1).
 
@@ -244,6 +246,11 @@ Report **both** the observed matrix and the base-rate-corrected `T_obs − T_exp
 - **Transition probabilities**: Markov-like matrix. Non-random transitions suggest structured temporal dynamics.
 
 ## Phase G — Write outputs
+
+Retain per-participant preparation records and the group pooling record: input
+and aligned channel order, source participant IDs, filter/reference settings,
+actual GFP threshold/reference, extracted/rejected/selected counts, selected
+indices, cap and seed. A cap alone is not proof of equal participant weighting.
 
 ### `microstate-stage/<sub>/<sub>-<cond>-microstate_params.json`
 ```json

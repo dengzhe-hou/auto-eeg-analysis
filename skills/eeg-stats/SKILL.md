@@ -55,6 +55,10 @@ Before running, these must exist:
 
 ## Procedure reference
 
+Use [conditional method choices](references/method-choices.md) when formulating
+a plan. They do not authorize changing an approved test, estimator or interval,
+or adding sensitivity analyses during execution.
+
 Choose the section that matches the current operation. Detailed code examples
 and numerical conventions remain in the linked source.
 

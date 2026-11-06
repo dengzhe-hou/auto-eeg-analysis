@@ -1,11 +1,15 @@
 ## Constants
 
 - **BACKEND = `mne`** — MNE-Python is the computation backend; `statsmodels` is the optional factorial/mixed-model backend (see Phase D).
-- **DESIGN = `within`** — `within` (all subjects see all conditions), `between` (independent groups), or `mixed` (one within factor × one between factor). Read from `ANALYSIS_PLAN.md`.
-- **DEFAULT_PERMS = `5000`** — must match `ANALYSIS_PLAN.md`. Override `— perms: 1000` for development only; never lower it to chase significance.
-- **SEED = read from ANALYSIS_PLAN.md `RNG seeds > Cluster permutation`**, default `42`.
-- **ALPHA = read from ANALYSIS_PLAN.md claim table `α` column**, default `0.05`.
-- **CI_LEVEL = `0.95`** — confidence level for grand-average bands and effect-size CIs.
+- **APPROVED SETTINGS** — resolve `approved_group_params` from the task/plan:
+  design, contrast order, observation identities, test/statistic, `tail`,
+  `cluster_forming_alpha` (if threshold is alpha-derived), corrected `alpha`,
+  `n_permutations`, `seed`, CI definition and any TFCE settings. No fallback
+  design, direction, alpha or seed is selected here.
+- **THRESHOLD** — examples below convert an explicitly approved cluster-forming
+  alpha. If the plan instead fixes a numeric threshold, pass that value and
+  record its actual meaning; inconsistent alpha/direction labels require
+  resolution rather than an automatic change to the approved threshold.
 - **EFFECT_SIZE = inferred from test** — Cohen's d / dz (t-contrasts), partial eta-squared (ANOVA effects).
 - **OUTPUT_DIR = `group-stage/`** — create if missing.
 
@@ -27,13 +31,15 @@ Write `group-stage/GROUP_PLAN.json` (design, factor levels, group Ns, ROI, windo
 ## Phase B — Group grand-averages with confidence intervals
 
 ```python
+# AEA example: group-evokeds
 import mne, numpy as np
 # Per-condition / per-group grand average + CI band
-evokeds = {cond: [mne.read_evokeds(f"{s}-ave.fif", condition=cond)[0] for s in subs]
+evokeds = {cond: [mne.read_evokeds(f"{s}-ave.fif", condition=cond) for s in subs]
            for cond in conditions}
 grand = {cond: mne.grand_average(evokeds[cond]) for cond in conditions}      # mean across subjects
-# 95% CI band for a butterfly/ROI plot via bootstrap over subjects (MNE built-in):
-mne.viz.plot_compare_evokeds(evokeds, picks=roi, combine="mean", ci=0.95)    # bootstrap CI by default
+# Use the approved band/callback and retain its actual definition in the caption.
+figures = mne.viz.plot_compare_evokeds(
+    evokeds, picks=roi, combine="mean", ci=approved_group_params['ci'], show=False)
 ```
 
 - Report CIs as **across-subject** variability (the second-level error term), not across-trial. Cite Luck (2014) on why standard error must reflect the random effect that licenses the inference.
@@ -44,29 +50,48 @@ mne.viz.plot_compare_evokeds(evokeds, picks=roi, combine="mean", ci=0.95)    # b
 Cluster-based permutation solves the massive multiple-comparison problem across channels × time without parametric assumptions, by building a single max-cluster null distribution (Maris & Oostenveld 2007).
 
 ```python
+# AEA example: group-cluster
 from mne.stats import (spatio_temporal_cluster_test,        # between-group / one-way independent
                        spatio_temporal_cluster_1samp_test)  # within / paired (X = A − B)
 import scipy.stats
-
-adjacency, ch_names = mne.channels.find_ch_adjacency(info, ch_type="eeg")  # spatial neighbours
-
-# --- Within / paired: one-sample test on the difference array (subjects, times, channels) ---
-df = X.shape[0] - 1
-thr = -scipy.stats.t.ppf(1 - alpha, df) if tail == -1 else scipy.stats.t.ppf(1 - alpha, df)
-t_obs, clusters, cluster_p, H0 = spatio_temporal_cluster_1samp_test(
-    X, threshold=thr, tail=tail, n_permutations=N, adjacency=adjacency,
-    seed=SEED, out_type="mask")
-
-# --- Between-group (≥2 independent groups): F-threshold, list of arrays ---
-f_thr = scipy.stats.f.ppf(1 - alpha, dfn=len(groups) - 1,
-                          dfd=sum(g.shape[0] for g in groups) - len(groups))
-t_obs, clusters, cluster_p, H0 = spatio_temporal_cluster_test(
-    [Xg1, Xg2], threshold=f_thr, n_permutations=N, adjacency=adjacency,
-    seed=SEED, out_type="mask")  # default stat_fun = F (ANOVA); permutes group labels
+from pathlib import Path
+import runpy
+group_helpers = runpy.run_path(str(
+    Path(AEA_ROOT) / 'skills/eeg-group-compare/scripts/statistics.py'))
+params = approved_group_params
+if params['design'] == 'within' and params['statistic'] == 't':
+    # X is the identity-aligned per-participant A-minus-B array.
+    thr = group_helpers['cluster_t_threshold'](
+        n_observations=X.shape[0], cluster_forming_alpha=params['cluster_forming_alpha'],
+        tail=params['tail'])
+    t_obs, clusters, cluster_p, H0 = spatio_temporal_cluster_1samp_test(
+        X, threshold=thr, tail=params['tail'], n_permutations=params['n_permutations'],
+        adjacency=adjacency, seed=params['seed'], out_type='mask')
+elif params['design'] == 'between' and params['statistic'] == 'F':
+    # group_arrays contains independent group arrays, not group-name strings.
+    thr = scipy.stats.f.ppf(1 - params['cluster_forming_alpha'],
+        dfn=len(group_arrays)-1,
+        dfd=sum(g.shape[0] for g in group_arrays)-len(group_arrays))
+    t_obs, clusters, cluster_p, H0 = spatio_temporal_cluster_test(
+        group_arrays, threshold=thr, tail=1, n_permutations=params['n_permutations'],
+        adjacency=adjacency, seed=params['seed'], out_type='mask')
+else:
+    raise ValueError('Use the approved design/statistic; these examples cover paired t and independent F')
 ```
 
-- Between-group is **two-sided by construction** (F-statistic) unless you supply a one-sided `stat_fun`; record this.
-- Significant clusters are those with `cluster_p < alpha`. Report the cluster p-value, the search space (ROI + window), and the cluster-forming threshold.
+Use adjacency for the actual selected channel order and retain that order with
+the input array. Both branches require participant-level inputs resolved in
+Phase A. The snippets above illustrate alpha-derived thresholds only.
+
+- A paired t statistic preserves the approved contrast and tail. At df=19,
+  two-sided cluster-forming alpha=.05 gives a magnitude threshold of 2.0930;
+  one-sided alpha=.05 gives 1.7291. Neither number is a default study setting.
+- The independent-groups F test is non-directional about group differences but
+  tests the **upper tail of F** (`tail=1`). It does not establish the sign of an
+  A-minus-B effect; a planned signed t statistic needs its own explicit branch.
+- Significant clusters use `cluster_p < approved_group_params['alpha']`.
+  Record corrected alpha separately from the cluster-forming alpha/threshold,
+  plus the search space, seed, actual statistic and permutation count.
 - **Interpretation guard (Sassenhagen & Draschkow 2019):** a significant cluster means "an effect exists somewhere in the tested space" — it does NOT license claims about precise onset, offset, or peak channel. Never write "the groups differed from 180–240 ms"; write "a significant cluster spanned the 180–240 ms, central window."
 
 ## Phase D — Factorial / repeated-measures and mixed designs
@@ -119,15 +144,36 @@ mdf = md.fit()
 TFCE removes the arbitrary cluster-forming threshold by integrating cluster support over all thresholds, giving voxel-/point-level corrected p-values (Smith & Nichols 2009).
 
 ```python
-# Pass a dict instead of a scalar threshold; works for both _test and _1samp_test
-t_obs, clusters, p_values, H0 = spatio_temporal_cluster_1samp_test(
-    X, threshold=dict(start=0, step=0.2), n_permutations=N,
-    adjacency=adjacency, seed=SEED, out_type="mask")
-# p_values is per-point (same shape as t_obs); significant points: p_values < alpha
+# AEA example: group-tfce
+from pathlib import Path
+import runpy
+from mne.stats import spatio_temporal_cluster_1samp_test, spatio_temporal_cluster_test
+group_helpers = runpy.run_path(str(
+    Path(AEA_ROOT) / 'skills/eeg-group-compare/scripts/statistics.py'))
+params = approved_group_params
+if params['design'] == 'within' and params['statistic'] == 't':
+    t_obs, clusters, p_values, H0 = spatio_temporal_cluster_1samp_test(
+        X, threshold=params['tfce_threshold'], tail=params['tail'],
+        n_permutations=params['n_permutations'], adjacency=adjacency,
+        seed=params['seed'], out_type='mask')
+elif params['design'] == 'between' and params['statistic'] == 'F':
+    t_obs, clusters, p_values, H0 = spatio_temporal_cluster_test(
+        group_arrays, threshold=params['tfce_threshold'], tail=1,
+        n_permutations=params['n_permutations'], adjacency=adjacency,
+        seed=params['seed'], out_type='mask')
+else:
+    raise ValueError('Use the approved design/statistic for TFCE')
+p_map = group_helpers['tfce_p_map'](t_obs, clusters, p_values)
+significant_points = p_map < params['alpha']
 ```
 
 - TFCE returns a **p-value per time-channel point**, so you may report the spatial/temporal extent of significance more honestly than cluster-sum (but onset bias caveats still apply; Sassenhagen & Draschkow 2019).
-- `start`/`step` trade sensitivity vs runtime; defaults `start=0, step=0.2` are standard for t-stat maps. Record them.
+- `p_values` can be flat while `t_obs` is time × channel. Map each returned
+  singleton mask to its corresponding p-value before drawing a significance
+  map. Preserve the actual time/channel axes. This is not an ordinary
+  cluster-sum p-value map, where a cluster p cannot be copied to pointwise claims.
+- `start`/`step` and direction come from the approved TFCE specification; record
+  them without filling missing choices from a numerical example.
 
 ## Phase F — Effect sizes with confidence intervals
 
@@ -177,7 +223,7 @@ Write per-claim:
 {
   "claim_id": "C1", "design": "between", "groups": ["patient", "control"],
   "n_per_group": {"patient": 22, "control": 25}, "balanced": false,
-  "test": "spatio_temporal_cluster_test", "stat": "F", "tail": 0,
+  "test": "spatio_temporal_cluster_test", "stat": "F", "tail": 1,
   "n_permutations": 5000, "threshold": 3.94, "threshold_kind": "F(1,45) at p=.05",
   "seed": 42, "window": [0.18, 0.24], "roi_1020": ["Cz","CPz","Pz"],
   "window_matches_plan": true, "roi_matches_plan": true,

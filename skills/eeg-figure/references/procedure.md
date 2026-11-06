@@ -83,32 +83,60 @@ ax.axhline(0, color='k', ls='-', lw=0.3)
 #### Difference wave with confidence interval
 ```python
 # difference = condition_A - condition_B, per subject
-diff_mean = np.mean(diff_array, axis=0)
-diff_sem = scipy.stats.sem(diff_array, axis=0)
-ci_95 = 1.96 * diff_sem
-ax.plot(times, diff_mean, color='k', lw=1.5)
-ax.fill_between(times, diff_mean - ci_95, diff_mean + ci_95, alpha=0.2, color='gray')
+from pathlib import Path
+import runpy
+mean_band = runpy.run_path(str(Path(AEA_ROOT) / "skills/eeg-figure/scripts/variability.py"))["mean_band"]
+# Approved paired differences, observations by time, in the stated plot unit.
+band = mean_band(diff_array, specification=approved_band_spec)
+ax.plot(times, band['mean'], color='k', lw=1.5)
+ax.fill_between(times, band['lower'], band['upper'], alpha=0.2, color='gray')
+band_caption = band['caption']
 ```
 
-#### Group ERP with mean ± SEM band (preferred convenience)
+#### Group ERP with the approved uncertainty band
+
+Read the specification from `FIGURE_PLAN.md`: `kind`, `unit` and
+`observation_unit`, plus `std_ddof` for SEM, `level` and `std_ddof: 1` for
+Student-t CI, or `method: percentile`, `level`, `n_resamples` and `seed` for
+the supported bootstrap CI. Both CI paths require `sidedness: two-sided`;
+one-sided intervals need their own approved implementation. These choices have no automatic defaults.
+Other estimators or CI methods need their approved implementation.
+
 ```python
-# Let MNE draw the grand average + variability band from a list/dict of per-subject
-# Evoked objects. Default band is mean ± 1 SEM; ci=0.95 switches to a bootstrap CI.
-mne.viz.plot_compare_evokeds(
-    {'A': evokeds_A, 'B': evokeds_B},   # values are LISTS of per-subject Evoked
-    picks=roi_channels, combine='mean',
-    ci=True,                            # mean ± SEM; or ci=0.95 for bootstrap 95% CI
-    show_sensors=False, show=False)
-
-# Manual equivalent (when you need the raw array, e.g. to overlay a cluster mask):
-data = np.array([ev.copy().pick(roi_channels).data.mean(0) for ev in evokeds_A])
-avg = data.mean(0)
-sem = data.std(0, ddof=0) / np.sqrt(data.shape[0])   # published default band
-ax.plot(times, avg, lw=1.5)
-ax.fill_between(times, avg - sem, avg + sem, alpha=0.2)
+from pathlib import Path
+import runpy
+import numpy as np
+mean_band = runpy.run_path(str(Path(AEA_ROOT) / "skills/eeg-figure/scripts/variability.py"))["mean_band"]
+# Each Evoked contributes one observation; ROI mean is approved for this panel.
+data_v = np.array([ev.copy().pick(roi_channels).data.mean(0) for ev in evokeds_A])
+scale = {'V': 1., 'uV': 1e6, 'µV': 1e6}[approved_band_spec['unit']]
+band = mean_band(data_v * scale, specification=approved_band_spec)
+ax.plot(evokeds_A[0].times, band['mean'], lw=1.5)
+ax.fill_between(evokeds_A[0].times, band['lower'], band['upper'], alpha=0.2)
+band_caption = band['caption']
 ```
 
-- The published default visual band is **mean ± 1 SEM**, with `SEM = std(ddof=0) / sqrt(n_subjects)`; state which band (SEM vs 95% CI) the figure uses in the caption — they are not interchangeable.
+For MNE rendering of one condition, pass a callable for the approved interval.
+MNE supplies EEG observations in its plot unit, µV; the caption uses that unit.
+Repeat per condition/panel with its actual N:
+
+```python
+captions = []
+def planned_ci(observations):
+    band = mean_band(observations, specification={**approved_band_spec, 'unit': 'uV'})
+    captions.append(band['caption'])
+    return np.stack([band['lower'], band['upper']])
+figures = mne.viz.plot_compare_evokeds(
+    {'A': evokeds_A}, picks=roi_channels, combine='mean', ci=planned_ci,
+    show_sensors=False, show=False)
+```
+
+- `ci=True` in MNE means a 95% confidence band, not ±1 SEM. Ordinary plots use
+  bootstrap estimation; topographic layouts use a parametric interval. See
+  [the API](https://mne.tools/1.8/generated/mne.viz.plot_compare_evokeds.html).
+- Retain the actual computed band's caption and specification. SEM, Student-t
+  CI and bootstrap CI are distinct. This helper describes mean bands; it does
+  not perform cluster inference or choose an estimator.
 - Grand average across subjects: `mne.grand_average([ev1, ev2, ...])`.
 - **Keep the per-subject axis** for cluster/ANOVA input — do NOT average across subjects before stats (the analog of FieldTrip `keepindividual='yes'`).
 
@@ -457,4 +485,4 @@ All must pass before declaring success:
 | Individual points overlap heavily | Add jitter, reduce marker size, or use transparency. |
 | Connectivity matrix all one color / saturated | Diagonal is dominating the scale. Mask it (`np.fill_diagonal(M, np.nan)`) and set `vmin/vmax` from off-diagonal values. |
 | Source map looks like noise or peaks everywhere | No threshold applied, or individual STC not morphed to fsaverage. Apply `clim=dict(kind='value', lims=[...])` and `compute_source_morph` to fsaverage first. |
-| Group band looks implausibly tight or wide | Confirm whether it is SEM or 95% CI, and that SEM uses `std(ddof=0)/sqrt(n_subjects)` over the subject axis (not over channels/time). |
+| Group band looks implausibly tight or wide | Confirm its actual SEM/CI method, approved SD convention and observation axis. Compare the rendered bounds with the computed band and matching caption; do not average channels/time in place of observations. |

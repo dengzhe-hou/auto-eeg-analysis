@@ -186,7 +186,10 @@ from mne.time_frequency import tfr_array_morlet
 coefs = tfr_array_morlet(epochs.get_data(), sfreq=epochs.info['sfreq'],
                          freqs=freqs, n_cycles=n_cycles,
                          output='complex', zero_mean=True, n_jobs=-1)   # (n_epochs, n_ch, n_freqs, n_times)
-itc = np.abs(np.mean(np.exp(1j * np.angle(coefs)), axis=0))   # (n_ch, n_freqs, n_times), in [0,1]
+from pathlib import Path
+import runpy
+itc_tools = runpy.run_path(str(Path(AEA_ROOT) / 'skills/eeg-tfr/scripts/itc.py'))
+itc = itc_tools['itc_from_complex'](coefs, trial_axis=0)  # (n_ch, n_freqs, n_times)
 power_st = (np.abs(coefs) ** 2)                                # single-trial power
 ```
 
@@ -194,7 +197,10 @@ This is the same phasor average that defines PLV between channels (applied to a 
 
 ## Phase D — Baseline Correction
 
-Apply baseline correction to all TFR outputs:
+Apply the approved baseline correction to **power** outputs. Raw ITC remains
+a unitless phase-consistency measure in `[0,1]`; these power baseline modes
+do not automatically apply to it. Label any separately approved ITC
+transformation explicitly and keep the raw ITC.
 
 1. Verify baseline window `[t_start, t_end]` falls entirely within the epoch.
 2. Apply chosen mode:
@@ -214,18 +220,61 @@ ITC (also called phase-locking factor, PLF) measures phase consistency across tr
 
 1. Compute single-trial complex spectral estimates (not averaged).
 2. ITC at each time-frequency point: `ITC(t,f) = |mean(exp(i * phase(t,f,trial)))| across trials`.
-3. ITC ranges from 0 (random phase) to 1 (perfect phase-locking).
-4. ITC is **not** affected by power — it is a pure phase measure.
-5. ITC significance can be tested via Rayleigh test or permutation (shuffle trial labels).
+3. ITC ranges from 0 to 1 (perfect phase-locking); random finite trial samples usually have positive ITC.
+4. The definition discards amplitude magnitude, but observed phase estimates can still depend on signal-to-noise. A zero-amplitude complex coefficient has undefined phase; record/resolve its handling rather than assigning angle zero or adding an unapproved epsilon.
+5. Resolve whether the target is a descriptive ITC, single-condition locking against an approved null, or a condition difference. Pure **trial-order shuffling within a condition leaves ITC unchanged**, so it is not a null for absolute locking. A Rayleigh test concerns an explicitly specified circular-uniformity null with its own assumptions; phase/time surrogates need an approved operation that changes alignment to the event. Do not choose one automatically.
 5b. **ERSP vs ITC — keep them distinct in code.** ERSP (event-related spectral perturbation) = baseline-normalized *trial-averaged power* (average power **then** baseline). ITC = phase-locking computed from *single-trial complex coefficients* (`return_itc=True` on `tfr_morlet`, or `output='complex'` on `tfr_array_morlet`). You cannot recover ITC from an averaged power TFR — keep the complex/per-trial data.
-5c. **ITC positive bias.** ITC is biased upward at low trial counts (the phasor average of random phases is non-zero for finite N). Always report the trial count; when contrasting ITC across conditions with unequal N, equalize by subsampling, or compare against a permutation/shuffled-phase null rather than the raw magnitude.
+5c. **ITC positive bias.** Report trial counts per participant/condition. With unequal counts, preserve the approved count-matching or inferential procedure; do not silently subsample. Exchanging condition labels can test an ITC **difference** when trials are exchangeable under that null. It does not establish absolute locking in either condition, and it does not itself remove finite-count bias from the reported raw magnitudes.
 6. Save ITC as separate file: `tfr-stage/<sub>/<sub>-<cond>-itc.h5`.
+
+The following example takes its target and null from `approved_itc_params`.
+The optional label-test branch is deliberately limited to **one actual
+participant**, two conditions, and exchange within the declared blocks.
+Keep coefficient trial IDs aligned with the metadata; session/trial counts
+are not independent participants. Multi-participant inference and other
+nulls use their separately approved implementations.
+
+```python
+# AEA example: tfr-itc-target
+from pathlib import Path
+import runpy
+
+params = approved_itc_params
+itc_tools = runpy.run_path(str(Path(AEA_ROOT) / 'skills/eeg-tfr/scripts/itc.py'))
+itc_values = itc_tools['itc_from_complex'](coefficients, trial_axis=params['trial_axis'])
+route = itc_tools['inference_route'](
+    target=params['target'], null_operation=params['null_operation'])
+itc_test = None
+if route == 'condition_label_exchange':
+    itc_test = itc_tools['condition_label_test'](
+        coefficients, trial_conditions, trial_axis=params['trial_axis'],
+        participant_ids=participant_ids, conditions=params['conditions'],
+        exchangeability_blocks=exchangeability_blocks,
+        n_permutations=params['n_permutations'], seed=params['seed'],
+        alternative=params['alternative'],
+    )
+elif route != 'descriptive':
+    raise NotImplementedError('Use the separate approved test for this ITC target/null')
+# Save raw ITC, axes, trial identities/counts and the resolved target.
+# If computed, save itc_test['p_uncorrected'] separately; correct the planned
+# channel/frequency/time test family before reporting significance.
+```
+
+The label-test helper computes `ITC(condition[0]) - ITC(condition[1])`,
+preserves the observed condition counts within each exchangeability block,
+and streams exceedance counts. Monte Carlo p-values use `(exceedances+1) /
+(n_permutations+1)`, including identity permutations. Record the condition
+order, blocks, alternative, seed and permutation count. Its pointwise
+p-values are **uncorrected** and neither a population test nor a
+multiple-comparison result.
 
 ### ITPC / ITLC — phase-only vs amplitude-weighted phase-locking (single-channel, across-trial)
 
 ITC as defined above is the **inter-trial phase coherence (ITPC)** — the across-trial average of *unit* phasors (amplitude discarded). Tallon-Baudry & Bertrand (1996) also define the **inter-trial linear coherence (ITLC)**, which *weights each trial's phasor by its amplitude*, so trials with stronger oscillations contribute more. Both are **single-channel, across-trial** measures of evoked phase-locking / phase resetting — they are **not** inter-channel connectivity and **not** power.
 
 ```python
+from pathlib import Path
+import runpy
 import numpy as np
 from mne.time_frequency import tfr_array_morlet
 
@@ -244,7 +293,8 @@ F = tfr_array_morlet(epochs.get_data(), sfreq=epochs.info['sfreq'],
 N = F.shape[0]                                            # trial count
 
 # ITPC (== itc.data above): average of unit phasors
-itpc = np.abs(np.mean(np.exp(1j * np.angle(F)), axis=0)) # (n_ch, n_freqs, n_times), in [0, 1]
+itc_tools = runpy.run_path(str(Path(AEA_ROOT) / 'skills/eeg-tfr/scripts/itc.py'))
+itpc = itc_tools['itc_from_complex'](F, trial_axis=0) # (n_ch, n_freqs, n_times), in [0, 1]
 
 # ITLC (Tallon-Baudry & Bertrand 1996): amplitude-weighted, normalised to [0, 1]
 itlc = np.abs(np.sum(F, axis=0)) / np.sqrt(N * np.sum(np.abs(F) ** 2, axis=0))
@@ -253,26 +303,44 @@ itlc = np.abs(np.sum(F, axis=0)) / np.sqrt(N * np.sum(np.abs(F) ** 2, axis=0))
 Use ITPC when you want a power-independent index of phase consistency; use ITLC when stronger-amplitude trials should dominate the phase estimate (it is closer to the magnitude of the trial-averaged complex signal normalised by total energy). Both collapse the trial axis of a **single channel** — never the channel axis.
 
 **When ITC matters:**
-- ERPs are visible only if ITC > 0 in the relevant frequency band.
+- Phase-consistent activity can contribute to an evoked average; a merely positive finite-sample ITC is not evidence of significant locking.
 - High power with low ITC = induced (non-phase-locked) activity.
 - High power with high ITC = evoked (phase-locked) activity.
-- ERDS maps typically show induced activity (ITC ≈ 0 after baseline).
+- These are descriptive patterns, not significance tests or an isolation of induced power. Power baseline correction neither removes the evoked contribution nor defines an ITC null.
 
 ### Make "induced" power actually induced (Kalcher & Pfurtscheller 1995)
 
 The skill labels high-power/low-ITC activity "induced" conceptually, but **total** power (the default `tfr_morlet` output) still contains the **evoked** (phase-locked) contribution — an ERSP/ERDS map called "induced" without an isolation step is mislabeled. To isolate genuinely induced power, subtract the evoked response from every trial *before* the TFR:
 
 ```python
-erp = epochs.average()                        # phase-locked (evoked) response
-induced = epochs.copy()
-induced._data -= erp.data[None]               # remove the evoked part trial-by-trial
-power_induced = mne.time_frequency.tfr_morlet(induced, freqs=freqs, n_cycles=n_cycles,
-                                              return_itc=False, average=True, decim=DECIM)
-# evoked power = TFR of the average ERP:
-power_evoked = mne.time_frequency.tfr_morlet(
-    mne.EpochsArray(erp.data[None], erp.info), freqs=freqs, n_cycles=n_cycles,
-    return_itc=False, average=True, decim=DECIM)
+# AEA example: tfr-power-time-grid
+# This Morlet example applies when the plan requests these three power outputs.
+params = approved_tfr_params
+if params['method'] != 'morlet':
+    raise ValueError('Use the approved TFR method; this example is Morlet only')
+analysis_epochs = epochs.copy().pick(params['channels'])
+erp = analysis_epochs.average(picks=analysis_epochs.ch_names)
+induced = analysis_epochs.copy().subtract_evoked(erp)
+# The synthetic epoch represents the ERP, not one independent participant/trial.
+evoked_epoch = mne.EpochsArray(
+    erp.data[None], erp.info.copy(), tmin=erp.tmin, baseline=None)
+kwargs = dict(freqs=np.asarray(params['freqs']), n_cycles=params['n_cycles'],
+    decim=params['decim'], zero_mean=params['zero_mean'], n_jobs=params['n_jobs'],
+    picks=analysis_epochs.ch_names, return_itc=False, average=True)
+power_total = mne.time_frequency.tfr_morlet(analysis_epochs, **kwargs)
+power_induced = mne.time_frequency.tfr_morlet(induced, **kwargs)
+power_evoked = mne.time_frequency.tfr_morlet(evoked_epoch, **kwargs)
+for power in (power_total, power_induced, power_evoked):
+    np.testing.assert_array_equal(power.times, analysis_epochs.times[::params['decim']])
+    np.testing.assert_array_equal(power.freqs, params['freqs'])
+    assert power.ch_names == analysis_epochs.ch_names
 ```
+
+Retain the input tmin, actual times, channels, sampling rate and integer
+decimation in `TFR_PARAMS.json`. The example preserves the original ERP time
+origin instead of silently restarting at 0 s, and performs no additional
+baseline correction or latency alignment. Compute only requested power types
+in a study; all three above are shown together to check their shared grid.
 
 Offer a `power_type: total|induced|evoked` option (default `total`). **Caveat to encode (Yeung et al. 2004):** ERP subtraction only removes phase-locked power if the evoked latency is *stable* across trials — with trial-to-trial latency jitter the average ERP is temporally smeared, subtraction is incomplete, and residual evoked energy leaks into "induced" power (and inflates ITC). Either latency-align trials first, or report **total power + ITC** rather than claiming a clean evoked/induced split. Cite: Kalcher, J., & Pfurtscheller, G. (1995). Discrimination between phase-locked and non-phase-locked event-related EEG activity. *Electroencephalogr. Clin. Neurophysiol.*, 94(5), 381–384; Yeung, N., Bogacz, R., Holroyd, C. B., & Cohen, J. D. (2004). Detection of synchronized oscillations in the electroencephalogram: an evaluation of methods. *Psychophysiology*, 41(6), 822–832.
 
@@ -331,7 +399,11 @@ For each subject, produce:
 HDF5 containing the averaged TFR (after baseline correction). Shape: `(n_channels, n_freqs, n_times)`.
 
 ### `tfr-stage/<sub>/<sub>-<cond>-itc.h5`
-HDF5 containing inter-trial coherence. Same shape as TFR.
+HDF5 containing raw unitless inter-trial coherence. Same axes as TFR; record
+trial counts per participant/condition and retain aligned coefficient/trial
+metadata for any approved inference. Save test outputs separately with the
+target, null operation, exchangeability, seed/permutations and correction
+status; do not label raw ITC or an uncorrected p-map as significant.
 
 ### `tfr-stage/<sub>/<sub>-erds-bands.csv`
 Band-aggregated ERDS values for quick inspection and figure generation.

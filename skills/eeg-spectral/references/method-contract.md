@@ -20,11 +20,25 @@ explicit alpha estimator and search interval. They no longer silently shorten
 a segment to fit an epoch. A resolved recipe may provide the parameters when
 approved for this study. PSD-only tasks do not require unrequested band/alpha choices.
 
+The full-study and bounded templates share `resolved_welch_settings` and
+`welch_parameters`: canonical `remove_dc` and null/integer FFT settings map to
+the retained `detrend` and `n_per_seg` form without altering the computation.
+`average` is explicit. Record actual segment/overlap samples after conversion.
+Band and peak helpers require the provided PSD axis to cover the requested
+bounds; they do not silently replace a band with its available intersection.
+
 If the task fixes a choice, implement it and record the override. If it leaves
 a consequential choice open, follow the project's researcher-decision policy:
 propose it with a reason, or record it as unresolved during an unattended run.
 Do not resolve it by searching for the setting closest to a benchmark answer.
 For a plan that already approves these template values, retain them.
+
+A categorical dominant band also needs a power definition and channel weighting.
+The mean absolute power, the mean channel-wise relative power and the ratio of
+mean powers are different summaries. In the continuous `band_power` interface,
+resolve `power_kind`, `aggregation`, numerator boundaries and (for relative
+power) the denominator. Supply only the branches requested by the approved study.
+Do not promote the general relative-power example to a default for dominance.
 
 Checks should compare the same estimand and conventions. Independently recompute
 the result with those settings and compare units and aggregation explicitly.

@@ -44,7 +44,7 @@ class FigureFidelityError(AssertionError):
 
 
 def _lines(ax):
-    return [ln for ln in ax.get_lines() if ln.get_xdata().size]
+    return [ln for ln in ax.get_lines() if np.asarray(ln.get_xdata()).size]
 
 
 def check_line(ax, expected_y, *, expected_x=None, label=None, rtol=1e-6, atol=None):

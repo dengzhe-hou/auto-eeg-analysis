@@ -38,6 +38,9 @@ python tools/load_skill.py eeg-decoding --section "Phase A — Setup"
 
 ## Critical Rules
 
+- CV folds are not participants. For group inference, use one within-participant estimate per actual participant, retaining identities and time grids. Pooled-subject folds do not supply that sample size.
+- Keep approved CV groups and permutation exchangeability units separate. A shuffle that cannot change any labels is an unavailable test, not evidence of no association.
+- Reuse the materialized approved splits throughout scoring, feature selection, generalization and permutations; do not fall back to integer `cv=5`. Use [the validation helpers](scripts/validation.py) for split records, participant handoff and explicit label exchange.
 - **Never** train and test on the same data (no CV = no result).
 - **Never** standardize features across the entire dataset before CV split (data leakage).
 - **Never** report accuracy without chance level and significance test.

@@ -27,6 +27,28 @@ result = sample_entropy(x, m=2, r_fraction=0.2, closed=True)
 value = result["sample_entropy"]
 ```
 
+When starting from an MNE Raw, use the same helper's `sample_entropy_raw`
+entry point so the approved channel selection, operations and half-open crop
+are applied through the bounded preprocessing tools. All metric parameters
+remain explicit:
+
+```python
+complexity = runpy.run_path(str(helper))
+computed = complexity["sample_entropy_raw"](
+    original_raw, analysis_channels=approved_channels,
+    operations=approved_operations, m=approved_m,
+    r_fraction=approved_tolerance_fraction, closed=approved_radius_closed)
+evidence = {"channels": computed["channels"], "segment": computed["segment"],
+            "channel_entropy": computed["channel_entropy"]}
+analysis_metadata = computed["metadata"]
+```
+
+The Raw path reads MNE EEG in V; do not multiply its segment by `1e-6` again.
+SampEn with a segment-relative tolerance can remain unchanged after a unit
+scaling error, so a plausible entropy value does not validate the saved signal.
+Generate counts and report text from `analysis_metadata`, and keep the planned
+per-channel aggregation and undefined-value policy.
+
 Pass the task's actual m and tolerance fraction, rather than always using the
 example values. Run per channel, then aggregate the resulting values as the
 task specifies. Report undefined values and their channels; do not silently

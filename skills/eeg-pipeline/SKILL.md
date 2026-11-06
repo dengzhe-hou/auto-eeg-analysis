@@ -84,4 +84,4 @@ Read this section in [the method background](references/background.md).
 
 - See each child skill's own SKILL.md for stage-specific behavior.
 - Read `AGENT_GUIDE.md` for the project-layout convention.
-- Checkpoint config: `~/.claude/checkpoint.json`.
+- Run controls: [project settings and legacy checkpoint support](../../docs/RUN_SETTINGS.md), read through `tools/run_settings.py` and retained with the actual run.

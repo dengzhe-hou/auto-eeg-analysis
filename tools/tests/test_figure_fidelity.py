@@ -59,6 +59,13 @@ def test_accepts_correct_line(good_fig, data):
     assert check_line(good_fig, truth) is not None
 
 
+def test_reference_lines_do_not_break_actual_curve_checks(good_fig, data):
+    t, truth, *_ = data
+    good_fig.axhline(0., color='grey')
+    good_fig.axvline(0., color='grey')
+    assert check_line(good_fig,truth,expected_x=t*1000) is not None
+
+
 def test_accepts_correct_sem_band(good_fig, data):
     _, truth, _, sd, _ = data
     assert check_errorband_is(good_fig, truth, sd, kind="sem", n=N_SUB) is not None

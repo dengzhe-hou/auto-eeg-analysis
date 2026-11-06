@@ -43,18 +43,23 @@ Before running, these must exist:
 
 - **Never** measure a component not specified in ANALYSIS_PLAN (unless `— exploratory` is passed).
 - **Never** choose time windows or ROI channels based on the grand average — this is circular (Luck & Gaspelin 2017). Use pre-registered or literature-based windows.
-- **Never** use peak amplitude as the sole measure for broad components (P3b, N400, LPP). Use mean amplitude.
-- **Never** report peak latency from noisy data — use fractional area latency instead (Luck 2014).
+- Broad/noisy components make peak scores especially sensitive to noise. Report the limitation and preserve the approved score; do not replace it automatically.
+- Preserve the approved measurement. Flag an unavailable/noisy peak rather than automatically substituting fractional-area latency or mean amplitude. Area latency also needs an explicit area/polarity/crossing definition.
 - **Never** confuse the grand average difference wave (for display) with subject-level difference waves (for statistics).
 - **Never** average across subjects before a cluster/ANOVA test — retain the per-subject array (FieldTrip `keepindividual='yes'`); collapsing first destroys the variance the test needs.
 - **Never** select the time window or ROI from a data-driven test and then report a fixed-window test inside it as pre-registered — that is the circular window problem (Luck & Gaspelin 2017). Pre-register the window (Route A) or report the cluster-corrected result (Route B).
-- **Never** average a contrast whose conditions have very unequal trial counts without equalizing (`equalize_event_counts`) or reporting the imbalance — the difference wave is biased toward the noisier condition.
+- Report retained trials per condition. Unequal counts affect precision but do not by themselves imply bias in a difference of condition means. Equalization discards data and requires an approved rule; do not add it automatically.
 
 
 ## Procedure reference
 
 Choose the section that matches the current operation. Detailed code examples
 and numerical conventions remain in the linked source.
+
+For an approved trapezoid-based fractional-area measure, use
+[the explicit-convention helper](scripts/measurements.py). It requires the area
+mode, polarity, fraction, crossing and interpolation choices; it does not choose
+them from the observed waveform.
 
 ## Constants
 

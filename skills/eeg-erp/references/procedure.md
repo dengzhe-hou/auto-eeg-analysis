@@ -2,9 +2,9 @@
 
 - **BACKEND = `mne`** — MNE-Python is the computation backend.
 - **CONDITIONS = read from ANALYSIS_PLAN claim rows** (the contrasts to be tested).
-- **METHOD = `mean`** (vs `median` — use median if user has high outlier rate even after AR).
+- **METHOD** — approved averaging estimator; do not switch mean/median after inspecting outliers.
 - **GFP = always computed** (paper-required for many ERP papers).
-- **MEASURE = `mean_amp`** — Default component measurement. Override: `— measure: peak` or `— measure: area_latency`.
+- **MEASURE** — approved component measurement, ROI/window, polarity and spatial aggregation. Missing choices remain unresolved; an example does not select a measure.
 - **OUTPUT_DIR = `erp-stage/`** — Create if missing.
 
 > Override: `/eeg-erp projects/my-study — conditions: target,standard — measure: mean_amp — components: N1,P3b`
@@ -36,6 +36,7 @@ For each subject + each condition:
 ### MNE-Python path (default)
 
 ```python
+# AEA example: erp-condition-averages
 import mne
 import numpy as np
 
@@ -43,12 +44,15 @@ import numpy as np
 epochs = mne.read_epochs(f'epoch-stage/{sub}/{sub}-epo.fif')
 
 # Average per condition
+evokeds = {}
 for cond in conditions:
-    evoked = epochs[cond].average()  # method='mean' by default
+    evoked = epochs[cond].average(method=approved_erp_params['averaging_method'])
+    evokeds[cond] = evoked
     evoked.save(f'erp-stage/{sub}/{sub}-{cond}-ave.fif', overwrite=True)
 
 # Difference wave (condition_A minus condition_B per claim contrast)
-diff = mne.combine_evoked([evoked_A, evoked_B], weights=[1, -1])
+condition_A, condition_B = approved_erp_params['contrast']
+diff = mne.combine_evoked([evokeds[condition_A], evokeds[condition_B]], weights=[1, -1])
 diff.save(f'erp-stage/{sub}/{sub}-diff_{contrast_name}-ave.fif', overwrite=True)
 ```
 
@@ -65,7 +69,12 @@ for cond in conditions:
 ```
 
 - **Correction over rejection**: prefer ICA correction of *stereotyped* artifacts (blinks, saccades, line noise) so trials survive, and reserve trial *rejection* for non-correctable segments (gross movement, swallowing, muscle bursts). Over-aggressive IC rejection removes neural signal and can erase part of the ERP (Chaumon et al. 2015) — see `eeg-ica`.
-- If trial counts differ across the conditions in a contrast, the difference wave is biased toward the noisier (lower-n) condition. Either equalize with `epochs.equalize_event_counts([...])` before averaging, or report the imbalance and confirm the effect survives it.
+- Unequal retained counts can produce unequal precision. For condition means
+  with zero-mean errors, unequal counts alone do not imply bias in their
+  difference. Nonlinear scores such as extrema require separate consideration.
+  Record counts and score-specific uncertainty. Equalize trials only if the
+  approved plan specifies the conditions, selection method and stage; retain
+  the pre-equalization counts and selected event identities.
 - Write per-condition `nave` into `ERP_PLAN.json` and surface it in `FINDINGS.md`.
 
 ### Standardized Measurement Error (SME) — quantitative per-subject data quality
@@ -89,7 +98,9 @@ Aggregate across conditions as `RMS(SME)` and report a group-level `SNR = effect
 
 ## Phase D — Component measurement
 
-For each claim's target component, measure amplitude and latency using the method specified in ANALYSIS_PLAN (default: mean amplitude).
+For each claim's target component, use the measurement specified in ANALYSIS_PLAN.
+Resolve all score-specific settings before execution. A poor/no peak or an
+undefined area is an unavailable measurement, not permission to change scores.
 
 ### Measurement methods (from Luck 2014; Keil et al. 2014; Kappenman & Luck 2016)
 
@@ -117,28 +128,44 @@ The maximum (or minimum) voltage in a time window.
 - Biased by noise: peak amplitude is systematically overestimated in noisy data because noise can only increase the apparent peak.
 - Unreliable for broad, plateau-shaped components (P3b, N400).
 - Should only be used for sharp, well-defined components (e.g., P1, N1, N170) with high SNR.
-- Never use peak amplitude as the primary measure when N < 20 or trial counts are low.
+- Low trial counts increase noise sensitivity. Report score-specific quality;
+  do not infer a universal sample-size cutoff or substitute a different score.
 
 ```python
-# MNE — use with caution
-ch, lat, amp = evoked.get_peak(ch_type='eeg', tmin=t_min, tmax=t_max, mode='neg')  # 'neg' for N-components
-# mode: 'pos' for P-components, 'neg' for N-components, 'abs' for either
+# AEA example: erp-peak
+# This example measures an extremum across the approved ROI channels.
+peak_evoked = evoked.copy().pick(roi_channels)
+ch, lat, amp = peak_evoked.get_peak(
+    ch_type='eeg', tmin=t_min, tmax=t_max,
+    mode=approved_erp_params['peak_mode'], return_amplitude=True)
+# lat is seconds and amp is volts; convert once for the named output columns.
 ```
+
+This channel-extremum estimator differs from the peak of an ROI-mean waveform.
+Use this example only for the approved channel-extremum definition; an ROI-mean
+score must first form the approved spatial mean. MNE returns only channel and
+latency unless `return_amplitude=True`.
 
 #### 3. Adaptive mean (window centered on individual peak)
 
 A hybrid: find the individual's peak latency, then measure mean amplitude in a narrow window (e.g., +/-25 ms) around that peak. Combines noise robustness of mean amplitude with sensitivity to individual timing differences.
 
 ```python
-# MNE + custom
-_, peak_lat, _ = evoked.get_peak(tmin=t_min, tmax=t_max, mode='neg')
-adaptive_tmin = peak_lat - 0.025
-adaptive_tmax = peak_lat + 0.025
+# AEA example: erp-adaptive-mean
+# peak_evoked must implement the plan's spatial peak definition.
+_, peak_lat = peak_evoked.get_peak(
+    ch_type='eeg', tmin=t_min, tmax=t_max,
+    mode=approved_erp_params['peak_mode'])
+half_width = approved_erp_params['adaptive_half_width_s']
+adaptive_tmin = peak_lat - half_width
+adaptive_tmax = peak_lat + half_width
+if adaptive_tmin < times[0] or adaptive_tmax > times[-1]:
+    raise ValueError('Approved adaptive window extends outside the supplied ERP')
 mask = (times >= adaptive_tmin) & (times <= adaptive_tmax)
 adaptive_mean = evoked.data[ch_idx][:, mask].mean() * 1e6
 ```
 
-#### 4. Fractional area latency (PREFERRED over peak latency)
+#### 4. Fractional area latency (when specified)
 
 The time point at which a specified fraction (typically 50%) of the area under the curve is reached. Better than peak latency because:
 - Less sensitive to noise.
@@ -146,16 +173,28 @@ The time point at which a specified fraction (typically 50%) of the area under t
 - Recommended by Luck (2014) and Keil et al. (2014).
 
 ```python
-# Custom implementation (MNE does not have a built-in)
-from scipy.integrate import cumulative_trapezoid
-signal = evoked.data[ch_idx].mean(axis=0)[mask]
-if component_polarity == 'negative':
-    signal = -signal  # flip so area is positive
-cumarea = cumulative_trapezoid(signal, times[mask], initial=0)
-total_area = cumarea[-1]
-frac_idx = np.searchsorted(cumarea, 0.5 * total_area)
-frac_latency = times[mask][frac_idx]
+# AEA example: erp-area-latency
+from pathlib import Path
+import runpy
+area_latency = runpy.run_path(str(
+    Path(AEA_ROOT) / 'skills/eeg-erp/scripts/measurements.py'))['fractional_area_latency']
+mask = (evoked.times >= t_min) & (evoked.times <= t_max)
+trace = evoked.data[ch_idx].mean(axis=0)[mask]  # approved ROI-mean estimator
+area_result = area_latency(trace, evoked.times[mask],
+    **approved_erp_params['fractional_area'])
+frac_latency = area_result['latency_s']  # seconds; save the conventions too
 ```
+
+The helper uses trapezoidal integration. Its required configuration is
+`fraction`, `area_mode` (`signed`, `positive`, `absolute`), `polarity`
+(`positive`/`negative`, or `None` for absolute area), `crossing` (`first`/`last`
+upward crossing), and `interpolation` (`sample`/`linear`). Linear interpolation
+is on the sampled cumulative area. Use it only if that definition is approved;
+other integration definitions require their own explicit implementation.
+Polarity flipping does not remove opposite-sign samples. Signed cumulative
+area can decrease: never sort it or call `searchsorted` to locate its latency.
+An absent convention or non-positive total area remains unresolved/unavailable,
+not an automatic switch to clipping, absolute area or a different score.
 
 #### 5. Jackknife latency (PREFERRED for latency *difference* tests)
 
@@ -327,10 +366,10 @@ All must pass before declaring success:
 | ANALYSIS_PLAN missing or has placeholders | Stop. Ask user to fill and freeze the plan. |
 | Epoch files missing for some subjects | Report which subjects are missing. Proceed with available subjects but warn. |
 | Fewer than 30 trials per condition per subject | Warn: low trial count degrades ERP quality; peak measures especially unreliable. The fixed 30 is a heuristic — prefer a G-theory D-study cutoff (`phi ≥ 0.8`) and per-subject SME for a principled, score-specific threshold (Clayson et al. 2021; Luck et al. 2021). |
-| No clear peak in measurement window | Do not force a peak. Use mean amplitude instead. Log the issue. |
+| No valid peak under the approved definition | Report the measurement unavailable and preserve the error. A new mean-amplitude or area score requires an approved change. |
 | Time window in plan does not match known component latency | Warn user but use the planned window (it may be intentional). |
 | ROI channels not found in data | Stop. Check channel_mapping.json or ask user. |
 | Mixed backends (some subjects in .fif, some in .set) | Convert all to one format before averaging. |
-| Unequal trial counts across conditions in a contrast | Equalize with `epochs.equalize_event_counts([...])` or report the imbalance and confirm the effect survives it; the diff wave is biased toward the noisier condition. |
+| Unequal trial counts across conditions in a contrast | Record retained counts and score-specific precision. Do not infer mean-difference bias from counts alone or equalize automatically. Follow the approved selection method if equalization is requested. |
 | Tempted to pick the window/ROI from the grand average then test it | Stop — circular (Luck & Gaspelin 2017). Use a pre-registered window (Route A) or a cluster-corrected data-driven test (Route B). |
 | Per-subject arrays collapsed to grand average before stats | Re-extract per-subject values/arrays; cluster and ANOVA tests need the subject axis (FieldTrip keepindividual='yes'). |

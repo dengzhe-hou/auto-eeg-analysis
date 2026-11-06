@@ -66,6 +66,10 @@ Before rendering, these must exist:
 
 ## Procedure reference
 
+For ERP uncertainty bands, use [the mean-band helper](scripts/variability.py)
+with the approved SEM/CI specification. Its bounds and caption come from one
+calculation; `ci=True` in MNE is a confidence band, not an SEM shortcut.
+
 Choose the section that matches the current operation. Detailed code examples
 and numerical conventions remain in the linked source.
 

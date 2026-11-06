@@ -1,8 +1,12 @@
 ## Domain Knowledge (distilled from ERP methodology literature)
 
+The notes below inform measurement proposals and quality reporting. Preserve
+the approved score and settings; these recommendations do not supply missing
+choices or authorize replacing a noisy/unavailable measurement.
+
 ### Component measurement best practices (Luck 2014; Keil et al. 2014)
 
-- **Mean amplitude is the default** — it is unbiased, noise-robust, and works for both peaked and broad components. Keil et al. (2014) committee guidelines explicitly recommend mean amplitude over peak amplitude for most ERP research.
+- **Mean amplitude is a common planned score** — it is noise-robust and works for both peaked and broad components. See Keil et al. (2014) for ERP reporting guidance; this is not an automatic replacement for another approved score.
 - **Peak amplitude overestimates the true amplitude** because noise can only push the peak further from zero. This bias increases with noise and decreases with trial count (Kappenman & Luck 2016).
 - **Peak latency is unreliable** in noisy data because the peak location is driven by the largest noise excursion within the window, not the true neural peak. Fractional area latency (50% area) is more robust (Luck 2014, Chapter 9).
 - **Adaptive mean** is a good compromise when individual peak timing varies but the component is well-defined: find the individual peak, then measure mean amplitude in a narrow window centered on it.

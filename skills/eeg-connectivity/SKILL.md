@@ -1,6 +1,6 @@
 ---
 name: eeg-connectivity
-description: "Compute functional connectivity per condition: wPLI, PLV, coherence, imaginary coherence, Granger causality, or phase-amplitude coupling on sensor-space epochs (or source-space if eeg-source ran). Optional skill — only invoked if DATASET_BRIEF.md ticks Connectivity."
+description: "Compute approved EEG connectivity: epoch-based wPLI, PLV, coherence, imaginary coherence, Granger causality or phase-amplitude coupling; also bounded continuous Pearson correlation, Hilbert PLV and ordinary temporal wPLI. Use when the task or study plan requests connectivity. Preserve the estimator and averaging axis."
 argument-hint: "[project-dir] [— metric: wpli|plv|coh|imcoh|gc|pac] [— space: sensor|source]"
 allowed-tools: Bash(*), Read, Write, Edit, Grep, Glob
 ---
@@ -11,34 +11,40 @@ allowed-tools: Bash(*), Read, Write, Edit, Grep, Glob
 
 ## Use this skill
 
-Read the task and the approved analysis plan before choosing a procedure. The
-name and description select this skill; they do not specify the analysis.
-Load only the relevant sections below, rather than every reference in advance.
-For a bounded calculation, use the supplied inputs without inventing upstream
-stages or approvals. Keep the actual method, parameters, outputs, and checks.
+Read the task and approved plan, then select the estimator and averaging axis.
+For a bounded continuous request, load only the matching reference section:
 
-Template values in the detailed procedures describe their documented examples.
-Resolve scientific choices against the task and approved plan before execution;
-do not treat an example, a timeout, or an unattended run as researcher approval.
-Preserve explicitly fixed configurations. Record unresolved choices and continue
-independent approved work, as described in the project instructions.
+- [Continuous Pearson correlation](references/continuous.md#continuous-pearson-correlation).
+- [Continuous PLV](references/continuous.md#continuous-plv), averaged over time samples.
+- [Continuous ordinary wPLI](references/continuous.md#continuous-ordinary-wpli),
+  retaining analytic-signal amplitudes.
+- [Complete multiband Hilbert calculation](references/continuous.md#complete-multiband-hilbert-calculation),
+  connecting each approved branch to saved matrices, summaries and source-data checks.
+
+For an epoch-based study, use the stages below with its approved estimator.
+Preserve fixed settings; examples add no processing or scientific default to
+the request. Record unresolved choices and continue independent approved work.
+A timeout or unattended run supplies no additional approval.
 
 For clients without native skill loading, use the section loader from the
 repository root; it loads the selected procedure, not the whole reference:
 
 ```bash
-python tools/load_skill.py eeg-connectivity --section "Phase A — Metric selection and validation"
+python tools/load_skill.py eeg-connectivity --section "Continuous ordinary wPLI"
 ```
 
 ## Required Inputs
 
-Before running, these must exist:
+For a bounded continuous request, use the approved task/plan, supplied Raw or
+time series, resolved channel identities, and explicit estimator, bands,
+interval and operation order. An already resolved request can supply the plan;
+record it with the outputs. Continuous Hilbert methods do not require epochs.
 
-1. `ANALYSIS_PLAN.md` — frozen, with connectivity claims (if any). **Stop if missing or unfrozen.**
-2. `epoch-stage/` — cleaned, epoched `.fif` files per subject per condition.
-3. `ENVIRONMENT.json` — to resolve backend.
-4. `channel_mapping.json` — if claim ROI uses 10-20 names but data uses numbered channels.
-5. (Optional) `source-stage/` — source-space time courses if `— space: source`.
+For an epoch-based study, use the frozen `ANALYSIS_PLAN.md`, cleaned
+per-condition epochs and `ENVIRONMENT.json` for the chosen backend. Resolve
+`channel_mapping.json` when numbered labels need anatomical identities.
+Source-space methods additionally require the approved source time courses.
+Do not construct unrelated upstream directories for a bounded request.
 
 ## Critical Rules
 
@@ -46,9 +52,14 @@ Before running, these must exist:
 - **Never** use Granger causality on non-stationary data without stationarity checks (ADF test or windowed approach).
 - **Never** interpret graph metrics from a single threshold. Report sensitivity to threshold choice or use MST-based approaches.
 - **Never** average connectivity across frequency bands without justification — each band may show different network topology.
-- **Never** compare connectivity matrices with different numbers of epochs across conditions — subsample to match trial counts.
-- **Never** report coherence or PLV computed from a single segment/epoch — both are degenerate (=1) without averaging over multiple segments/trials.
+- For epoch-based contrasts, preserve the approved handling of trial-count differences; do not silently subsample. This prerequisite does not apply to a continuous estimator averaged across time samples.
+- Spectral coherence/PLV across epochs needs that averaging dimension. An approved Hilbert PLV across time samples is a different estimator; preserve its declared averaging axis.
 - **Never** include the diagonal in connectivity statistics or in figure color scaling, and use the correct edge count for multiple-comparison correction (`E*(E-1)/2` undirected, `E*(E-1)` directed).
+- For proportional graphs, select from the declared **available unique edges**,
+  not a percentile of the whole matrix. Keep estimator storage/indices,
+  direction, ranking/sign handling, density, rounding and boundary-tie policy.
+  Uncomputed triangular entries are unavailable; measured zero edges remain
+  eligible. Record the actual retained edge count and density.
 - **Never** threshold connectivity edges at p<0.05 independently — correct across the ~N² edges (FDR, cluster permutation, or NBS).
 - **Never** estimate a separate source spatial filter per condition when contrasting conditions in source space — use one common filter on pooled data, then apply per condition.
 - **Never** apply CSD/Laplacian before MVAR-based DTF/PDC — it distorts the MVAR model and yields misleading directed structure (CSD-before-FC is only for phase/coherence metrics).
@@ -61,6 +72,13 @@ Before running, these must exist:
 
 
 ## Procedure reference
+
+For the continuous procedures linked above, use the matching
+[callable primitives](scripts/continuous.py). These average over time samples,
+not epochs; preserve the plan's estimator, bands and processing order.
+For multiple bands, use independent input copies; MNE RawArray construction
+can share an existing array's memory and filtering can otherwise contaminate
+the next band.
 
 Choose the section that matches the current operation. Detailed code examples
 and numerical conventions remain in the linked source.
@@ -88,6 +106,9 @@ Read this section in [the detailed procedure](references/procedure.md).
 ## Phase D — Graph theory metrics
 
 Read this section in [the detailed procedure](references/procedure.md).
+The [proportional graph helper](scripts/graph.py) implements an explicitly
+approved edge-selection policy and records its candidates/retained edges.
+It does not choose a graph density, sign convention or thresholding method.
 
 ## Phase E — Group-level aggregation
 

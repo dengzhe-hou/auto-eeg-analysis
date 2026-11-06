@@ -42,6 +42,11 @@ This recipe produces **descriptive per-subject (and group) microstate parameters
 
 ## Pipeline
 
+The values below describe this recipe's example profile. Resolve every processing
+choice against the approved study plan; neither this recipe nor a child skill
+fills missing scientific settings. Preserve the same approved cohort, channel set,
+ICA policy, filtering, GFP preparation and smoothing profile across both entrypoints.
+
 ### 1. Preprocess
 - Bandpass: **2–20 Hz** (zero-phase FIR). *Microstate-specific* — broadband 1–40 Hz smears the GFP peaks; the 2–20 Hz band is the field convention (Michel & Koenig 2018).
 - Notch: 50 / 60 Hz inferred from country.
@@ -49,7 +54,7 @@ This recipe produces **descriptive per-subject (and group) microstate parameters
 - Bad channels: RANSAC (pyprep) → interpolate, then re-apply the average reference.
 
 ### 2. ICA
-- Extended Infomax; auto-label via `mne-icalabel`; reject eye / muscle / heart / line / channel-noise components.
+- Use the approved ICA method and explicit component-selection policy via `eeg-ica`. Example methods/classes do not authorize rejecting all components with those labels.
 
 ### 3. Segment (instead of epoch — continuous)
 - No event epoching. Optionally `mne.make_fixed_length_epochs(raw, duration=2.0, overlap=0.0)` only for artifact screening; microstate fitting runs on the **GFP peaks of the continuous record**.
@@ -57,30 +62,50 @@ This recipe produces **descriptive per-subject (and group) microstate parameters
 
 ### 4. Microstate fitting (`pycrostates`)
 
-```python
-from pycrostates.cluster import ModKMeans
-from pycrostates.preprocessing import extract_gfp_peaks
+Use [the shared microstate preparation](../../skills/eeg-microstate/scripts/preparation.py)
+and [the skill fit/group-alignment procedure](../../skills/eeg-microstate/references/procedure.md).
+Select the actual approved input: if upstream processing already applied the
+approved band-pass, declare no additional filtering in filter_kwargs rather than
+applying a second filter. Otherwise preparation applies the approved filter once.
+Keep retained BAD annotations for the declared reject_by_annotation policy; do
+not concatenate away gaps without preserving their identities.
 
-gfp_peaks = extract_gfp_peaks(raw)            # cluster on GFP peaks only, not every sample
-ModK = ModKMeans(n_clusters=4, random_state=42)
-ModK.fit(gfp_peaks, n_jobs=1)                 # modified k-means; polarity-invariant
-ModK.reorder_clusters(order=[...])            # align to canonical A,B,C,D after inspection
-sf = raw.info['sfreq']
-segmentation = ModK.predict(                  # back-fit to the CONTINUOUS raw
-    raw, factor=10,
-    half_window_size=round(0.030 * sf),       # 30 ms smoothing in PHYSICAL units (Poulsen 2018)
-    min_segment_length=round(0.020 * sf),     # 20 ms — sfreq-INDEPENDENT (see note below)
-    reject_by_annotation=True)
-params = segmentation.compute_parameters()    # NOT pycrostates.metrics (does not exist)
+```python
+# AEA example: recipe-microstate-preparation
+import runpy
+from pathlib import Path
+preparation = runpy.run_path(str(Path(AEA_ROOT) / 'skills/eeg-microstate/scripts/preparation.py'))
+prepared_raw, gfp_peaks, peak_audit = preparation['prepare_peaks'](
+    raw, **approved_microstate_preparation)
 ```
 
-> **Smoothing must be in physical units, not samples.** Earlier drafts used
-> `half_window_size=8, min_segment_length=5` (sample counts), which are sampling-rate
-> dependent: at 250 Hz they give ~32/20 ms, but on a 160 Hz recording the same counts mean
-> 50/31 ms and inflate mean microstate durations to ~200 ms (validated: 160 Hz native →
-> 200 ms vs the canonical ~100 ms). Deriving the windows from `sfreq` (30/20 ms) fixes this
-> — on the eegbci validation at native 160 Hz the duration came to **116 ms** and split-half
-> map reproducibility was **|r| = 0.87** ([recorded audit script](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/995f53d42cc74205b164e8711d4b289b8c2ad3a1/tools/validation/audit_followups.py)).
+Fit/load and align the model under the approved individual, group, two-stage or
+published-template route. Group maps must pool the name-aligned prepared maps,
+not refetch uncapped peaks. The model handed to back-fitting is that actual
+fitted model; a placeholder order is not canonical map alignment. Save its source
+and fitting record with the preparation audit.
+
+```python
+# AEA example: recipe-microstate-backfit
+segmentation, backfit_audit = preparation['backfit_microstates'](
+    prepared_raw, approved_fitted_model, settings=approved_microstate_backfit)
+params = segmentation.compute_parameters()
+```
+
+Specify smoothing values and units explicitly in approved_microstate_backfit;
+record the actual half_window_size and min_segment_length returned in the audit.
+This is the same back-fitting helper used by the skill, not another set of defaults.
+Physical-unit settings convert using the actual sfreq; explicitly approved
+sample-unit settings keep their sample counts. A rounded value rejected by the
+native API needs the policy resolved, not automatic clamping.
+
+The historical 30/20 ms smoothing profile came from earlier validation. Earlier
+sample settings `half_window_size=8, min_segment_length=5` were sampling-rate
+dependent: at 250 Hz they are about 32/20 ms, while at 160 Hz they are 50/31 ms.
+The archived 160 Hz run reported about 200 ms duration under that profile, and
+about **116 ms** with its revised 30/20 ms settings, with split-half map
+reproducibility **|r| = 0.87** ([recorded audit script](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/995f53d42cc74205b164e8711d4b289b8c2ad3a1/tools/validation/audit_followups.py)).
+These are recorded settings/results, not approval for a new study's smoothing.
 
 - **Selecting K:** default K = 4 (canonical). If exploring, justify K by Global Explained Variance (GEV) elbow + cross-validation criterion across K = 3–7; report GEV.
 - **Polarity invariance:** microstate clustering ignores map polarity — never interpret the sign of a map.
@@ -117,6 +142,10 @@ T_exp = compute_expected_transition_matrix(segmentation)   # base-rate (Markov) 
 On a clean ≥2-min eyes-closed adult recording the recipe should yield 4 maps explaining ~70% GEV, durations ~70–120 ms, and a roughly symmetric transition matrix with the well-known C↔D and A↔B preferences.
 
 ## Validated results (server, 2026-06-19)
+
+Historical results below refer to the archived scripts and their recorded
+configuration. Local implementation changes do not constitute rerunning that
+20-participant validation or validate every newly selectable profile.
 
 **Dataset:** PhysioNet eegbci, **N = 20** subjects, eyes-closed (R02), 64 ch, K = 4, seed 42.
 **Sanity check — 4 maps, ~70% GEV, durations in the 70–120 ms band: CONFIRMED.**
