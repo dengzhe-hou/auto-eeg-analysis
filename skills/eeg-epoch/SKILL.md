@@ -30,6 +30,15 @@ repository root; it loads the selected procedure, not the whole reference:
 python tools/load_skill.py eeg-epoch --section "Phase A — Event Extraction"
 ```
 
+## Approved ERP execution
+
+For a resolved ERP plan, read [approved ERP execution](references/approved-erp.md#approved-erp-execution).
+This includes integer-sample epoch timing and saving computed artifacts before
+additional checks. Load [ERP CORE response coding](references/approved-erp.md#erp-core-response-coding)
+only for that dataset's error-minus-correct contrast, and
+[approved ERP group statistics](references/approved-erp.md#approved-erp-group-statistics)
+only for participant-level group tasks. Callable helpers are in `scripts/erp.py`.
+
 ## Required Inputs
 
 Before running, these must exist:

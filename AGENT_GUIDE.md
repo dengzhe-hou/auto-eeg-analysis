@@ -26,6 +26,22 @@ For a bounded calculation, apply the relevant procedure to the supplied inputs;
 do not invent completed upstream stages or researcher approvals to satisfy an
 example directory layout. Scientific choices still follow the approved plan.
 
+For an explicit approved ERP plan, `tools/prepare_erp_packet.py` selects the
+matching execution section and callable helpers, adding group statistics only
+for group requests. See [approved ERP execution](docs/APPROVED_ERP.md).
+For its four explicit ERP CORE mean-amplitude contrasts, run the saved
+`tools/run_erp_plan.py` entry with the actual plan, input and workspace paths.
+It checkpoints participants, runs the requested tests and checks the saved
+delivery before writing `FINAL_SUBMISSION.md`. Read that actual file for the
+final response. Inspect the recorded PID and state after a timeout before
+resuming a stopped execution. Other ERP tasks retain their matching procedures.
+Complete readable metadata checks and fix programming errors within the already
+approved steps. Missing variable names or normal integer-sample epoch rounding
+do not require renewed scientific approval. Save actual computed artifacts before
+additional diagnostics; do not treat a check not yet run as a reason to stop the
+whole task. A genuinely missing input or unresolved scientific choice still
+blocks the affected step and must be recorded while independent work continues.
+
 For a client without native skill loading, the runner can use
 `tools/load_skill.py` to select a skill section and its relevant references,
 then include that complete procedure in the initial model message. This avoids
