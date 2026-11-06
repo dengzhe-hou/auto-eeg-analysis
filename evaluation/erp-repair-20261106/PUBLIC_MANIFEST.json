@@ -1,0 +1,290 @@
+{
+  "status": "frozen_before_execution",
+  "resource_version": "aea-erp-r2-20261106",
+  "formal_sessions_started": 0,
+  "files": [
+    {
+      "path": "EXPERIMENT_PLAN.approved.md",
+      "bytes": 12697
+    },
+    {
+      "path": "PACKET_RECEIPTS.json",
+      "bytes": 28013
+    },
+    {
+      "path": "PROTOCOL_FROZEN.json",
+      "bytes": 4655
+    },
+    {
+      "path": "README.md",
+      "bytes": 1677
+    },
+    {
+      "path": "REQUESTS.json",
+      "bytes": 25736
+    },
+    {
+      "path": "RESOURCE_CHANGES.json",
+      "bytes": 737
+    },
+    {
+      "path": "RESOURCE_FREEZE.json",
+      "bytes": 53132
+    },
+    {
+      "path": "RUN_PARAMETERS.json",
+      "bytes": 2438
+    },
+    {
+      "path": "SCHEDULE.json",
+      "bytes": 37763
+    },
+    {
+      "path": "aea-erp-r2-20261106.zip",
+      "bytes": 13168913
+    },
+    {
+      "path": "analyze_validation.py",
+      "bytes": 6015
+    },
+    {
+      "path": "components.py",
+      "bytes": 3047
+    },
+    {
+      "path": "contracts.py",
+      "bytes": 7193
+    },
+    {
+      "path": "controller.py",
+      "bytes": 4594
+    },
+    {
+      "path": "grade_validation.py",
+      "bytes": 2699
+    },
+    {
+      "path": "observed_kernel.py",
+      "bytes": 1522
+    },
+    {
+      "path": "packets/erp_ERN_group.md",
+      "bytes": 22131
+    },
+    {
+      "path": "packets/erp_ERN_sub-021.md",
+      "bytes": 20900
+    },
+    {
+      "path": "packets/erp_ERN_sub-022.md",
+      "bytes": 20900
+    },
+    {
+      "path": "packets/erp_ERN_sub-023.md",
+      "bytes": 20900
+    },
+    {
+      "path": "packets/erp_ERN_sub-024.md",
+      "bytes": 20900
+    },
+    {
+      "path": "packets/erp_ERN_sub-025.md",
+      "bytes": 20900
+    },
+    {
+      "path": "packets/erp_N170_group.md",
+      "bytes": 19107
+    },
+    {
+      "path": "packets/erp_N170_sub-021.md",
+      "bytes": 17876
+    },
+    {
+      "path": "packets/erp_N170_sub-022.md",
+      "bytes": 17876
+    },
+    {
+      "path": "packets/erp_N170_sub-023.md",
+      "bytes": 17876
+    },
+    {
+      "path": "packets/erp_N170_sub-024.md",
+      "bytes": 17876
+    },
+    {
+      "path": "packets/erp_N170_sub-025.md",
+      "bytes": 17876
+    },
+    {
+      "path": "packets/erp_N400_group.md",
+      "bytes": 19107
+    },
+    {
+      "path": "packets/erp_N400_sub-021.md",
+      "bytes": 17876
+    },
+    {
+      "path": "packets/erp_N400_sub-022.md",
+      "bytes": 17876
+    },
+    {
+      "path": "packets/erp_N400_sub-023.md",
+      "bytes": 17876
+    },
+    {
+      "path": "packets/erp_N400_sub-024.md",
+      "bytes": 17876
+    },
+    {
+      "path": "packets/erp_N400_sub-025.md",
+      "bytes": 17876
+    },
+    {
+      "path": "packets/erp_P3b_group.md",
+      "bytes": 19107
+    },
+    {
+      "path": "packets/erp_P3b_sub-021.md",
+      "bytes": 17876
+    },
+    {
+      "path": "packets/erp_P3b_sub-022.md",
+      "bytes": 17876
+    },
+    {
+      "path": "packets/erp_P3b_sub-023.md",
+      "bytes": 17876
+    },
+    {
+      "path": "packets/erp_P3b_sub-024.md",
+      "bytes": 17876
+    },
+    {
+      "path": "packets/erp_P3b_sub-025.md",
+      "bytes": 17876
+    },
+    {
+      "path": "requests/erp_ERN_group.json",
+      "bytes": 5360
+    },
+    {
+      "path": "requests/erp_ERN_sub-021.json",
+      "bytes": 3799
+    },
+    {
+      "path": "requests/erp_ERN_sub-022.json",
+      "bytes": 3799
+    },
+    {
+      "path": "requests/erp_ERN_sub-023.json",
+      "bytes": 3799
+    },
+    {
+      "path": "requests/erp_ERN_sub-024.json",
+      "bytes": 3799
+    },
+    {
+      "path": "requests/erp_ERN_sub-025.json",
+      "bytes": 3799
+    },
+    {
+      "path": "requests/erp_N170_group.json",
+      "bytes": 5381
+    },
+    {
+      "path": "requests/erp_N170_sub-021.json",
+      "bytes": 3820
+    },
+    {
+      "path": "requests/erp_N170_sub-022.json",
+      "bytes": 3820
+    },
+    {
+      "path": "requests/erp_N170_sub-023.json",
+      "bytes": 3820
+    },
+    {
+      "path": "requests/erp_N170_sub-024.json",
+      "bytes": 3820
+    },
+    {
+      "path": "requests/erp_N170_sub-025.json",
+      "bytes": 3820
+    },
+    {
+      "path": "requests/erp_N400_group.json",
+      "bytes": 5355
+    },
+    {
+      "path": "requests/erp_N400_sub-021.json",
+      "bytes": 3794
+    },
+    {
+      "path": "requests/erp_N400_sub-022.json",
+      "bytes": 3794
+    },
+    {
+      "path": "requests/erp_N400_sub-023.json",
+      "bytes": 3794
+    },
+    {
+      "path": "requests/erp_N400_sub-024.json",
+      "bytes": 3794
+    },
+    {
+      "path": "requests/erp_N400_sub-025.json",
+      "bytes": 3794
+    },
+    {
+      "path": "requests/erp_P3b_group.json",
+      "bytes": 5374
+    },
+    {
+      "path": "requests/erp_P3b_sub-021.json",
+      "bytes": 3814
+    },
+    {
+      "path": "requests/erp_P3b_sub-022.json",
+      "bytes": 3814
+    },
+    {
+      "path": "requests/erp_P3b_sub-023.json",
+      "bytes": 3814
+    },
+    {
+      "path": "requests/erp_P3b_sub-024.json",
+      "bytes": 3814
+    },
+    {
+      "path": "requests/erp_P3b_sub-025.json",
+      "bytes": 3814
+    },
+    {
+      "path": "requests/pilot_N170_group_sub001to020.json",
+      "bytes": 5395
+    },
+    {
+      "path": "requests/pilot_N400_sub-026.json",
+      "bytes": 3796
+    },
+    {
+      "path": "run_validation.py",
+      "bytes": 10999
+    },
+    {
+      "path": "study_apptainer.py",
+      "bytes": 7914
+    },
+    {
+      "path": "verify_allocation.py",
+      "bytes": 1936
+    },
+    {
+      "path": "verify_contract.py",
+      "bytes": 11383
+    }
+  ],
+  "included_current_reference_outputs": false,
+  "included_raw_eeg": false,
+  "credential_pattern_findings": []
+}

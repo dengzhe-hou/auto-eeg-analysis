@@ -1,0 +1,866 @@
+{
+  "erp_P3b_sub-021": {
+    "selections": [
+      {
+        "skill": "eeg-epoch",
+        "section": "Approved ERP execution",
+        "sources": [
+          {
+            "path": "skills/eeg-epoch/references/approved-erp.md",
+            "characters": 3747
+          },
+          {
+            "path": "skills/eeg-epoch/scripts/erp.py",
+            "characters": 3768
+          }
+        ],
+        "packet_characters": 7625,
+        "scope": "Procedure delivery is distinct from following it or passing validation."
+      }
+    ],
+    "packet_characters": 17876,
+    "execution_condition": "preloaded_procedures",
+    "scope": "Delivery receipt, not proof of adoption or accuracy.",
+    "additional_sources": [
+      "tools/check_erp_outputs.py",
+      "templates/bids_derivatives/README.md"
+    ],
+    "request_kind": "single_subject",
+    "contrast_label": "rareminusfrequent",
+    "selection_basis": "Public request kind, dataset and contrast only; no reference outcomes"
+  },
+  "erp_P3b_sub-022": {
+    "selections": [
+      {
+        "skill": "eeg-epoch",
+        "section": "Approved ERP execution",
+        "sources": [
+          {
+            "path": "skills/eeg-epoch/references/approved-erp.md",
+            "characters": 3747
+          },
+          {
+            "path": "skills/eeg-epoch/scripts/erp.py",
+            "characters": 3768
+          }
+        ],
+        "packet_characters": 7625,
+        "scope": "Procedure delivery is distinct from following it or passing validation."
+      }
+    ],
+    "packet_characters": 17876,
+    "execution_condition": "preloaded_procedures",
+    "scope": "Delivery receipt, not proof of adoption or accuracy.",
+    "additional_sources": [
+      "tools/check_erp_outputs.py",
+      "templates/bids_derivatives/README.md"
+    ],
+    "request_kind": "single_subject",
+    "contrast_label": "rareminusfrequent",
+    "selection_basis": "Public request kind, dataset and contrast only; no reference outcomes"
+  },
+  "erp_P3b_sub-023": {
+    "selections": [
+      {
+        "skill": "eeg-epoch",
+        "section": "Approved ERP execution",
+        "sources": [
+          {
+            "path": "skills/eeg-epoch/references/approved-erp.md",
+            "characters": 3747
+          },
+          {
+            "path": "skills/eeg-epoch/scripts/erp.py",
+            "characters": 3768
+          }
+        ],
+        "packet_characters": 7625,
+        "scope": "Procedure delivery is distinct from following it or passing validation."
+      }
+    ],
+    "packet_characters": 17876,
+    "execution_condition": "preloaded_procedures",
+    "scope": "Delivery receipt, not proof of adoption or accuracy.",
+    "additional_sources": [
+      "tools/check_erp_outputs.py",
+      "templates/bids_derivatives/README.md"
+    ],
+    "request_kind": "single_subject",
+    "contrast_label": "rareminusfrequent",
+    "selection_basis": "Public request kind, dataset and contrast only; no reference outcomes"
+  },
+  "erp_P3b_sub-024": {
+    "selections": [
+      {
+        "skill": "eeg-epoch",
+        "section": "Approved ERP execution",
+        "sources": [
+          {
+            "path": "skills/eeg-epoch/references/approved-erp.md",
+            "characters": 3747
+          },
+          {
+            "path": "skills/eeg-epoch/scripts/erp.py",
+            "characters": 3768
+          }
+        ],
+        "packet_characters": 7625,
+        "scope": "Procedure delivery is distinct from following it or passing validation."
+      }
+    ],
+    "packet_characters": 17876,
+    "execution_condition": "preloaded_procedures",
+    "scope": "Delivery receipt, not proof of adoption or accuracy.",
+    "additional_sources": [
+      "tools/check_erp_outputs.py",
+      "templates/bids_derivatives/README.md"
+    ],
+    "request_kind": "single_subject",
+    "contrast_label": "rareminusfrequent",
+    "selection_basis": "Public request kind, dataset and contrast only; no reference outcomes"
+  },
+  "erp_P3b_sub-025": {
+    "selections": [
+      {
+        "skill": "eeg-epoch",
+        "section": "Approved ERP execution",
+        "sources": [
+          {
+            "path": "skills/eeg-epoch/references/approved-erp.md",
+            "characters": 3747
+          },
+          {
+            "path": "skills/eeg-epoch/scripts/erp.py",
+            "characters": 3768
+          }
+        ],
+        "packet_characters": 7625,
+        "scope": "Procedure delivery is distinct from following it or passing validation."
+      }
+    ],
+    "packet_characters": 17876,
+    "execution_condition": "preloaded_procedures",
+    "scope": "Delivery receipt, not proof of adoption or accuracy.",
+    "additional_sources": [
+      "tools/check_erp_outputs.py",
+      "templates/bids_derivatives/README.md"
+    ],
+    "request_kind": "single_subject",
+    "contrast_label": "rareminusfrequent",
+    "selection_basis": "Public request kind, dataset and contrast only; no reference outcomes"
+  },
+  "erp_P3b_group": {
+    "selections": [
+      {
+        "skill": "eeg-epoch",
+        "section": "Approved ERP execution",
+        "sources": [
+          {
+            "path": "skills/eeg-epoch/references/approved-erp.md",
+            "characters": 3747
+          },
+          {
+            "path": "skills/eeg-epoch/scripts/erp.py",
+            "characters": 3768
+          }
+        ],
+        "packet_characters": 7625,
+        "scope": "Procedure delivery is distinct from following it or passing validation."
+      },
+      {
+        "skill": "eeg-epoch",
+        "section": "Approved ERP group statistics",
+        "sources": [
+          {
+            "path": "skills/eeg-epoch/references/approved-erp.md",
+            "characters": 1169
+          }
+        ],
+        "packet_characters": 1229,
+        "scope": "Procedure delivery is distinct from following it or passing validation."
+      }
+    ],
+    "packet_characters": 19107,
+    "execution_condition": "preloaded_procedures",
+    "scope": "Delivery receipt, not proof of adoption or accuracy.",
+    "additional_sources": [
+      "tools/check_erp_outputs.py",
+      "templates/bids_derivatives/README.md"
+    ],
+    "request_kind": "group",
+    "contrast_label": "rareminusfrequent",
+    "selection_basis": "Public request kind, dataset and contrast only; no reference outcomes"
+  },
+  "erp_N170_sub-021": {
+    "selections": [
+      {
+        "skill": "eeg-epoch",
+        "section": "Approved ERP execution",
+        "sources": [
+          {
+            "path": "skills/eeg-epoch/references/approved-erp.md",
+            "characters": 3747
+          },
+          {
+            "path": "skills/eeg-epoch/scripts/erp.py",
+            "characters": 3768
+          }
+        ],
+        "packet_characters": 7625,
+        "scope": "Procedure delivery is distinct from following it or passing validation."
+      }
+    ],
+    "packet_characters": 17876,
+    "execution_condition": "preloaded_procedures",
+    "scope": "Delivery receipt, not proof of adoption or accuracy.",
+    "additional_sources": [
+      "tools/check_erp_outputs.py",
+      "templates/bids_derivatives/README.md"
+    ],
+    "request_kind": "single_subject",
+    "contrast_label": "facesminuscars",
+    "selection_basis": "Public request kind, dataset and contrast only; no reference outcomes"
+  },
+  "erp_N170_sub-022": {
+    "selections": [
+      {
+        "skill": "eeg-epoch",
+        "section": "Approved ERP execution",
+        "sources": [
+          {
+            "path": "skills/eeg-epoch/references/approved-erp.md",
+            "characters": 3747
+          },
+          {
+            "path": "skills/eeg-epoch/scripts/erp.py",
+            "characters": 3768
+          }
+        ],
+        "packet_characters": 7625,
+        "scope": "Procedure delivery is distinct from following it or passing validation."
+      }
+    ],
+    "packet_characters": 17876,
+    "execution_condition": "preloaded_procedures",
+    "scope": "Delivery receipt, not proof of adoption or accuracy.",
+    "additional_sources": [
+      "tools/check_erp_outputs.py",
+      "templates/bids_derivatives/README.md"
+    ],
+    "request_kind": "single_subject",
+    "contrast_label": "facesminuscars",
+    "selection_basis": "Public request kind, dataset and contrast only; no reference outcomes"
+  },
+  "erp_N170_sub-023": {
+    "selections": [
+      {
+        "skill": "eeg-epoch",
+        "section": "Approved ERP execution",
+        "sources": [
+          {
+            "path": "skills/eeg-epoch/references/approved-erp.md",
+            "characters": 3747
+          },
+          {
+            "path": "skills/eeg-epoch/scripts/erp.py",
+            "characters": 3768
+          }
+        ],
+        "packet_characters": 7625,
+        "scope": "Procedure delivery is distinct from following it or passing validation."
+      }
+    ],
+    "packet_characters": 17876,
+    "execution_condition": "preloaded_procedures",
+    "scope": "Delivery receipt, not proof of adoption or accuracy.",
+    "additional_sources": [
+      "tools/check_erp_outputs.py",
+      "templates/bids_derivatives/README.md"
+    ],
+    "request_kind": "single_subject",
+    "contrast_label": "facesminuscars",
+    "selection_basis": "Public request kind, dataset and contrast only; no reference outcomes"
+  },
+  "erp_N170_sub-024": {
+    "selections": [
+      {
+        "skill": "eeg-epoch",
+        "section": "Approved ERP execution",
+        "sources": [
+          {
+            "path": "skills/eeg-epoch/references/approved-erp.md",
+            "characters": 3747
+          },
+          {
+            "path": "skills/eeg-epoch/scripts/erp.py",
+            "characters": 3768
+          }
+        ],
+        "packet_characters": 7625,
+        "scope": "Procedure delivery is distinct from following it or passing validation."
+      }
+    ],
+    "packet_characters": 17876,
+    "execution_condition": "preloaded_procedures",
+    "scope": "Delivery receipt, not proof of adoption or accuracy.",
+    "additional_sources": [
+      "tools/check_erp_outputs.py",
+      "templates/bids_derivatives/README.md"
+    ],
+    "request_kind": "single_subject",
+    "contrast_label": "facesminuscars",
+    "selection_basis": "Public request kind, dataset and contrast only; no reference outcomes"
+  },
+  "erp_N170_sub-025": {
+    "selections": [
+      {
+        "skill": "eeg-epoch",
+        "section": "Approved ERP execution",
+        "sources": [
+          {
+            "path": "skills/eeg-epoch/references/approved-erp.md",
+            "characters": 3747
+          },
+          {
+            "path": "skills/eeg-epoch/scripts/erp.py",
+            "characters": 3768
+          }
+        ],
+        "packet_characters": 7625,
+        "scope": "Procedure delivery is distinct from following it or passing validation."
+      }
+    ],
+    "packet_characters": 17876,
+    "execution_condition": "preloaded_procedures",
+    "scope": "Delivery receipt, not proof of adoption or accuracy.",
+    "additional_sources": [
+      "tools/check_erp_outputs.py",
+      "templates/bids_derivatives/README.md"
+    ],
+    "request_kind": "single_subject",
+    "contrast_label": "facesminuscars",
+    "selection_basis": "Public request kind, dataset and contrast only; no reference outcomes"
+  },
+  "erp_N170_group": {
+    "selections": [
+      {
+        "skill": "eeg-epoch",
+        "section": "Approved ERP execution",
+        "sources": [
+          {
+            "path": "skills/eeg-epoch/references/approved-erp.md",
+            "characters": 3747
+          },
+          {
+            "path": "skills/eeg-epoch/scripts/erp.py",
+            "characters": 3768
+          }
+        ],
+        "packet_characters": 7625,
+        "scope": "Procedure delivery is distinct from following it or passing validation."
+      },
+      {
+        "skill": "eeg-epoch",
+        "section": "Approved ERP group statistics",
+        "sources": [
+          {
+            "path": "skills/eeg-epoch/references/approved-erp.md",
+            "characters": 1169
+          }
+        ],
+        "packet_characters": 1229,
+        "scope": "Procedure delivery is distinct from following it or passing validation."
+      }
+    ],
+    "packet_characters": 19107,
+    "execution_condition": "preloaded_procedures",
+    "scope": "Delivery receipt, not proof of adoption or accuracy.",
+    "additional_sources": [
+      "tools/check_erp_outputs.py",
+      "templates/bids_derivatives/README.md"
+    ],
+    "request_kind": "group",
+    "contrast_label": "facesminuscars",
+    "selection_basis": "Public request kind, dataset and contrast only; no reference outcomes"
+  },
+  "erp_ERN_sub-021": {
+    "selections": [
+      {
+        "skill": "eeg-epoch",
+        "section": "Approved ERP execution",
+        "sources": [
+          {
+            "path": "skills/eeg-epoch/references/approved-erp.md",
+            "characters": 3747
+          },
+          {
+            "path": "skills/eeg-epoch/scripts/erp.py",
+            "characters": 3768
+          }
+        ],
+        "packet_characters": 7625,
+        "scope": "Procedure delivery is distinct from following it or passing validation."
+      },
+      {
+        "skill": "eeg-epoch",
+        "section": "ERP CORE response coding",
+        "sources": [
+          {
+            "path": "skills/eeg-epoch/references/approved-erp.md",
+            "characters": 842
+          },
+          {
+            "path": "skills/eeg-epoch/scripts/erp_core_events.py",
+            "characters": 2058
+          }
+        ],
+        "packet_characters": 3022,
+        "scope": "Procedure delivery is distinct from following it or passing validation."
+      }
+    ],
+    "packet_characters": 20900,
+    "execution_condition": "preloaded_procedures",
+    "scope": "Delivery receipt, not proof of adoption or accuracy.",
+    "additional_sources": [
+      "tools/check_erp_outputs.py",
+      "templates/bids_derivatives/README.md"
+    ],
+    "request_kind": "single_subject",
+    "contrast_label": "errorminuscorrect",
+    "selection_basis": "Public request kind, dataset and contrast only; no reference outcomes"
+  },
+  "erp_ERN_sub-022": {
+    "selections": [
+      {
+        "skill": "eeg-epoch",
+        "section": "Approved ERP execution",
+        "sources": [
+          {
+            "path": "skills/eeg-epoch/references/approved-erp.md",
+            "characters": 3747
+          },
+          {
+            "path": "skills/eeg-epoch/scripts/erp.py",
+            "characters": 3768
+          }
+        ],
+        "packet_characters": 7625,
+        "scope": "Procedure delivery is distinct from following it or passing validation."
+      },
+      {
+        "skill": "eeg-epoch",
+        "section": "ERP CORE response coding",
+        "sources": [
+          {
+            "path": "skills/eeg-epoch/references/approved-erp.md",
+            "characters": 842
+          },
+          {
+            "path": "skills/eeg-epoch/scripts/erp_core_events.py",
+            "characters": 2058
+          }
+        ],
+        "packet_characters": 3022,
+        "scope": "Procedure delivery is distinct from following it or passing validation."
+      }
+    ],
+    "packet_characters": 20900,
+    "execution_condition": "preloaded_procedures",
+    "scope": "Delivery receipt, not proof of adoption or accuracy.",
+    "additional_sources": [
+      "tools/check_erp_outputs.py",
+      "templates/bids_derivatives/README.md"
+    ],
+    "request_kind": "single_subject",
+    "contrast_label": "errorminuscorrect",
+    "selection_basis": "Public request kind, dataset and contrast only; no reference outcomes"
+  },
+  "erp_ERN_sub-023": {
+    "selections": [
+      {
+        "skill": "eeg-epoch",
+        "section": "Approved ERP execution",
+        "sources": [
+          {
+            "path": "skills/eeg-epoch/references/approved-erp.md",
+            "characters": 3747
+          },
+          {
+            "path": "skills/eeg-epoch/scripts/erp.py",
+            "characters": 3768
+          }
+        ],
+        "packet_characters": 7625,
+        "scope": "Procedure delivery is distinct from following it or passing validation."
+      },
+      {
+        "skill": "eeg-epoch",
+        "section": "ERP CORE response coding",
+        "sources": [
+          {
+            "path": "skills/eeg-epoch/references/approved-erp.md",
+            "characters": 842
+          },
+          {
+            "path": "skills/eeg-epoch/scripts/erp_core_events.py",
+            "characters": 2058
+          }
+        ],
+        "packet_characters": 3022,
+        "scope": "Procedure delivery is distinct from following it or passing validation."
+      }
+    ],
+    "packet_characters": 20900,
+    "execution_condition": "preloaded_procedures",
+    "scope": "Delivery receipt, not proof of adoption or accuracy.",
+    "additional_sources": [
+      "tools/check_erp_outputs.py",
+      "templates/bids_derivatives/README.md"
+    ],
+    "request_kind": "single_subject",
+    "contrast_label": "errorminuscorrect",
+    "selection_basis": "Public request kind, dataset and contrast only; no reference outcomes"
+  },
+  "erp_ERN_sub-024": {
+    "selections": [
+      {
+        "skill": "eeg-epoch",
+        "section": "Approved ERP execution",
+        "sources": [
+          {
+            "path": "skills/eeg-epoch/references/approved-erp.md",
+            "characters": 3747
+          },
+          {
+            "path": "skills/eeg-epoch/scripts/erp.py",
+            "characters": 3768
+          }
+        ],
+        "packet_characters": 7625,
+        "scope": "Procedure delivery is distinct from following it or passing validation."
+      },
+      {
+        "skill": "eeg-epoch",
+        "section": "ERP CORE response coding",
+        "sources": [
+          {
+            "path": "skills/eeg-epoch/references/approved-erp.md",
+            "characters": 842
+          },
+          {
+            "path": "skills/eeg-epoch/scripts/erp_core_events.py",
+            "characters": 2058
+          }
+        ],
+        "packet_characters": 3022,
+        "scope": "Procedure delivery is distinct from following it or passing validation."
+      }
+    ],
+    "packet_characters": 20900,
+    "execution_condition": "preloaded_procedures",
+    "scope": "Delivery receipt, not proof of adoption or accuracy.",
+    "additional_sources": [
+      "tools/check_erp_outputs.py",
+      "templates/bids_derivatives/README.md"
+    ],
+    "request_kind": "single_subject",
+    "contrast_label": "errorminuscorrect",
+    "selection_basis": "Public request kind, dataset and contrast only; no reference outcomes"
+  },
+  "erp_ERN_sub-025": {
+    "selections": [
+      {
+        "skill": "eeg-epoch",
+        "section": "Approved ERP execution",
+        "sources": [
+          {
+            "path": "skills/eeg-epoch/references/approved-erp.md",
+            "characters": 3747
+          },
+          {
+            "path": "skills/eeg-epoch/scripts/erp.py",
+            "characters": 3768
+          }
+        ],
+        "packet_characters": 7625,
+        "scope": "Procedure delivery is distinct from following it or passing validation."
+      },
+      {
+        "skill": "eeg-epoch",
+        "section": "ERP CORE response coding",
+        "sources": [
+          {
+            "path": "skills/eeg-epoch/references/approved-erp.md",
+            "characters": 842
+          },
+          {
+            "path": "skills/eeg-epoch/scripts/erp_core_events.py",
+            "characters": 2058
+          }
+        ],
+        "packet_characters": 3022,
+        "scope": "Procedure delivery is distinct from following it or passing validation."
+      }
+    ],
+    "packet_characters": 20900,
+    "execution_condition": "preloaded_procedures",
+    "scope": "Delivery receipt, not proof of adoption or accuracy.",
+    "additional_sources": [
+      "tools/check_erp_outputs.py",
+      "templates/bids_derivatives/README.md"
+    ],
+    "request_kind": "single_subject",
+    "contrast_label": "errorminuscorrect",
+    "selection_basis": "Public request kind, dataset and contrast only; no reference outcomes"
+  },
+  "erp_ERN_group": {
+    "selections": [
+      {
+        "skill": "eeg-epoch",
+        "section": "Approved ERP execution",
+        "sources": [
+          {
+            "path": "skills/eeg-epoch/references/approved-erp.md",
+            "characters": 3747
+          },
+          {
+            "path": "skills/eeg-epoch/scripts/erp.py",
+            "characters": 3768
+          }
+        ],
+        "packet_characters": 7625,
+        "scope": "Procedure delivery is distinct from following it or passing validation."
+      },
+      {
+        "skill": "eeg-epoch",
+        "section": "ERP CORE response coding",
+        "sources": [
+          {
+            "path": "skills/eeg-epoch/references/approved-erp.md",
+            "characters": 842
+          },
+          {
+            "path": "skills/eeg-epoch/scripts/erp_core_events.py",
+            "characters": 2058
+          }
+        ],
+        "packet_characters": 3022,
+        "scope": "Procedure delivery is distinct from following it or passing validation."
+      },
+      {
+        "skill": "eeg-epoch",
+        "section": "Approved ERP group statistics",
+        "sources": [
+          {
+            "path": "skills/eeg-epoch/references/approved-erp.md",
+            "characters": 1169
+          }
+        ],
+        "packet_characters": 1229,
+        "scope": "Procedure delivery is distinct from following it or passing validation."
+      }
+    ],
+    "packet_characters": 22131,
+    "execution_condition": "preloaded_procedures",
+    "scope": "Delivery receipt, not proof of adoption or accuracy.",
+    "additional_sources": [
+      "tools/check_erp_outputs.py",
+      "templates/bids_derivatives/README.md"
+    ],
+    "request_kind": "group",
+    "contrast_label": "errorminuscorrect",
+    "selection_basis": "Public request kind, dataset and contrast only; no reference outcomes"
+  },
+  "erp_N400_sub-021": {
+    "selections": [
+      {
+        "skill": "eeg-epoch",
+        "section": "Approved ERP execution",
+        "sources": [
+          {
+            "path": "skills/eeg-epoch/references/approved-erp.md",
+            "characters": 3747
+          },
+          {
+            "path": "skills/eeg-epoch/scripts/erp.py",
+            "characters": 3768
+          }
+        ],
+        "packet_characters": 7625,
+        "scope": "Procedure delivery is distinct from following it or passing validation."
+      }
+    ],
+    "packet_characters": 17876,
+    "execution_condition": "preloaded_procedures",
+    "scope": "Delivery receipt, not proof of adoption or accuracy.",
+    "additional_sources": [
+      "tools/check_erp_outputs.py",
+      "templates/bids_derivatives/README.md"
+    ],
+    "request_kind": "single_subject",
+    "contrast_label": "unrelatedminusrelated",
+    "selection_basis": "Public request kind, dataset and contrast only; no reference outcomes"
+  },
+  "erp_N400_sub-022": {
+    "selections": [
+      {
+        "skill": "eeg-epoch",
+        "section": "Approved ERP execution",
+        "sources": [
+          {
+            "path": "skills/eeg-epoch/references/approved-erp.md",
+            "characters": 3747
+          },
+          {
+            "path": "skills/eeg-epoch/scripts/erp.py",
+            "characters": 3768
+          }
+        ],
+        "packet_characters": 7625,
+        "scope": "Procedure delivery is distinct from following it or passing validation."
+      }
+    ],
+    "packet_characters": 17876,
+    "execution_condition": "preloaded_procedures",
+    "scope": "Delivery receipt, not proof of adoption or accuracy.",
+    "additional_sources": [
+      "tools/check_erp_outputs.py",
+      "templates/bids_derivatives/README.md"
+    ],
+    "request_kind": "single_subject",
+    "contrast_label": "unrelatedminusrelated",
+    "selection_basis": "Public request kind, dataset and contrast only; no reference outcomes"
+  },
+  "erp_N400_sub-023": {
+    "selections": [
+      {
+        "skill": "eeg-epoch",
+        "section": "Approved ERP execution",
+        "sources": [
+          {
+            "path": "skills/eeg-epoch/references/approved-erp.md",
+            "characters": 3747
+          },
+          {
+            "path": "skills/eeg-epoch/scripts/erp.py",
+            "characters": 3768
+          }
+        ],
+        "packet_characters": 7625,
+        "scope": "Procedure delivery is distinct from following it or passing validation."
+      }
+    ],
+    "packet_characters": 17876,
+    "execution_condition": "preloaded_procedures",
+    "scope": "Delivery receipt, not proof of adoption or accuracy.",
+    "additional_sources": [
+      "tools/check_erp_outputs.py",
+      "templates/bids_derivatives/README.md"
+    ],
+    "request_kind": "single_subject",
+    "contrast_label": "unrelatedminusrelated",
+    "selection_basis": "Public request kind, dataset and contrast only; no reference outcomes"
+  },
+  "erp_N400_sub-024": {
+    "selections": [
+      {
+        "skill": "eeg-epoch",
+        "section": "Approved ERP execution",
+        "sources": [
+          {
+            "path": "skills/eeg-epoch/references/approved-erp.md",
+            "characters": 3747
+          },
+          {
+            "path": "skills/eeg-epoch/scripts/erp.py",
+            "characters": 3768
+          }
+        ],
+        "packet_characters": 7625,
+        "scope": "Procedure delivery is distinct from following it or passing validation."
+      }
+    ],
+    "packet_characters": 17876,
+    "execution_condition": "preloaded_procedures",
+    "scope": "Delivery receipt, not proof of adoption or accuracy.",
+    "additional_sources": [
+      "tools/check_erp_outputs.py",
+      "templates/bids_derivatives/README.md"
+    ],
+    "request_kind": "single_subject",
+    "contrast_label": "unrelatedminusrelated",
+    "selection_basis": "Public request kind, dataset and contrast only; no reference outcomes"
+  },
+  "erp_N400_sub-025": {
+    "selections": [
+      {
+        "skill": "eeg-epoch",
+        "section": "Approved ERP execution",
+        "sources": [
+          {
+            "path": "skills/eeg-epoch/references/approved-erp.md",
+            "characters": 3747
+          },
+          {
+            "path": "skills/eeg-epoch/scripts/erp.py",
+            "characters": 3768
+          }
+        ],
+        "packet_characters": 7625,
+        "scope": "Procedure delivery is distinct from following it or passing validation."
+      }
+    ],
+    "packet_characters": 17876,
+    "execution_condition": "preloaded_procedures",
+    "scope": "Delivery receipt, not proof of adoption or accuracy.",
+    "additional_sources": [
+      "tools/check_erp_outputs.py",
+      "templates/bids_derivatives/README.md"
+    ],
+    "request_kind": "single_subject",
+    "contrast_label": "unrelatedminusrelated",
+    "selection_basis": "Public request kind, dataset and contrast only; no reference outcomes"
+  },
+  "erp_N400_group": {
+    "selections": [
+      {
+        "skill": "eeg-epoch",
+        "section": "Approved ERP execution",
+        "sources": [
+          {
+            "path": "skills/eeg-epoch/references/approved-erp.md",
+            "characters": 3747
+          },
+          {
+            "path": "skills/eeg-epoch/scripts/erp.py",
+            "characters": 3768
+          }
+        ],
+        "packet_characters": 7625,
+        "scope": "Procedure delivery is distinct from following it or passing validation."
+      },
+      {
+        "skill": "eeg-epoch",
+        "section": "Approved ERP group statistics",
+        "sources": [
+          {
+            "path": "skills/eeg-epoch/references/approved-erp.md",
+            "characters": 1169
+          }
+        ],
+        "packet_characters": 1229,
+        "scope": "Procedure delivery is distinct from following it or passing validation."
+      }
+    ],
+    "packet_characters": 19107,
+    "execution_condition": "preloaded_procedures",
+    "scope": "Delivery receipt, not proof of adoption or accuracy.",
+    "additional_sources": [
+      "tools/check_erp_outputs.py",
+      "templates/bids_derivatives/README.md"
+    ],
+    "request_kind": "group",
+    "contrast_label": "unrelatedminusrelated",
+    "selection_basis": "Public request kind, dataset and contrast only; no reference outcomes"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "base_snapshot": "aea-erp-r1-20261101",
+  "version": "aea-erp-r2-20261106",
+  "overlay_files": [
+    "AGENT_GUIDE.md",
+    "docs/APPROVED_ERP.md",
+    "docs/PRELOADED_SKILLS.md",
+    "docs/REPLAY.md",
+    "skills/eeg-epoch/SKILL.md",
+    "skills/eeg-epoch/references/approved-erp.md",
+    "skills/eeg-epoch/references/procedure.md",
+    "skills/eeg-epoch/scripts/erp.py",
+    "skills/eeg-epoch/scripts/erp_core_events.py",
+    "tools/check_erp_outputs.py",
+    "tools/prepare_erp_packet.py",
+    "tools/replay.py",
+    "tools/run_continuous_plan.py",
+    "tools/tests/test_approved_erp_execution.py",
+    "tools/tests/test_execution_state.py"
+  ],
+  "all_other_r1_files_retained": true,
+  "selection_uses_reference_answers": false
+}

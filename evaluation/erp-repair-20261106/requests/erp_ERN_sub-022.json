@@ -1,0 +1,109 @@
+{
+  "request_id": "erp_ERN_sub-022",
+  "public_plan_version": "erp-explicit-plan-20261101",
+  "request_kind": "single_subject",
+  "component": "ERN",
+  "dataset": {
+    "name": "ERP CORE",
+    "doi": "10.18115/D5JW4R",
+    "osf_component": "https://osf.io/9f5w7/",
+    "bids_root_readonly": "/input/erp_core_bids",
+    "bids_task_label": "ERN",
+    "discovery": "Locate recording and event files by walking the BIDS directory. Work out which event codes form each condition from the dataset documentation in that directory."
+  },
+  "subjects": [
+    "sub-022"
+  ],
+  "analysis": {
+    "channels": {
+      "drop_before_processing": [
+        "HEOG_left",
+        "HEOG_right",
+        "VEOG_lower"
+      ],
+      "note": "These three EOG channels are read as type EEG from the .set files. Remove them first; the 30 remaining scalp channels are analysed.",
+      "montage": "standard_1020",
+      "montage_match_case": false
+    },
+    "filter": {
+      "type": "zero-phase FIR band-pass, mne.io.Raw.filter defaults",
+      "l_freq_hz": 0.1,
+      "h_freq_hz": 30.0,
+      "l_trans_bandwidth_hz": 0.1,
+      "h_trans_bandwidth": "MNE default rule: a quarter of the upper cutoff and at least 2 Hz",
+      "fir_design": "firwin",
+      "fir_window": "hamming",
+      "filter_length": "auto",
+      "pad": "reflect_limited",
+      "n_jobs": 1
+    },
+    "resample_hz": 256.0,
+    "resample_method": "mne.io.Raw.resample default",
+    "reference": "average of the 30 scalp channels, applied directly (projection False)",
+    "processing_order": [
+      "drop the three EOG channels",
+      "set montage",
+      "band-pass filter",
+      "resample to 256 Hz",
+      "average reference",
+      "epoch"
+    ],
+    "events": {
+      "source": "the BIDS events.tsv of the recording",
+      "sample_rule": "round(onset_seconds * 256)",
+      "keep": "samples strictly inside the recording"
+    },
+    "time_lock": "response",
+    "contrast": {
+      "plus": "error (the response side differs from the target side)",
+      "minus": "correct (the response side equals the target side)",
+      "difference": "mean of plus trials minus mean of minus trials"
+    },
+    "epoch_s": [
+      -0.4,
+      0.6
+    ],
+    "baseline_s": [
+      -0.4,
+      -0.2
+    ],
+    "rejection": "none",
+    "minimum_trials": {
+      "plus": 15,
+      "minus": 15
+    },
+    "minimum_trials_rule": "A subject with fewer retained trials than this in either condition is ineligible.",
+    "roi": [
+      "FCz",
+      "Fz",
+      "Cz"
+    ],
+    "window_s": [
+      0.0,
+      0.1
+    ],
+    "window_endpoints": "inclusive",
+    "amplitude": "mean over the ROI channels and window samples of the difference wave, in microvolts",
+    "expected_direction": "negative"
+  },
+  "derivatives": {
+    "root": "derivatives/erp-analysis",
+    "contrast_label": "errorminuscorrect",
+    "requirement": "A BIDS-Derivatives dataset that passes the BIDS validator with no errors and holds the ERP result of every analysed subject under its sub-XXX folder. The validator is not installed in this environment."
+  },
+  "required_results": {
+    "status": "computed, or ineligible for a subject below the trial minimum",
+    "component": "component name as given",
+    "dataset_doi": "DOI of the dataset",
+    "dataset_version": "dataset version as stated in the dataset's own CHANGES file",
+    "explanation": "brief factual explanation",
+    "subject": "subject label",
+    "roi_amplitude_uv": "ROI amplitude in microvolts, full precision",
+    "n_trials_plus": "retained plus trials",
+    "n_trials_minus": "retained minus trials"
+  },
+  "required_evidence": {
+    "times_s": "all epoch sample times in seconds, whole epoch",
+    "roi_difference_uv": "difference wave averaged over the ROI, microvolts, one value per epoch sample, whole epoch"
+  }
+}
