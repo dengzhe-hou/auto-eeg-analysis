@@ -1,0 +1,8 @@
+{
+  "mode": "warm reuse",
+  "runtime_record": "/home/hou/Research/auto-eeg-analysis/review-stage/brainbench-formal-20261022/RUNTIME_ENVIRONMENT.json",
+  "previous_complete_run": "/home/hou/Research/auto-eeg-analysis/review-stage/aea-erp-validation-20261101/launch-20261105/FINAL_AUDIT.json",
+  "environment_rebuilt": false,
+  "changed_target": "AEA resource snapshot and selected packet only",
+  "mirror_versions_unchanged": true
+}

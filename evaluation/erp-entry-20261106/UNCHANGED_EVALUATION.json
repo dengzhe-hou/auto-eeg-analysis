@@ -1,0 +1,20 @@
+{
+  "source": "/home/hou/Research/auto-eeg-analysis/review-stage/aea-erp-repair-20261106",
+  "byte_identical_files": [
+    "components.py",
+    "contracts.py",
+    "verify_contract.py",
+    "grade_validation.py",
+    "analyze_validation.py",
+    "controller.py",
+    "study_apptainer.py",
+    "observed_kernel.py",
+    "RUN_PARAMETERS.json"
+  ],
+  "public_plans_byte_identical": 24,
+  "no_upstream_loop_change": true,
+  "private_adapter_changes": [
+    "Correct common output-path rule identically in both arms",
+    "Record treatment condition accurately"
+  ]
+}

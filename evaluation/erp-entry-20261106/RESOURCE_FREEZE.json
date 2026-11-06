@@ -1,0 +1,2278 @@
+{
+  "version": "aea-erp-r3-entry-20261106",
+  "built_from": "aea-erp-r2-20261106 plus the retained executable-delivery repair and new single-entry patch",
+  "frozen_at_utc": "2026-11-06T09:46:37.257247+00:00",
+  "files": 566,
+  "skills": 22,
+  "recipes": 10,
+  "archive_sha256": "ef8aab2ca10b843ad0ea6cc941cbd0c18288a5bef41cf5957cb319442f98ed15",
+  "inventory": [
+    {
+      "path": "AGENT_GUIDE.md",
+      "bytes": 13478
+    },
+    {
+      "path": "CHANGELOG.md",
+      "bytes": 7126
+    },
+    {
+      "path": "CITATION.cff",
+      "bytes": 1008
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "bytes": 11764
+    },
+    {
+      "path": "LICENSE",
+      "bytes": 1377
+    },
+    {
+      "path": "README.ja.md",
+      "bytes": 9359
+    },
+    {
+      "path": "README.md",
+      "bytes": 7241
+    },
+    {
+      "path": "README.zh-CN.md",
+      "bytes": 7260
+    },
+    {
+      "path": "RESOURCE_INDEX.md",
+      "bytes": 2597
+    },
+    {
+      "path": "docs/APPROVED_ERP.md",
+      "bytes": 10221
+    },
+    {
+      "path": "docs/BENCHMARK.md",
+      "bytes": 38416
+    },
+    {
+      "path": "docs/CERTIFICATION_LEVELS.md",
+      "bytes": 12934
+    },
+    {
+      "path": "docs/CITATION_AUDIT.md",
+      "bytes": 12311
+    },
+    {
+      "path": "docs/COMPARISON.md",
+      "bytes": 35301
+    },
+    {
+      "path": "docs/DEPLOYABILITY.md",
+      "bytes": 4850
+    },
+    {
+      "path": "docs/DISTILLATION_PROTOCOL.md",
+      "bytes": 3486
+    },
+    {
+      "path": "docs/EEGLAB.md",
+      "bytes": 9467
+    },
+    {
+      "path": "docs/EXAMPLES.md",
+      "bytes": 19671
+    },
+    {
+      "path": "docs/EXTERNAL_USE_REPORT_TEMPLATE.md",
+      "bytes": 1829
+    },
+    {
+      "path": "docs/FIRST_EXTERNAL_TEST.md",
+      "bytes": 13106
+    },
+    {
+      "path": "docs/GETTING_STARTED.md",
+      "bytes": 18513
+    },
+    {
+      "path": "docs/KILLER_DEMOS.md",
+      "bytes": 7852
+    },
+    {
+      "path": "docs/LITERATURE_MINING.md",
+      "bytes": 5450
+    },
+    {
+      "path": "docs/MANIFESTO.md",
+      "bytes": 11331
+    },
+    {
+      "path": "docs/MATLAB_NATIVE.md",
+      "bytes": 11791
+    },
+    {
+      "path": "docs/OPTIMIZATION_PLAN.md",
+      "bytes": 18858
+    },
+    {
+      "path": "docs/PLATFORM_SUPPORT.md",
+      "bytes": 7357
+    },
+    {
+      "path": "docs/PRELOADED_SKILLS.md",
+      "bytes": 20370
+    },
+    {
+      "path": "docs/RELATED_WORK.md",
+      "bytes": 4204
+    },
+    {
+      "path": "docs/REPLAY.md",
+      "bytes": 5980
+    },
+    {
+      "path": "docs/ROADMAP.md",
+      "bytes": 14998
+    },
+    {
+      "path": "docs/RUN_SETTINGS.md",
+      "bytes": 2507
+    },
+    {
+      "path": "docs/SOURCE_MINING.md",
+      "bytes": 4797
+    },
+    {
+      "path": "docs/WINDOWS_FIRST_RUN.md",
+      "bytes": 6083
+    },
+    {
+      "path": "docs/assets/eeglab/01-eeglab-aea-menu.jpg",
+      "bytes": 40222
+    },
+    {
+      "path": "docs/assets/eeglab/02-settings-claude.jpg",
+      "bytes": 24286
+    },
+    {
+      "path": "docs/assets/eeglab/03-real-report-metrics.jpg",
+      "bytes": 181993
+    },
+    {
+      "path": "docs/assets/flankers-case-study-corrected.caption.txt",
+      "bytes": 1425
+    },
+    {
+      "path": "docs/assets/flankers-case-study-corrected.pdf",
+      "bytes": 243826
+    },
+    {
+      "path": "docs/assets/flankers-case-study-corrected.png",
+      "bytes": 993376
+    },
+    {
+      "path": "docs/assets/flankers-case-study-corrected.svg",
+      "bytes": 358402
+    },
+    {
+      "path": "docs/assets/flankers-case-study.png",
+      "bytes": 405107
+    },
+    {
+      "path": "docs/assets/library-overview.svg",
+      "bytes": 8007
+    },
+    {
+      "path": "docs/assets/n100-case-study-corrected.caption.txt",
+      "bytes": 862
+    },
+    {
+      "path": "docs/assets/n100-case-study-corrected.pdf",
+      "bytes": 62878
+    },
+    {
+      "path": "docs/assets/n100-case-study-corrected.png",
+      "bytes": 456430
+    },
+    {
+      "path": "docs/assets/n100-case-study-corrected.svg",
+      "bytes": 113698
+    },
+    {
+      "path": "docs/assets/n100-case-study.png",
+      "bytes": 208632
+    },
+    {
+      "path": "docs/assets/n400-example.png",
+      "bytes": 543393
+    },
+    {
+      "path": "docs/assets/site.css",
+      "bytes": 16698
+    },
+    {
+      "path": "docs/assets/site.js",
+      "bytes": 1547
+    },
+    {
+      "path": "docs/index.html",
+      "bytes": 30379
+    },
+    {
+      "path": "docs/index.ja.html",
+      "bytes": 32731
+    },
+    {
+      "path": "docs/index.zh-CN.html",
+      "bytes": 28834
+    },
+    {
+      "path": "environment.yml",
+      "bytes": 645
+    },
+    {
+      "path": "extensions/eeglab/aea/README.md",
+      "bytes": 7984
+    },
+    {
+      "path": "extensions/eeglab/aea/aea_client_command.m",
+      "bytes": 918
+    },
+    {
+      "path": "extensions/eeglab/aea/aea_erp_mean.m",
+      "bytes": 10654
+    },
+    {
+      "path": "extensions/eeglab/aea/aea_export.m",
+      "bytes": 2977
+    },
+    {
+      "path": "extensions/eeglab/aea/aea_launch_matlab.m",
+      "bytes": 1986
+    },
+    {
+      "path": "extensions/eeglab/aea/aea_prepare_matlab.m",
+      "bytes": 6739
+    },
+    {
+      "path": "extensions/eeglab/aea/aea_shell_quote.m",
+      "bytes": 292
+    },
+    {
+      "path": "extensions/eeglab/aea/aea_write_json.m",
+      "bytes": 278
+    },
+    {
+      "path": "extensions/eeglab/aea/eegplugin_aea.m",
+      "bytes": 1492
+    },
+    {
+      "path": "extensions/eeglab/aea/pop_aea.m",
+      "bytes": 6148
+    },
+    {
+      "path": "extensions/eeglab/aea/tests/test_aea_export.m",
+      "bytes": 3222
+    },
+    {
+      "path": "extensions/eeglab/aea/tests/test_aea_matlab.m",
+      "bytes": 4785
+    },
+    {
+      "path": "recipes/README.md",
+      "bytes": 9173
+    },
+    {
+      "path": "recipes/_template/RECIPE.md",
+      "bytes": 5045
+    },
+    {
+      "path": "recipes/alpha-attention-cueing/RECIPE.md",
+      "bytes": 6890
+    },
+    {
+      "path": "recipes/alpha-attention-cueing/citation.bib",
+      "bytes": 1151
+    },
+    {
+      "path": "recipes/complexity-anesthesia/RECIPE.md",
+      "bytes": 10166
+    },
+    {
+      "path": "recipes/complexity-anesthesia/citation.bib",
+      "bytes": 1732
+    },
+    {
+      "path": "recipes/ern-flankers/RECIPE.md",
+      "bytes": 15565
+    },
+    {
+      "path": "recipes/ern-flankers/citation.bib",
+      "bytes": 1265
+    },
+    {
+      "path": "recipes/ern-flankers/tests/test_ern_flankers.py",
+      "bytes": 6651
+    },
+    {
+      "path": "recipes/mmn-oddball/RECIPE.md",
+      "bytes": 8076
+    },
+    {
+      "path": "recipes/mmn-oddball/citation.bib",
+      "bytes": 1325
+    },
+    {
+      "path": "recipes/n170-face-inversion/RECIPE.md",
+      "bytes": 7652
+    },
+    {
+      "path": "recipes/n170-face-inversion/citation.bib",
+      "bytes": 988
+    },
+    {
+      "path": "recipes/n170-faces/RECIPE.md",
+      "bytes": 7853
+    },
+    {
+      "path": "recipes/n170-faces/citation.bib",
+      "bytes": 1390
+    },
+    {
+      "path": "recipes/n400-semantic/RECIPE.md",
+      "bytes": 5358
+    },
+    {
+      "path": "recipes/n400-semantic/citation.bib",
+      "bytes": 967
+    },
+    {
+      "path": "recipes/p300-oddball/RECIPE.md",
+      "bytes": 7845
+    },
+    {
+      "path": "recipes/p300-oddball/citation.bib",
+      "bytes": 823
+    },
+    {
+      "path": "recipes/resting-microstate/RECIPE.md",
+      "bytes": 11785
+    },
+    {
+      "path": "recipes/resting-microstate/citation.bib",
+      "bytes": 1761
+    },
+    {
+      "path": "recipes/resting-spectral-connectivity/RECIPE.md",
+      "bytes": 10139
+    },
+    {
+      "path": "recipes/resting-spectral-connectivity/citation.bib",
+      "bytes": 1974
+    },
+    {
+      "path": "skills/eeg-audit/SKILL.md",
+      "bytes": 6317
+    },
+    {
+      "path": "skills/eeg-audit/references/background.md",
+      "bytes": 6982
+    },
+    {
+      "path": "skills/eeg-audit/references/procedure.md",
+      "bytes": 23350
+    },
+    {
+      "path": "skills/eeg-behavior/SKILL.md",
+      "bytes": 5356
+    },
+    {
+      "path": "skills/eeg-behavior/references/background.md",
+      "bytes": 3360
+    },
+    {
+      "path": "skills/eeg-behavior/references/procedure.md",
+      "bytes": 16022
+    },
+    {
+      "path": "skills/eeg-behavior/scripts/trials.py",
+      "bytes": 7989
+    },
+    {
+      "path": "skills/eeg-bids/SKILL.md",
+      "bytes": 3120
+    },
+    {
+      "path": "skills/eeg-bids/references/background.md",
+      "bytes": 3787
+    },
+    {
+      "path": "skills/eeg-bids/references/procedure.md",
+      "bytes": 10594
+    },
+    {
+      "path": "skills/eeg-bids/scripts/events.py",
+      "bytes": 5587
+    },
+    {
+      "path": "skills/eeg-complexity/SKILL.md",
+      "bytes": 9177
+    },
+    {
+      "path": "skills/eeg-complexity/references/background.md",
+      "bytes": 10882
+    },
+    {
+      "path": "skills/eeg-complexity/references/procedure.md",
+      "bytes": 41958
+    },
+    {
+      "path": "skills/eeg-complexity/references/sample-entropy.md",
+      "bytes": 3696
+    },
+    {
+      "path": "skills/eeg-complexity/scripts/lempel_ziv.py",
+      "bytes": 2640
+    },
+    {
+      "path": "skills/eeg-complexity/scripts/sample_entropy.py",
+      "bytes": 3185
+    },
+    {
+      "path": "skills/eeg-connectivity/SKILL.md",
+      "bytes": 8384
+    },
+    {
+      "path": "skills/eeg-connectivity/references/background.md",
+      "bytes": 12919
+    },
+    {
+      "path": "skills/eeg-connectivity/references/continuous.md",
+      "bytes": 6601
+    },
+    {
+      "path": "skills/eeg-connectivity/references/procedure.md",
+      "bytes": 44145
+    },
+    {
+      "path": "skills/eeg-connectivity/scripts/continuous.py",
+      "bytes": 2715
+    },
+    {
+      "path": "skills/eeg-connectivity/scripts/graph.py",
+      "bytes": 4782
+    },
+    {
+      "path": "skills/eeg-decoding/SKILL.md",
+      "bytes": 7333
+    },
+    {
+      "path": "skills/eeg-decoding/references/background.md",
+      "bytes": 6663
+    },
+    {
+      "path": "skills/eeg-decoding/references/procedure.md",
+      "bytes": 37627
+    },
+    {
+      "path": "skills/eeg-decoding/scripts/validation.py",
+      "bytes": 8314
+    },
+    {
+      "path": "skills/eeg-epoch/SKILL.md",
+      "bytes": 6949
+    },
+    {
+      "path": "skills/eeg-epoch/references/approved-erp.md",
+      "bytes": 5763
+    },
+    {
+      "path": "skills/eeg-epoch/references/background.md",
+      "bytes": 5787
+    },
+    {
+      "path": "skills/eeg-epoch/references/procedure.md",
+      "bytes": 14480
+    },
+    {
+      "path": "skills/eeg-epoch/scripts/erp.py",
+      "bytes": 3768
+    },
+    {
+      "path": "skills/eeg-epoch/scripts/erp_core_events.py",
+      "bytes": 2058
+    },
+    {
+      "path": "skills/eeg-erp/SKILL.md",
+      "bytes": 6244
+    },
+    {
+      "path": "skills/eeg-erp/references/background.md",
+      "bytes": 5826
+    },
+    {
+      "path": "skills/eeg-erp/references/procedure.md",
+      "bytes": 24922
+    },
+    {
+      "path": "skills/eeg-erp/scripts/measurements.py",
+      "bytes": 3388
+    },
+    {
+      "path": "skills/eeg-figure/SKILL.md",
+      "bytes": 5688
+    },
+    {
+      "path": "skills/eeg-figure/references/background.md",
+      "bytes": 4746
+    },
+    {
+      "path": "skills/eeg-figure/references/procedure.md",
+      "bytes": 23343
+    },
+    {
+      "path": "skills/eeg-figure/scripts/variability.py",
+      "bytes": 3317
+    },
+    {
+      "path": "skills/eeg-group-compare/SKILL.md",
+      "bytes": 6859
+    },
+    {
+      "path": "skills/eeg-group-compare/references/background.md",
+      "bytes": 7348
+    },
+    {
+      "path": "skills/eeg-group-compare/references/procedure.md",
+      "bytes": 17988
+    },
+    {
+      "path": "skills/eeg-group-compare/scripts/statistics.py",
+      "bytes": 1905
+    },
+    {
+      "path": "skills/eeg-ica/SKILL.md",
+      "bytes": 6982
+    },
+    {
+      "path": "skills/eeg-ica/references/background.md",
+      "bytes": 12594
+    },
+    {
+      "path": "skills/eeg-ica/references/procedure.md",
+      "bytes": 21461
+    },
+    {
+      "path": "skills/eeg-ica/scripts/selection.py",
+      "bytes": 2441
+    },
+    {
+      "path": "skills/eeg-methods-text/SKILL.md",
+      "bytes": 4891
+    },
+    {
+      "path": "skills/eeg-methods-text/references/background.md",
+      "bytes": 5998
+    },
+    {
+      "path": "skills/eeg-methods-text/references/procedure.md",
+      "bytes": 18485
+    },
+    {
+      "path": "skills/eeg-microstate/SKILL.md",
+      "bytes": 7381
+    },
+    {
+      "path": "skills/eeg-microstate/references/background.md",
+      "bytes": 6327
+    },
+    {
+      "path": "skills/eeg-microstate/references/procedure.md",
+      "bytes": 21585
+    },
+    {
+      "path": "skills/eeg-microstate/scripts/preparation.py",
+      "bytes": 8013
+    },
+    {
+      "path": "skills/eeg-pipeline/SKILL.md",
+      "bytes": 3588
+    },
+    {
+      "path": "skills/eeg-pipeline/references/background.md",
+      "bytes": 2632
+    },
+    {
+      "path": "skills/eeg-pipeline/references/procedure.md",
+      "bytes": 15767
+    },
+    {
+      "path": "skills/eeg-preprocess/SKILL.md",
+      "bytes": 8156
+    },
+    {
+      "path": "skills/eeg-preprocess/references/background.md",
+      "bytes": 19394
+    },
+    {
+      "path": "skills/eeg-preprocess/references/bounded.md",
+      "bytes": 13410
+    },
+    {
+      "path": "skills/eeg-preprocess/references/channel-identity.md",
+      "bytes": 3754
+    },
+    {
+      "path": "skills/eeg-preprocess/references/procedure.md",
+      "bytes": 21079
+    },
+    {
+      "path": "skills/eeg-preprocess/scripts/check_channels.py",
+      "bytes": 2884
+    },
+    {
+      "path": "skills/eeg-preprocess/scripts/continuous.py",
+      "bytes": 7561
+    },
+    {
+      "path": "skills/eeg-qc/SKILL.md",
+      "bytes": 8591
+    },
+    {
+      "path": "skills/eeg-qc/references/background.md",
+      "bytes": 8925
+    },
+    {
+      "path": "skills/eeg-qc/references/procedure.md",
+      "bytes": 26834
+    },
+    {
+      "path": "skills/eeg-qc/scripts/spectral.py",
+      "bytes": 4195
+    },
+    {
+      "path": "skills/eeg-recipe/SKILL.md",
+      "bytes": 2982
+    },
+    {
+      "path": "skills/eeg-recipe/references/procedure.md",
+      "bytes": 20037
+    },
+    {
+      "path": "skills/eeg-report/SKILL.md",
+      "bytes": 5569
+    },
+    {
+      "path": "skills/eeg-report/references/background.md",
+      "bytes": 6440
+    },
+    {
+      "path": "skills/eeg-report/references/procedure.md",
+      "bytes": 20791
+    },
+    {
+      "path": "skills/eeg-report/scripts/inputs.py",
+      "bytes": 2510
+    },
+    {
+      "path": "skills/eeg-source/SKILL.md",
+      "bytes": 6827
+    },
+    {
+      "path": "skills/eeg-source/references/background.md",
+      "bytes": 15235
+    },
+    {
+      "path": "skills/eeg-source/references/procedure.md",
+      "bytes": 32058
+    },
+    {
+      "path": "skills/eeg-source/scripts/roi.py",
+      "bytes": 2707
+    },
+    {
+      "path": "skills/eeg-spectral/SKILL.md",
+      "bytes": 8783
+    },
+    {
+      "path": "skills/eeg-spectral/references/background.md",
+      "bytes": 11741
+    },
+    {
+      "path": "skills/eeg-spectral/references/continuous.md",
+      "bytes": 6428
+    },
+    {
+      "path": "skills/eeg-spectral/references/method-contract.md",
+      "bytes": 4226
+    },
+    {
+      "path": "skills/eeg-spectral/references/procedure.md",
+      "bytes": 29116
+    },
+    {
+      "path": "skills/eeg-spectral/scripts/continuous.py",
+      "bytes": 8553
+    },
+    {
+      "path": "skills/eeg-stats/SKILL.md",
+      "bytes": 5258
+    },
+    {
+      "path": "skills/eeg-stats/references/background.md",
+      "bytes": 9247
+    },
+    {
+      "path": "skills/eeg-stats/references/method-choices.md",
+      "bytes": 1404
+    },
+    {
+      "path": "skills/eeg-stats/references/procedure.md",
+      "bytes": 23897
+    },
+    {
+      "path": "skills/eeg-tfr/SKILL.md",
+      "bytes": 8078
+    },
+    {
+      "path": "skills/eeg-tfr/references/background.md",
+      "bytes": 8098
+    },
+    {
+      "path": "skills/eeg-tfr/references/procedure.md",
+      "bytes": 37544
+    },
+    {
+      "path": "skills/eeg-tfr/scripts/itc.py",
+      "bytes": 5081
+    },
+    {
+      "path": "templates/ANALYSIS_PLAN.md",
+      "bytes": 2551
+    },
+    {
+      "path": "templates/DATASET_BRIEF.md",
+      "bytes": 4333
+    },
+    {
+      "path": "templates/FIGURE_PLAN.md",
+      "bytes": 2544
+    },
+    {
+      "path": "templates/FINDINGS.md",
+      "bytes": 2369
+    },
+    {
+      "path": "templates/backends/README.md",
+      "bytes": 3272
+    },
+    {
+      "path": "templates/backends/erp_preprocess_eeglab.m",
+      "bytes": 10441
+    },
+    {
+      "path": "templates/backends/erp_preprocess_fieldtrip.m",
+      "bytes": 11218
+    },
+    {
+      "path": "templates/backends/validation/ft_p3_minus6db.json",
+      "bytes": 1175
+    },
+    {
+      "path": "templates/backends/validation/ft_p3_passband.json",
+      "bytes": 1177
+    },
+    {
+      "path": "templates/bids_derivatives/README.md",
+      "bytes": 1815
+    },
+    {
+      "path": "templates/bids_derivatives/bidsignore",
+      "bytes": 21
+    },
+    {
+      "path": "templates/bids_derivatives/dataset_description.json",
+      "bytes": 276
+    },
+    {
+      "path": "tools/auto_brief.py",
+      "bytes": 15760
+    },
+    {
+      "path": "tools/baselines/sample_pipeline.json",
+      "bytes": 786
+    },
+    {
+      "path": "tools/benchmark/CLUSTER_CERT.md",
+      "bytes": 15404
+    },
+    {
+      "path": "tools/benchmark/CONSEQUENCE_EVAL.md",
+      "bytes": 5137
+    },
+    {
+      "path": "tools/benchmark/CROSS_PARADIGM_BASELINE.md",
+      "bytes": 4265
+    },
+    {
+      "path": "tools/benchmark/CROSS_PARADIGM_RESULT.json",
+      "bytes": 33334
+    },
+    {
+      "path": "tools/benchmark/CROSS_TOOLBOX_DIVERGENCE.json",
+      "bytes": 11054
+    },
+    {
+      "path": "tools/benchmark/CROSS_TOOLBOX_EVAL.md",
+      "bytes": 18475
+    },
+    {
+      "path": "tools/benchmark/CROSS_TOOLBOX_RESULT.json",
+      "bytes": 14128
+    },
+    {
+      "path": "tools/benchmark/EEGLAB_RESULT.json",
+      "bytes": 840
+    },
+    {
+      "path": "tools/benchmark/ERN_BENCHMARK_RESULT.json",
+      "bytes": 2969
+    },
+    {
+      "path": "tools/benchmark/ERN_WAVEFORM_RESULT.json",
+      "bytes": 2408
+    },
+    {
+      "path": "tools/benchmark/MMN_BENCHMARK_RESULT.json",
+      "bytes": 6862
+    },
+    {
+      "path": "tools/benchmark/MMN_KERNEL_INDEP_RESULT.json",
+      "bytes": 1831
+    },
+    {
+      "path": "tools/benchmark/MMN_WAVEFORM_RESULT.json",
+      "bytes": 5639
+    },
+    {
+      "path": "tools/benchmark/N170_BENCHMARK_RESULT.json",
+      "bytes": 3894
+    },
+    {
+      "path": "tools/benchmark/N170_WAVEFORM_RESULT.json",
+      "bytes": 3222
+    },
+    {
+      "path": "tools/benchmark/N400_BENCHMARK_RESULT.json",
+      "bytes": 3864
+    },
+    {
+      "path": "tools/benchmark/N400_WAVEFORM_RESULT.json",
+      "bytes": 3113
+    },
+    {
+      "path": "tools/benchmark/OPEN_MODEL_EVAL.md",
+      "bytes": 8265
+    },
+    {
+      "path": "tools/benchmark/OPEN_MODEL_RESULT.json",
+      "bytes": 921
+    },
+    {
+      "path": "tools/benchmark/P3_BENCHMARK_RESULT.json",
+      "bytes": 3780
+    },
+    {
+      "path": "tools/benchmark/P3_KERNEL_INDEP_RESULT.json",
+      "bytes": 1817
+    },
+    {
+      "path": "tools/benchmark/P3_WAVEFORM_RESULT.json",
+      "bytes": 3106
+    },
+    {
+      "path": "tools/benchmark/RECIPE_GENERATION_EVAL.md",
+      "bytes": 8107
+    },
+    {
+      "path": "tools/benchmark/RECIPE_GENERATION_RESULT.json",
+      "bytes": 25614
+    },
+    {
+      "path": "tools/benchmark/RECIPE_GENERATION_RESULT_MMN_codex.json",
+      "bytes": 915
+    },
+    {
+      "path": "tools/benchmark/RECIPE_GENERATION_RESULT_N170.json",
+      "bytes": 6637
+    },
+    {
+      "path": "tools/benchmark/RECIPE_GENERATION_RESULT_P3.json",
+      "bytes": 7407
+    },
+    {
+      "path": "tools/benchmark/RECIPE_GENERATION_SPECLEVEL.json",
+      "bytes": 218808
+    },
+    {
+      "path": "tools/benchmark/SPECTRAL_KERNEL_INDEP_RESULT.json",
+      "bytes": 1115
+    },
+    {
+      "path": "tools/benchmark/SPECTRAL_KERNEL_INDEP_RESULT_hann.json",
+      "bytes": 1114
+    },
+    {
+      "path": "tools/benchmark/SPECTRAL_KERNEL_INDEP_RESULT_legacy_conventions.json",
+      "bytes": 1140
+    },
+    {
+      "path": "tools/benchmark/SPEC_PRECISION_EVAL.md",
+      "bytes": 7986
+    },
+    {
+      "path": "tools/benchmark/analyze_toolbox_divergence.py",
+      "bytes": 4942
+    },
+    {
+      "path": "tools/benchmark/bidspipe_ern_results.json",
+      "bytes": 2331
+    },
+    {
+      "path": "tools/benchmark/bidspipe_mmn_results.json",
+      "bytes": 4418
+    },
+    {
+      "path": "tools/benchmark/bidspipe_n170_results.json",
+      "bytes": 2323
+    },
+    {
+      "path": "tools/benchmark/bidspipe_n400_results.json",
+      "bytes": 2315
+    },
+    {
+      "path": "tools/benchmark/bidspipe_p3_results.json",
+      "bytes": 2290
+    },
+    {
+      "path": "tools/benchmark/build_bids_subset.py",
+      "bytes": 2771
+    },
+    {
+      "path": "tools/benchmark/build_bids_subset_ern.py",
+      "bytes": 2525
+    },
+    {
+      "path": "tools/benchmark/build_bids_subset_n170.py",
+      "bytes": 2400
+    },
+    {
+      "path": "tools/benchmark/build_bids_subset_n400.py",
+      "bytes": 2424
+    },
+    {
+      "path": "tools/benchmark/build_bids_subset_p3.py",
+      "bytes": 2561
+    },
+    {
+      "path": "tools/benchmark/cluster_cert/CLUSTER_CERT_ERN_harmonized.json",
+      "bytes": 566
+    },
+    {
+      "path": "tools/benchmark/cluster_cert/CLUSTER_CERT_N170_harmonized.json",
+      "bytes": 581
+    },
+    {
+      "path": "tools/benchmark/cluster_cert/CLUSTER_CERT_N400.json",
+      "bytes": 583
+    },
+    {
+      "path": "tools/benchmark/cluster_cert/CLUSTER_CERT_N400_harmonized.json",
+      "bytes": 567
+    },
+    {
+      "path": "tools/benchmark/cluster_cert/CLUSTER_CERT_P3_harmonized.json",
+      "bytes": 576
+    },
+    {
+      "path": "tools/benchmark/cluster_cert/ELEMENTWISE_ERN.json",
+      "bytes": 368
+    },
+    {
+      "path": "tools/benchmark/cluster_cert/ELEMENTWISE_N170.json",
+      "bytes": 371
+    },
+    {
+      "path": "tools/benchmark/cluster_cert/ELEMENTWISE_N400.json",
+      "bytes": 371
+    },
+    {
+      "path": "tools/benchmark/cluster_cert/ELEMENTWISE_P3.json",
+      "bytes": 369
+    },
+    {
+      "path": "tools/benchmark/cluster_cert/ELEMENTWISE_shipped_ERN.json",
+      "bytes": 367
+    },
+    {
+      "path": "tools/benchmark/cluster_cert/ELEMENTWISE_shipped_N170.json",
+      "bytes": 368
+    },
+    {
+      "path": "tools/benchmark/cluster_cert/ELEMENTWISE_shipped_N400.json",
+      "bytes": 368
+    },
+    {
+      "path": "tools/benchmark/cluster_cert/ELEMENTWISE_shipped_P3.json",
+      "bytes": 366
+    },
+    {
+      "path": "tools/benchmark/cluster_cert/cluster_input_ERN.json",
+      "bytes": 739
+    },
+    {
+      "path": "tools/benchmark/cluster_cert/cluster_input_ERN.mat",
+      "bytes": 868616
+    },
+    {
+      "path": "tools/benchmark/cluster_cert/cluster_input_N170.json",
+      "bytes": 825
+    },
+    {
+      "path": "tools/benchmark/cluster_cert/cluster_input_N170.mat",
+      "bytes": 868480
+    },
+    {
+      "path": "tools/benchmark/cluster_cert/cluster_input_N400.json",
+      "bytes": 832
+    },
+    {
+      "path": "tools/benchmark/cluster_cert/cluster_input_N400.mat",
+      "bytes": 1238696
+    },
+    {
+      "path": "tools/benchmark/cluster_cert/cluster_input_P3.json",
+      "bytes": 830
+    },
+    {
+      "path": "tools/benchmark/cluster_cert/cluster_input_P3.mat",
+      "bytes": 1238696
+    },
+    {
+      "path": "tools/benchmark/cluster_cert/dumps_shipped/ft_ERN.log",
+      "bytes": 30498
+    },
+    {
+      "path": "tools/benchmark/cluster_cert/dumps_shipped/ft_ERN.mat",
+      "bytes": 6447
+    },
+    {
+      "path": "tools/benchmark/cluster_cert/dumps_shipped/ft_N170.log",
+      "bytes": 27030
+    },
+    {
+      "path": "tools/benchmark/cluster_cert/dumps_shipped/ft_N170.mat",
+      "bytes": 4587
+    },
+    {
+      "path": "tools/benchmark/cluster_cert/dumps_shipped/ft_N400.log",
+      "bytes": 42210
+    },
+    {
+      "path": "tools/benchmark/cluster_cert/dumps_shipped/ft_N400.mat",
+      "bytes": 12587
+    },
+    {
+      "path": "tools/benchmark/cluster_cert/dumps_shipped/ft_P3.log",
+      "bytes": 42306
+    },
+    {
+      "path": "tools/benchmark/cluster_cert/dumps_shipped/ft_P3.mat",
+      "bytes": 12608
+    },
+    {
+      "path": "tools/benchmark/cluster_cert/dumps_shipped/mne_ERN.log",
+      "bytes": 131
+    },
+    {
+      "path": "tools/benchmark/cluster_cert/dumps_shipped/mne_ERN.mat",
+      "bytes": 9608
+    },
+    {
+      "path": "tools/benchmark/cluster_cert/dumps_shipped/mne_N170.log",
+      "bytes": 133
+    },
+    {
+      "path": "tools/benchmark/cluster_cert/dumps_shipped/mne_N170.mat",
+      "bytes": 6728
+    },
+    {
+      "path": "tools/benchmark/cluster_cert/dumps_shipped/mne_N400.log",
+      "bytes": 133
+    },
+    {
+      "path": "tools/benchmark/cluster_cert/dumps_shipped/mne_N400.mat",
+      "bytes": 18968
+    },
+    {
+      "path": "tools/benchmark/cluster_cert/dumps_shipped/mne_P3.log",
+      "bytes": 170
+    },
+    {
+      "path": "tools/benchmark/cluster_cert/dumps_shipped/mne_P3.mat",
+      "bytes": 18968
+    },
+    {
+      "path": "tools/benchmark/cluster_cert/fieldtrip_ERN_a025.json",
+      "bytes": 992
+    },
+    {
+      "path": "tools/benchmark/cluster_cert/fieldtrip_ERN_shipped.json",
+      "bytes": 522
+    },
+    {
+      "path": "tools/benchmark/cluster_cert/fieldtrip_N170_a025.json",
+      "bytes": 1974
+    },
+    {
+      "path": "tools/benchmark/cluster_cert/fieldtrip_N170_shipped.json",
+      "bytes": 530
+    },
+    {
+      "path": "tools/benchmark/cluster_cert/fieldtrip_N400.json",
+      "bytes": 1880
+    },
+    {
+      "path": "tools/benchmark/cluster_cert/fieldtrip_N400_a025.json",
+      "bytes": 1517
+    },
+    {
+      "path": "tools/benchmark/cluster_cert/fieldtrip_N400_shipped.json",
+      "bytes": 525
+    },
+    {
+      "path": "tools/benchmark/cluster_cert/fieldtrip_P3_a025.json",
+      "bytes": 1242
+    },
+    {
+      "path": "tools/benchmark/cluster_cert/fieldtrip_P3_shipped.json",
+      "bytes": 608
+    },
+    {
+      "path": "tools/benchmark/cluster_cert/mne_ERN.json",
+      "bytes": 1306
+    },
+    {
+      "path": "tools/benchmark/cluster_cert/mne_ERN_shipped.json",
+      "bytes": 584
+    },
+    {
+      "path": "tools/benchmark/cluster_cert/mne_N170.json",
+      "bytes": 2633
+    },
+    {
+      "path": "tools/benchmark/cluster_cert/mne_N170_shipped.json",
+      "bytes": 591
+    },
+    {
+      "path": "tools/benchmark/cluster_cert/mne_N400.json",
+      "bytes": 2004
+    },
+    {
+      "path": "tools/benchmark/cluster_cert/mne_N400_shipped.json",
+      "bytes": 586
+    },
+    {
+      "path": "tools/benchmark/cluster_cert/mne_P3.json",
+      "bytes": 1642
+    },
+    {
+      "path": "tools/benchmark/cluster_cert/mne_P3_shipped.json",
+      "bytes": 700
+    },
+    {
+      "path": "tools/benchmark/cluster_cert_fieldtrip.m",
+      "bytes": 6422
+    },
+    {
+      "path": "tools/benchmark/cluster_cert_mne.py",
+      "bytes": 5944
+    },
+    {
+      "path": "tools/benchmark/compare_cluster_cert.py",
+      "bytes": 4666
+    },
+    {
+      "path": "tools/benchmark/compare_cluster_elementwise.py",
+      "bytes": 3541
+    },
+    {
+      "path": "tools/benchmark/compare_eeglab.py",
+      "bytes": 6804
+    },
+    {
+      "path": "tools/benchmark/compare_mmn.py",
+      "bytes": 6448
+    },
+    {
+      "path": "tools/benchmark/compare_waveform.py",
+      "bytes": 5589
+    },
+    {
+      "path": "tools/benchmark/config_ern_bidspipe.py",
+      "bytes": 1507
+    },
+    {
+      "path": "tools/benchmark/config_mmn_bidspipe.py",
+      "bytes": 1769
+    },
+    {
+      "path": "tools/benchmark/config_n170_bidspipe.py",
+      "bytes": 1502
+    },
+    {
+      "path": "tools/benchmark/config_n400_bidspipe.py",
+      "bytes": 1327
+    },
+    {
+      "path": "tools/benchmark/config_p3_bidspipe.py",
+      "bytes": 1782
+    },
+    {
+      "path": "tools/benchmark/cross_toolbox_results/eeglab_ERN.json",
+      "bytes": 742
+    },
+    {
+      "path": "tools/benchmark/cross_toolbox_results/eeglab_MMN_abs.json",
+      "bytes": 1823
+    },
+    {
+      "path": "tools/benchmark/cross_toolbox_results/eeglab_MMN_p2p.json",
+      "bytes": 1818
+    },
+    {
+      "path": "tools/benchmark/cross_toolbox_results/eeglab_N170.json",
+      "bytes": 967
+    },
+    {
+      "path": "tools/benchmark/cross_toolbox_results/eeglab_N400.json",
+      "bytes": 969
+    },
+    {
+      "path": "tools/benchmark/cross_toolbox_results/eeglab_P3.json",
+      "bytes": 971
+    },
+    {
+      "path": "tools/benchmark/cross_toolbox_results/fieldtrip_ERN.json",
+      "bytes": 765
+    },
+    {
+      "path": "tools/benchmark/cross_toolbox_results/fieldtrip_ERN_cutmatch.json",
+      "bytes": 815
+    },
+    {
+      "path": "tools/benchmark/cross_toolbox_results/fieldtrip_MMN.json",
+      "bytes": 1841
+    },
+    {
+      "path": "tools/benchmark/cross_toolbox_results/fieldtrip_MMN_cutmatch.json",
+      "bytes": 1891
+    },
+    {
+      "path": "tools/benchmark/cross_toolbox_results/fieldtrip_N170.json",
+      "bytes": 991
+    },
+    {
+      "path": "tools/benchmark/cross_toolbox_results/fieldtrip_N170_cutmatch.json",
+      "bytes": 1040
+    },
+    {
+      "path": "tools/benchmark/cross_toolbox_results/fieldtrip_N400.json",
+      "bytes": 993
+    },
+    {
+      "path": "tools/benchmark/cross_toolbox_results/fieldtrip_N400_cutmatch.json",
+      "bytes": 1042
+    },
+    {
+      "path": "tools/benchmark/cross_toolbox_results/fieldtrip_P3.json",
+      "bytes": 994
+    },
+    {
+      "path": "tools/benchmark/cross_toolbox_results/fieldtrip_P3_cutmatch.json",
+      "bytes": 1044
+    },
+    {
+      "path": "tools/benchmark/cross_toolbox_results/fieldtrip_P3_df0.1.json",
+      "bytes": 1010
+    },
+    {
+      "path": "tools/benchmark/download_erpcore_component.py",
+      "bytes": 3047
+    },
+    {
+      "path": "tools/benchmark/erpcore_eeglab.m",
+      "bytes": 9137
+    },
+    {
+      "path": "tools/benchmark/erpcore_fieldtrip.m",
+      "bytes": 10495
+    },
+    {
+      "path": "tools/benchmark/export_cluster_input.py",
+      "bytes": 4404
+    },
+    {
+      "path": "tools/benchmark/extract_bidspipe_ern.py",
+      "bytes": 2888
+    },
+    {
+      "path": "tools/benchmark/extract_bidspipe_mmn.py",
+      "bytes": 3221
+    },
+    {
+      "path": "tools/benchmark/extract_bidspipe_n170.py",
+      "bytes": 2896
+    },
+    {
+      "path": "tools/benchmark/extract_bidspipe_n400.py",
+      "bytes": 2823
+    },
+    {
+      "path": "tools/benchmark/extract_bidspipe_p3.py",
+      "bytes": 2947
+    },
+    {
+      "path": "tools/benchmark/figure_fidelity.py",
+      "bytes": 11353
+    },
+    {
+      "path": "tools/benchmark/figures/ern_benchmark.png",
+      "bytes": 71122
+    },
+    {
+      "path": "tools/benchmark/figures/mmn_benchmark.png",
+      "bytes": 85002
+    },
+    {
+      "path": "tools/benchmark/figures/mmn_waveform.png",
+      "bytes": 148755
+    },
+    {
+      "path": "tools/benchmark/figures/n170_benchmark.png",
+      "bytes": 72894
+    },
+    {
+      "path": "tools/benchmark/figures/n400_benchmark.png",
+      "bytes": 71875
+    },
+    {
+      "path": "tools/benchmark/figures/p3_benchmark.png",
+      "bytes": 68978
+    },
+    {
+      "path": "tools/benchmark/generated_pipelines/C_dsr1_14b_pipeline.py",
+      "bytes": 3075
+    },
+    {
+      "path": "tools/benchmark/generated_pipelines/C_llama8b_pipeline.py",
+      "bytes": 2536
+    },
+    {
+      "path": "tools/benchmark/generated_pipelines/C_qwen14b_pipeline_AS_GENERATED.py",
+      "bytes": 3361
+    },
+    {
+      "path": "tools/benchmark/generated_pipelines/C_qwen14b_pipeline_minfix.py",
+      "bytes": 3549
+    },
+    {
+      "path": "tools/benchmark/generated_pipelines/C_qwen32b_pipeline.py",
+      "bytes": 2494
+    },
+    {
+      "path": "tools/benchmark/generated_pipelines/L0_1_pipeline.py",
+      "bytes": 12395
+    },
+    {
+      "path": "tools/benchmark/generated_pipelines/L0_2_pipeline.py",
+      "bytes": 11262
+    },
+    {
+      "path": "tools/benchmark/generated_pipelines/L0_3_pipeline.py",
+      "bytes": 9612
+    },
+    {
+      "path": "tools/benchmark/generated_pipelines/L0_4_pipeline.py",
+      "bytes": 11113
+    },
+    {
+      "path": "tools/benchmark/generated_pipelines/L0_5_pipeline.py",
+      "bytes": 11921
+    },
+    {
+      "path": "tools/benchmark/generated_pipelines/L0_6_pipeline.py",
+      "bytes": 10757
+    },
+    {
+      "path": "tools/benchmark/generated_pipelines/L0_7_pipeline.py",
+      "bytes": 11793
+    },
+    {
+      "path": "tools/benchmark/generated_pipelines/L0_8_pipeline.py",
+      "bytes": 13862
+    },
+    {
+      "path": "tools/benchmark/generated_pipelines/L0_9_pipeline.py",
+      "bytes": 13762
+    },
+    {
+      "path": "tools/benchmark/generated_pipelines/L1_10_pipeline.py",
+      "bytes": 11876
+    },
+    {
+      "path": "tools/benchmark/generated_pipelines/L1_11_pipeline.py",
+      "bytes": 16163
+    },
+    {
+      "path": "tools/benchmark/generated_pipelines/L1_12_pipeline.py",
+      "bytes": 15328
+    },
+    {
+      "path": "tools/benchmark/generated_pipelines/L1_3_pipeline.py",
+      "bytes": 17614
+    },
+    {
+      "path": "tools/benchmark/generated_pipelines/L1_4_pipeline.py",
+      "bytes": 14493
+    },
+    {
+      "path": "tools/benchmark/generated_pipelines/L1_5_pipeline.py",
+      "bytes": 14563
+    },
+    {
+      "path": "tools/benchmark/generated_pipelines/L1_6_pipeline.py",
+      "bytes": 14872
+    },
+    {
+      "path": "tools/benchmark/generated_pipelines/L1_7_pipeline.py",
+      "bytes": 11384
+    },
+    {
+      "path": "tools/benchmark/generated_pipelines/L1_8_pipeline.py",
+      "bytes": 14134
+    },
+    {
+      "path": "tools/benchmark/generated_pipelines/L1_9_pipeline.py",
+      "bytes": 12938
+    },
+    {
+      "path": "tools/benchmark/generated_pipelines/N170_L0_1_pipeline.py",
+      "bytes": 14330
+    },
+    {
+      "path": "tools/benchmark/generated_pipelines/N170_L0_2_pipeline.py",
+      "bytes": 15208
+    },
+    {
+      "path": "tools/benchmark/generated_pipelines/P3_L0_1_pipeline.py",
+      "bytes": 11509
+    },
+    {
+      "path": "tools/benchmark/generated_pipelines/P3_L0_2_pipeline.py",
+      "bytes": 11741
+    },
+    {
+      "path": "tools/benchmark/independent_dsp.py",
+      "bytes": 7038
+    },
+    {
+      "path": "tools/benchmark/independent_spectral.py",
+      "bytes": 7657
+    },
+    {
+      "path": "tools/benchmark/mmn_eeglab.m",
+      "bytes": 2368
+    },
+    {
+      "path": "tools/benchmark/octave_shims/spm_bwlabel.m",
+      "bytes": 2086
+    },
+    {
+      "path": "tools/benchmark/reports/README.md",
+      "bytes": 2503
+    },
+    {
+      "path": "tools/benchmark/reports/attenuation.json",
+      "bytes": 5009
+    },
+    {
+      "path": "tools/benchmark/reports/attenuation.py",
+      "bytes": 4649
+    },
+    {
+      "path": "tools/benchmark/reports/fig1_chain.pdf",
+      "bytes": 38003
+    },
+    {
+      "path": "tools/benchmark/reports/fig1_chain.png",
+      "bytes": 382271
+    },
+    {
+      "path": "tools/benchmark/reports/fig1_chain.py",
+      "bytes": 2971
+    },
+    {
+      "path": "tools/benchmark/reports/fig1_chain.svg",
+      "bytes": 14126
+    },
+    {
+      "path": "tools/benchmark/reports/fig2_pinning.pdf",
+      "bytes": 33441
+    },
+    {
+      "path": "tools/benchmark/reports/fig2_pinning.png",
+      "bytes": 190224
+    },
+    {
+      "path": "tools/benchmark/reports/fig2_pinning.py",
+      "bytes": 6882
+    },
+    {
+      "path": "tools/benchmark/reports/fig2_pinning.svg",
+      "bytes": 28234
+    },
+    {
+      "path": "tools/benchmark/reports/fig3_levels.pdf",
+      "bytes": 34040
+    },
+    {
+      "path": "tools/benchmark/reports/fig3_levels.py",
+      "bytes": 2141
+    },
+    {
+      "path": "tools/benchmark/reports/latex_includes.tex",
+      "bytes": 300
+    },
+    {
+      "path": "tools/benchmark/reports/run_manifest.json",
+      "bytes": 9296
+    },
+    {
+      "path": "tools/benchmark/reports/run_manifest.py",
+      "bytes": 6391
+    },
+    {
+      "path": "tools/benchmark/reports/skill_levels.json",
+      "bytes": 804
+    },
+    {
+      "path": "tools/benchmark/reports/tab1_crosstoolbox.py",
+      "bytes": 3943
+    },
+    {
+      "path": "tools/benchmark/reports/tab1_crosstoolbox.tex",
+      "bytes": 1836
+    },
+    {
+      "path": "tools/benchmark/score_recipe_generation.py",
+      "bytes": 6420
+    },
+    {
+      "path": "tools/build_resource_index.py",
+      "bytes": 1320
+    },
+    {
+      "path": "tools/case_study_stats.py",
+      "bytes": 4155
+    },
+    {
+      "path": "tools/check_analysis_outputs.py",
+      "bytes": 22280
+    },
+    {
+      "path": "tools/check_erp_outputs.py",
+      "bytes": 9514
+    },
+    {
+      "path": "tools/check_plan_provenance.py",
+      "bytes": 4075
+    },
+    {
+      "path": "tools/eeglab_bridge.py",
+      "bytes": 10660
+    },
+    {
+      "path": "tools/env/ARCHIVE_VERSION",
+      "bytes": 16
+    },
+    {
+      "path": "tools/env/backends.json",
+      "bytes": 12769
+    },
+    {
+      "path": "tools/env/check_env.ps1",
+      "bytes": 8291
+    },
+    {
+      "path": "tools/env/check_env.sh",
+      "bytes": 9671
+    },
+    {
+      "path": "tools/env/deploy_report.ps1",
+      "bytes": 13677
+    },
+    {
+      "path": "tools/env/deploy_report.sh",
+      "bytes": 11623
+    },
+    {
+      "path": "tools/env/environment-pinned.yml",
+      "bytes": 8095
+    },
+    {
+      "path": "tools/env/requirements-optional.txt",
+      "bytes": 3807
+    },
+    {
+      "path": "tools/env/resolve_backend.py",
+      "bytes": 13107
+    },
+    {
+      "path": "tools/erp_cluster_report.schema.json",
+      "bytes": 3956
+    },
+    {
+      "path": "tools/erp_execution.py",
+      "bytes": 14826
+    },
+    {
+      "path": "tools/examples/gen_library_overview.py",
+      "bytes": 3532
+    },
+    {
+      "path": "tools/examples/gen_recipe_case_figures.py",
+      "bytes": 6305
+    },
+    {
+      "path": "tools/examples/n400/recipe_case_figure_data.npz",
+      "bytes": 301755
+    },
+    {
+      "path": "tools/examples/n400/recipe_case_results.json",
+      "bytes": 4949
+    },
+    {
+      "path": "tools/examples/plot_style.py",
+      "bytes": 1671
+    },
+    {
+      "path": "tools/examples/run_recipe_case.py",
+      "bytes": 23626
+    },
+    {
+      "path": "tools/gen_case_study_figures.py",
+      "bytes": 14459
+    },
+    {
+      "path": "tools/gen_receipt.py",
+      "bytes": 5967
+    },
+    {
+      "path": "tools/install_skills.py",
+      "bytes": 2959
+    },
+    {
+      "path": "tools/load_skill.py",
+      "bytes": 4750
+    },
+    {
+      "path": "tools/overleaf_sync.sh",
+      "bytes": 2326
+    },
+    {
+      "path": "tools/package_eeglab_plugin.py",
+      "bytes": 1061
+    },
+    {
+      "path": "tools/prepare_analysis_review.py",
+      "bytes": 6240
+    },
+    {
+      "path": "tools/prepare_erp_packet.py",
+      "bytes": 6839
+    },
+    {
+      "path": "tools/prepare_sample_case.py",
+      "bytes": 4379
+    },
+    {
+      "path": "tools/prepare_skill_packet.py",
+      "bytes": 1995
+    },
+    {
+      "path": "tools/qc_amplitude.py",
+      "bytes": 5507
+    },
+    {
+      "path": "tools/regression_pipeline.py",
+      "bytes": 8026
+    },
+    {
+      "path": "tools/render_statistical_report.py",
+      "bytes": 12931
+    },
+    {
+      "path": "tools/replay.py",
+      "bytes": 11641
+    },
+    {
+      "path": "tools/run_case_study.py",
+      "bytes": 8164
+    },
+    {
+      "path": "tools/run_continuous_plan.py",
+      "bytes": 11336
+    },
+    {
+      "path": "tools/run_erp_core_validation.py",
+      "bytes": 15604
+    },
+    {
+      "path": "tools/run_erp_plan.py",
+      "bytes": 19969
+    },
+    {
+      "path": "tools/run_fix_audit.py",
+      "bytes": 20987
+    },
+    {
+      "path": "tools/run_full_case_study.py",
+      "bytes": 29307
+    },
+    {
+      "path": "tools/run_settings.py",
+      "bytes": 2559
+    },
+    {
+      "path": "tools/run_stats_case.py",
+      "bytes": 3303
+    },
+    {
+      "path": "tools/run_tfr_case.py",
+      "bytes": 6724
+    },
+    {
+      "path": "tools/skill_line_counts.py",
+      "bytes": 1551
+    },
+    {
+      "path": "tools/tests/fixtures/certification/README.md",
+      "bytes": 593
+    },
+    {
+      "path": "tools/tests/fixtures/certification/benchmark/CROSS_TOOLBOX_DIVERGENCE.json",
+      "bytes": 11054
+    },
+    {
+      "path": "tools/tests/fixtures/certification/benchmark/CROSS_TOOLBOX_RESULT.json",
+      "bytes": 14128
+    },
+    {
+      "path": "tools/tests/fixtures/certification/benchmark/ERN_WAVEFORM_RESULT.json",
+      "bytes": 2408
+    },
+    {
+      "path": "tools/tests/fixtures/certification/benchmark/MMN_WAVEFORM_RESULT.json",
+      "bytes": 5639
+    },
+    {
+      "path": "tools/tests/fixtures/certification/benchmark/N170_WAVEFORM_RESULT.json",
+      "bytes": 3222
+    },
+    {
+      "path": "tools/tests/fixtures/certification/benchmark/N400_WAVEFORM_RESULT.json",
+      "bytes": 3113
+    },
+    {
+      "path": "tools/tests/fixtures/certification/benchmark/P3_WAVEFORM_RESULT.json",
+      "bytes": 3106
+    },
+    {
+      "path": "tools/tests/fixtures/certification/benchmark/bidspipe_ern_results.json",
+      "bytes": 2331
+    },
+    {
+      "path": "tools/tests/fixtures/certification/benchmark/bidspipe_mmn_results.json",
+      "bytes": 4418
+    },
+    {
+      "path": "tools/tests/fixtures/certification/benchmark/bidspipe_n170_results.json",
+      "bytes": 2323
+    },
+    {
+      "path": "tools/tests/fixtures/certification/benchmark/bidspipe_n400_results.json",
+      "bytes": 2315
+    },
+    {
+      "path": "tools/tests/fixtures/certification/benchmark/bidspipe_p3_results.json",
+      "bytes": 2290
+    },
+    {
+      "path": "tools/tests/fixtures/certification/benchmark/cluster_cert/cluster_input_N170.mat",
+      "bytes": 868480
+    },
+    {
+      "path": "tools/tests/fixtures/certification/benchmark/cluster_cert/dumps_shipped/ft_ERN.mat",
+      "bytes": 6447
+    },
+    {
+      "path": "tools/tests/fixtures/certification/benchmark/cluster_cert/dumps_shipped/ft_N170.mat",
+      "bytes": 4587
+    },
+    {
+      "path": "tools/tests/fixtures/certification/benchmark/cluster_cert/dumps_shipped/ft_N400.mat",
+      "bytes": 12587
+    },
+    {
+      "path": "tools/tests/fixtures/certification/benchmark/cluster_cert/dumps_shipped/ft_P3.mat",
+      "bytes": 12608
+    },
+    {
+      "path": "tools/tests/fixtures/certification/benchmark/cluster_cert/dumps_shipped/mne_ERN.mat",
+      "bytes": 9608
+    },
+    {
+      "path": "tools/tests/fixtures/certification/benchmark/cluster_cert/dumps_shipped/mne_N170.mat",
+      "bytes": 6728
+    },
+    {
+      "path": "tools/tests/fixtures/certification/benchmark/cluster_cert/dumps_shipped/mne_N400.mat",
+      "bytes": 18968
+    },
+    {
+      "path": "tools/tests/fixtures/certification/benchmark/cluster_cert/dumps_shipped/mne_P3.mat",
+      "bytes": 18968
+    },
+    {
+      "path": "tools/tests/fixtures/certification/validation/ern_erpcore_results.json",
+      "bytes": 1987
+    },
+    {
+      "path": "tools/tests/fixtures/certification/validation/mmn_group_results.json",
+      "bytes": 4484
+    },
+    {
+      "path": "tools/tests/fixtures/certification/validation/n170_erpcore_results.json",
+      "bytes": 2608
+    },
+    {
+      "path": "tools/tests/fixtures/certification/validation/n400_erpcore_results.json",
+      "bytes": 2601
+    },
+    {
+      "path": "tools/tests/fixtures/certification/validation/p3_group_results.json",
+      "bytes": 2567
+    },
+    {
+      "path": "tools/tests/support/_certified_output.py",
+      "bytes": 2002
+    },
+    {
+      "path": "tools/tests/support/cluster_cert_mne.py",
+      "bytes": 5944
+    },
+    {
+      "path": "tools/tests/support/compare_mmn.py",
+      "bytes": 315
+    },
+    {
+      "path": "tools/tests/support/figure_fidelity.py",
+      "bytes": 11365
+    },
+    {
+      "path": "tools/tests/support/library_numerics.py",
+      "bytes": 28015
+    },
+    {
+      "path": "tools/tests/support/octave_shims/spm_bwlabel.m",
+      "bytes": 2086
+    },
+    {
+      "path": "tools/tests/support/score_recipe_generation.py",
+      "bytes": 1884
+    },
+    {
+      "path": "tools/tests/test_approved_erp_execution.py",
+      "bytes": 10343
+    },
+    {
+      "path": "tools/tests/test_backends.py",
+      "bytes": 10604
+    },
+    {
+      "path": "tools/tests/test_behavior_group_tfr.py",
+      "bytes": 14031
+    },
+    {
+      "path": "tools/tests/test_benchmark.py",
+      "bytes": 2993
+    },
+    {
+      "path": "tools/tests/test_benchmark_reports.py",
+      "bytes": 5358
+    },
+    {
+      "path": "tools/tests/test_case_study_inputs.py",
+      "bytes": 5658
+    },
+    {
+      "path": "tools/tests/test_case_study_stats.py",
+      "bytes": 4192
+    },
+    {
+      "path": "tools/tests/test_channel_checks.py",
+      "bytes": 3915
+    },
+    {
+      "path": "tools/tests/test_cluster_cert.py",
+      "bytes": 3194
+    },
+    {
+      "path": "tools/tests/test_cluster_cert_scripts.py",
+      "bytes": 1723
+    },
+    {
+      "path": "tools/tests/test_cluster_cert_shipped_maps.py",
+      "bytes": 2360
+    },
+    {
+      "path": "tools/tests/test_complexity_graph_itc.py",
+      "bytes": 18435
+    },
+    {
+      "path": "tools/tests/test_continuous_delivery.py",
+      "bytes": 9167
+    },
+    {
+      "path": "tools/tests/test_continuous_failure_regressions.py",
+      "bytes": 8741
+    },
+    {
+      "path": "tools/tests/test_decoding_spatial.py",
+      "bytes": 18135
+    },
+    {
+      "path": "tools/tests/test_deploy_report.py",
+      "bytes": 3890
+    },
+    {
+      "path": "tools/tests/test_deployability.py",
+      "bytes": 21177
+    },
+    {
+      "path": "tools/tests/test_eeglab_bridge.py",
+      "bytes": 13739
+    },
+    {
+      "path": "tools/tests/test_erp_execution_delivery.py",
+      "bytes": 11384
+    },
+    {
+      "path": "tools/tests/test_execution_state.py",
+      "bytes": 10438
+    },
+    {
+      "path": "tools/tests/test_figure_fidelity.py",
+      "bytes": 8183
+    },
+    {
+      "path": "tools/tests/test_generation_scoring.py",
+      "bytes": 1542
+    },
+    {
+      "path": "tools/tests/test_install_skills.py",
+      "bytes": 6078
+    },
+    {
+      "path": "tools/tests/test_library_numerics.py",
+      "bytes": 1704
+    },
+    {
+      "path": "tools/tests/test_load_skill.py",
+      "bytes": 2723
+    },
+    {
+      "path": "tools/tests/test_postfailure_delivery.py",
+      "bytes": 12897
+    },
+    {
+      "path": "tools/tests/test_preloaded_analysis.py",
+      "bytes": 5026
+    },
+    {
+      "path": "tools/tests/test_qc_amplitude.py",
+      "bytes": 4326
+    },
+    {
+      "path": "tools/tests/test_qc_bids_recipe.py",
+      "bytes": 16131
+    },
+    {
+      "path": "tools/tests/test_recipe_case.py",
+      "bytes": 6907
+    },
+    {
+      "path": "tools/tests/test_regression.py",
+      "bytes": 5331
+    },
+    {
+      "path": "tools/tests/test_replay.py",
+      "bytes": 5184
+    },
+    {
+      "path": "tools/tests/test_run_erp_plan.py",
+      "bytes": 9411
+    },
+    {
+      "path": "tools/tests/test_sample_entropy.py",
+      "bytes": 2481
+    },
+    {
+      "path": "tools/tests/test_skill_apis.py",
+      "bytes": 18856
+    },
+    {
+      "path": "tools/tests/test_skill_contracts.py",
+      "bytes": 11253
+    },
+    {
+      "path": "tools/tests/test_skill_followups.py",
+      "bytes": 5851
+    },
+    {
+      "path": "tools/tests/test_spectral_skill_examples.py",
+      "bytes": 10326
+    },
+    {
+      "path": "tools/tests/test_stage_handoff.py",
+      "bytes": 14593
+    },
+    {
+      "path": "tools/tests/test_statistical_report.py",
+      "bytes": 7910
+    },
+    {
+      "path": "tools/tests/test_trial_identity.py",
+      "bytes": 6286
+    },
+    {
+      "path": "tools/tests/test_workflow_policies.py",
+      "bytes": 10510
+    },
+    {
+      "path": "tools/validation/_certified_output.py",
+      "bytes": 2576
+    },
+    {
+      "path": "tools/validation/audit_eval/CASES.md",
+      "bytes": 4415
+    },
+    {
+      "path": "tools/validation/audit_eval/KEY.json",
+      "bytes": 1630
+    },
+    {
+      "path": "tools/validation/audit_eval/RESULTS.json",
+      "bytes": 4759
+    },
+    {
+      "path": "tools/validation/audit_eval/RESULTS.md",
+      "bytes": 4586
+    },
+    {
+      "path": "tools/validation/audit_followup_results.json",
+      "bytes": 5440
+    },
+    {
+      "path": "tools/validation/audit_followups.py",
+      "bytes": 10299
+    },
+    {
+      "path": "tools/validation/connectivity_results.json",
+      "bytes": 1556
+    },
+    {
+      "path": "tools/validation/ern_erpcore_results.json",
+      "bytes": 1987
+    },
+    {
+      "path": "tools/validation/figures/audit_followups.png",
+      "bytes": 132404
+    },
+    {
+      "path": "tools/validation/figures/ern_erpcore_group.png",
+      "bytes": 68225
+    },
+    {
+      "path": "tools/validation/figures/mmn_group.png",
+      "bytes": 78645
+    },
+    {
+      "path": "tools/validation/figures/n170_erpcore_group.png",
+      "bytes": 71890
+    },
+    {
+      "path": "tools/validation/figures/n170_faces.png",
+      "bytes": 68229
+    },
+    {
+      "path": "tools/validation/figures/n400_erpcore_group.png",
+      "bytes": 70215
+    },
+    {
+      "path": "tools/validation/figures/p3_group.png",
+      "bytes": 76544
+    },
+    {
+      "path": "tools/validation/figures/resting_validation.png",
+      "bytes": 121483
+    },
+    {
+      "path": "tools/validation/gen_recipe_case_figures.py",
+      "bytes": 6376
+    },
+    {
+      "path": "tools/validation/library_numerics.py",
+      "bytes": 28012
+    },
+    {
+      "path": "tools/validation/library_numerics_2026-10-03.json",
+      "bytes": 9314
+    },
+    {
+      "path": "tools/validation/library_numerics_initial_2026-10-03.json",
+      "bytes": 8067
+    },
+    {
+      "path": "tools/validation/methods_text_eval/FACTS.md",
+      "bytes": 4036
+    },
+    {
+      "path": "tools/validation/methods_text_eval/KEY.json",
+      "bytes": 2687
+    },
+    {
+      "path": "tools/validation/methods_text_eval/PARAGRAPHS.md",
+      "bytes": 7443
+    },
+    {
+      "path": "tools/validation/methods_text_eval/RESULTS.json",
+      "bytes": 2705
+    },
+    {
+      "path": "tools/validation/methods_text_eval/RESULTS.md",
+      "bytes": 4084
+    },
+    {
+      "path": "tools/validation/mmn_group_results.json",
+      "bytes": 4484
+    },
+    {
+      "path": "tools/validation/n170_erpcore_results.json",
+      "bytes": 2608
+    },
+    {
+      "path": "tools/validation/n170_faces_results.json",
+      "bytes": 5058
+    },
+    {
+      "path": "tools/validation/n400_erpcore_results.json",
+      "bytes": 2601
+    },
+    {
+      "path": "tools/validation/p3_group_results.json",
+      "bytes": 2567
+    },
+    {
+      "path": "tools/validation/qc_revision_2026-10-03.json",
+      "bytes": 41688
+    },
+    {
+      "path": "tools/validation/qc_sample_revision_2026-10-03.json",
+      "bytes": 20510
+    },
+    {
+      "path": "tools/validation/recipe_case_figure_data.npz",
+      "bytes": 301755
+    },
+    {
+      "path": "tools/validation/recipe_case_results.json",
+      "bytes": 4946
+    },
+    {
+      "path": "tools/validation/resting_results.json",
+      "bytes": 14965
+    },
+    {
+      "path": "tools/validation/resting_results_109_2026-10-10.json",
+      "bytes": 73912
+    },
+    {
+      "path": "tools/validation/run_recipe_case.py",
+      "bytes": 20520
+    },
+    {
+      "path": "tools/validation/trial_identity_event_ids.json",
+      "bytes": 4300820
+    },
+    {
+      "path": "tools/validation/trial_identity_results.json",
+      "bytes": 467212
+    },
+    {
+      "path": "tools/validation/validate_connectivity.py",
+      "bytes": 3769
+    },
+    {
+      "path": "tools/validation/validate_ern_erpcore_group.py",
+      "bytes": 8217
+    },
+    {
+      "path": "tools/validation/validate_mmn_group.py",
+      "bytes": 8368
+    },
+    {
+      "path": "tools/validation/validate_n170_erpcore_group.py",
+      "bytes": 7954
+    },
+    {
+      "path": "tools/validation/validate_n170_faces.py",
+      "bytes": 9230
+    },
+    {
+      "path": "tools/validation/validate_n400_erpcore_group.py",
+      "bytes": 7913
+    },
+    {
+      "path": "tools/validation/validate_p3_group.py",
+      "bytes": 8060
+    },
+    {
+      "path": "tools/validation/validate_replay.py",
+      "bytes": 2596
+    },
+    {
+      "path": "tools/validation/validate_resting_recipes.py",
+      "bytes": 13483
+    },
+    {
+      "path": "tools/validation/validate_trial_identity.py",
+      "bytes": 27046
+    },
+    {
+      "path": "tools/write_erp_derivatives.py",
+      "bytes": 2095
+    }
+  ],
+  "current_reference_outputs_included": false,
+  "raw_eeg_included": false,
+  "current_skills_recipes_modified": false
+}

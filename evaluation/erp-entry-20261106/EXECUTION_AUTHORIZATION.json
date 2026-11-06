@@ -1,0 +1,65 @@
+{
+  "authorized_at_utc": "2026-11-06T09:45:42.578081+00:00",
+  "user_response": "可以，我们erp那个skill相关吗？",
+  "approval_context": "Approved the selected one-call ERP entry, new independent resource freeze and one complete 144-session fresh paired verification. No change to scientific parameters, graders, metrics, model or upstream CodeAct loop.",
+  "approved_plan": "/home/hou/Research/auto-eeg-analysis/review-stage/aea-erp-validation-20261101/ERP_PAIRED_PLAN.approved.md",
+  "new_trial_counts_approved": true,
+  "new_judge_calls_approved": false,
+  "pilot_authorized": false,
+  "formal_authorized": false,
+  "instance_count": 24,
+  "task_families": 4,
+  "components": [
+    "P3b",
+    "N170",
+    "ERN",
+    "N400"
+  ],
+  "single_subject_requests": 20,
+  "group_requests": 4,
+  "repetitions": 3,
+  "formal_sessions": 144,
+  "pilot_sessions": 0,
+  "authorized_new_target_sessions": 144,
+  "authorized_new_api_spend_usd": 12.0,
+  "new_api_cap_usd": 5.026545199999973,
+  "pilot_api_cap_usd": 0.0,
+  "shared_api_cap_usd": 39.897205400000175,
+  "effective_shared_committed_ceiling_usd": 39.897205400000175,
+  "ceiling_source": "Shared ledger committed_usd at this moment plus the approved new cap; computed, not typed.",
+  "budget_at_start": {
+    "cap_usd": 39.897205400000175,
+    "usage_cost_estimate_usd": 34.8706602000002,
+    "outstanding_or_unknown_reserve_usd": 0,
+    "committed_usd": 34.8706602000002,
+    "unresolved_request_ids": [],
+    "generation_request_attempts": 27676,
+    "count_tokens_request_attempts": 27686,
+    "provider_invoiced_cost_usd": null
+  },
+  "models": {
+    "execution": "claude-haiku-5-5",
+    "grading": null
+  },
+  "resource_version": "aea-erp-r3-entry-20261106",
+  "scientific_policy": "tab:spec settings of the v0.3.2 certified analyses; same plan and tolerances in both arms; primary endpoint is answer fields with deterministic checks only.",
+  "execution_condition": "preloaded_procedures_with_complete_erp_entry",
+  "target_replacement_allowed": false,
+  "old_results_preserved": true,
+  "publication_authorized": true,
+  "formal_execution_go_ahead": {
+    "user_instruction": "执行",
+    "date": "2026-11-06 Asia/Tokyo"
+  },
+  "public_freeze_authorization": {
+    "user_instruction": "允许公开冻结并开跑（推荐）",
+    "date": "2026-11-05 Asia/Tokyo"
+  },
+  "public_freeze_authorization_basis": "Continuing the explicit prior approval to publish on the independent preregistration branch and the current approval of a new freeze and one complete retest.",
+  "previous_result_root": "/home/hou/Research/auto-eeg-analysis/review-stage/aea-erp-repair-20261106",
+  "post_repair_on_seen_tasks": true,
+  "latest_instruction": "可以，我们erp那个skill相关吗？",
+  "plan_review_status": "approved_by_user",
+  "launch_gate": "New public freeze, independent preflight and effective Slurm limits before any model call",
+  "worker_mode": "One active API worker at a time, shared lab egress; no MDX restart or cloud spend"
+}

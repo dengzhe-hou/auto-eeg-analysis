@@ -1,0 +1,60 @@
+{
+ "model": {
+  "execution": "claude-haiku-5-5",
+  "thinking": {
+   "type": "disabled"
+  },
+  "effort": "medium",
+  "max_completion_tokens": 2048,
+  "loop": "Upstream BrainBench CodeAct, unchanged",
+  "max_iterations": 20,
+  "max_non_action_responses": 3,
+  "repeated_failure_limit": 3,
+  "observation_max_chars": 8000,
+  "basis": "Same settings as aea-next-validation-preparation-20261031, read from its actual provider requests in EXECUTION_CONFIG_WITNESS.json"
+ },
+ "judge": {
+  "enabled": false,
+  "sonnet_requests_expected": 0,
+  "enforced_by": "StudyClient refuses any role other than target"
+ },
+ "session_limits": {
+  "execution_timeout_sec": 300,
+  "case_timeout_sec": 1200,
+  "cpus_per_session": 2,
+  "threads_in_kernel": 1,
+  "memory_gib": {
+   "single_subject": 8,
+   "group": 16
+  },
+  "same_in_both_arms": true
+ },
+ "measured_basis": {
+  "reference_runs": 14,
+  "slowest_formal_group_reference_seconds": 42.33986815501703,
+  "slowest_on": [
+   "N170",
+   "image1.8.0",
+   "c03"
+  ],
+  "largest_reference_rss_gib": 0.9642753601074219,
+  "largest_rss_on": [
+   "ERN",
+   "image1.8.0"
+  ],
+  "per_cell_rule": "The whole 20-subject analysis, including 5000 permutations, is one possible cell. 300 s is about 7 times the slowest reference run on one thread. The official 150 s is about 3.6 times and leaves little room on a busier node.",
+  "per_session_rule": "Three full reruns on a node twice as slow is about 250 s; 20 model turns at the 15 s the previous round used per turn is about 300 s. 1200 s covers this with a factor of two. The official 720 s would also have covered the reference compute, so the plan text that it may be too short for group tasks is not supported by the reference timing; the longer limit stays because it costs nothing unless a session needs it.",
+  "memory_rule": "Reference peak under 1 GiB. An agent that holds all 20 raw recordings at 1024 Hz at once needs about 3.2 GiB before filtering copies. Group 16 GiB is the approved ceiling, single-subject 8 GiB is over 8 times the reference peak.",
+  "cpu_rule": "Reference CPU seconds match wall time on one thread. Two CPUs give the kernel and the controller one each, the approved ceiling."
+ },
+ "slurm": {
+  "partition": "batch",
+  "gpu_requested": false
+ },
+ "status": "confirmed_by_pilot_no_limit_bound",
+ "pilot_observed": {
+  "longest_cell_seconds": 42.8,
+  "longest_session_seconds": 120.26381062401924,
+  "pilot_job_max_rss_gib": 2.9
+ }
+}
