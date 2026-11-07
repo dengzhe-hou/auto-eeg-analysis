@@ -46,5 +46,5 @@ approve the analysis plan, then open the saved report from EEGLAB.
 The native helper covers explicit ERP means from existing epochs. The broader
 resource library primarily uses MNE-Python. See [native MATLAB coverage](MATLAB_NATIVE.md)
 and the [toolbox setup guide](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/extensions/matlab/README.md).
-File Exchange submission is being prepared. The toolbox is available from the
-linked GitHub release.
+The [File Exchange listing](https://www.mathworks.com/matlabcentral/fileexchange/185187-aea-for-matlab-and-eeglab) provides the GitHub source.
+Use the linked GitHub release for the tested `.mltbx` installer.
