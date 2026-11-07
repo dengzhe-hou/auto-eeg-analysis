@@ -13,7 +13,7 @@ documentation. It does not install or configure a model client or an account.
 Use Python 3.10 or newer in an environment of your choice.
 
 ```sh
-python -m pip install auto-eeg-analysis==0.3.3rc1
+python -m pip install auto-eeg-analysis==0.3.3rc2
 aea-eeg init ./my-eeg-study --agent codex
 cd my-eeg-study
 ```
@@ -29,7 +29,7 @@ existing MNE environment, use the included `environment.yml` to create one,
 or install the analysis dependencies from the existing environment specification.
 
 ```sh
-python -m pip install 'auto-eeg-analysis[analysis]==0.3.3rc1'
+python -m pip install 'auto-eeg-analysis[analysis]==0.3.3rc2'
 ```
 
 Read `AGENT_GUIDE.md`, select procedures through `RESOURCE_INDEX.md`, and approve
