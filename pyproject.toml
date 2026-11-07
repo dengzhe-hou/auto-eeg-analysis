@@ -1,0 +1,42 @@
+[build-system]
+requires = ["setuptools>=77", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "auto-eeg-analysis"
+version = "0.3.3rc1"
+description = "Reusable EEG analysis skills and study recipes for large language model agents"
+readme = "packaging/README.md"
+requires-python = ">=3.10"
+license = "MIT AND CC-BY-4.0"
+license-files = ["LICENSE"]
+authors = [{name = "Dengzhe Hou"}]
+keywords = ["EEG", "MNE", "agent", "skills", "neuroscience"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Science/Research",
+  "Programming Language :: Python :: 3",
+  "Topic :: Scientific/Engineering :: Medical Science Apps.",
+]
+
+[project.urls]
+Homepage = "https://dengzhe-hou.github.io/auto-eeg-analysis/"
+Repository = "https://github.com/dengzhe-hou/auto-eeg-analysis"
+Documentation = "https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/docs/GETTING_STARTED.md"
+Issues = "https://github.com/dengzhe-hou/auto-eeg-analysis/issues"
+
+[project.optional-dependencies]
+analysis = [
+  "numpy", "scipy", "matplotlib", "pandas", "h5py",
+  "mne[hdf5]>=1.7", "mne-bids>=0.14", "mne-icalabel>=0.6",
+  "onnxruntime>=1.16", "autoreject>=0.4", "pycrostates>=0.5",
+  "mne-connectivity>=0.7", "pyprep>=0.4", "mffpy", "eeglabio",
+]
+
+[project.scripts]
+aea-eeg = "auto_eeg_analysis.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+packages = ["auto_eeg_analysis"]
+include-package-data = false
