@@ -219,11 +219,11 @@ for i = 1:numel(subs_wanted)
 
     subs{end+1} = sid; vals(end+1) = v;
     na(end+1) = sum(cond == 1); nb(end+1) = sum(cond == 2);
-    printf('%s %s-%s = %.4f uV (a=%d b=%d)\n', sid, SPEC.cond_A.name, SPEC.cond_B.name, ...
+    fprintf('%s %s-%s = %.4f uV (a=%d b=%d)\n', sid, SPEC.cond_A.name, SPEC.cond_B.name, ...
            v, na(end), nb(end));
   catch err
     skipped{end+1} = sprintf('%s: ERROR %s', sid, err.message);
-    printf('%s ERROR %s\n', sid, err.message);
+    fprintf('%s ERROR %s\n', sid, err.message);
   end
 end
 
