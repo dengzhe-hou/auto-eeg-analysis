@@ -36,7 +36,19 @@ The fixed N400 example retains results from 20 ERP CORE participants: CPz/Cz/Pz 
 
 **EEGLAB extension approved:** AEA 0.1.3 is listed in the [official EEGLAB extension catalogue](https://sccn.ucsd.edu/eeglab/plugin_uploader/plugin_list_all.php). In EEGLAB, open **File > Manage EEGLAB extensions**, search for **AEA**, and install it. Then follow the [setup guide](docs/EEGLAB.md) to connect your AEA checkout and coding client.
 
-Install Git, Conda, and a signed-in Codex CLI or Claude Code client first. These commands use `main`, including fixes added after [v0.3.2](CHANGELOG.md#choose-a-version).
+The [PyPI preview](https://pypi.org/project/auto-eeg-analysis/0.3.3rc2/) creates an AEA project in an existing analysis environment.
+
+```sh
+python -m pip install auto-eeg-analysis==0.3.3rc2
+aea-eeg init ./my-eeg-study --agent codex
+cd my-eeg-study
+```
+
+Use `--agent claude` or `--agent both` for the other client choices. Work from the initialized project in your MNE environment. The default package has no scientific runtime dependencies. See the [package guide](docs/PACKAGES.md) for environment setup.
+
+A [MATLAB toolbox preview](https://github.com/dengzhe-hou/auto-eeg-analysis/releases/download/eeglab-v0.1.3-preview/AEA_MATLAB_EEGLAB_0_1_3_preview.mltbx) bundles the resource library and EEGLAB adapter. Follow its [setup guide](extensions/matlab/README.md).
+
+For a Git checkout and a new Conda environment, install Git, Conda, and a signed-in Codex CLI or Claude Code client first. These commands use `main`, including fixes added after [v0.3.2](CHANGELOG.md#choose-a-version).
 
 ```bash
 git clone https://github.com/dengzhe-hou/auto-eeg-analysis.git

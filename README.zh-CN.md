@@ -38,7 +38,19 @@ AEA（Automated EEG Analysis，自动化脑电分析）是一个开放资源库�
 
 **EEGLAB 扩展已获批准：** AEA 0.1.3 已列入 [EEGLAB 官方扩展目录](https://sccn.ucsd.edu/eeglab/plugin_uploader/plugin_list_all.php)。在 EEGLAB 中打开 **File > Manage EEGLAB extensions**，搜索 **AEA** 并安装，再按[配置指南](docs/EEGLAB.md)连接 AEA 源码目录和编程客户端。
 
-先安装 Git、Conda，以及已登录的 Codex CLI 或 Claude Code。以下命令使用 `main`，包含 [v0.3.2](CHANGELOG.md#choose-a-version) 之后的修正。
+已有分析环境时，可用 [PyPI 预览包](https://pypi.org/project/auto-eeg-analysis/0.3.3rc2/) 创建 AEA 工程。
+
+```sh
+python -m pip install auto-eeg-analysis==0.3.3rc2
+aea-eeg init ./my-eeg-study --agent codex
+cd my-eeg-study
+```
+
+Claude Code 用户可改用 `--agent claude`，也可选择 `--agent both`。在新工程目录和已有 MNE 环境中运行客户端。默认安装包不自动安装科学计算依赖，环境配置见[安装包指南](docs/PACKAGES.md)。
+
+[MATLAB 工具箱预览包](https://github.com/dengzhe-hou/auto-eeg-analysis/releases/download/eeglab-v0.1.3-preview/AEA_MATLAB_EEGLAB_0_1_3_preview.mltbx) 包含资源库和 EEGLAB 适配器，按[配置指南](extensions/matlab/README.md)使用。
+
+若使用 Git 源码和新 Conda 环境，先安装 Git、Conda，以及已登录的 Codex CLI 或 Claude Code。以下命令使用 `main`，包含 [v0.3.2](CHANGELOG.md#choose-a-version) 之后的修正。
 
 ```bash
 git clone https://github.com/dengzhe-hou/auto-eeg-analysis.git

@@ -38,7 +38,19 @@ AEA（Automated EEG Analysis）は、MNE-Python向けの **22のスキルと10�
 
 **EEGLAB拡張が承認されました：** AEA 0.1.3は[EEGLAB公式拡張一覧](https://sccn.ucsd.edu/eeglab/plugin_uploader/plugin_list_all.php)に掲載されています。EEGLABの **File > Manage EEGLAB extensions** で **AEA** を検索してインストールし、[設定ガイド](docs/EEGLAB.md)に従ってAEAのソースフォルダとコーディングクライアントを接続してください。
 
-Git、Conda、およびログイン済みのCodex CLIまたはClaude Codeを用意してください。以下は `main` を使う手順で、[v0.3.2](CHANGELOG.md#choose-a-version)以降の修正を含みます。
+既存の解析環境では、[PyPIプレビュー版](https://pypi.org/project/auto-eeg-analysis/0.3.3rc2/)からAEAプロジェクトを作成できます。
+
+```sh
+python -m pip install auto-eeg-analysis==0.3.3rc2
+aea-eeg init ./my-eeg-study --agent codex
+cd my-eeg-study
+```
+
+Claude Codeには `--agent claude`、両方には `--agent both` を指定します。作成したプロジェクトから、既存のMNE環境でクライアントを起動してください。既定のパッケージは科学計算用の依存関係を自動インストールしません。[パッケージ導入ガイド](docs/PACKAGES.md)に環境設定を記載しています。
+
+[MATLABツールボックスのプレビュー版](https://github.com/dengzhe-hou/auto-eeg-analysis/releases/download/eeglab-v0.1.3-preview/AEA_MATLAB_EEGLAB_0_1_3_preview.mltbx)にはリソースとEEGLABアダプターが含まれます。[設定ガイド](extensions/matlab/README.md)を参照してください。
+
+Gitのソースと新しいConda環境を使う場合は、Git、Conda、およびログイン済みのCodex CLIまたはClaude Codeを用意してください。以下は `main` を使う手順で、[v0.3.2](CHANGELOG.md#choose-a-version)以降の修正を含みます。
 
 ```bash
 git clone https://github.com/dengzhe-hou/auto-eeg-analysis.git
