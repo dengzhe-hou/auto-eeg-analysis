@@ -38,6 +38,8 @@ AEA（Automated EEG Analysis）は、MNE-Python向けの **22のスキルと10�
 
 **EEGLAB拡張が承認されました：** AEA 0.1.3は[EEGLAB公式拡張一覧](https://sccn.ucsd.edu/eeglab/plugin_uploader/plugin_list_all.php)に掲載されています。EEGLABの **File > Manage EEGLAB extensions** で **AEA** を検索してインストールし、[設定ガイド](docs/EEGLAB.md)に従ってAEAのソースフォルダとコーディングクライアントを接続してください。
 
+AEAは[FieldTripの外部拡張一覧](https://www.fieldtriptoolbox.org/extensions/)にも掲載されています。利用できる経路は[バックエンドの説明](templates/backends/README.md)を参照してください。
+
 既存の解析環境では、[PyPIプレビュー版](https://pypi.org/project/auto-eeg-analysis/0.3.3rc2/)からAEAプロジェクトを作成できます。
 
 ```sh

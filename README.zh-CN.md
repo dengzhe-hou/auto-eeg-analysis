@@ -38,6 +38,8 @@ AEA（Automated EEG Analysis，自动化脑电分析）是一个开放资源库�
 
 **EEGLAB 扩展已获批准：** AEA 0.1.3 已列入 [EEGLAB 官方扩展目录](https://sccn.ucsd.edu/eeglab/plugin_uploader/plugin_list_all.php)。在 EEGLAB 中打开 **File > Manage EEGLAB extensions**，搜索 **AEA** 并安装，再按[配置指南](docs/EEGLAB.md)连接 AEA 源码目录和编程客户端。
 
+AEA 也已列入 [FieldTrip 外部扩展目录](https://www.fieldtriptoolbox.org/extensions/)，可用路线见[后端说明](templates/backends/README.md)。
+
 已有分析环境时，可用 [PyPI 预览包](https://pypi.org/project/auto-eeg-analysis/0.3.3rc2/) 创建 AEA 工程。
 
 ```sh
