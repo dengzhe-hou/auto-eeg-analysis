@@ -48,7 +48,7 @@ cd my-eeg-study
 
 Claude Codeには `--agent claude`、両方には `--agent both` を指定します。作成したプロジェクトから、既存のMNE環境でクライアントを起動してください。既定のパッケージは科学計算用の依存関係を自動インストールしません。[パッケージ導入ガイド](docs/PACKAGES.md)に環境設定を記載しています。
 
-[MATLABツールボックスのプレビュー版](https://github.com/dengzhe-hou/auto-eeg-analysis/releases/download/eeglab-v0.1.3-preview/AEA_MATLAB_EEGLAB_0_1_3_preview.mltbx)にはリソースとEEGLABアダプターが含まれます。[設定ガイド](extensions/matlab/README.md)を参照してください。
+[MATLABツールボックスのプレビュー版](https://github.com/dengzhe-hou/auto-eeg-analysis/releases/download/eeglab-v0.1.3-preview/AEA_MATLAB_EEGLAB_0_1_3_preview.mltbx)にはリソースとEEGLABアダプターが含まれます。[File Exchange](https://www.mathworks.com/matlabcentral/fileexchange/185187-aea-for-matlab-and-eeglab)ではGitHubのソースを提供しています。インストールには上記の `.mltbx` リンクを使い、[設定ガイド](extensions/matlab/README.md)に従ってください。
 
 Gitのソースと新しいConda環境を使う場合は、Git、Conda、およびログイン済みのCodex CLIまたはClaude Codeを用意してください。以下は `main` を使う手順で、[v0.3.2](CHANGELOG.md#choose-a-version)以降の修正を含みます。
 
@@ -110,7 +110,7 @@ WindowsとEEGLABを使う場合は、[最初のレポートを作る手順](docs
 
 ## 引用と貢献
 
-AEAの引用には [CITATION.cff](CITATION.cff) を使い、利用したレシピが示す出典論文も引用してください。スキルやレシピを追加・改善する場合は、[貢献ガイド](CONTRIBUTING.md)を参照してください。
+AEAの引用には [CITATION.cff](CITATION.cff) を使い、実際に使用したバージョンまたはコミットを記録してください。レシピの出典論文も引用してください。[Zenodoアーカイブ](https://doi.org/10.5281/zenodo.24012489)は2026年11月6日時点で固定したリソースと検証記録を保存しています。パッケージとアーカイブの対応は[公開バージョンの説明](docs/PACKAGES.md#public-versions-and-archives)、貢献方法は[貢献ガイド](CONTRIBUTING.md)を参照してください。
 
 公式の利用チュートリアルは英語で提供します。[任意の言語でコミュニティのチュートリアルを投稿](CONTRIBUTING.md#share-a-community-tutorial)したり、途中で止まった試行や失敗を含めて[初回利用や環境ごとの動作結果を報告](CONTRIBUTING.md#report-a-first-run-or-platform-check)したりすることも歓迎します。
 

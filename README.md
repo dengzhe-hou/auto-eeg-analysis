@@ -46,7 +46,7 @@ cd my-eeg-study
 
 Use `--agent claude` or `--agent both` for the other client choices. Work from the initialized project in your MNE environment. The default package has no scientific runtime dependencies. See the [package guide](docs/PACKAGES.md) for environment setup.
 
-A [MATLAB toolbox preview](https://github.com/dengzhe-hou/auto-eeg-analysis/releases/download/eeglab-v0.1.3-preview/AEA_MATLAB_EEGLAB_0_1_3_preview.mltbx) bundles the resource library and EEGLAB adapter. Follow its [setup guide](extensions/matlab/README.md).
+A [MATLAB toolbox preview](https://github.com/dengzhe-hou/auto-eeg-analysis/releases/download/eeglab-v0.1.3-preview/AEA_MATLAB_EEGLAB_0_1_3_preview.mltbx) bundles the resource library and EEGLAB adapter. [File Exchange](https://www.mathworks.com/matlabcentral/fileexchange/185187-aea-for-matlab-and-eeglab) provides the GitHub source. Use the `.mltbx` link for the tested installer and follow its [setup guide](extensions/matlab/README.md).
 
 For a Git checkout and a new Conda environment, install Git, Conda, and a signed-in Codex CLI or Claude Code client first. These commands use `main`, including fixes added after [v0.3.2](CHANGELOG.md#choose-a-version).
 
@@ -111,7 +111,7 @@ Each [recipe](recipes/README.md#available-recipes) records its declared status a
 
 ## Citation and contributing
 
-Use [CITATION.cff](CITATION.cff) to cite AEA, and cite the source papers declared by the recipes you use. See the [contribution guide](CONTRIBUTING.md) to add or improve a skill or recipe.
+Use [CITATION.cff](CITATION.cff) to cite AEA and record the software version or commit used. Cite the source papers declared by the recipes you use. The [Zenodo archive](https://doi.org/10.5281/zenodo.24012489) preserves the resources and validation records frozen on 6 November 2026. See [public versions and archives](docs/PACKAGES.md#public-versions-and-archives) for the package and archive mapping, and the [contribution guide](CONTRIBUTING.md) to add or improve a skill or recipe.
 
 Official usage tutorials are in English. You can also [share a community tutorial in any language](CONTRIBUTING.md#share-a-community-tutorial) or [report your first run and platform results](CONTRIBUTING.md#report-a-first-run-or-platform-check), including incomplete attempts.
 

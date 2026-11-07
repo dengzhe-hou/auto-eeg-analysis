@@ -48,7 +48,7 @@ cd my-eeg-study
 
 Claude Code 用户可改用 `--agent claude`，也可选择 `--agent both`。在新工程目录和已有 MNE 环境中运行客户端。默认安装包不自动安装科学计算依赖，环境配置见[安装包指南](docs/PACKAGES.md)。
 
-[MATLAB 工具箱预览包](https://github.com/dengzhe-hou/auto-eeg-analysis/releases/download/eeglab-v0.1.3-preview/AEA_MATLAB_EEGLAB_0_1_3_preview.mltbx) 包含资源库和 EEGLAB 适配器，按[配置指南](extensions/matlab/README.md)使用。
+[MATLAB 工具箱预览包](https://github.com/dengzhe-hou/auto-eeg-analysis/releases/download/eeglab-v0.1.3-preview/AEA_MATLAB_EEGLAB_0_1_3_preview.mltbx)包含资源库和 EEGLAB 适配器。[File Exchange](https://www.mathworks.com/matlabcentral/fileexchange/185187-aea-for-matlab-and-eeglab) 提供 GitHub 源码。安装请使用前面的 `.mltbx` 链接，并按[配置指南](extensions/matlab/README.md)操作。
 
 若使用 Git 源码和新 Conda 环境，先安装 Git、Conda，以及已登录的 Codex CLI 或 Claude Code。以下命令使用 `main`，包含 [v0.3.2](CHANGELOG.md#choose-a-version) 之后的修正。
 
@@ -110,7 +110,7 @@ $eeg-recipe n400-semantic --data projects/my-study
 
 ## 引用与贡献
 
-引用 AEA 时请使用 [CITATION.cff](CITATION.cff)，并引用所用配方声明的来源论文。新增或改进技能、配方，请参照[贡献指南](CONTRIBUTING.md)。
+引用 AEA 时请使用 [CITATION.cff](CITATION.cff)，记录实际使用的软件版本或提交，并引用所用配方声明的来源论文。[Zenodo 归档](https://doi.org/10.5281/zenodo.24012489)保存了截至 2026 年 11 月 6 日冻结的资源与验证记录。安装包和归档的对应关系见[公开版本说明](docs/PACKAGES.md#public-versions-and-archives)。新增或改进技能、配方，请参照[贡献指南](CONTRIBUTING.md)。
 
 官方使用教程提供英文版。社区可以[贡献任意语言的教程](CONTRIBUTING.md#share-a-community-tutorial)，也可以[提交首次使用和平台测试反馈](CONTRIBUTING.md#report-a-first-run-or-platform-check)，包括未完成或失败的尝试。
 
