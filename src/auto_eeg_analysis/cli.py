@@ -18,7 +18,8 @@ def initialize(target, agent):
     target = Path(target).expanduser().resolve()
     if target.exists() and (not target.is_dir() or any(target.iterdir())):
         raise FileExistsError(f"The destination must be a new or empty directory: {target}")
-    shutil.copytree(resource_root(), target, dirs_exist_ok=True)
+    shutil.copytree(resource_root(), target, dirs_exist_ok=True,
+                    ignore=shutil.ignore_patterns("__pycache__"))
     created = unchanged = 0
     if agent:
         installer = runpy.run_path(str(target / "tools" / "install_skills.py"))
