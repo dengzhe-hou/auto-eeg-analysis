@@ -1,0 +1,50 @@
+{
+  "studies": [
+    {
+      "configuration": "R1",
+      "resource_snapshot": "aea-erp-r1-20261101",
+      "study_root": "/home/hou/Research/auto-eeg-analysis/review-stage/aea-erp-validation-20261101",
+      "freeze_commit": "95a24a6043e306129d1e6c09665dfee8a8557de2",
+      "execution_correction_commit": "5e129666e485cdffe1dfc07c893a1f5fd7022038",
+      "files": [
+        "RESULTS.json",
+        "RUN_METRICS.csv",
+        "PROTOCOL_FROZEN.json",
+        "SCHEDULE.json",
+        "analyze_validation.py"
+      ]
+    },
+    {
+      "configuration": "R2",
+      "resource_snapshot": "aea-erp-r2-20261106",
+      "study_root": "/home/hou/Research/auto-eeg-analysis/review-stage/aea-erp-repair-20261106",
+      "freeze_commit": "b4d783b1f6c1d7e4805ce5b5e0c87814fa3bab5b",
+      "execution_correction_commit": "06456cac124c664ec3601a23df0f886d0546dfd7",
+      "files": [
+        "RESULTS.json",
+        "RUN_METRICS.csv",
+        "PROTOCOL_FROZEN.json",
+        "SCHEDULE.json",
+        "analyze_validation.py"
+      ]
+    },
+    {
+      "configuration": "R3",
+      "resource_snapshot": "aea-erp-r3-entry-20261106",
+      "study_root": "/home/hou/Research/auto-eeg-analysis/review-stage/aea-erp-entry-20261106",
+      "freeze_commit": "7efd971ecc0bc3610ab535894c54fc79f93d6daa",
+      "execution_correction_commit": null,
+      "files": [
+        "RESULTS.json",
+        "RUN_METRICS.csv",
+        "PROTOCOL_FROZEN.json",
+        "SCHEDULE.json",
+        "analyze_validation.py"
+      ]
+    }
+  ],
+  "primary_endpoint": "answer_field_pass",
+  "statistic": "24 request means of three paired differences; four component and six subject-factor levels; 10000 crossed exponential weights; seed 20261029",
+  "scores_recomputed": false,
+  "model_calls": 0
+}

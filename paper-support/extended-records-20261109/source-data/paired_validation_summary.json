@@ -1,0 +1,266 @@
+{
+  "assigned_formal_sessions": 600,
+  "complete_formal_sessions": 600,
+  "assigned_pairs": 300,
+  "complete_pairs": 300,
+  "analysis_complete": true,
+  "repetitions": {
+    "1": {
+      "complete_pairs": 100,
+      "difference_pp": 14.000000000000002
+    },
+    "2": {
+      "complete_pairs": 100,
+      "difference_pp": 10.0
+    },
+    "3": {
+      "complete_pairs": 100,
+      "difference_pp": 11.0
+    }
+  },
+  "groups": [
+    {
+      "grouping": "task_family",
+      "group": "case1",
+      "complete_sessions": 36,
+      "with_aea": 1.0,
+      "without_aea": 0.9444444444444444,
+      "difference_pp": 5.555555555555558
+    },
+    {
+      "grouping": "task_family",
+      "group": "case12",
+      "complete_sessions": 30,
+      "with_aea": 1.0,
+      "without_aea": 0.9333333333333333,
+      "difference_pp": 6.666666666666665
+    },
+    {
+      "grouping": "task_family",
+      "group": "case14",
+      "complete_sessions": 30,
+      "with_aea": 0.8666666666666667,
+      "without_aea": 0.8,
+      "difference_pp": 6.666666666666665
+    },
+    {
+      "grouping": "task_family",
+      "group": "case15",
+      "complete_sessions": 36,
+      "with_aea": 1.0,
+      "without_aea": 1.0,
+      "difference_pp": 0.0
+    },
+    {
+      "grouping": "task_family",
+      "group": "case17",
+      "complete_sessions": 36,
+      "with_aea": 0.8333333333333334,
+      "without_aea": 0.7777777777777778,
+      "difference_pp": 5.555555555555558
+    },
+    {
+      "grouping": "task_family",
+      "group": "case19",
+      "complete_sessions": 30,
+      "with_aea": 1.0,
+      "without_aea": 1.0,
+      "difference_pp": 0.0
+    },
+    {
+      "grouping": "task_family",
+      "group": "case2",
+      "complete_sessions": 30,
+      "with_aea": 0.9333333333333333,
+      "without_aea": 1.0,
+      "difference_pp": -6.666666666666665
+    },
+    {
+      "grouping": "task_family",
+      "group": "case22",
+      "complete_sessions": 30,
+      "with_aea": 1.0,
+      "without_aea": 1.0,
+      "difference_pp": 0.0
+    },
+    {
+      "grouping": "task_family",
+      "group": "case23",
+      "complete_sessions": 36,
+      "with_aea": 0.8888888888888888,
+      "without_aea": 0.4444444444444444,
+      "difference_pp": 44.44444444444444
+    },
+    {
+      "grouping": "task_family",
+      "group": "case24",
+      "complete_sessions": 30,
+      "with_aea": 0.8666666666666667,
+      "without_aea": 0.9333333333333333,
+      "difference_pp": -6.666666666666665
+    },
+    {
+      "grouping": "task_family",
+      "group": "case25",
+      "complete_sessions": 30,
+      "with_aea": 1.0,
+      "without_aea": 0.8,
+      "difference_pp": 19.999999999999996
+    },
+    {
+      "grouping": "task_family",
+      "group": "case26",
+      "complete_sessions": 36,
+      "with_aea": 0.9444444444444444,
+      "without_aea": 0.6666666666666666,
+      "difference_pp": 27.77777777777778
+    },
+    {
+      "grouping": "task_family",
+      "group": "case29",
+      "complete_sessions": 30,
+      "with_aea": 1.0,
+      "without_aea": 0.7333333333333333,
+      "difference_pp": 26.66666666666667
+    },
+    {
+      "grouping": "task_family",
+      "group": "case3",
+      "complete_sessions": 30,
+      "with_aea": 1.0,
+      "without_aea": 0.9333333333333333,
+      "difference_pp": 6.666666666666665
+    },
+    {
+      "grouping": "task_family",
+      "group": "case34",
+      "complete_sessions": 30,
+      "with_aea": 1.0,
+      "without_aea": 0.8666666666666667,
+      "difference_pp": 13.33333333333333
+    },
+    {
+      "grouping": "task_family",
+      "group": "case35",
+      "complete_sessions": 30,
+      "with_aea": 1.0,
+      "without_aea": 0.6666666666666666,
+      "difference_pp": 33.333333333333336
+    },
+    {
+      "grouping": "task_family",
+      "group": "case36",
+      "complete_sessions": 36,
+      "with_aea": 1.0,
+      "without_aea": 0.8333333333333334,
+      "difference_pp": 16.666666666666664
+    },
+    {
+      "grouping": "task_family",
+      "group": "case6",
+      "complete_sessions": 24,
+      "with_aea": 1.0,
+      "without_aea": 0.8333333333333334,
+      "difference_pp": 16.666666666666664
+    },
+    {
+      "grouping": "task_family",
+      "group": "case9",
+      "complete_sessions": 30,
+      "with_aea": 1.0,
+      "without_aea": 1.0,
+      "difference_pp": 0.0
+    },
+    {
+      "grouping": "dataset",
+      "group": "BCIC2020-3",
+      "complete_sessions": 120,
+      "with_aea": 0.9666666666666667,
+      "without_aea": 0.9,
+      "difference_pp": 6.666666666666665
+    },
+    {
+      "grouping": "dataset",
+      "group": "ISRUC",
+      "complete_sessions": 120,
+      "with_aea": 0.95,
+      "without_aea": 0.7833333333333333,
+      "difference_pp": 16.666666666666664
+    },
+    {
+      "grouping": "dataset",
+      "group": "MentalArithmetic",
+      "complete_sessions": 120,
+      "with_aea": 1.0,
+      "without_aea": 0.8833333333333333,
+      "difference_pp": 11.66666666666667
+    },
+    {
+      "grouping": "dataset",
+      "group": "Mumtaz2016",
+      "complete_sessions": 120,
+      "with_aea": 0.9833333333333333,
+      "without_aea": 0.8833333333333333,
+      "difference_pp": 9.999999999999998
+    },
+    {
+      "grouping": "dataset",
+      "group": "SEED-V",
+      "complete_sessions": 120,
+      "with_aea": 0.9166666666666666,
+      "without_aea": 0.7833333333333333,
+      "difference_pp": 13.33333333333333
+    },
+    {
+      "grouping": "new_recording",
+      "group": true,
+      "complete_sessions": 600,
+      "with_aea": 0.9633333333333334,
+      "without_aea": 0.8466666666666667,
+      "difference_pp": 11.66666666666667
+    }
+  ],
+  "difference_pp": 11.666666666666668,
+  "ci95_crossed": [
+    4.623836995872111,
+    20.520368245079844
+  ],
+  "ci95_family_sensitivity": [
+    6.095198868973008,
+    18.224842549180202
+  ],
+  "ci95_recording_sensitivity": [
+    8.265422659221201,
+    14.921602191675683
+  ],
+  "with_aea": {
+    "complete_sessions": 300,
+    "passed": 289,
+    "pass_rate": 0.9633333333333334,
+    "api_cost_usd": 2.951477,
+    "cost_per_success_usd": 0.010212723183391004,
+    "target_api_cost_usd": 2.3307290000000003,
+    "grading_api_cost_usd": 0.6207479999999999,
+    "usage": {
+      "input_tokens": 21029754,
+      "output_tokens": 517582,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 0
+    }
+  },
+  "without_aea": {
+    "complete_sessions": 300,
+    "passed": 254,
+    "pass_rate": 0.8466666666666667,
+    "api_cost_usd": 1.6454157,
+    "cost_per_success_usd": 0.006478014566929134,
+    "target_api_cost_usd": 0.8588797,
+    "grading_api_cost_usd": 0.786536,
+    "usage": {
+      "input_tokens": 6600245,
+      "output_tokens": 476364,
+      "cache_read_input_tokens": 0,
+      "cache_creation_input_tokens": 0
+    }
+  }
+}

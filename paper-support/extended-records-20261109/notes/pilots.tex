@@ -1,0 +1,50 @@
+\subsection*{Supplementary Note \thesuppnote: raw-data pilots and auditory adaptation}
+\label{si:pilots}
+
+These four internal pilot executions used Codex CLI 0.162.1, gpt-6.1-sol at ultra reasoning effort and the same installed environment (\mne{} 1.12.1) in both arms. A denotes the direct coding agent; B adds 22 skills and 10 recipes derived from public development commit \texttt{150d0fb}, with historical numerical answers and direct links to them removed while methods and limitations were retained. Each task brief supplied the cohort, measurement and statistical choices. Both arms could consult installed API documentation, write and execute code, and request approval of the plan and ambiguous ICA decisions. Scientific results were not accepted by comparison with a desired effect or historical amplitude. One execution per task and arm was completed.
+
+\subsubsection*{N400 and auditory task specifications}
+
+The pilot N400 task used ERP CORE sub-001--sub-020, related target codes 211/212 and unrelated codes 221/222, CPz/Cz/Pz, and 300--500\,ms. It applied 0.1--30\,Hz filtering, ICA and local AutoReject at the native 1024\,Hz sampling rate, average reference, epochs from $-0.2$ to $0.8$\,s and a $-0.2$ to 0\,s baseline. The unrelated-minus-related contrast entered the negative-tailed ROI cluster test. This is separate from the recorded 10 October run in Supplementary Note~\ref*{si:recorded} and the no-ICA fixed example in Supplementary Note~\ref*{si:workflows}.
+
+The auditory data were OpenNeuro ds006480 v1.0.1 \textsuperscript{1}: sub-01--sub-18, sub-20 and sub-21, with 65 HydroCel EEG channels sampled at 1000\,Hz. Two complete active-control blocks were delimited by codes 111 and 118. Within each block, standard 113, target 114 and distractor 115 occurred 84, 18 and 18 times, respectively. The target-minus-standard contrast used Fz/Cz/Pz (E6/E65/E34) and 300--500\,ms after 0.1--30\,Hz filtering, ICA, local AutoReject and average referencing, with epochs and baseline as above. E65 was the acquisition reference and was not treated as an ordinary flat bad channel. The coordinate sidecar's unit declaration disagreed with its values; the adapted import used the verified centimetre coordinates and fiducials without altering the shared source data. These were device-template coordinates, not individually measured electrode positions. Distractor trials and averages were retained without adding a P3a hypothesis test.
+
+Participants required at least 100 standard and 30 target trials, with a minimum group size of 16. Both auditory executions excluded sub-08 (97/23 standard/target), sub-17 (139/29), sub-18 (73/18) and sub-20 (148/29), without replacing participants or relaxing the criteria. Across all 20 processed participants, each retained 3927/4800 stimulus trials: 2658 standard, 639 target and 630 distractor. This total includes the four participants excluded from group statistics. N400 retained 2321/2400 target-word trials in A and 2322/2400 in B. Both tasks used the planned directional $t_{0.95}$ cluster-forming threshold, fixed ROI adjacency, 5000 permutations and seed 42; group means weighted participants equally.
+
+Supplementary Table~\ref*{tab:rawpilots} reports all four pilot executions. The auditory group SD was \SI{2.294587}{\uV} and SEM \SI{0.573647}{\uV}. Its interval for the full ROI-window mean includes zero; the significant spatiotemporal cluster is a different statistic and does not establish significance of that scalar mean. The common checks read saved epochs and independently recomputed condition averages, ROI values, group inputs, observed $t$ maps, cluster membership, $p$ values and the complete 5000-permutation null distribution. Additional bounded checks compared report fields and actual figure sources with their inputs, verified recorded ICA authorization and inspected ICA application on one retained epoch per participant, using channels without AutoReject interpolation. These checks did not refit the entire raw-data pipeline or establish the correctness of subjective component classifications.
+
+\begin{table}[!htbp]
+\centering\footnotesize
+\caption{All four raw-data pilot executions. All passed the common saved-epoch output checks. The ROI intervals are descriptive two-sided 95\,\% $t$ intervals; all four planned directional cluster tests returned one cluster with $p=0.0002$. Minutes are cumulative agent execution, excluding waits at researcher decision points. There was one execution per cell.}
+\label{tab:rawpilots}
+\begin{tabular}{llrrrr}
+\toprule
+Task & Arm & Processed/included & ROI mean (\uV) & 95\,\% interval (\uV) & Minutes \\
+\midrule
+N400 & A & 20/20 & $-3.388781$ & [$-4.120632$, $-2.656930$] & 70.01 \\
+N400 & B & 20/20 & $-3.372312$ & [$-4.118750$, $-2.625874$] & 39.70 \\
+Auditory & A & 20/16 & $0.869985$ & [$-0.352714$, $2.092684$] & 172.51 \\
+Auditory & B & 20/16 & $0.869985$ & [$-0.352714$, $2.092684$] & 170.05 \\
+\bottomrule
+\end{tabular}
+\end{table}
+\subsubsection*{Researcher decisions, failures and subsequent checks}
+
+In N400 B, the researcher approved five additional ICA exclusions and retained the other 199 ambiguous components; the 25 rule-authorized automatic ocular exclusions were unchanged. For each auditory arm, 37 of 376 components were excluded and 339 retained. Five exclusions were directly approved by the researcher; the other 32 exclusions and all 339 retentions were judgments made by an assistant after explicit delegation. They were not independent human inspection of every diagnostic. Neither human nor delegated-review time was measured. The auditory recordings lacked independent EOG/ECG, and ICLabel\textsuperscript{2} received 1--30\,Hz data rather than its recommended 1--100\,Hz training bandwidth.
+
+The first deliveries retained technical failures. Auditory A encountered JSON serialization and movement of files still being written; at least seven EEG workers overlapped briefly within four-core CPU affinity. Auditory B had a completion controller exit with code 143; its cause was not recorded, and remaining quality-control and reporting stages were resumed from saved outputs. These intervals are included in the reported execution times. Initial N400 B model-review initialization failed twice; auditory B initially had no model-review conclusion. Their original incomplete review states were retained. Later fresh gpt-6-astra/max reviews in read-only sessions returned pass-with-caveats for N400 B and, after a request to revise disclosures and a separately saved report revision, pass-with-caveats for auditory B. These same-family model reviews are provisional checks, not independent numerical certification; their later timing and outcomes were not backfilled into first-delivery records.
+
+Additional saved-input ICA replays passed the original strict matrix comparison for 14/20 participants in each N400 arm and 18/20 in each auditory arm. N400 failures were sub-004, sub-007, sub-008, sub-012, sub-015 and sub-020; auditory failures were sub-09 and sub-11. The failures were retained without changing tolerances. New diagnostic replays stopped by the implementation's weight-change or consecutive-small-angle rules; a saved iteration counter of 500 alone does not show exhaustion of the iteration budget. The new traces cannot recover unrecorded historical stopping steps or establish reproducibility of every original decomposition.
+
+\subsubsection*{Sub-008 downstream sensitivity}
+
+For N400 sub-008, the existing replay ICA differed from the original cleaning operator by 0.016351876 in relative Frobenius norm. This approximately 1.64\,\% operator discrepancy is not an ERP percentage error. The approved IC0 exclusion was retained, and the saved replay decomposition was applied without fitting another ICA. The original epoch signals, AutoReject labels and group results were first reproduced. Two sensitivity routes then either held original AutoReject decisions fixed or refitted AutoReject with the original settings. Only sub-008 was replaced in each arm's 20-person group input; the other 19 participants were unchanged.
+
+In both arms and both routes, the participant's ROI contrast changed from \(-1.807034086\) to \(-1.809268069\)~\uV, a difference of \(-0.002233983\)~\uV. Each condition retained 60 trials, and the 20-person group mean changed by \(-0.000111699\)~\uV. The 615-sample cluster membership and $p=0.0002$ were unchanged, but the observed $t$ map and numerical permutation null were not identical: maximum $t$-map changes were 0.002090989 in A and 0.002180501 in B. The maximum all-channel difference-wave change was \SI{0.064435689}{\uV} with fixed AutoReject decisions and \SI{0.208800450}{\uV} after refitting. The latter maximum occurred at PO7 at 439.453\,ms. Refitting changed 28 channel-by-epoch labels, including three interpolation decisions in two epochs at PO7, FP1 and F7, all outside the ROI; no epoch rejection changed. This check quantifies one saved replay's consequences for one participant, does not identify the upstream cause or establish stability across fits, and does not reverse the original strict ICA failure.
+
+\subsubsection*{Pilot resources and retained records}
+
+The four executions consumed 22,097,836, 23,875,012, 34,969,331 and 57,926,564 input tokens, respectively, for N400 A, N400 B, auditory A and auditory B; cached subsets were 21,189,632, 22,973,184, 34,230,656 and 56,571,264. Output tokens were 186,797, 151,067, 214,350 and 260,008. The totals across 15 model threads were 138,868,743 input (134,964,736 cached) and 812,222 output tokens. Cumulative execution was 7.538 hours. Sampled process-tree RSS peaks were 1.63, 5.80, 35.28 and 13.60\,GB, and final workspaces occupied 5.67, 3.64, 12.23 and 17.49\,GB. RSS sampling can count shared pages repeatedly. Preparation, supervision, delegated judgments, independent verification and later diagnostic/review work are outside these first-delivery totals. The measurements do not estimate human work or monetary cost, and the single execution per condition does not support a general speed comparison.
+
+\FloatBarrier
+\refstepcounter{suppnote}

@@ -1,0 +1,35 @@
+\subsection*{Supplementary Note \thesuppnote: recorded N400 execution}
+\label{si:recorded}
+
+The run used a fresh clone of the public repository at commit \texttt{721a01a}, with the 22 skills installed for repository-scope discovery by \verb|tools/install_skills.py --agent codex|. The agent was Codex CLI 0.162.1 with the gpt-6.1-sol model at its configured reasoning effort (ultra), a workspace-write sandbox without network access and no approval prompts; analysis used the documented Python environment (\mne{} 1.12.1). Before the run, files containing earlier N400 results or a ready-made N400 runner were moved out of the agent's copy: the example runner and figure script, the example result arrays, the certified-value test fixtures, the recipe-case test, \path{docs/EXAMPLES.md}, \path{docs/index.html} and the N400 example image. The recipe file was left unchanged, including its documented validation value; the agent reported that it saw this value and excluded it from its plan.
+
+\subsubsection*{Supervision and execution records}
+
+The researcher's request named the data directory, the question (more negative N400 for unrelated than related targets), the recipe and the Python interpreter, asked the agent to work only inside the repository and data directory and to stop for approval after writing the dataset brief and analysis plan. The researcher's replies were relayed by a separate assistant session (Claude), which summarized each request and offered reply options; at each intervention the researcher selected one option, and its text was forwarded unchanged. The run continued in one session over four turns, with 2\,h\,16\,min of agent execution within 2\,h\,53\,min elapsed. The main thread started six sub-threads; five used the same model, and one carried out the audit step with gpt-6-astra (reasoning effort max) without the run's conversation, returning a pass with caveats about methods reporting, after which the agent added the interpolation details and a statement that the acquisition metadata were unavailable to its report.
+
+Across the seven threads the agent made 631 tool calls; apart from the Python environment (interpreter, conda and 66 reads of installed package sources) and the Codex executable, none referred to paths outside the workspace and the data directory, and none opened the withheld files. The seven threads used 67.9 million input tokens (97.0\,\% served from cache) and 0.37 million output tokens. The session transcripts, the dataset brief, plan, programs, stage outputs, replay comparison, audit and report are included in the archive described under Code availability.
+
+\subsubsection*{Analysis outputs and replay}
+
+The approved choices and processing steps are summarized in main Table~\ref*{tab:reuse}. The run used average referencing at the native 1024\,Hz sampling rate, recipe-recommended ICA and agent-proposed local AutoReject. The negative-tailed cluster test used Cz--CPz--Pz adjacency and cluster-forming and cluster-level $\alpha=0.05$. Supplementary Table~\ref*{tab:interventions} records the three researcher interventions.
+
+The plan and decisions are retained in \path{ANALYSIS_PLAN.md} and \path{APPROVAL.json}. \path{pipeline.py} links event metadata in participant epochs (for example, \path{sub-001-epo.fif}) to trial counts in \path{epoch_summary.json}, condition and difference averages (\path{sub-001-difference-ave.fif}) and amplitudes in \path{component_measures.csv}. \path{group_outputs.py} produces \path{C1_cluster_perm.json}; \path{build_report.py} assembles the statistics, ERP/scalp plots, methods and checks in \path{REPORT.md}. \path{REPLAY_COMPARISON.json} records the replay checks.
+
+\begin{table}[!htbp]
+\centering\footnotesize
+\caption{Researcher interventions during the recorded agent run (Japan Standard Time, 10 October 2026). Responses summarize the reply option the researcher selected; the selections and forwarded texts are recorded verbatim in the run records.}
+\label{tab:interventions}
+\begin{tabular}{>{\raggedright\arraybackslash}p{1.3cm}>{\raggedright\arraybackslash}p{6.6cm}>{\raggedright\arraybackslash}p{6.3cm}}
+\toprule
+time & agent request & researcher response \\
+\midrule
+15:43 & Approve the analysis plan and answer three questions: cleaning route (ICA with local AutoReject, or rejection without ICA), all targets or correct-only trials, eligibility and statistical details. & Approved the ICA and local AutoReject route, all target trials and the other proposed settings. \\
+16:46 & Decide 43 ambiguous ICA components in 13 participants; the agent proposed 18 additional exclusions and 25 retentions with written reasons. & Accepted all proposals without inspecting the individual diagnostics. \\
+18:05 & Acknowledge that the ground arrangement, electrode-contact acceptance criterion and hardware-filter specifications are unavailable in the dataset metadata, as required by the audit skill. & Accepted the disclosure and closure. \\
+\bottomrule
+\end{tabular}
+\end{table}
+The results and replay counts are shown in Fig.~\ref*{fig:n400-recorded}. The replay began from raw data, but passing required resuming affected participants from that replay's own saved ICA checkpoints; no second full raw-data replay was performed. The recorded ICA route differed from the certified configuration: per-participant amplitudes correlated at $r=0.88$, with different signs for 2 of 20 participants, while the group effect direction and significance agreed. This is a descriptive comparison. The agent corrected electrode-coordinate and event-latency conventions and an incorrect comment on classifier output in the ICA skill. One run with one client and one main model does not estimate agent reliability.
+
+\FloatBarrier
+\refstepcounter{suppnote}

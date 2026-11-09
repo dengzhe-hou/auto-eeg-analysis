@@ -1,0 +1,34 @@
+{
+  "passed": true,
+  "completed_sessions": 1800,
+  "requests": 300,
+  "pairs": 900,
+  "recordings": 30,
+  "new_independent_recordings": 0,
+  "counts": {
+    "with_aea": {
+      "sessions": 900,
+      "result_fields_pass": 890,
+      "first_delivery_contract_pass": 877,
+      "objective_direct_pass": 882
+    },
+    "without_aea": {
+      "sessions": 900,
+      "result_fields_pass": 791,
+      "first_delivery_contract_pass": 702,
+      "objective_direct_pass": 709
+    }
+  },
+  "paired_field_outcomes": {
+    "1_1": 781,
+    "1_0": 109,
+    "0_1": 10
+  },
+  "matching_helper_entry_completed": 536,
+  "all_aea_helpers_required_for_every_family": false,
+  "old_results_unchanged": true,
+  "all_900_pairs_same_node_cpu_memory": true,
+  "new_api_calls_by_this_analysis": 0,
+  "cost_estimate_usd": 12.4215936,
+  "scope": "Complete repair retest on reused requests and recordings; retain original outcomes."
+}

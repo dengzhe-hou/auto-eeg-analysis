@@ -1,0 +1,110 @@
+[
+  {
+    "label": "tab:interventions",
+    "original_number": "S1",
+    "supplement_page": "S2",
+    "file": "tables/interventions.tex"
+  },
+  {
+    "label": "tab:rawpilots",
+    "original_number": "S2",
+    "supplement_page": "S4",
+    "file": "tables/rawpilots.tex"
+  },
+  {
+    "label": "tab:spec",
+    "original_number": "S3",
+    "supplement_page": "S6",
+    "file": "tables/spec.tex"
+  },
+  {
+    "label": "tab:cert",
+    "original_number": "S4",
+    "supplement_page": "S7",
+    "file": "tables/cert.tex"
+  },
+  {
+    "label": "tab:crosstoolbox",
+    "original_number": "S5",
+    "supplement_page": "S8",
+    "file": "tables/crosstoolbox.tex"
+  },
+  {
+    "label": "tab:ba",
+    "original_number": "S6",
+    "supplement_page": "S8",
+    "file": "tables/ba.tex"
+  },
+  {
+    "label": "tab:cluster",
+    "original_number": "S7",
+    "supplement_page": "S9",
+    "file": "tables/cluster.tex"
+  },
+  {
+    "label": "tab:instances",
+    "original_number": "S8",
+    "supplement_page": "S10",
+    "file": "tables/instances.tex"
+  },
+  {
+    "label": "tab:knowninput",
+    "original_number": "S9",
+    "supplement_page": "S11",
+    "file": "tables/knowninput.tex"
+  },
+  {
+    "label": "tab:skill-coverage",
+    "original_number": "S10",
+    "supplement_page": "S12",
+    "file": "tables/skill-coverage.tex"
+  },
+  {
+    "label": "tab:paired-recordings",
+    "original_number": "S11",
+    "supplement_page": "S13",
+    "file": "tables/paired-recordings.tex"
+  },
+  {
+    "label": "tab:paired-families",
+    "original_number": "S12",
+    "supplement_page": "S16",
+    "file": "tables/paired-families.tex"
+  },
+  {
+    "label": "tab:paired-composition",
+    "original_number": "S13",
+    "supplement_page": "S16",
+    "file": "tables/paired-composition.tex"
+  },
+  {
+    "label": "tab:paired-costs",
+    "original_number": "S14",
+    "supplement_page": "S17",
+    "file": "tables/paired-costs.tex"
+  },
+  {
+    "label": "tab:repair-validation",
+    "original_number": "S15",
+    "supplement_page": "S17",
+    "file": "tables/repair-validation.tex"
+  },
+  {
+    "label": "tab:erp-paired-configurations",
+    "original_number": "S16",
+    "supplement_page": "S18",
+    "file": "tables/erp-paired-configurations.tex"
+  },
+  {
+    "label": "tab:files",
+    "original_number": "S17",
+    "supplement_page": "S19",
+    "file": "tables/files.tex"
+  },
+  {
+    "label": "tab:version-routes",
+    "original_number": "S18",
+    "supplement_page": "S20",
+    "file": "tables/version-routes.tex"
+  }
+]

@@ -1,0 +1,122 @@
+{
+  "task_families": {
+    "case17": {
+      "difference_pp": 5.555555555555555,
+      "pairs": 18
+    },
+    "case29": {
+      "difference_pp": 26.666666666666668,
+      "pairs": 15
+    },
+    "case1": {
+      "difference_pp": 5.555555555555555,
+      "pairs": 18
+    },
+    "case19": {
+      "difference_pp": 0.0,
+      "pairs": 15
+    },
+    "case35": {
+      "difference_pp": 33.33333333333333,
+      "pairs": 15
+    },
+    "case26": {
+      "difference_pp": 27.77777777777778,
+      "pairs": 18
+    },
+    "case3": {
+      "difference_pp": 6.666666666666667,
+      "pairs": 15
+    },
+    "case14": {
+      "difference_pp": 6.666666666666667,
+      "pairs": 15
+    },
+    "case12": {
+      "difference_pp": 6.666666666666667,
+      "pairs": 15
+    },
+    "case22": {
+      "difference_pp": 0.0,
+      "pairs": 15
+    },
+    "case25": {
+      "difference_pp": 20.0,
+      "pairs": 15
+    },
+    "case15": {
+      "difference_pp": 0.0,
+      "pairs": 18
+    },
+    "case24": {
+      "difference_pp": -6.666666666666667,
+      "pairs": 15
+    },
+    "case23": {
+      "difference_pp": 44.44444444444444,
+      "pairs": 18
+    },
+    "case36": {
+      "difference_pp": 16.666666666666664,
+      "pairs": 18
+    },
+    "case2": {
+      "difference_pp": -6.666666666666667,
+      "pairs": 15
+    },
+    "case9": {
+      "difference_pp": 0.0,
+      "pairs": 15
+    },
+    "case6": {
+      "difference_pp": 16.666666666666664,
+      "pairs": 12
+    },
+    "case34": {
+      "difference_pp": 13.333333333333334,
+      "pairs": 15
+    }
+  },
+  "recordings": {
+    "MentalArithmetic_08.edf": {
+      "difference_pp": 6.666666666666667,
+      "pairs": 30
+    },
+    "MentalArithmetic_07.edf": {
+      "difference_pp": 16.666666666666664,
+      "pairs": 30
+    },
+    "Mumtaz2016_08.edf": {
+      "difference_pp": 16.666666666666664,
+      "pairs": 30
+    },
+    "SEED-V-07.cnt": {
+      "difference_pp": 10.0,
+      "pairs": 30
+    },
+    "SEED-V-08.cnt": {
+      "difference_pp": 16.666666666666664,
+      "pairs": 30
+    },
+    "Mumtaz2016_07.edf": {
+      "difference_pp": 3.3333333333333335,
+      "pairs": 30
+    },
+    "ISRUC_07.edf": {
+      "difference_pp": 13.333333333333334,
+      "pairs": 30
+    },
+    "ISRUC_08.edf": {
+      "difference_pp": 20.0,
+      "pairs": 30
+    },
+    "BCIC2020-3_08.edf": {
+      "difference_pp": 10.0,
+      "pairs": 30
+    },
+    "BCIC2020-3_07.edf": {
+      "difference_pp": 3.3333333333333335,
+      "pairs": 30
+    }
+  }
+}

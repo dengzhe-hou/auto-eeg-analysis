@@ -1,0 +1,22 @@
+\begin{table}[!htbp]
+\centering\small
+\caption{Version-specific evidence and reproduction routes. Frozen resources, saved records and commands are indexed in the accompanying archive. Development configurations are retained separately from the final ERP comparison.}
+\label{tab:version-routes}
+\begin{tabular}{>{\raggedright\arraybackslash}p{3.8cm}>{\raggedright\arraybackslash}p{4.1cm}>{\raggedright\arraybackslash}p{6.2cm}}
+\toprule
+Resource version & Environment and entry & Evidence scope \\
+\midrule
+\texttt{v0.3.2}; post-release \texttt{546db87} & \mne{} 1.12.1; numerical scripts. GNU Octave 10.3.0 and \fieldtrip{} 20170830 for independent toolbox comparisons. & Specified amplitudes, observed cluster statistics and known-effect records. No agent pass-rate inference. \\
+\addlinespace[3pt]
+\texttt{aea-postfailure-}\newline\texttt{r3-20261031} & Haiku 5.5, \mne{} 1.8.0; preloaded procedures and matching helpers. & The 600-session first-delivery comparison. The archived CSV and statistics script reproduce the reported summaries. \\
+\addlinespace[3pt]
+ERP R1 and R2 freezes & Haiku 5.5, \mne{} 1.8.0; their own plans, packets and retained executions. & Earlier development records, available separately and not pooled with the final comparison. \\
+\addlinespace[3pt]
+ERP R3, \texttt{7efd971} & Haiku 5.5, \mne{} 1.8.0; \path{tools/run_erp_plan.py}. & The final 144-session ERP comparison, repaired using the same requests. It is not an unseen-task transfer test. \\
+\addlinespace[3pt]
+Locally frozen repair package, 8 November 2026 & Haiku 5.5, \mne{} 1.8.0; \path{tools/run_continuous_plan.py}. & Separate 1,800-session repair retest on reused inputs. Supplementary Table~\ref*{tab:repair-validation} retains its preceding configuration and distinct endpoints. \\
+\addlinespace[3pt]
+Maintenance \texttt{b52df1c} & Current installation and selected execution utilities. & Post-evaluation IO and deployment fixes, plus corrected backend descriptions. These do not constitute a new model comparison. \\
+\bottomrule
+\end{tabular}
+\end{table}

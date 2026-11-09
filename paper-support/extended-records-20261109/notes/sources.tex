@@ -1,0 +1,90 @@
+\subsection*{Supplementary Note \thesuppnote: source files}
+\label{si:sources}
+
+Supplementary Table~\ref*{tab:files} indexes the release records. Later records and manuscript illustration sources are listed separately below.
+
+\begin{table}[!htb]
+\centering\footnotesize
+\caption{Reported results and their versioned files in the released repository (tag \texttt{v0.3.2}; code and skills under the MIT licence, recipes under CC-BY-4.0). Amplitudes are in \uV{} unless stated; subjects are identified by their ERP CORE, PhysioNet or OpenNeuro identifiers; components by name.}
+\label{tab:files}
+\begin{tabular}{>{\raggedright\arraybackslash}p{4.6cm}>{\raggedright\arraybackslash}p{9.2cm}}
+\toprule
+result & file(s) \\
+\midrule
+certified per-subject ROI amplitudes (Supplementary Table~\ref*{tab:cert}) & \path{tools/validation/{mmn_group,p3_group,n170_erpcore,ern_erpcore,n400_erpcore}_results.json} (\texttt{per\_subject}, \uV) \\
+reference-pipeline comparison, waveform RMSE & \path{tools/benchmark/<C>_BENCHMARK_RESULT.json} (\uV); \path{tools/benchmark/<C>_WAVEFORM_RESULT.json} (RMSE in nV) \\
+cross-toolbox per-subject values (Supplementary Table~\ref*{tab:crosstoolbox}) & \path{tools/benchmark/cross_toolbox_results/{eeglab,fieldtrip}_<C>[_p2p|_abs|_df0.1|_cutmatch].json}; summaries \path{tools/benchmark/CROSS_TOOLBOX_RESULT.json} \\
+cluster certification (Supplementary Table~\ref*{tab:cluster}) & \path{tools/benchmark/cluster_cert/cluster_input_<C>.mat} (contrast waves, adjacency, times); \path{mne_<C>[_shipped].json}, \path{fieldtrip_<C>_a025.json}, \path{fieldtrip_<C>_shipped.json}, \path{fieldtrip_N400.json}; element-wise \path{ELEMENTWISE[_shipped]_<C>.json}; raw maps \path{dumps_shipped/*.mat} \\
+spectral comparison & \path{tools/benchmark/SPECTRAL_KERNEL_INDEP_RESULT.json} (pinned conventions, Hamming), \path{..._hann.json} (released default, Hann), \path{..._legacy_conventions.json} (original) \\
+known-effect checks & \path{tools/validation/resting_results.json}, \path{tools/validation/n170_faces_results.json} \\
+bias, dispersion, scenarios (Table~\ref*{tab:ba}) & \path{tools/benchmark/reports/attenuation.json} (from \path{attenuation.py}) \\
+skill evidence inventory (Supplementary Table~\ref*{tab:skill-coverage}) & \path{tools/benchmark/reports/skill_levels.json}, \path{docs/CERTIFICATION_LEVELS.md} \\
+generation pilot (Note~\ref*{si:generation}) & \path{tools/benchmark/RECIPE_GENERATION_*.json}, \path{OPEN_MODEL_RESULT.json}, \path{CROSS_PARADIGM_RESULT.json} (P3b/N170 vectors), \path{tools/benchmark/reports/run_manifest.json}, retained programs under \path{tools/benchmark/generated_pipelines/} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsubsection*{Versions and evidence routes}
+
+The archive separates the resources used in each evaluation from later software maintenance (Table~\ref*{tab:version-routes}). Installing the current library does not retrospectively change any recorded evaluation condition.
+
+\begin{table}[!htbp]
+\centering\small
+\caption{Version-specific evidence and reproduction routes. Frozen resources, saved records and commands are indexed in the accompanying archive. Development configurations are retained separately from the final ERP comparison.}
+\label{tab:version-routes}
+\begin{tabular}{>{\raggedright\arraybackslash}p{3.8cm}>{\raggedright\arraybackslash}p{4.1cm}>{\raggedright\arraybackslash}p{6.2cm}}
+\toprule
+Resource version & Environment and entry & Evidence scope \\
+\midrule
+\texttt{v0.3.2}; post-release \texttt{546db87} & \mne{} 1.12.1; numerical scripts. GNU Octave 10.3.0 and \fieldtrip{} 20170830 for independent toolbox comparisons. & Specified amplitudes, observed cluster statistics and known-effect records. No agent pass-rate inference. \\
+\addlinespace[3pt]
+\texttt{aea-postfailure-}\newline\texttt{r3-20261031} & Haiku 5.5, \mne{} 1.8.0; preloaded procedures and matching helpers. & The 600-session first-delivery comparison. The archived CSV and statistics script reproduce the reported summaries. \\
+\addlinespace[3pt]
+ERP R1 and R2 freezes & Haiku 5.5, \mne{} 1.8.0; their own plans, packets and retained executions. & Earlier development records, available separately and not pooled with the final comparison. \\
+\addlinespace[3pt]
+ERP R3, \texttt{7efd971} & Haiku 5.5, \mne{} 1.8.0; \path{tools/run_erp_plan.py}. & The final 144-session ERP comparison, repaired using the same requests. It is not an unseen-task transfer test. \\
+\addlinespace[3pt]
+Locally frozen repair package, 8 November 2026 & Haiku 5.5, \mne{} 1.8.0; \path{tools/run_continuous_plan.py}. & Separate 1,800-session repair retest on reused inputs. Supplementary Table~\ref*{tab:repair-validation} retains its preceding configuration and distinct endpoints. \\
+\addlinespace[3pt]
+Maintenance \texttt{b52df1c} & Current installation and selected execution utilities. & Post-evaluation IO and deployment fixes, plus corrected backend descriptions. These do not constitute a new model comparison. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsubsection*{Post-release records}
+
+Additional records dated 4 October 2026, outside the \texttt{v0.3.2} snapshot, are \path{tools/validation/recipe_case_results.json} (per-subject N400 amplitudes in \uV{}, trial counts and the ROI-restricted cluster result), \path{tools/validation/recipe_case_figure_data.npz} (participant ROI waveforms in \uV{}, times in seconds and electrode positions in metres), and \path{tools/validation/trial_identity_results.json} with \path{trial_identity_event_ids.json} (original event identities, retention and timing comparisons). The corresponding runners are \path{run_recipe_case.py} and \path{validate_trial_identity.py} in the same directory; \path{gen_recipe_case_figures.py} regenerates the complete-case figure from the compact public arrays without downloading EEG. \path{docs/EXAMPLES.md} gives the reproduction commands. Full intermediate EEG files are generated locally rather than distributed. The rerun of the resting-state checks on all 109 PhysioNet participants, dated 10 October 2026, used the unchanged \path{tools/validation/validate_resting_recipes.py} from \texttt{v0.3.2} and is recorded in \path{resting_results_109_2026-10-10.json}; this record are included in the archive described under Code availability.
+
+Additional checks in \path{review-stage/known-effects-rerun-20261031/} retain \path{n170_rerun_results.json}, \path{n170_rerun.py}, \path{resting/resting_results_109_noica.json} and \path{validate_resting_recipes.py}. These records are outside the \texttt{v0.3.2} snapshot.
+
+The case-to-source maps are \path{review-stage/skills-value-local-2026-10-14/cases/N400_CASE.md} and \path{AUDITORY_CASE.md}; \path{EVIDENCE_MAP.json} lists the underlying records. All four first-delivery snapshots, plans, decisions, scripts, outputs, independent checks, failures and resource accounts are retained under \path{review-stage/direct-llm-pilot-2026-10-13/records/}. Subsequent ICA and model-review records are under \path{review-stage/ica-convergence-audit-2026-10-14/}; the sub-008 analysis is under \path{review-stage/skills-value-local-2026-10-14/sub008/}. These post-release research records are included in the archive described under Code availability, separately from the public library.
+
+Manuscript illustration sources are retained separately. Figure~\ref*{fig:overview} is generated by \path{paper/gen_fig1_overview.py}, with its original and revised native artwork under \path{paper/source-data/fig1-overview-20261109/}. The recorded N400 asset in Fig.~\ref*{fig:n400-recorded} matches \path{review-stage/fig2-no-rules-short-caption-2026-10-19/fig2_draft.pdf}, generated by \path{gen_fig2_draft.py} in that directory from the retained recorded-run outputs. Figures~\ref*{fig:numerical-validation}--\ref*{fig:adapted-cases} are generated by \path{paper/gen_main_figures.py} and the individual \path{gen_fig3_numerical_comparison.py}, \path{gen_fig4_first_deliveries.py}, \path{gen_fig5_erp_validation.py}, \path{gen_fig6_repair_retest.py} and \path{gen_fig7_adapted_cases.py} entries. Their frozen input tables, arrays, summaries and reproduction notes are under \path{paper/source-data/multipanel-20261109/}. Supplementary Figure~\ref*{fig:paired-validation} retains its generator \path{paper/gen_figS1_heterogeneity.py} and complete input records under \path{paper/source-data/}. Previous individual auditory, resting-state and N170 plot assets and generators remain retained. Their displayed evidence is consolidated in Fig.~\ref*{fig:adapted-cases}. Earlier overview and numerical-convention artwork also remains retained. No EEG processing, model sessions, scoring or statistical intervals were rerun for this figure integration.
+
+\FloatBarrier
+\renewcommand{\refname}{Supplementary references}
+\begin{thebibliography}{1}
+\label{si:references}
+\bibitem{Kim2025Supplement}
+Kim, A. J., Mather, M., Morales, S. \& Senior, J.
+Young adult resting state and auditory oddball task EEG data, version 1.0.1.
+OpenNeuro \url{https://doi.org/10.18112/openneuro.ds006480.v1.0.1} (2025).
+\bibitem{PionTonachini2019Supplement}
+Pion-Tonachini, L., Kreutz-Delgado, K. \& Makeig, S.
+ICLabel: an automated electroencephalographic independent component classifier, dataset, and website.
+NeuroImage \textbf{198}, 181--197 (2019). \url{https://doi.org/10.1016/j.neuroimage.2019.05.026}
+\bibitem{Zhou2026Supplement}
+Zhou, Y. et al.
+BrainBench: benchmarking large language models for comprehensive EEG understanding.
+Preprint at \url{https://arxiv.org/abs/2608.04156v2} (2026).
+\bibitem{Lachaux1999Supplement}
+Lachaux, J.-P., Rodriguez, E., Martinerie, J. \& Varela, F. J.
+Measuring phase synchrony in brain signals.
+Hum. Brain Mapp. \textbf{8}, 194--208 (1999). \url{https://doi.org/10.1002/(SICI)1097-0193(1999)8:4<194::AID-HBM4>3.0.CO;2-C}
+\bibitem{Vinck2011Supplement}
+Vinck, M., Oostenveld, R., van Wingerden, M., Battaglia, F. \& Pennartz, C. M. A.
+An improved index of phase-synchronization for electrophysiological data in the presence of volume-conduction, noise and sample-size bias.
+NeuroImage \textbf{55}, 1548--1565 (2011). \url{https://doi.org/10.1016/j.neuroimage.2011.01.055}
+\end{thebibliography}
+
+\end{document}

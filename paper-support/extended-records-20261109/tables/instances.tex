@@ -1,0 +1,19 @@
+\begin{table}[!htbp]
+\centering\footnotesize
+\caption{Eight observed specification or implementation issues. Consequences are per-subject amplitude differences unless stated.}
+\label{tab:instances}
+\begin{tabular}{>{\raggedright\arraybackslash}p{2.5cm}>{\raggedright\arraybackslash}p{4.0cm}>{\raggedright\arraybackslash}p{4.8cm}>{\raggedright\arraybackslash}p{2.5cm}}
+\toprule
+phrase & the two readings & measured consequence & type \\
+\midrule
+``\SI{\pm 100}{\uV} rejection'' & absolute amplitude vs peak-to-peak & mean \(\absdiff\) 0.0886 vs \SI{0.0396}{\uV} (MMN, \eeglab{}) & controlled effect \\
+``0.1--30\,Hz FIR'' (cutoff) & stated frequency at the \SI{-6}{dB} point vs at the passband edge & P3b max \(\absdiff\) 0.8023 to \SI{0.0496}{\uV} at fixed width & controlled effect \\
+transition width & 0.2 vs 0.1\,Hz at both edges & P3b 0.7214 to \SI{0.8023}{\uV}: pinning did not reduce the difference & no reduction \\
+``\(\alpha = 0.05\), one-sided'' & \(t_{0.975}\) used vs \(t_{0.95}\) specified & 14 vs 18 suprathreshold clusters, leading extent 1268 vs 1419 (N400, full epoch); leading cluster significant in both & implementation error (specification adequate) \\
+``Welch, Hamming window'' & symmetric window without demeaning vs periodic window with per-segment demeaning & band power 0.44\,\% to \(6.9\times10^{-16}\) relative (joint effect of both conventions) & controlled effect \\
+reference scheme & mastoid vs average reference & 7 of 9 unconstrained generations chose mastoid: grand-mean error 0.894 vs \SI{0.123}{\uV} (different cohorts; Supplementary Note~\ref*{si:generation}) & associated observation \\
+RANSAC / automated rejection & on vs off & retained trial sets differ; not isolated numerically & unisolated risk \\
+window-edge alignment & sample at the edge included vs excluded & two readings observed in generated programs (Supplementary Note~\ref*{si:generation}); no isolated consequence & unisolated risk \\
+\bottomrule
+\end{tabular}
+\end{table}

@@ -1,0 +1,18 @@
+\subsection*{Supplementary Note \thesuppnote: fixed N400 execution and historical workflows}
+\label{si:workflows}
+
+\subsubsection*{Fixed N400 recipe execution}
+
+The fixed no-ICA N400 recipe run, with 256\,Hz resampling, completed all planned stages for all 20 participants, each retaining 60 related and 60 unrelated target trials. The unrelated-minus-related ROI amplitude was \SI{-2.957}{\uV} (SEM \SI{0.466}{\uV}); every per-subject amplitude reproduced the historical validation value at its stored precision. The recipe's three-channel primary domain yielded one cluster ($p = 0.0002$, 155 channel-time samples). The requested figure contains the condition and difference ERPs, a descriptive peak topography and every participant's ROI amplitude. Recomputing group statistics from saved participant averages reproduced the observed $t$-map, cluster masks, permutation null distribution and $p$-values exactly. This complete case demonstrates the specified analysis and its retained handoffs on the fixed cohort; it supplies no estimate of LLM success rate or time savings.
+
+\subsubsection*{Historical workflow and revision records}
+
+The released resting-state example retains the dataset brief, analysis plan, executable code, subject-level results, findings, figures, methods text, audit and follow-up records under \path{projects/eegbci-resting/} and \path{tools/validation/}. Its reproduction receipt records the environment and command, identifies the original analysis as historical and states that it was not rerun for the public release. Its project-authored runner applied the adapted analyses described in Methods to the PhysioNet eyes-open and eyes-closed recordings. The retained audit questioned the scope of the recipe checks and identified preprocessing and microstate-smoothing sensitivities. The follow-up record and result files preserve the failure of Lempel--Ziv complexity to separate the states without ICA, the diffuse alpha-difference topography, and the comparison of sample-based with physical-unit microstate smoothing. Readers can therefore inspect the initial analysis alongside the objections and subsequent analyses, including outcomes that did not support the initial interpretation. The known-effect results are reported in Supplementary Note~\ref*{si:numerical}; this example supplies the document and code trail needed to examine how they were obtained.
+
+
+
+A second example, \path{projects/mne-sample-audvis/}, illustrates a downstream revision using saved intermediates. Its released brief, plan, channel mapping, figures and post-fix \texttt{FINDINGS.md} accompany the original analysis scripts and \path{tools/run_fix_audit.py}. The latter reads saved epochs and evoked responses, selects channels mapped to the planned ROI labels, applies the planned time window and directional test, and regenerates statistics and the ERP figure. The public findings document the post-fix state; the original audit memo and complete statistical outputs are not included in the release. In this release, arbitrary pairing of auditory and visual trials and approximate channel-to-ROI mapping remained unresolved. A later public reanalysis (\path{projects/mne-sample-audvis/REANALYSIS.md} at commit \texttt{76202d6}) replaced the arbitrary pairing with 61 complete stimulus cycles, excluding 45 target trials in incomplete cycles, and corrected the coordinate frame of the ROI mapping; its ROI electrodes remain approximate template sites, and conditions follow fixed positions within each cycle. This single-subject example therefore supports inspection of the revision process without establishing the validity of its biological inference.
+
+
+\FloatBarrier
+\refstepcounter{suppnote}

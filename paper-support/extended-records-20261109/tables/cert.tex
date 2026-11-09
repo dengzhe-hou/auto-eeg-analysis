@@ -1,0 +1,16 @@
+\begin{table}[!htbp]
+\centering\small
+\caption{Per-subject certification of the five reference implementations against MNE-BIDS-Pipeline 1.10.1 in the configuration of Supplementary Table~\ref*{tab:spec}. \(n\): shared subjects; CCC: Lin's concordance correlation coefficient; max \(\absdiff\): largest absolute per-subject difference, computed from the stored per-subject amplitudes (three decimals); recomputed from the retained waveform summaries it is 0.001 (P3b) and 0.007\,\uV{} (N400), both within tolerance.}
+\label{tab:cert}
+\begin{tabular}{lrrrr}
+\toprule
+component & \(n\) & CCC & max \(\absdiff\) (\uV) & within \SI{0.1}{\uV} \\
+\midrule
+MMN & 38 & 0.999747 & 0.090 & 38/38 \\
+P3b & 20 & 1.000000 & 0.000 & 20/20 \\
+N170 & 20 & 0.999990 & 0.011 & 20/20 \\
+ERN & 14 & 0.999993 & 0.032 & 14/14 \\
+N400 & 20 & 1.000000 & 0.006 & 20/20 \\
+\bottomrule
+\end{tabular}
+\end{table}

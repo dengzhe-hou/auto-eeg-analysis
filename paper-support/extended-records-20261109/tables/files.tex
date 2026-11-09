@@ -1,0 +1,20 @@
+\begin{table}[!htb]
+\centering\footnotesize
+\caption{Reported results and their versioned files in the released repository (tag \texttt{v0.3.2}; code and skills under the MIT licence, recipes under CC-BY-4.0). Amplitudes are in \uV{} unless stated; subjects are identified by their ERP CORE, PhysioNet or OpenNeuro identifiers; components by name.}
+\label{tab:files}
+\begin{tabular}{>{\raggedright\arraybackslash}p{4.6cm}>{\raggedright\arraybackslash}p{9.2cm}}
+\toprule
+result & file(s) \\
+\midrule
+certified per-subject ROI amplitudes (Supplementary Table~\ref*{tab:cert}) & \path{tools/validation/{mmn_group,p3_group,n170_erpcore,ern_erpcore,n400_erpcore}_results.json} (\texttt{per\_subject}, \uV) \\
+reference-pipeline comparison, waveform RMSE & \path{tools/benchmark/<C>_BENCHMARK_RESULT.json} (\uV); \path{tools/benchmark/<C>_WAVEFORM_RESULT.json} (RMSE in nV) \\
+cross-toolbox per-subject values (Supplementary Table~\ref*{tab:crosstoolbox}) & \path{tools/benchmark/cross_toolbox_results/{eeglab,fieldtrip}_<C>[_p2p|_abs|_df0.1|_cutmatch].json}; summaries \path{tools/benchmark/CROSS_TOOLBOX_RESULT.json} \\
+cluster certification (Supplementary Table~\ref*{tab:cluster}) & \path{tools/benchmark/cluster_cert/cluster_input_<C>.mat} (contrast waves, adjacency, times); \path{mne_<C>[_shipped].json}, \path{fieldtrip_<C>_a025.json}, \path{fieldtrip_<C>_shipped.json}, \path{fieldtrip_N400.json}; element-wise \path{ELEMENTWISE[_shipped]_<C>.json}; raw maps \path{dumps_shipped/*.mat} \\
+spectral comparison & \path{tools/benchmark/SPECTRAL_KERNEL_INDEP_RESULT.json} (pinned conventions, Hamming), \path{..._hann.json} (released default, Hann), \path{..._legacy_conventions.json} (original) \\
+known-effect checks & \path{tools/validation/resting_results.json}, \path{tools/validation/n170_faces_results.json} \\
+bias, dispersion, scenarios (Table~\ref*{tab:ba}) & \path{tools/benchmark/reports/attenuation.json} (from \path{attenuation.py}) \\
+skill evidence inventory (Supplementary Table~\ref*{tab:skill-coverage}) & \path{tools/benchmark/reports/skill_levels.json}, \path{docs/CERTIFICATION_LEVELS.md} \\
+generation pilot (Note~\ref*{si:generation}) & \path{tools/benchmark/RECIPE_GENERATION_*.json}, \path{OPEN_MODEL_RESULT.json}, \path{CROSS_PARADIGM_RESULT.json} (P3b/N170 vectors), \path{tools/benchmark/reports/run_manifest.json}, retained programs under \path{tools/benchmark/generated_pipelines/} \\
+\bottomrule
+\end{tabular}
+\end{table}

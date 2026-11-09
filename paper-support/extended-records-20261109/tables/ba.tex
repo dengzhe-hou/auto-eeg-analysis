@@ -1,0 +1,21 @@
+\begin{table}[!htbp]
+\centering\small
+\caption{Default-toolbox agreement with certified values. Bias (toolbox minus certified), paired-difference standard deviation \(s_d\), reference between-subject standard deviation \(s_b\), and the two sample-size inflation scenarios follow Methods (``Size of toolbox-induced differences''). Limits of agreement are bias \(\pm 1.96\,s_d\). Source: \texttt{tools/benchmark/reports/attenuation.json}.}
+\label{tab:ba}
+\resizebox{\linewidth}{!}{\begin{tabular}{llrrrlrrr}
+\toprule
+toolbox & component & \(n\) & bias (\uV) & \(s_d\) (\uV) & limits (\uV) & \(s_b\) (\uV) & equal split (\%) & one-sided (\%) \\
+\midrule
+EEGLAB & ERN & 14 & +0.018 & 0.080 & -0.138 to +0.175 & 3.23 & 0.03 & 0.06 \\
+EEGLAB & MMN & 38 & -0.015 & 0.063 & -0.139 to +0.108 & 0.66 & 0.46 & 0.92 \\
+EEGLAB & N170 & 20 & -0.039 & 0.065 & -0.167 to +0.089 & 1.19 & 0.15 & 0.30 \\
+EEGLAB & N400 & 20 & -0.015 & 0.027 & -0.069 to +0.039 & 2.09 & 0.01 & 0.02 \\
+EEGLAB & P3b & 20 & -0.009 & 0.027 & -0.061 to +0.043 & 1.81 & 0.01 & 0.02 \\
+FieldTrip & ERN & 14 & +0.124 & 0.166 & -0.201 to +0.449 & 3.23 & 0.13 & 0.26 \\
+FieldTrip & MMN & 38 & -0.010 & 0.073 & -0.152 to +0.133 & 0.66 & 0.61 & 1.22 \\
+FieldTrip & N170 & 20 & +0.016 & 0.050 & -0.081 to +0.114 & 1.19 & 0.09 & 0.18 \\
+FieldTrip & N400 & 20 & -0.024 & 0.122 & -0.264 to +0.215 & 2.09 & 0.17 & 0.34 \\
+FieldTrip & P3b & 20 & +0.064 & 0.205 & -0.337 to +0.465 & 1.81 & 0.64 & 1.27 \\
+\bottomrule
+\end{tabular}}
+\end{table}

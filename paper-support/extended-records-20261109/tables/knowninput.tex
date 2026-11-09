@@ -1,0 +1,21 @@
+\begin{table}[!htbp]
+\centering\footnotesize
+\caption{Known-input checks dated 3 October 2026, outside the \texttt{v0.3.2} snapshot, for skills classified L0 in Supplementary Table~\ref*{tab:skill-coverage}. Unless stated, the result is computed for each checked output as the largest absolute difference divided by the largest absolute reference value, and the table gives the largest such ratio across outputs; a control with an all-zero reference is compared by absolute difference (0). Records: \texttt{tools/validation/library\_numerics\_2026-10-03.json} (with the initial run \texttt{library\_numerics\_initial\_2026-10-03.json}), \texttt{qc\_revision\_2026-10-03.json} and \texttt{qc\_sample\_revision\_2026-10-03.json} at commit \texttt{546db87}; runner \texttt{tools/validation/library\_numerics.py}.}
+\label{tab:knowninput}
+\begin{tabular}{>{\raggedright\arraybackslash}p{2.3cm}>{\raggedright\arraybackslash}p{4.6cm}>{\raggedright\arraybackslash}p{4.0cm}>{\raggedright\arraybackslash}p{3.2cm}}
+\toprule
+skill & operation checked & reference & result \\
+\midrule
+eeg-tfr & zero-mean Morlet power, inter-trial coherence, baseline units & explicit Gaussian wavelet, direct convolution & \(2.4\times10^{-15}\) \\
+eeg-connectivity & debiased squared weighted phase-lag index, three edges, 8--13\,Hz & direct DFT and moment formula & \(6.9\times10^{-15}\) \\
+eeg-ica & extended Infomax on a known three-source mixture; component removal & known sources and clean mixture & minimum \(|r|\) 0.9999; cleaned relative RMSE 0.021 \\
+eeg-source & MNE and dSPM, fixed orientation, spherical model & direct regularized linear inverse & \(2.9\times10^{-15}\) \\
+eeg-decoding & sliding estimator, group-disjoint cross-validation & explicit fold and time loop, same estimator & 0 \\
+eeg-complexity & permutation entropy, order 3 & explicit ordinal-pattern counts & \(2.2\times10^{-16}\) \\
+eeg-microstate & state-transition probabilities & row-normalized literal adjacent-state counts & 0 \\
+eeg-bids & BrainVision round trip of signals, channels and events & original values and metadata & \(3.7\times10^{-8}\) \\
+eeg-qc, released rule & flat-signal and peak annotation & artifact-free sinusoids; injected faults & failed: 2 of 3 clean channels flagged, 100 annotations \\
+eeg-qc, revised rule & constant spans, rapid changes, low-amplitude warnings & 27 analytic waveforms; injected faults in synthetic and MNE sample data & no clean-waveform candidates; injected faults located \\
+\bottomrule
+\end{tabular}
+\end{table}

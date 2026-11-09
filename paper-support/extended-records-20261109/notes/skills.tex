@@ -1,0 +1,9 @@
+\subsection*{Supplementary Note \thesuppnote: ERP skill design}
+\label{si:skills}
+
+Main Table~\ref*{tab:skill-design} distinguishes the skill's reusable instructions, researcher-approved parameters and earlier-stage files. For ERP measurement, the skill requires a frozen plan, cleaned participant epochs and an environment record; a channel mapping is needed if names differ. Approved parameters are recorded in \path{ERP_PLAN.json}. The skill defaults to mean amplitude and recommends a windowed mean over a peak for broad components such as N400.
+
+The condition-averaging template is \texttt{evoked = epochs[cond].average()}. Subsequent steps form difference waves and measure the planned component. Outputs comprise participant condition and difference averages, measurement tables, grand averages and an analysis summary; participant-level values feed group statistics. Completion checks cover participants, conditions, contrasts and agreement with the planned windows. Confirmatory ROIs or windows must not be selected from the grand average. A missing or unfrozen plan requires stopping; unmappable ROI channels require clarification. These are instructions interpreted by the coding agent, not an automatically enforced schema.
+
+\FloatBarrier
+\refstepcounter{suppnote}

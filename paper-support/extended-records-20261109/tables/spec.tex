@@ -1,0 +1,22 @@
+\begin{table}[!htbp]
+\centering\footnotesize
+\caption{Numerical specification of the five certified analyses. All: average reference; zero-phase FIR band-pass (\mne{}: lower transition width 0.1\,Hz, upper transition width by \mne{}'s default rule, a quarter of the cutoff and at least 2\,Hz); resampling to 256\,Hz; baseline-corrected epochs; amplitude = mean over the region of interest (ROI) and window of the condition difference wave; group test: two-sided one-sample \(t\)-test of the ROI amplitudes against zero (the stated direction is the expected sign) and a one-sided cluster-permutation test in that direction on the same window (\(B = 5000\), cluster-forming threshold the one-sided \(t_{0.95}\) quantile, shared channel adjacency). Software: \mne{} 1.12.1 (NumPy 2.4.6, SciPy 1.17.1), MNE-BIDS-Pipeline 1.10.1; \eeglab{} development version (git 4207693, 2026-05-28) and \fieldtrip{} 20170830 under GNU Octave 10.3.0.}
+\label{tab:spec}
+\resizebox{\linewidth}{!}{\begin{tabular}{lccccc}
+\toprule
+ & MMN & P3b & N170 & ERN & N400 \\
+\midrule
+participants (shared) & 40 (38) & 20 (20) & 20 (20) & 20 (14) & 20 (20) \\
+contrast & deviant \(-\) standard & rare \(-\) frequent & faces \(-\) cars & error \(-\) correct & unrelated \(-\) related \\
+time lock & stimulus & stimulus & stimulus & response & stimulus \\
+band-pass (Hz) & 0.1--30 & 0.1--30 & 0.1--40 & 0.1--30 & 0.1--30 \\
+epoch (s) & \(-0.2\)--0.5 & \(-0.2\)--0.8 & \(-0.2\)--0.5 & \(-0.4\)--0.6 & \(-0.2\)--0.8 \\
+baseline (s) & \(-0.2\)--0 & \(-0.2\)--0 & \(-0.2\)--0 & \(-0.4\)--\(-0.2\) & \(-0.2\)--0 \\
+rejection & \SI{100}{\uV} peak-to-peak & none & none & none & none \\
+minimum retained trials & 50 deviant, 150 standard & 30 rare, 100 frequent & 30 per condition & 15 per condition & 30 per condition \\
+ROI & Fz, FCz, Cz & Fz, Cz, Pz, CPz & PO7, PO8, P7, P8 & FCz, Fz, Cz & CPz, Cz, Pz \\
+window (s) & 0.10--0.25 & 0.30--0.50 & 0.13--0.20 & 0--0.10 & 0.30--0.50 \\
+direction & negative & positive & negative & negative & negative \\
+\bottomrule
+\end{tabular}}
+\end{table}

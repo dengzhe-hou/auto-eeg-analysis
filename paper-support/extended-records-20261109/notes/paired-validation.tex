@@ -1,0 +1,197 @@
+\subsection*{Supplementary Note \thesuppnote: paired validation of the revised resource package}
+\label{si:paired-validation}
+
+\subsubsection*{Development boundary and task allocation}
+
+The study used \texttt{aea-postfailure-r3-20261031}, a frozen snapshot containing 22 skills, 10 recipes and a separate recipe template. Earlier evaluation runs informed resource and implementation revisions. Their recordings and results were not pooled with this study, and their records were retained. The 19 task families and public instruction templates were therefore seen during development; the 10 recordings listed in Supplementary Table~\ref*{tab:paired-recordings} were new to these runs. The study evaluates transfer of the revised package to new recordings within known task families, not to unseen families or unknown model pretraining data.
+
+The task source was BrainBench Foundational Analysis at Hugging Face \href{https://huggingface.co/datasets/xbb083/BrainBench/tree/c8cf0e6fc549d832e0d2de11f6e831b7bcb753a3}{revision \texttt{c8cf0e6}}, with its official code and data-preparation interface\textsuperscript{3}. Metadata-based allocation fixed 20 requests per dataset and 10 per recording, with four to six requests per family and at most one per family/recording combination. For most families, the lowest public template identifier compatible with the source was used. The five inference-limitation requests covered the published 8--30\,Hz band-pass, 0.5--4\,Hz band-pass, 30\,Hz high-pass, 50\,Hz downsampling and 50\,Hz notch variants. No new reference values or model outcomes were used for selection. A preliminary draft and preparation failures were retained separately before the final freeze. Eight sessions on four earlier-input requests checked integration and cost before the 600 formal sessions; they did not enter the efficacy estimate. All formal deliveries and grades were complete, with no unresolved infrastructure failure.
+
+\begin{table}[!htbp]
+\centering\small
+\caption{New recording inputs for the paired validation. Each row contributed 20 requests.}
+\label{tab:paired-recordings}
+\begin{tabular}{>{\raggedright\arraybackslash}p{4.1cm}>{\raggedright\arraybackslash}p{6.1cm}>{\raggedright\arraybackslash}p{4.5cm}}
+\toprule
+Source & Recordings & Input preparation \\
+\midrule
+BCI Competition 2020 Track 3 & Training \texttt{Data\_Sample07.mat} and \texttt{Data\_Sample08.mat} & Official MAT-to-EDF conversion code. \\
+ISRUC-Sleep, cohort I & Participants 7 and 8, \texttt{7.rec} and \texttt{8.rec} & Original EDF-compatible recordings. \\
+EEG During Mental Arithmetic Tasks & \texttt{Subject06\_1.edf} and \texttt{Subject07\_1.edf} & Background recordings; study aliases 07 and 08. \\
+Mumtaz 2016 & Healthy controls \texttt{H S7 EC.edf} and \texttt{H S8 EC.edf} & Eyes-closed recordings. \\
+SEED-V & Participants 7 and 8, session 1 & Original CNT signals; participant 7 header correction described below. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The BCI inputs came from the same pinned Hugging Face mirror used in development (Data availability); byte identity with the original OSF host was not independently established. SEED-V participant 7 had a sample-count header value of 4,294,966,564 inconsistent with its file size. A derived input changed only the four-byte count field at offset 864 to 3,527,400, calculated from the signal and event boundaries. All remaining bytes were compared with the original and four signal windows agreed sample by sample. The original file was retained and both conditions used the same derived input. Neither SEED-V input exposed event annotations through the current reader; only continuous-signal tasks were evaluated. ISRUC participant 8 lacked the requested frontal ROI in two requests. These requests were retained and evaluated under the pre-existing unavailable-input rule; the preparation code's initial empty-ROI NaN was corrected before any model run.
+
+\subsubsection*{Common analysis plan and execution}
+
+The common plan made scientific choices explicit to both conditions. Unless the task stated otherwise, Welch estimation used 4-s Hamming segments, 50\,\% overlap, \texttt{n\_fft = n\_per\_seg}, constant segment detrending and mean averaging. Filtering used the \mne{} 1.8 zero-phase FIR implementation with \texttt{firwin}, a Hamming window, automatic transitions and reflect-limited padding. The request-specific plan fixed band endpoints, channel identities, EEG-only selections, time intervals, operation order and units. These were study-specific choices supplied equally to both arms, not new universal defaults for the library.
+
+Dominant-band comparisons used integrated absolute power per channel followed by an arithmetic mean across the selected channels. Individual alpha peaks were the maximum PSD bin within 8--13\,Hz in each occipital channel, averaged across channels; the personalized band was that mean peak plus or minus 2\,Hz. Phase-locking value\textsuperscript{4} used full-signal 8--13\,Hz filtering before the first-60-s crop. Weighted phase-lag index\textsuperscript{5} used the first 60\,s followed by separate alpha and beta filtering and Hilbert phases. Global field power followed average reference, resampling to 100\,Hz, 0.5--40\,Hz filtering and then the 30--60\,s crop. The full plan also specified sample entropy, channel-pair definitions, numerical edge rules and undefined outputs. Missing regions or intervals required disclosure without unapproved substitution; tasks with inference limits still required their contracted preprocessing and evidence.
+
+Selected procedure packets were checked in the actual outgoing native API requests. Preloading establishes delivery of instructions, not correct adoption. The AEA condition also had matching executable helpers and an output checker; six task families had a public continuous-plan execution entry point. The harness did not compute task answers on the agent's behalf. The model remained responsible for choosing actions, executing code and submitting the requested artifacts. The control received the same explicit plan and software environment without these AEA resources. Both arms used one CPU and one numerical-library thread, with 12\,GiB memory for ordinary sources and 24\,GiB for SEED-V. These allocations were matched within pairs and sized from measured prior and pilot usage. No GPU was used. Kernel-level helper observations do not capture every subprocess call, so absence of a recorded Python helper return was not treated as proof of non-use.
+
+\subsubsection*{Acceptance and uncertainty calculation}
+
+Verification ran after first final delivery. It parsed the structured result deterministically, compared values and evidence arrays with independently computed references, checked required EDF contents or plotting data, and checked agreement between the saved result and final report. Relative/absolute tolerances were respectively \(10^{-4}/10^{-6}\) for ordinary scalars, \(10^{-4}/10^{-18}\) for PSD in V\(^{2}\)/Hz, \(10^{-5}/(2\times10^{-10})\) for signals in V, and \(10^{-4}/10^{-6}\) for connectivity. Time and frequency coordinates used an absolute tolerance of \(10^{-6}\). EDF export allowed two quantization steps plus \(2\times10^{-10}\)\,V. Known-correct controls and deliberately corrupted outputs tested the acceptance code before execution; the frozen verifier record retains the individual checks.
+
+Sonnet 5.5 judged only the remaining explanation or image requirements after the direct checks passed. Explanation prompts contained the full final report; PSD image prompts included the verified mean and actual channel range, so a channel curve was not compared with a mean as though they were the same quantity. Identical judge requests reused their first verdict. No judge score was used to decide an objectively checkable numerical or file property, and judge feedback was not returned to the target agent. The original BrainBench score was not applicable to all 100 adapted requests, because no official reference answers existed for these new recordings; it was neither copied from earlier inputs nor set to zero.
+
+Let \(Y_{iar}\) be the binary first-delivery result for request \(i\), arm \(a\) and repetition \(r\). The request-level paired difference was
+\[
+d_i = \frac{1}{3}\sum_{r=1}^{3}\left(Y_{i,\mathrm{AEA},r}-Y_{i,\mathrm{control},r}\right),
+\qquad \widehat\Delta=\frac{100}{N}\sum_{i=1}^{N}d_i,\quad N=100,
+\quad\text{in percentage points}.
+\]
+For each of 10,000 draws, independent mean-one exponential weights \(u_f\) and \(v_s\) were assigned to task family \(f\) and recording \(s\). The weighted effect was \(100\sum_i u_{f(i)}v_{s(i)}d_i/\sum_i u_{f(i)}v_{s(i)}\), with seed 20261029. The 2.5th and 97.5th percentiles defined the approximate crossed-weight interval. This describes uncertainty within the sampled family/recording structure; 600 sessions were not treated as 600 independent datasets. Family-only and recording-only sensitivity intervals were 6.10--18.22 and 8.27--14.92 percentage points, respectively. The prespecified positive-effect and positive-lower-endpoint criterion was met. Supplementary Fig.~\ref*{fig:paired-validation} and Table~\ref*{tab:paired-families} retain family-level variation, including negative differences.
+
+\begin{figure}[!htbp]
+\centering
+\makebox[\textwidth][c]{\includegraphics[width=180mm]{figS1_heterogeneity.pdf}}
+\caption{Variation in paired first-delivery differences across task families and recordings. (a) All 19 task families, in the original case order. Parenthesized \(n\) is the number of requests in each family, with three matched session pairs per request. Dots mark zero differences. (b) All 10 new recordings, two per dataset; labels 07/08 are the study input aliases mapped in Supplementary Table~\ref*{tab:paired-recordings}. Each recording supplies 10 requests and 30 matched pairs. Both panels show descriptive differences in pass rates, without subgroup inferential intervals. All 600 assigned sessions are included. Overall uncertainty is reported separately in Fig.~\ref*{fig:paired-deliveries}.}
+\label{fig:paired-validation}
+\end{figure}
+\FloatBarrier
+
+\begin{table}[!htbp]
+\centering\footnotesize
+\caption{All task-family outcomes in the paired validation. Each request contributed three sessions per condition; differences are descriptive percentage points.}
+\label{tab:paired-families}
+\begin{tabular}{r>{\raggedright\arraybackslash}p{6.0cm}rrrr}
+\toprule
+Case & Task family & Requests & AEA passed & Control passed & Difference \\
+\midrule
+1 & Alpha relative power & 6 & 18/18 & 17/18 & +5.56 \\
+2 & Prefrontal spectral ratios & 5 & 14/15 & 15/15 & -6.67 \\
+3 & Occipital sample entropy & 5 & 15/15 & 14/15 & +6.67 \\
+6 & Baseline-drift power ratio & 4 & 12/12 & 10/12 & +16.67 \\
+9 & Top channel correlations & 5 & 15/15 & 15/15 & +0.00 \\
+12 & Delta variance ranking & 5 & 15/15 & 14/15 & +6.67 \\
+14 & Processed prefrontal EDF & 5 & 13/15 & 12/15 & +6.67 \\
+15 & Average-reference EDF & 6 & 18/18 & 18/18 & +0.00 \\
+17 & Notch-filtered PSD figure & 6 & 15/18 & 14/18 & +5.56 \\
+19 & Correlation heatmap & 5 & 15/15 & 15/15 & +0.00 \\
+22 & Unavailable time interval & 5 & 15/15 & 15/15 & +0.00 \\
+23 & Check claimed band dominance & 6 & 16/18 & 8/18 & +44.44 \\
+24 & Inference after transformation & 5 & 13/15 & 14/15 & -6.67 \\
+25 & Line-noise suppression ratio & 5 & 15/15 & 12/15 & +20.00 \\
+26 & Frontal--occipital alpha contrast & 6 & 17/18 & 12/18 & +27.78 \\
+29 & Phase-locking value & 5 & 15/15 & 11/15 & +26.67 \\
+34 & Individual alpha peak and power & 5 & 15/15 & 13/15 & +13.33 \\
+35 & Global field power peak times & 5 & 15/15 & 10/15 & +33.33 \\
+36 & Hemispheric wPLI contrast & 6 & 18/18 & 15/18 & +16.67 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsubsection*{Post hoc composition of the difference}
+
+First-delivery correctness was the prespecified endpoint. The analyses below were computed after the results were known, from the retained grades and evidence arrays, and are sensitivity results. Supplementary Table~\ref*{tab:paired-composition} uses the same weights and seed as the main interval. Its second definition ignores report content, explanation presence, figure-file checks and the LLM judge, and compares evidence arrays after removing singleton dimensions and allowing a one-sample length difference, a declared unit scale or a frequency subset; a missing evidence file still fails. The regrading scripts are retained under \path{review-stage/failure-regrade-20261101/}.
+
+\begin{table}[!htbp]
+\centering\small
+\caption{Alternative definitions of a passing first delivery. Intervals are approximate 95\,\% crossed task-family/recording intervals. Only the first row was prespecified.}
+\label{tab:paired-composition}
+\begin{tabular}{>{\raggedright\arraybackslash}p{6.4cm}rrrr}
+\toprule
+Definition & With AEA & Without AEA & Difference & Interval \\
+\midrule
+Complete contract (prespecified) & 289/300 & 254/300 & 11.67 & 4.62 to 20.52 \\
+Result fields and evidence arrays & 294/300 & 272/300 & 7.33 & 1.32 to 17.18 \\
+Final reported result fields & 294/300 & 284/300 & 3.33 & \(-0.67\) to 9.14 \\
+Final reported result fields, 1\,\% tolerance & 295/300 & 292/300 & 1.00 & \(-1.91\) to 4.55 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Of the net 35 passing deliveries, 10 differed in final result fields, 11 in evidence arrays only and 15 in format, report or a missing file; the LLM judge accounted for \(-1\). Of the 21 with numerical differences, a net 14 came from control sessions that added filtering the plan did not request (9 for the claimed-band-dominance family and a net 5 for the frontal--occipital alpha contrast). The other net 7 were definition, boundary or code errors. All ten failing control deliveries in the claimed-band-dominance family reached the correct dominant band. Removing these two families leaves a difference of 2.65 percentage points (\(-1.02\) to 7.38) for the second definition. All six SEED-V sessions on one notch-filtered PSD request were failed by the LLM judge, mainly because the adapted request retained a template file name; this applied to both arms and left the difference unchanged.
+
+\subsubsection*{Usage costs and retained evidence}
+
+\begin{table}[!htbp]
+\centering\small
+\caption{Formal-session usage and API cost estimates. Token counts include execution and grading. Failed deliveries remain in the totals. US dollar values are usage-based estimates; provider invoices were not reconciled.}
+\label{tab:paired-costs}
+\begin{tabular}{lrr}
+\toprule
+Measure & With AEA & Without AEA \\
+\midrule
+Assigned sessions & 300 & 300 \\
+Passing first deliveries & 289 & 254 \\
+Non-passing first deliveries & 11 & 46 \\
+Input tokens & 21,029,754 & 6,600,245 \\
+Output tokens & 517,582 & 476,364 \\
+Cache-read/write tokens & 0/0 & 0/0 \\
+Execution API (US\$) & 2.330729 & 0.858880 \\
+Grading API (US\$) & 0.620748 & 0.786536 \\
+Total API (US\$) & 2.951477 & 1.645416 \\
+Total per passing delivery (US\$) & 0.010213 & 0.006478 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Execution and grading usage estimates summed to US\$4.596893 for the formal study; the eight integration-pilot sessions added US\$0.061136, giving US\$4.658029 for this stage. Supplementary Table~\ref*{tab:paired-costs} retains the per-arm usage and cost breakdown. Judge-cache costs were assigned to the first charged request; per-arm grading expense therefore does not estimate a causal effect on human review effort. Provider invoices and active researcher time were not measured.
+
+The evidence directory \path{review-stage/aea-next-validation-preparation-20261031/} retains \path{PROTOCOL_FROZEN.json}, \path{SCHEDULE.json}, recording metadata, contracts, independent reference programs, the frozen AEA archive, first submissions, generated programs, numerical artifacts, request traces, grades and the API ledger links. \path{RUN_METRICS.csv} contains all 600 formal rows, \path{RESULTS.json} contains the aggregate results, and \path{analyze_validation.py} reproduces the statistics. The manuscript plotting scripts and their complete source-data copies are indexed in Supplementary Note~\ref*{si:sources}. The retained records are included in the Zenodo release \citep{Hou2026AEAEvidence}. SEED-V raw data and private access links are excluded.
+
+
+\subsubsection*{Complete continuous-analysis repair retest}
+\label{si:repair-validation}
+
+Table~\ref*{tab:repair-validation} retains the preceding and repaired configurations separately. Neither model outputs nor scores were overwritten. Each configuration generated its own 900 sessions per arm on the same 300 requests and 30 recordings. The repaired resource package was locally frozen before its sessions; it was not publicly deposited before execution. Objective result fields were checked deterministically against the retained independent references. Complete-contract checks additionally considered evidence, files, report consistency and specified nonobjective review. The same model, numerical image, task-level scientific choices and tolerances were retained.
+
+\begin{table}[!htbp]
+\centering\small
+\caption{Separate complete comparisons on reused requests and recordings. Counts are passes out of 900 sessions per arm. Differences and approximate 95\,\% crossed task-family/recording intervals are in percentage points. Each configuration used fresh paired model sessions.}
+\label{tab:repair-validation}
+\begin{tabular}{lrrrr}
+\toprule
+Configuration and endpoint & With AEA & Without AEA & Difference & Interval \\
+\midrule
+Earlier result fields & 809/900 & 839/900 & -3.33 & -12.25 to 6.61 \\
+Repaired result fields & 890/900 & 791/900 & +11.00 & 3.41 to 22.89 \\
+Earlier full contract & 788/900 & 746/900 & +4.67 & -4.42 to 14.62 \\
+Repaired full contract & 877/900 & 702/900 & +19.44 & 9.53 to 31.97 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+All 1,800 repaired target sessions, objective checks and full-contract decisions were complete. Independent aggregation reproduced the endpoint counts and verified matching actual node, CPU and memory within all 900 pairs. Two API token-count connection failures interrupted grading before generation was sent. Only the pending grading requests and unstarted target assignments were resumed; first deliveries were retained unchanged. API usage was estimated at US\$12.4216, including US\$7.6657 for target calls and US\$4.7559 for review, without invoice reconciliation.
+
+Earlier records use \path{aea-final-fields-validation-20261107}. Repaired records use \path{aea-repaired-full-validation-20261108}. For each, \path{RESULTS.json}, \path{RUN_METRICS.csv}, frozen plans/resources and retained executions identify the condition. The repaired record additionally contains \path{INDEPENDENT_COUNT_CHECK.json}, \path{FAILURE_DETAILS.json}, \path{collect.py} and \path{finalize_saved.py}. Its public archive accession remains to be supplied before submission.
+
+\subsubsection*{ERP answer-field evaluation}
+\label{si:erp-paired}
+
+The reported ERP configuration was \texttt{aea-erp-r3-entry-20261106}. It used task-matching procedures and a complete execution entry with event checks, participant checkpoints and checked delivery. Resources had been revised using earlier failures on the same 24 requests. The final configuration was frozen before its target sessions; the evaluation therefore checks a repaired configuration on seen requests. Earlier configurations and all their first deliveries remain in the public development records, separately from the final comparison. Scientific plans, references, tolerances, endpoints and interval calculations were retained, and the final comparison used fresh controls. Output-path wording was corrected identically in both arms.
+
+The full contract added participant measurements/counts, evidence, file/report consistency, BIDS derivative validation and DOI/version to the primary answer checks. Table~\ref*{tab:erp-paired-configurations} reports all final endpoints. All 72 AEA sessions executed the complete entry and passed the full contract.
+
+\begin{table}[!htbp]
+\centering\small
+\caption{Final ERP configuration on all 72 sessions per arm. Differences are in percentage points, with approximate 95\,\% crossed component/subject intervals. Answer fields were primary and the other endpoints secondary.}
+\label{tab:erp-paired-configurations}
+\begin{tabular}{lrrrr}
+\toprule
+Endpoint & With AEA & Without AEA & Difference & Interval \\
+\midrule
+Answer fields & 72/72 & 65/72 & +9.72 & 1.62 to 25.31 \\
+Full contract & 72/72 & 0/72 & +100.00 & 100.00 to 100.00 \\
+Evidence arrays & 72/72 & 58/72 & +19.44 & 8.02 to 33.33 \\
+Derivatives & 72/72 & 0/72 & +100.00 & 100.00 to 100.00 \\
+Provenance & 72/72 & 69/72 & +4.17 & 0.12 to 14.06 \\
+\bottomrule
+\end{tabular}
+\par\smallskip
+\begin{minipage}{\linewidth}\footnotesize
+Every observed request-level paired difference was one for full contract and derivatives, so reweighting gives the degenerate 100-to-100 interval. This conditional result does not imply zero uncertainty for future model executions. Group answer checks concern direction and significance decisions, rather than equality of every numerical output.
+\end{minipage}
+\end{table}
+
+The final study's formal-session API usage estimate was US\$1.062941, without invoice reconciliation. A new-directory replay of saved scores reproduced its summaries and intervals without model calls or regrading. The accompanying \path{erp_final_sessions.csv}, \path{erp_final_endpoint_summary.csv} and \path{erp_paired_sources.json} identify the final 144 sessions, endpoints and sources. First submissions, native model requests, programs, numerical artifacts and grades are retained in the archive. Plans and resources were publicly frozen at \href{https://github.com/dengzhe-hou/auto-eeg-analysis/tree/7efd971ecc0bc3610ab535894c54fc79f93d6daa/evaluation/erp-entry-20261106}{commit \texttt{7efd971}} before target calls. Actual entry use was recorded from saved execution files; parent-kernel tracing alone does not observe all child-process functions.
+
+\FloatBarrier
+\refstepcounter{suppnote}

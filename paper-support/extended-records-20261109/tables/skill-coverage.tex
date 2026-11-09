@@ -1,0 +1,22 @@
+\begin{table}[!htbp]
+\centering\footnotesize
+\caption{Evidence categories assigned to all 22 skills in the v0.3.2 certification inventory, for the operations and configurations tested. Counts refer to skills, not independent tests.}
+\label{tab:skill-coverage}
+\begin{tabular}{>{\raggedright\arraybackslash}p{2.8cm}>{\raggedright\arraybackslash}p{5.5cm}>{\raggedright\arraybackslash}p{6.3cm}}
+\toprule
+Evidence category & Skills in the release inventory & What the evidence establishes \\
+\midrule
+L3: cross-toolbox comparison (4) & eeg-preprocess, eeg-epoch, eeg-erp, eeg-stats & An independently implemented toolbox reproduces the tested per-subject values or observed group statistic within the stated acceptance criterion. \\
+\addlinespace[5pt]
+L2: cross-implementation comparison (1) & eeg-spectral & A second implementation of the same numerics reproduces the tested output. \\
+\addlinespace[5pt]
+L1: behavioural check (3) & eeg-audit, eeg-methods-text, eeg-figure & Behaviour is evaluated through seeded-defect detection or checklist coverage. \\
+\addlinespace[5pt]
+L0: interface test (14) & eeg-recipe, eeg-ica, eeg-tfr, eeg-connectivity, eeg-source, eeg-microstate, eeg-decoding, eeg-complexity, eeg-behavior, eeg-bids, eeg-qc, eeg-group-compare, eeg-report, eeg-pipeline & Automated tests exercise the documented interface, from import and presence checks to synthetic-data runs returning correctly shaped results. These checks do not establish numerical correctness. \\
+\bottomrule
+\end{tabular}
+\par\medskip
+\begin{minipage}{\linewidth}\footnotesize
+Each skill has one assigned evidence category. The categories do not score overall capability or imply that every lower category was separately tested. Preprocessing, epoching and ERP measurement have end-to-end evidence through the tested ROI amplitudes, not stage-by-stage certification. Independent amplitude certification covers the four components without trial rejection; MMN is not independently certified. The statistics evidence covers the evaluated observed cluster statistics and memberships, not exact Monte-Carlo \(p\)-value agreement. Post-release known-input checks and the revised QC rule (Supplementary Table~\ref*{tab:knowninput}) do not change this release inventory. Source files for the category assignments are listed in Supplementary Table~\ref*{tab:files}.
+\end{minipage}
+\end{table}
