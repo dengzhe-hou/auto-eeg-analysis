@@ -1,0 +1,361 @@
+
+\clearpage
+\appendix
+\setcounter{page}{1}
+\renewcommand{\thepage}{S\arabic{page}}
+\setcounter{figure}{0}
+\renewcommand{\thefigure}{S\arabic{figure}}
+\renewcommand{\theHfigure}{S\arabic{figure}}
+\section*{Supplementary information}
+\begin{center}
+\large Reusable skills for electroencephalography analysis with large language model agents\\[4pt]
+\normalsize Dengzhe Hou and Kazunori D. Yamada
+\end{center}
+\newcounter{suppnote}
+\makeatletter
+\setlength{\@fptop}{0pt}
+\makeatother
+\renewcommand{\topfraction}{0.95}
+\renewcommand{\textfraction}{0.05}
+\renewcommand{\thetable}{S\arabic{table}}
+\setcounter{table}{0}
+\noindent\textbf{Contents}\par\smallskip
+\begin{tabular}{@{}p{13.0cm}r@{}}
+Note 1. Plans and worked configurations & \pageref{si:skills}\\
+Note 2. Numerical specifications and comparisons & \pageref{si:numerical}\\
+Note 3. Adapted checks and evidence coverage & \pageref{si:coverage}\\
+Note 4. Paired study on new recordings & \pageref{si:paired-validation}\\
+Note 5. Repair and ERP comparisons & \pageref{si:repair-validation}\\
+Note 6. Versions and retained records & \pageref{si:sources}\\
+Supplementary references & \pageref{si:references}\\
+\end{tabular}
+
+\refstepcounter{suppnote}
+\subsection*{Supplementary Note \thesuppnote. Plans and worked configurations}
+\label{si:skills}
+\label{si:recorded}
+\label{si:workflows}
+\label{si:pilots}
+
+The ERP skill requires cleaned participant epochs, an environment record and an approved plan specifying events, contrast, ROI, window and tests. Condition averages feed participant difference waves and measurements, which feed group statistics. Required outputs cover participants, conditions and consistency with the planned measurement. These instructions are interpreted by the agent. The later bounded ERP entry executes its own output checks before submission.
+
+The recorded N400 case used commit \texttt{721a01a}, Codex CLI 0.162.1, gpt-6.1-sol at ultra effort and \mne{} 1.12.1. Earlier N400 outputs and ready-made runners were removed from the agent copy. The unchanged recipe retained a validation value, which the agent acknowledged seeing and excluded from its plan. Processing used average reference, native 1024\,Hz data, ICA and local AutoReject. The negative-tailed Cz/CPz/Pz cluster test used cluster-forming and cluster-level \(\alpha=0.05\). The researcher approved the plan, accepted proposals for 43 ambiguous components in 13 participants (18 exclusions and 25 retentions), and accepted disclosure of missing acquisition metadata. These were not independent human inspections of every diagnostic. Raw-data replay passed only after 13 paths resumed from their own saved ICA checkpoints. No second complete raw-data replay was performed. Participant amplitudes correlated with the certified route at \(r=0.88\), with different signs in 2 of 20 participants. The intervention chronology is in \extrecord{2}{E01}.
+
+The fixed N400 example instead used 256\,Hz resampling without ICA or amplitude-based trial rejection. All 20 participants retained 60 trials per condition. Its mean was \(-2.957\)\,\uV{} (SEM 0.466), and its three-channel cluster contained 155 channel--time samples (\(p=0.0002\)). Group-statistic replay started from saved participant averages and reproduced the observed map, membership, null and \(p\)-values exactly. It was not a second raw-data run.
+
+The four raw-data pilot executions used the same task-specific scientific choices in both arms and one execution per task and arm. Their complete results and timing are preserved in \extrecord{4}{E02}. The auditory adaptation used ds006480 v1.0.1\textsuperscript{1}, active-control blocks delimited by codes 111/118, and standard/target/distractor codes 113/114/115. The target-minus-standard ROI was Fz/Cz/Pz (E6/E65/E34), over 300--500\,ms. Processing used 0.1--30\,Hz filtering, ICA, local AutoReject, average reference, epochs \(-0.2\) to \(0.8\)\,s and a \(-0.2\) to 0\,s baseline. E65 remained the acquisition reference. Verified centimetre template coordinates replaced an inconsistent sidecar unit declaration.
+
+At least 100 standard and 30 target trials were required. Four of 20 participants failed these minima, leaving 16 without substitution or relaxed criteria. Both arms retained 3927/4800 stimulus trials across all processed participants, including those excluded from group statistics. The ROI-mean interval included zero, while the separately defined cluster was significant. Researcher and delegated ICA decisions, technical failures and later review outcomes remain in the extended records. Strict saved-input ICA replays passed for 14/20 participants in each N400 arm and 18/20 in each auditory arm. Failed comparisons were retained without changing tolerances. Auditory data lacked independent EOG/ECG, and ICLabel\textsuperscript{2} received 1--30\,Hz inputs. These cases do not estimate comparative reliability, researcher time savings or correctness of subjective component classifications.
+
+\refstepcounter{suppnote}
+\subsection*{Supplementary Note \thesuppnote. Numerical specifications and comparisons}
+\label{si:numerical}
+
+The certification contract in Methods uses \(\SI{0.1}{\uV}\) per-participant amplitude tolerance, identical cluster partitions and relative \(t\)-map agreement within \(10^{-12}\). The reference software was \mne{} 1.12.1 (NumPy 2.4.6, SciPy 1.17.1) and MNE-BIDS-Pipeline 1.10.1. Independent arms used EEGLAB git 4207693 and FieldTrip 20170830 under GNU Octave 10.3.0.
+
+Shared preprocessing used zero-phase FIR filtering, average reference, resampling to 256\,Hz and the component-specific epochs, baselines and ROIs in Table~\ref*{tab:spec}. MNE used a 0.1\,Hz lower transition and an upper transition of one-quarter of the cutoff, with a minimum of 2\,Hz. Amplitudes average the condition-difference wave over ROI channels and the inclusive window. Scalar tests were two-sided one-sample \(t\)-tests. Planned directional cluster tests used 5000 permutations, the one-sided \(t_{0.95}\) forming threshold and shared adjacency.
+\begin{table}[!htbp]
+\centering\footnotesize
+\caption{Specifications of the five certified ERP analyses. Shared processing, software and statistical settings are given in Supplementary Note~\ref*{si:numerical}. Both measurement-window endpoints are included.}
+\label{tab:spec}
+\resizebox{\linewidth}{!}{\begin{tabular}{lccccc}
+\toprule
+ & MMN & P3b & N170 & ERN & N400 \\
+\midrule
+participants (shared) & 40 (38) & 20 (20) & 20 (20) & 20 (14) & 20 (20) \\
+contrast & deviant \(-\) standard & rare \(-\) frequent & faces \(-\) cars & error \(-\) correct & unrelated \(-\) related \\
+time lock & stimulus & stimulus & stimulus & response & stimulus \\
+band-pass (Hz) & 0.1--30 & 0.1--30 & 0.1--40 & 0.1--30 & 0.1--30 \\
+epoch (s) & \(-0.2\)--0.5 & \(-0.2\)--0.8 & \(-0.2\)--0.5 & \(-0.4\)--0.6 & \(-0.2\)--0.8 \\
+baseline (s) & \(-0.2\)--0 & \(-0.2\)--0 & \(-0.2\)--0 & \(-0.4\)--\(-0.2\) & \(-0.2\)--0 \\
+rejection & \SI{100}{\uV} peak-to-peak & none & none & none & none \\
+minimum retained trials & 50 deviant, 150 standard & 30 rare, 100 frequent & 30 per condition & 15 per condition & 30 per condition \\
+ROI & Fz, FCz, Cz & Fz, Cz, Pz, CPz & PO7, PO8, P7, P8 & FCz, Fz, Cz & CPz, Cz, Pz \\
+window (s) & 0.10--0.25 & 0.30--0.50 & 0.13--0.20 & 0--0.10 & 0.30--0.50 \\
+direction & negative & positive & negative & negative & negative \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+All 112 shared participant--component amplitudes met the reference-pipeline tolerance (Table~\ref*{tab:cert}). This comparison composes shared MNE kernels. It does not establish independent-toolbox equivalence or equality of full waveforms. Post-release trial tracing recovered all 120 available records, including the eight original exclusions. Of 112 shared records, 111 had identical retained memberships. MMN sub-030 differed by one deviant, with a one-sample event offset and amplitudes straddling the 100\,\uV{} rejection threshold. Across candidates, 590 event positions differed by one sample. These observations did not isolate the contribution of timing or rejection to the residual.
+\begin{table}[!htbp]
+\centering\small
+\caption{Reference-pipeline amplitude comparisons. Here \(n\) is the shared participant count and CCC is Lin concordance. Maximum absolute differences use stored amplitudes rounded to three decimals. Recomputed waveform summaries give 0.001 for P3b and 0.007\,\uV{} for N400, both within tolerance.}
+\label{tab:cert}
+\begin{tabular}{lrrrr}
+\toprule
+component & \(n\) & CCC & max \(\absdiff\) (\uV) & within \SI{0.1}{\uV} \\
+\midrule
+MMN & 38 & 0.999747 & 0.090 & 38/38 \\
+P3b & 20 & 1.000000 & 0.000 & 20/20 \\
+N170 & 20 & 0.999990 & 0.011 & 20/20 \\
+ERN & 14 & 0.999993 & 0.032 & 14/14 \\
+N400 & 20 & 1.000000 & 0.006 & 20/20 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Independent default-toolbox arms reproduced the group effect direction and significance but did not all meet participant-level amplitude tolerance (Table~\ref*{tab:crosstoolbox}). Pinning transition width alone worsened P3b agreement. Matching the cutoff interpretation at that width reduced the discrepancy. The four components without rejection then passed all 74 shared comparisons. MMN remained above tolerance. Rejection coupling and the unpinned MNE upper transition were not separately isolated. EEGLAB was not further pinned. Dispersion was 1.3--11.3\,\% of between-participant SD. Full bias, limits and model-dependent inflation scenarios are in \extrecord{8}{E06}.
+\begin{table}[!htbp]
+\centering
+\small
+\caption{Independent-toolbox comparisons with the certified values. A uses default EEGLAB \texttt{pop\_eegfiltnew} and FieldTrip \texttt{firws} at its default transition width. FieldTrip general defaults use a different filter. The grand-mean difference is relative to the certified grand mean. Tests are two-sided one-sample \(t\)-tests with \(n-1\) degrees of freedom. Same conclusion means matching direction and the \(p<0.05\) decision. B reports maximum per-participant amplitude differences in \uV{}.}
+\label{tab:crosstoolbox}
+\textbf{A. Default toolbox configurations}\par\smallskip
+\resizebox{\linewidth}{!}{\begin{tabular}{llrrrrrrrc}
+\toprule
+toolbox & component & $n$ & $|$grand $\Delta|$ (\%) & max $|\Delta|$ (µV) & CCC & $\leq$0.1\,µV & $t$ & $p$ (two-sided) & same conclusion \\
+\midrule
+EEGLAB & MMN & 38 & 1.844 & 0.233 & 0.9953 & 33/38 & -7.68 & $3.5\times10^{-9}$ & yes \\
+EEGLAB & P3b & 20 & 0.520 & 0.050 & 0.9999 & 20/20 & 4.14 & $5.6\times10^{-4}$ & yes \\
+EEGLAB & N170 & 20 & 3.320 & 0.161 & 0.9979 & 16/20 & -4.63 & $1.8\times10^{-4}$ & yes \\
+EEGLAB & ERN & 14 & 0.338 & 0.210 & 0.9997 & 12/14 & -6.31 & $2.7\times10^{-5}$ & yes \\
+EEGLAB & N400 & 20 & 0.512 & 0.069 & 0.9999 & 20/20 & -6.38 & $4.1\times10^{-6}$ & yes \\
+FieldTrip & MMN & 38 & 1.177 & 0.189 & 0.9939 & 30/38 & -7.75 & $2.9\times10^{-9}$ & yes \\
+FieldTrip & P3b & 20 & 3.779 & 0.721 & 0.9928 & 10/20 & 4.43 & $2.9\times10^{-4}$ & yes \\
+FieldTrip & N170 & 20 & 1.385 & 0.117 & 0.9990 & 18/20 & -4.39 & $3.1\times10^{-4}$ & yes \\
+FieldTrip & ERN & 14 & 2.275 & 0.366 & 0.9979 & 3/14 & -6.29 & $2.8\times10^{-5}$ & yes \\
+FieldTrip & N400 & 20 & 0.823 & 0.229 & 0.9982 & 10/20 & -6.46 & $3.5\times10^{-6}$ & yes \\
+\bottomrule
+\end{tabular}}
+
+\par\medskip
+\textbf{B. FieldTrip filter settings}\par\smallskip
+\begin{tabular}{lrrr}
+\toprule
+Component & Default & Width only & Cutoff + width matched \\
+\midrule
+P3b & 0.7214 & 0.8023 & 0.0496 \\
+N400 & 0.2287 & n.m. & 0.0500 \\
+ERN & 0.3658 & n.m. & 0.0697 \\
+N170 & 0.1170 & n.m. & 0.0993 \\
+MMN & 0.1888 & n.m. & 0.1838 \\
+\bottomrule
+\end{tabular}
+\par\smallskip
+\begin{minipage}{\linewidth}\footnotesize
+Width only fixes the transition width to 0.1\,Hz; cutoff + width also interprets the stated cutoff as the passband edge. n.m. marks an unmeasured configuration; only P3b has an intermediate measurement. The tolerance is \SI{0.1}{\uV}. All four components without trial rejection meet it after matching; MMN remains above tolerance and its residual is unresolved. The default-to-matched comparison changes two parameters; the cutoff-only attribution rests on the P3b intermediate comparison. Values are from the result records listed in \extrecord{19}{E17}.
+\end{minipage}
+\end{table}
+
+Observed cluster maps and partitions agreed in the tested four components (Table~\ref*{tab:cluster}). FieldTrip permutations were unseeded, so exactness excludes Monte-Carlo \(p\)-values. Matching an erroneous threshold establishes implementation agreement rather than correctness. The released one-sided 0.95 quantile is distinct from the historical full-epoch 0.975 error.
+\begin{table}[!htbp]
+\centering\small
+\caption{Observed cluster comparisons. A uses the shipped component window, one-sided \(t_{0.95}\) threshold, \(B=5000\) and shared 30-channel adjacency. Both implementations have identical leading summed \(t\) and extent. Maximum map difference is element-wise, and partitions are compared as sample sets. \(p\)-values are listed for MNE-Python and FieldTrip. B is the separate full-epoch N400 threshold comparison. Counts are suprathreshold clusters and extent is in channel--time samples.}
+\label{tab:cluster}
+\textbf{A. Shipped component-window configuration}\par\smallskip
+\begin{tabular}{lrrrrrll}
+\toprule
+component & window (ms) & threshold & clusters & leading \(\sum t\) & extent & \(t\)-map max \(\absdiff\) & \(p\) \\
+\midrule
+N400 & 301--500 & \(-1.729\) & 1 / 1 & \(-2102.71\) & 518 & \(1.8\times10^{-15}\) & 0.0002 / 0.0002 \\
+ERN & 0--98 & \(-1.771\) & 1 / 1 & \(-1014.83\) & 257 & \(1.8\times10^{-15}\) & 0.0004 / 0.0006 \\
+N170 & 133--199 & \(-1.729\) & 1 / 1 & \(-645.14\) & 166 & \(1.8\times10^{-15}\) & 0.0002 / 0.0004 \\
+P3b & 301--500 & \(+1.729\) & 2 / 2 & \(+1368.89\) & 415 & \(1.8\times10^{-15}\) & 0.0002 / 0.0004 \\
+\bottomrule
+\end{tabular}
+
+\par\medskip
+\textbf{B. Full-epoch N400 threshold comparison}\par\smallskip
+\begin{tabular}{>{\raggedright\arraybackslash}p{6.2cm}rrr}
+\toprule
+Implementation and configuration & Quantile & \shortstack{Suprathreshold\\clusters} & \shortstack{Leading-cluster\\extent} \\
+\midrule
+\mne{}, historical error & 0.975 & 14 & 1268 \\
+\fieldtrip{}, specified one-sided threshold & 0.95 & 18 & 1419 \\
+\fieldtrip{}, matched historical error & 0.975 & 14 & 1268 \\
+\bottomrule
+\end{tabular}
+\par\smallskip
+\begin{minipage}{\linewidth}\footnotesize
+The leading cluster has the maximum absolute cluster statistic, not necessarily the largest extent. All three leading clusters in B remain significant; the counts are not counts of significant clusters. The historical 0.975 quantile was a configuration error for the intended one-sided test. Matching that error across toolboxes establishes agreement, not correctness. The released configuration uses 0.95; its component-window certification in A is distinct from the full-epoch comparison in B. Source records are listed in \extrecord{19}{E17}.
+\end{minipage}
+\end{table}
+
+\extrecord{10}{E08} retains all eight observed issues, including the controlled rejection, cutoff and Welch convention effects, a transition-width change that did not improve agreement, the incorrect cluster quantile and three associated or unisolated observations. No total residual is treated as an upper bound on an unisolated error source. Welch matched a from-scratch implementation on 12 recordings after matching periodic windows and per-segment demeaning. Maximum relative errors were \(6.9\times10^{-16}\) for Hamming and \(5.2\times10^{-16}\) for the released Hann default. The initial Hamming comparison differed by up to 0.44\,\%. The two conventions were changed together.
+
+\refstepcounter{suppnote}
+\subsection*{Supplementary Note \thesuppnote. Adapted checks and evidence coverage}
+\label{si:coverage}
+
+The resting-state ICA route used all 109 PhysioNet participants. Posterior alpha was higher eyes-closed in 106, while complexity and entropy were higher eyes-open. Removing ICA reduced the Lempel--Ziv mean contrast from 0.0309 to 0.0049, with \(t(108)=7.24\), \(p=6.9\times10^{-11}\) versus \(t(108)=0.96\), \(p=0.34\). Entropy remained higher eyes-open without ICA (\(p=1.5\times10^{-21}\)), and alpha remained higher eyes-closed in 106 participants. The comparison does not distinguish artifact removal from differences introduced by ICA.
+
+Table~\ref*{tab:adapted-n170} separates the N170 configurations. The delay-only comparison isolates a 34.5\,ms trigger shift. The six-run route additionally changes run coverage and channel handling. Participant-specific ROI results are separate from the fixed ROI. These adapted checks do not certify the recipes as written. Figure~\ref*{fig:adapted-cases} retains the original run-01 display.
+\begin{table}[!htbp]
+\centering\small
+\caption{Retained ds000117 N170 configurations, each with 16 participants. Amplitudes and SEM are in \uV{}. Scalar tests use 15 degrees of freedom. No additional cluster test was recorded for the participant-specific ROI summary.}
+\label{tab:adapted-n170}
+\begin{tabular}{>{\raggedright\arraybackslash}p{4.7cm}rrrrr}
+\toprule
+Configuration & Mean & SEM & \(t\) & Scalar \(p\) & Minimum cluster \(p\)\\
+\midrule
+Original run-01 & \(-0.641\) & 0.251 & \(-2.56\) & 0.022 & 0.029\\
+Run-01 with trigger shift & \(-1.472\) & 0.273 & \(-5.38\) & \(7.6\times10^{-5}\) & 0.0008\\
+Six runs, fixed ROI & \(-1.427\) & 0.117 & \(-12.21\) & \(3.4\times10^{-9}\) & 0.0006\\
+Six runs, participant ROIs & \(-1.534\) & 0.124 & \(-12.41\) & \(2.7\times10^{-9}\) & not recorded\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The v0.3.2 evidence inventory assigns four skills to cross-toolbox comparisons, one to cross-implementation comparison, three to behavioural checks and fourteen to interface tests. ERP evidence is end-to-end through selected outputs, rather than stage-wise or all-skill certification. Independent amplitude agreement excludes unresolved MMN. Statistics coverage concerns observed maps and memberships, not exact Monte-Carlo values. The complete 22-skill inventory is in \extrecord{12}{E10}.
+
+Post-release known-input checks passed for eight of nine further skills. The released QC rule falsely flagged artifact-free 10\,Hz sinusoids. Its revision passed the retained analytic and injected-fault checks. Individual operations and references remain in \extrecord{11}{E09}, separate from the release inventory.
+
+\phantomsection\label{si:generation}
+The historical generation pilot does not establish certification or generator reliability. Most MMN generations used cohorts differing from the reference. The seven pinned-specification programs were not retained, and most MMN participant vectors were unavailable for independent recomputation. Recipe generation remains interface-tested. All 24 MMN scoring summaries, retained programs and provenance limitations remain in the extended records, without replacing them with later results.
+
+\refstepcounter{suppnote}
+\subsection*{Supplementary Note \thesuppnote. Paired study on new recordings}
+\label{si:paired-validation}
+
+The frozen resource was \texttt{aea-postfailure-r3-20261031}. The 19 BrainBench\textsuperscript{3} task families were development-seen, while all ten recordings were new to the formal study. Metadata-based allocation fixed 20 requests per source and ten per recording, with at most one per family/recording combination. Eight integration sessions were excluded from the 600 formal sessions. Source recordings and aliases are listed in Table~\ref*{tab:paired-recordings}.
+\begin{table}[!htbp]
+\centering\small
+\caption{New recording inputs for the paired validation. Each row contributed 20 requests.}
+\label{tab:paired-recordings}
+\begin{tabular}{>{\raggedright\arraybackslash}p{4.1cm}>{\raggedright\arraybackslash}p{6.1cm}>{\raggedright\arraybackslash}p{4.5cm}}
+\toprule
+Source & Recordings & Input preparation \\
+\midrule
+BCI Competition 2020 Track 3 & Training \texttt{Data\_Sample07.mat} and \texttt{Data\_Sample08.mat} & Official MAT-to-EDF conversion code. \\
+ISRUC-Sleep, cohort I & Participants 7 and 8, \texttt{7.rec} and \texttt{8.rec} & Original EDF-compatible recordings. \\
+EEG During Mental Arithmetic Tasks & \texttt{Subject06\_1.edf} and \texttt{Subject07\_1.edf} & Background recordings; study aliases 07 and 08. \\
+Mumtaz 2016 & Healthy controls \texttt{H S7 EC.edf} and \texttt{H S8 EC.edf} & Eyes-closed recordings. \\
+SEED-V & Participants 7 and 8, session 1 & Original CNT signals; participant 7 header correction described below. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The BCI inputs used the pinned public mirror specified under Data availability. Identity with the original OSF-hosted bytes was not independently established. SEED-V participant 7 required a derived header correction from 4,294,966,564 to 3,527,400 samples at byte offset 864. All other bytes and four signal windows were checked against the retained original. Both conditions used the same derived file. Only continuous tasks were used because event annotations were unavailable to the reader. Two ISRUC participant-8 requests lacked the frontal ROI and were retained under the unavailable-input rule.
+
+Both arms received identical scientific plans. Unless a request overrode them, Welch used 4-s Hamming segments, 50\,\% overlap, \texttt{n\_fft=n\_per\_seg}, constant segment detrending and mean averaging. Plans fixed EEG channels, units, bands, sample edges and operation order. Dominant-band power was integrated per channel before the channel mean. Individual alpha peaks used the maximum 8--13\,Hz PSD bin and a personalized band of peak \(\pm2\)\,Hz. PLV\textsuperscript{4} filtered the full signal before the first-60-s crop. wPLI\textsuperscript{5} cropped first, then filtered alpha and beta bands. GFP followed average reference, 100\,Hz resampling, 0.5--40\,Hz filtering and the 30--60\,s crop. The full common plan and exceptions are in the extended records.
+
+Objective checks ran after first final delivery and used independently calculated references. Relative/absolute tolerances were \(10^{-4}/10^{-6}\) for ordinary scalars and connectivity, \(10^{-4}/10^{-18}\) for PSD in V\(^{2}\)/Hz, and \(10^{-5}/(2\times10^{-10})\) for signals in V. Coordinates used \(10^{-6}\) absolute tolerance. EDF allowed two quantization steps plus \(2\times10^{-10}\)\,V. Sonnet 5.5 evaluated only remaining explanation or image requirements after direct checks passed. Its feedback was not returned to target agents. All assigned failures remained in their arms.
+
+Effects average three paired binary differences within each request, then weight the 100 requests equally. Approximate 95\,\% intervals use 10,000 draws of independent mean-one exponential weights for family and recording, multiplied within each request, with seed 20261029. Sessions are not independent recordings. Family-only and recording-only sensitivity intervals were 6.10--18.22 and 8.27--14.92 points. Figure~\ref*{fig:paired-validation} preserves every family and recording difference, including negative outcomes. Full family counts are in \extrecord{16}{E12}.
+\begin{figure}[!htbp]
+\centering
+\makebox[\textwidth][c]{\includegraphics[width=180mm]{figS1_heterogeneity.pdf}}
+\caption{Variation in paired first-delivery differences across task families and recordings. (a) All 19 task families, in the original case order. Parenthesized \(n\) is the number of requests in each family, with three matched session pairs per request. Dots mark zero differences. (b) All 10 new recordings, two per dataset; labels 07/08 are the study input aliases mapped in Supplementary Table~\ref*{tab:paired-recordings}. Each recording supplies 10 requests and 30 matched pairs. Both panels show descriptive differences in pass rates, without subgroup inferential intervals. All 600 assigned sessions are included. Overall uncertainty is reported separately in Fig.~\ref*{fig:paired-deliveries}.}
+\label{fig:paired-validation}
+\end{figure}
+
+Complete-contract correctness was prespecified. The post hoc endpoints in Table~\ref*{tab:paired-composition} use the same weights and seed. The evidence-array variant allowed singleton removal, one-sample length differences, declared unit scaling or frequency subsets. Missing evidence still failed. A net 14 of 21 numerical differences came from unrequested control filtering in two families. Removing those families gave a 2.65-point evidence-array difference (interval \(-1.02\) to 7.38). All six sessions of one SEED-V PSD request failed the image judge in both arms, largely because of a retained template filename.
+\begin{table}[!htbp]
+\centering\small
+\caption{Alternative definitions of a passing first delivery. Intervals are approximate 95\,\% crossed task-family/recording intervals. Only the first row was prespecified.}
+\label{tab:paired-composition}
+\begin{tabular}{>{\raggedright\arraybackslash}p{6.4cm}rrrr}
+\toprule
+Definition & With AEA & Without AEA & Difference & Interval \\
+\midrule
+Complete contract (prespecified) & 289/300 & 254/300 & 11.67 & 4.62 to 20.52 \\
+Result fields and evidence arrays & 294/300 & 272/300 & 7.33 & 1.32 to 17.18 \\
+Final reported result fields & 294/300 & 284/300 & 3.33 & \(-0.67\) to 9.14 \\
+Final reported result fields, 1\,\% tolerance & 295/300 & 292/300 & 1.00 & \(-1.91\) to 4.55 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Formal execution and grading cost an estimated US\$4.596893. Integration sessions added US\$0.061136. Failures remained included, and cached judge expense was assigned to the first charged request. Neither invoices nor researcher time were measured. Detailed token and cost accounting is retained in \extrecord{17}{E14}.
+
+\refstepcounter{suppnote}
+\subsection*{Supplementary Note \thesuppnote. Repair and ERP comparisons}
+\label{si:repair-validation}
+\label{si:erp-paired}
+
+The continuous repair comparison reused the same 300 requests and 30 recordings as its preceding comparison, with fresh 900-session arms. Scientific plans, references, tolerances, model and numerical image were retained. The repaired package was locally frozen before execution and was not publicly deposited beforehand. Neither old outputs nor grades were overwritten. Table~\ref*{tab:repair-validation} keeps both endpoints and both configurations separate.
+\begin{table}[!htbp]
+\centering\small
+\caption{Separate complete comparisons on reused requests and recordings. Counts are passes out of 900 sessions per arm. Differences and approximate 95\,\% crossed task-family/recording intervals are in percentage points. Each configuration used fresh paired model sessions.}
+\label{tab:repair-validation}
+\begin{tabular}{lrrrr}
+\toprule
+Configuration and endpoint & With AEA & Without AEA & Difference & Interval \\
+\midrule
+Earlier result fields & 809/900 & 839/900 & -3.33 & -12.25 to 6.61 \\
+Repaired result fields & 890/900 & 791/900 & +11.00 & 3.41 to 22.89 \\
+Earlier full contract & 788/900 & 746/900 & +4.67 & -4.42 to 14.62 \\
+Repaired full contract & 877/900 & 702/900 & +19.44 & 9.53 to 31.97 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+All 1,800 repaired sessions and their contract decisions were complete. Independent aggregation reproduced counts and confirmed matching actual node, CPU and memory in all 900 pairs. Two token-count connection failures interrupted grading before generation was sent. Only pending grading and unstarted assignments resumed. Usage was estimated at US\$12.4216, including US\$7.6657 target calls and US\$4.7559 review, without invoice reconciliation. The fixed snapshot supplies summaries and metrics. A public accession for the complete first-delivery archive remains to be added before submission.
+
+The final ERP resource was \texttt{aea-erp-r3-entry-20261106}, publicly frozen at commit \texttt{7efd971} before its 144 sessions. Development had used failures on the same 24 requests. Earlier R1/R2 records remain separate and are not pooled. Scientific plans, references, tolerances and interval calculations were retained, and fresh controls received identical output-path wording. Single-participant answer checks use 0.1\,\uV{} tolerance. Group checks require matching direction and both scalar and cluster significance decisions, rather than every numerical value. Full-contract checks add participant measurements, evidence, file/report consistency, derivative validation and provenance.
+\begin{table}[!htbp]
+\centering\small
+\caption{Final ERP configuration on all 72 sessions per arm. Differences are in percentage points, with approximate 95\,\% crossed component/subject intervals. Answer fields were primary and the other endpoints secondary.}
+\label{tab:erp-paired-configurations}
+\begin{tabular}{lrrrr}
+\toprule
+Endpoint & With AEA & Without AEA & Difference & Interval \\
+\midrule
+Answer fields & 72/72 & 65/72 & +9.72 & 1.62 to 25.31 \\
+Full contract & 72/72 & 0/72 & +100.00 & 100.00 to 100.00 \\
+Evidence arrays & 72/72 & 58/72 & +19.44 & 8.02 to 33.33 \\
+Derivatives & 72/72 & 0/72 & +100.00 & 100.00 to 100.00 \\
+Provenance & 72/72 & 69/72 & +4.17 & 0.12 to 14.06 \\
+\bottomrule
+\end{tabular}
+\par\smallskip
+\begin{minipage}{\linewidth}\footnotesize
+Every observed request-level paired difference was one for full contract and derivatives, so reweighting gives the degenerate 100-to-100 interval. This conditional result does not imply zero uncertainty for future model executions. Group answer checks concern direction and significance decisions, rather than equality of every numerical output.
+\end{minipage}
+\end{table}
+
+All 72 AEA sessions executed the complete entry and passed the contract. The degenerate full-contract and derivative intervals are conditional reweightings of uniformly positive observed differences, not zero uncertainty for future executions. Formal usage was estimated at US\$1.062941. A new-directory saved-score replay reproduced the summaries and intervals without model calls or regrading.
+
+\refstepcounter{suppnote}
+\subsection*{Supplementary Note \thesuppnote. Versions and retained records}
+\label{si:sources}
+
+Table~\ref*{tab:version-routes} separates tested resources from later maintenance. Installing current AEA does not retrospectively change an evaluation. The \extendedrecords\ preserve all eight original notes, 18 tables, chronology, historical checks, full file indexes and the original 21-page supplement, plus saved summary CSV files. Their E-prefixed record identifiers distinguish them from the condensed supplement tables.
+
+\begin{table}[!htbp]
+\centering\small
+\caption{Resource versions and the evidence they support. Earlier ERP development records remain separately available. None of these comparisons establishes full skill equivalence across Python, MATLAB/EEGLAB and FieldTrip.}
+\label{tab:version-routes}
+\begin{tabular}{>{\raggedright\arraybackslash}p{4.0cm}>{\raggedright\arraybackslash}p{4.4cm}>{\raggedright\arraybackslash}p{6.1cm}}
+\toprule
+Resource & Execution & Evidence scope\\
+\midrule
+v0.3.2 and post-release 546db87 & MNE 1.12.1. Independent arms use Octave 10.3.0 and FieldTrip 20170830. & Selected numerical outputs and known-input or known-effect checks.\\
+aea-postfailure-r3-20261031 & Haiku 5.5, MNE 1.8.0, preloaded procedures and helpers. & 600 sessions on development-seen families and new recordings.\\
+ERP R3, 7efd971 & Haiku 5.5, MNE 1.8.0, complete ERP entry. & 144 sessions on previously used requests. R1/R2 are separate development records.\\
+Repair freeze, 8 November 2026 & Haiku 5.5, MNE 1.8.0, continuous-plan entry. & 1,800 fresh sessions on reused inputs, separate from the preceding configuration.\\
+Maintenance b52df1c & Installation and selected execution utilities. & IO and deployment checks, without a new model comparison.\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Zenodo DOI 10.5281/zenodo.24012489 archives the numerical, 600-session and ERP records in its 2026-11-06 version. The later compilation and full repair-record accession are distinguished under Code availability. Restricted SEED-V signals and private access links are excluded. The original inputs remain subject to provider access rules. Versioned file maps and the dated source index are retained in the extended records. No new model sessions, EEG processing, scoring or interval calculations were performed for this condensation.
+
+\FloatBarrier
+\renewcommand{\refname}{Supplementary references}
+\begin{thebibliography}{1}
+\label{si:references}
+\bibitem{Kim2025Supplement}
+Kim, A. J., Mather, M., Morales, S. \& Senior, J.
+Young adult resting state and auditory oddball task EEG data, version 1.0.1.
+OpenNeuro \url{https://doi.org/10.18112/openneuro.ds006480.v1.0.1} (2025).
+\bibitem{PionTonachini2019Supplement}
+Pion-Tonachini, L., Kreutz-Delgado, K. \& Makeig, S.
+ICLabel: an automated electroencephalographic independent component classifier, dataset, and website.
+NeuroImage \textbf{198}, 181--197 (2019). \url{https://doi.org/10.1016/j.neuroimage.2019.05.026}
+\bibitem{Zhou2026Supplement}
+Zhou, Y. et al.
+BrainBench: benchmarking large language models for comprehensive EEG understanding.
+Preprint at \url{https://arxiv.org/abs/2608.04156v2} (2026).
+\bibitem{Lachaux1999Supplement}
+Lachaux, J.-P., Rodriguez, E., Martinerie, J. \& Varela, F. J.
+Measuring phase synchrony in brain signals.
+Hum. Brain Mapp. \textbf{8}, 194--208 (1999). \url{https://doi.org/10.1002/(SICI)1097-0193(1999)8:4<194::AID-HBM4>3.0.CO;2-C}
+\bibitem{Vinck2011Supplement}
+Vinck, M., Oostenveld, R., van Wingerden, M., Battaglia, F. \& Pennartz, C. M. A.
+An improved index of phase-synchronization for electrophysiological data in the presence of volume-conduction, noise and sample-size bias.
+NeuroImage \textbf{55}, 1548--1565 (2011). \url{https://doi.org/10.1016/j.neuroimage.2011.01.055}
+\end{thebibliography}
+
+\end{document}

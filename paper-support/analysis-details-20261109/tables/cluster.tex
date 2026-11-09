@@ -1,0 +1,32 @@
+\begin{table}[!htbp]
+\centering\small
+\caption{Observed cluster comparisons. A uses the shipped component window, one-sided \(t_{0.95}\) threshold, \(B=5000\) and shared 30-channel adjacency. Both implementations have identical leading summed \(t\) and extent. Maximum map difference is element-wise, and partitions are compared as sample sets. \(p\)-values are listed for MNE-Python and FieldTrip. B is the separate full-epoch N400 threshold comparison. Counts are suprathreshold clusters and extent is in channel--time samples.}
+\label{tab:cluster}
+\textbf{A. Shipped component-window configuration}\par\smallskip
+\begin{tabular}{lrrrrrll}
+\toprule
+component & window (ms) & threshold & clusters & leading \(\sum t\) & extent & \(t\)-map max \(\absdiff\) & \(p\) \\
+\midrule
+N400 & 301--500 & \(-1.729\) & 1 / 1 & \(-2102.71\) & 518 & \(1.8\times10^{-15}\) & 0.0002 / 0.0002 \\
+ERN & 0--98 & \(-1.771\) & 1 / 1 & \(-1014.83\) & 257 & \(1.8\times10^{-15}\) & 0.0004 / 0.0006 \\
+N170 & 133--199 & \(-1.729\) & 1 / 1 & \(-645.14\) & 166 & \(1.8\times10^{-15}\) & 0.0002 / 0.0004 \\
+P3b & 301--500 & \(+1.729\) & 2 / 2 & \(+1368.89\) & 415 & \(1.8\times10^{-15}\) & 0.0002 / 0.0004 \\
+\bottomrule
+\end{tabular}
+
+\par\medskip
+\textbf{B. Full-epoch N400 threshold comparison}\par\smallskip
+\begin{tabular}{>{\raggedright\arraybackslash}p{6.2cm}rrr}
+\toprule
+Implementation and configuration & Quantile & \shortstack{Suprathreshold\\clusters} & \shortstack{Leading-cluster\\extent} \\
+\midrule
+\mne{}, historical error & 0.975 & 14 & 1268 \\
+\fieldtrip{}, specified one-sided threshold & 0.95 & 18 & 1419 \\
+\fieldtrip{}, matched historical error & 0.975 & 14 & 1268 \\
+\bottomrule
+\end{tabular}
+\par\smallskip
+\begin{minipage}{\linewidth}\footnotesize
+The leading cluster has the maximum absolute cluster statistic, not necessarily the largest extent. All three leading clusters in B remain significant; the counts are not counts of significant clusters. The historical 0.975 quantile was a configuration error for the intended one-sided test. Matching that error across toolboxes establishes agreement, not correctness. The released configuration uses 0.95; its component-window certification in A is distinct from the full-epoch comparison in B. Source records are listed in \extrecord{19}{E17}.
+\end{minipage}
+\end{table}

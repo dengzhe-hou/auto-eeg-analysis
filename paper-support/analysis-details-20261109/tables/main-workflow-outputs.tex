@@ -1,0 +1,22 @@
+\begin{table}[!htb]
+\centering\small
+\caption{Steps and inspectable outputs from the recorded N400 analysis.}
+\label{tab:reuse}
+\begin{tabular}{>{\raggedright\arraybackslash}p{2.7cm}>{\raggedright\arraybackslash}p{5.9cm}>{\raggedright\arraybackslash}p{6.1cm}}
+\toprule
+Analysis step & What this run did & What can be checked \\
+\midrule
+Assign conditions & Assigned target events to related or unrelated conditions for all 20 participants. & Each retained trial's original event code and assigned condition. \\
+\addlinespace[3pt]
+Clean the data & Applied ICA and then local AutoReject. & Component decisions, rejected trials and remaining counts; sub-001 retained 57 related and 55 unrelated trials. \\
+\addlinespace[3pt]
+Measure the N400 & Computed unrelated-minus-related waveforms and mean amplitudes at CPz/Cz/Pz over 300--500\,ms. & Each participant's condition averages, difference wave, amplitude and trial counts. \\
+\addlinespace[3pt]
+Analyse and report & Ran the planned group cluster test and produced plots, methods text and reports. & Statistical inputs and results, report contents and raw-data replay comparisons. \\
+\bottomrule
+\end{tabular}
+\par\smallskip
+\begin{minipage}{\linewidth}\footnotesize
+Supplementary Note~\ref*{si:recorded} links the approved choices to scripts and retained files. This recorded run is separate from the fixed no-ICA example. Researcher decisions and replay limitations are described in the text and Supplementary Note~\ref*{si:recorded}.
+\end{minipage}
+\end{table}

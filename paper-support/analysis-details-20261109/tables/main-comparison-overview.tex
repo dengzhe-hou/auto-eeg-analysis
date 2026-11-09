@@ -1,0 +1,22 @@
+\begin{table}[!htb]
+\centering\small
+\caption{Purpose, findings and limits of the numerical comparisons in the tested configurations.}
+\label{tab:validation}
+\begin{tabular}{>{\raggedright\arraybackslash}p{4.2cm}>{\raggedright\arraybackslash}p{5.3cm}>{\raggedright\arraybackslash}p{5.2cm}}
+\toprule
+Comparison purpose & Main finding & Scope and limitations \\
+\midrule
+Check ERP amplitudes against MNE-BIDS-Pipeline & All shared participant--component amplitudes met the tolerance. & Checks how shared \mne{} operations are combined; this is not an independent implementation. \\
+\addlinespace[3pt]
+Compare \eeglab{} default filtering and \fieldtrip{} \texttt{firws} filtering at its default transition width & Group effect directions and significance decisions agreed; some participant amplitude differences exceeded tolerance. & Group agreement does not establish participant-level equivalence. \\
+\addlinespace[3pt]
+Test explicit filter settings in \fieldtrip{} & All comparisons without trial rejection met tolerance. MMN discrepancies remained unresolved. & MMN is not independently certified; \eeglab{} settings were not further matched. \\
+\addlinespace[3pt]
+Check the observed cluster statistic in \fieldtrip{} & Cluster memberships matched; observed \(t\)-maps agreed to floating-point precision. & Tests the statistic on shared contrast waves and adjacency. Monte-Carlo \(p\)-values are excluded from exact agreement. \\
+\bottomrule
+\end{tabular}
+\par\smallskip
+\begin{minipage}{\linewidth}\footnotesize
+Acceptance criteria, coverage and component-level results are in Supplementary Note~\ref*{si:numerical} and Supplementary Tables~\ref*{tab:spec}, \ref*{tab:cert}, \ref*{tab:crosstoolbox} and~\ref*{tab:cluster}.
+\end{minipage}
+\end{table}
