@@ -1,10 +1,14 @@
 ## Constants
 
+Resolve scientific settings against the task/approved plan. The presets and
+numbers below describe examples, not new exclusions or permission to change the
+analysis. QC availability is checked before comparing any value with a gate.
+
 - **BACKEND = `mne`** — MNE-Python is the computation backend.
 - **OUTPUT_DIR = `qc-stage/`** — relative to project root. Create if missing.
 - **STAGES = `all`** — which stages to QC: `raw` (pre-preprocess sanity), `preprocess`, `ica`, `epoch`, or `all`. Each consumes the matching `*-stage/` directory.
 - **GATES = `normal`** — gate strictness preset (`strict` | `normal` | `lenient`). Sets the pass/warn/fail thresholds in Phase F. The chosen preset and every numeric threshold are written verbatim to `qc-stage/QC_GATES.json` (no hidden thresholds — COBIDAS).
-- **LINE_FREQ = inferred from country** — 50 Hz (Japan/EU/most) or 60 Hz (Americas) — confirmed against `DATASET_BRIEF.md > Notch`. Used for the line-noise ratio.
+- **LINE_FREQ = recorded acquisition/site frequency** — read the explicit approved value from DATASET_BRIEF; do not infer it from country alone. The chosen PSD must cover the declared line and flanking bands for a ratio to be available.
 - **FMIN/FMAX = `1` / `40`** Hz — PSD analysis band for SNR and bad-channel scoring. Raise FMAX for high-gamma studies.
 - **HURST_EPOCH_S = `4.0`** — window length for the per-channel Hurst/DFA estimate (scaling needs longer epochs than band power; see Domain Knowledge → Hurst). OPTIONAL — degrades to variance+correlation if no DFA backend.
 - **SEED = read from ANALYSIS_PLAN**, default `42` — for any subsampled metric (LOF neighbor draws are deterministic; AutoReject preview is seeded).
@@ -60,29 +64,53 @@ For each subject's continuous data at each present stage, write and execute a sc
 
 ### B.2 PSD-based bad-channel and line-noise detection
 
-Compute the PSD once per channel and derive several QC scalars from it:
+Compute a PSD with the approved settings; retain its actual frequency grid and
+known input filter support. A 1–40 Hz PSD cannot support a 50/60 Hz line ratio.
+Even if higher-frequency bins exist, they do not restore a band already removed
+by the input's low-pass. Resolve a separate approved diagnostic input when needed;
+never widen the scientific filter or change Welch settings automatically.
+
 ```python
-psd = raw.compute_psd(method='welch', fmin=FMIN, fmax=FMAX,
-                      n_fft=int(2*raw.info['sfreq']),
-                      n_per_seg=int(2*raw.info['sfreq']),
-                      n_overlap=int(raw.info['sfreq']), window='hann', picks='eeg')
-psds, freqs = psd.get_data(return_freqs=True)   # (n_ch, n_freq), V**2/Hz
+# AEA example: qc-spectral-availability
+import runpy
+from pathlib import Path
+qc_spectral = runpy.run_path(str(Path(AEA_ROOT) / 'skills/eeg-qc/scripts/spectral.py'))
+psd = raw.compute_psd(**approved_qc_psd_params)
+psds, freqs = psd.get_data(return_freqs=True)  # channel x frequency, V**2/Hz
+line_metric = qc_spectral['band_ratio'](
+    psds, freqs, **approved_line_ratio_params,
+    supported_band_hz=recorded_input_filter_support_hz,
+    nyquist_hz=raw.info['sfreq']/2)
 ```
-- **Line-noise ratio** (per channel): power in a narrow band around `LINE_FREQ` (±1–2 Hz) divided by the power in flanking bands. A high ratio after preprocessing means the notch/ZapLine under-performed. Also check the first harmonic (`2*LINE_FREQ`) if within FMAX.
+
+`approved_line_ratio_params` declares the exact numerator/flanking bands and
+`statistic` (`mean_density` or `integrated_power`). The latter is a ratio of
+integrated powers, not mean PSD densities; do not change between them. Boundaries
+are inclusive and bands must not overlap. Missing axis coverage, too few bins,
+Nyquist violations, unknown/out-of-band filter support, or undefined denominator
+produce an unavailable metric with reasons; never substitute zero or a pass.
+Use the same primitive for an approved EMG/other band ratio. The helper's
+integrals reuse `eeg-spectral`'s existing implementation.
+
+- **Line-noise ratio**: use the explicitly approved line/flanking bands; a high
+  computed ratio after notch is a diagnostic observation. A harmonic is assessed
+  only when its full bands are both represented and supported. Save the actual
+  ratio definition, bin counts, availability and reasons with channel metrics.
+
 - **High-frequency / EMG index** (per channel): ratio of high-band power (e.g. 20–40 Hz, or up toward Nyquist) to low-band power. Channels with an anomalously high ratio carry muscle/EMG or are noisy (this is the spectral analog of the FASTER high-frequency-noise criterion).
 - **Spectral bad-channel score**: a channel whose whole PSD shape is an outlier vs the across-channel median (e.g. correlation of its log-PSD with the channel-median log-PSD is low, or its broadband power is `|z|>3`) is flagged. Do NOT interpret content above the low-pass cutoff — bins exist to Nyquist but are filter roll-off (see `eeg-spectral`).
 - **Slope/`1/f` sanity**: a healthy scalp channel has a decreasing PSD; a flat or rising log-log PSD across 1–40 Hz signals a disconnected/reference-shorted channel.
 
-### B.3 Neighbor-prediction bad-channel detectors (montage required)
+### B.3 Signal-distance LOF and geometry-based corroboration
 
-When 3D positions exist, add geometry-aware detectors — they catch channels that variance/PSD miss:
+MNE LOF compares channel time series, using distances in signal space. It does
+not read electrode positions and does not require a montage:
 ```python
 from mne.preprocessing import find_bad_channels_lof
 bads_lof, scores = find_bad_channels_lof(
-    raw, n_neighbors=20, picks='eeg',
-    threshold=1.5, return_scores=True)   # Local Outlier Factor on spatial neighbors
+    raw, **approved_lof_params, return_scores=True)  # explicit picks/metric/neighbors/threshold
 ```
-`find_bad_channels_lof` (Kumaravel et al. 2022, the detector used in the HAPPE/automagic family) scores each channel by how anomalous it is relative to its spatial neighbors — robust to global noise that fools simple variance thresholds. Corroborate with `pyprep.NoisyChannels(raw).find_all_bads()` (RANSAC + correlation + deviation + HF-noise + SNR + flat criteria, Bigdely-Shamlo et al. 2015) — `pyprep` is a core dep, so it is normally present; a channel flagged by **both** LOF and RANSAC is a high-confidence bad channel. If a stripped env lacks `pyprep`, fall back to LOF + the FASTER-style variance/spectral metrics and log the substitution.
+`find_bad_channels_lof` (Kumaravel et al. 2022, the detector used in the HAPPE/automagic family) scores each channel relative to neighboring channel time series in the chosen signal-distance metric. It is not an electrode-location neighbor predictor, and this score alone does not establish robust artifact identification. When the approved geometry-aware route has the required positions, corroborate with `pyprep.NoisyChannels(raw).find_all_bads()` (RANSAC + correlation + deviation + HF-noise + SNR + flat criteria, Bigdely-Shamlo et al. 2015) — `pyprep` is a core dep, so it is normally present; a channel flagged by **both** LOF and RANSAC is a high-confidence bad channel. If a stripped env lacks `pyprep`, fall back to LOF + the FASTER-style variance/spectral metrics and log the substitution.
 
 > **`find_bad_channels_maxwell` is MEG-only** (it relies on Maxwell filtering / SSS and an Elekta/MEGIN-style fine-calibration + crosstalk model). Do NOT call it on scalp EEG; use `find_bad_channels_lof` (+ pyprep RANSAC) for EEG. Only reach for `find_bad_channels_maxwell` if the recording is MEG (then it is the canonical bad-channel detector).
 
@@ -189,7 +217,23 @@ Apply the thresholds from `QC_GATES.json` (the `normal` preset below; `strict`/`
 | Median SNR | ≥ preset floor | borderline | below floor |
 | Stage SNR delta | non-negative | small negative | a stage made SNR worse |
 
-- The subject verdict is the **worst** gate it trips: any `fail` → `fail`; else any `warn` → `warn`; else `pass`.
+- Apply numeric gates only to computed metrics. Unplanned metrics are
+  `not_applicable`; a planned metric without usable input is `unavailable`, with
+  its reason. A measured fail remains fail; otherwise an unavailable required
+  metric makes overall QC `incomplete`, not pass. This does not invent an exclusion.
+
+```python
+# AEA example: qc-availability-gate
+# gates contains other already evaluated gates or explicit not_applicable states.
+if line_metric['status'] != 'computed':
+    gates['line_ratio'] = 'unavailable'
+else:
+    gates['line_ratio'] = approved_line_gate(line_metric['values'])
+verdict = qc_spectral['qc_verdict'](gates)
+```
+
+Keep the individual computed warnings/failures and unavailable reasons even when
+overall coverage is incomplete. No missing/NaN/null value is a zero-noise result.
 - A `fail` is a routing signal, not a fix: name the offending metric and the stage to revisit (e.g. "fail: line ratio 8× at preprocess → re-run notch/ZapLine in `eeg-preprocess`"). **Never** auto-edit upstream data from this skill.
 - `strict` tightens each band by ~half; `lenient` widens it. The exact numbers live in `QC_GATES.json` so the methods text can cite them.
 

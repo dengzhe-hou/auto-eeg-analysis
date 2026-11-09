@@ -47,13 +47,19 @@ python tools/load_skill.py eeg-group-compare --section "Phase A — Parse design
 - **Never** run a between-group `_1samp` test or a within `spatio_temporal_cluster_test` — match the function to the design.
 - **Never** use balanced-only `AnovaRM` on unequal-N or covariate data — switch to `MixedLM`.
 - **Never** report a p-value without a standardized effect size and its CI.
-- **Never** change `n_permutations`, seed, ROI, or window after seeing results, and never silently fall back from `pingouin`/`statsmodels` without logging it.
+- **Never** change `n_permutations`, seed, ROI, window or selected method after seeing results. A missing package does not authorize a new model; follow only an approved fallback.
+- Keep cluster-forming alpha separate from corrected significance alpha. Convert a two-sided t threshold using alpha/2 in each tail; preserve explicitly approved numeric thresholds and report inconsistent labels rather than silently replacing them.
+- TFCE returns p-values associated with point masks. Map them onto the actual statistic grid before reporting significant times/channels; ordinary cluster p-values cannot be used as a point map.
 
 
 ## Procedure reference
 
 Choose the section that matches the current operation. Detailed code examples
 and numerical conventions remain in the linked source.
+
+Use [the statistics helpers](scripts/statistics.py) for an approved alpha-to-t
+conversion and TFCE singleton-mask mapping. These do not choose a design,
+direction, alpha or permutation count.
 
 ## Constants
 

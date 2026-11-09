@@ -9,7 +9,7 @@ allowed-tools: Bash(*), Read, Write, Edit, Grep, Glob
 
 ## Context: $ARGUMENTS
 
-> **OPTIONAL skill.** Only run if `DATASET_BRIEF.md` (or `ANALYSIS_PLAN.md`) ticks Complexity / entropy / nonlinear dynamics / criticality / consciousness-depth tracking. If no complexity claim exists, **do not run** — return control to the dispatcher.
+> **OPTIONAL skill.** Run when the explicit task or approved study requests a complexity/entropy metric. A bounded SampEn request does not require an unrelated study-stage checkbox or new upstream preprocessing.
 >
 > **Every external library in this skill is an OPTIONAL dependency.** None of `antropy`, `neurokit2`, `EntropyHub`, `nolds`, `mne-features`, `pywt`, `PyEMD`/`emd`, `specparam`/`fooof` are guaranteed to be installed. **Every** code path MUST guard its import, log availability to the stage JSON, surface missing libs in `BACKEND_RESOLUTION.md`, and degrade gracefully (skip the metric with a clear message + `pip install` hint — never crash the stage). Only `numpy`/`scipy`/`scikit-learn`/`mne` are assumed present.
 
@@ -40,13 +40,16 @@ python tools/load_skill.py eeg-complexity --section "Phase A — Metric selectio
 
 ## Required Inputs
 
-Before running, these must exist:
+For bounded SampEn, use the resolved task/plan, supplied signal, documented
+channels, exact interval, approved operations, embedding/tolerance and radius
+conventions. The `sample_entropy_raw` helper connects Raw input to the bounded
+SI-unit and half-open crop path, returning actual input evidence and metadata.
+No windowed-analysis or ICA stage is required unless the request includes it.
 
-1. `ANALYSIS_PLAN.md` — frozen, with the complexity/entropy claim(s). **Stop if missing or unfrozen.**
-2. `DATASET_BRIEF.md` — must tick Complexity (otherwise this skill should not have been invoked); also gives the paradigm and condition labels (e.g. awake vs deep anesthesia, eyes-open vs eyes-closed).
-3. Preprocessed data: `preprocess-stage/` or `ica-stage/` (continuous, for windowed time courses) or `epoch-stage/` (already-epoched).
-4. `ENVIRONMENT.json` — to resolve which complexity backend is available.
-5. `channel_mapping.json` — if claim ROI uses 10-20 names but data uses numbered channels.
+For a full study, retain the frozen `ANALYSIS_PLAN.md`, `DATASET_BRIEF.md`,
+chosen preprocessing/epoch outputs and `ENVIRONMENT.json`. Resolve the channel
+mapping when ROI identities need it; check optional dependencies for the
+specific metric rather than loading every backend.
 
 ## Critical Rules
 
@@ -55,7 +58,12 @@ Before running, these must exist:
   boundary. A shared metric name alone does not establish numerical equivalence
   between implementations.
 - **Never** compute `r` for SampEn/ApEn from a global SD — recompute it from each window's own SD, inside the window loop.
-- **Never** normalize PLZC (or any >2-symbol LZC) with base 2 — the normalization base must be `m!`. Mismatched base silently produces uninterpretable values.
+- Normalize LZC/PLZC once from the raw parse count with the approved alphabet
+  definition. Binary LZC uses base 2; theoretical-alphabet PLZC uses `m!`.
+  AntroPy's normalized output uses the **observed** alphabet (minimum 2), so
+  never apply an extra base-2 correction without checking that convention.
+  Keep raw count, symbol count, alphabet and backend version; finite-sequence
+  normalized LZC/PLZC may exceed 1 and must not be clipped or rejected for that.
 - **Never** compute LZC/PLZC/SampEn across channels — these are per-channel 1-D time-series metrics. Only spatial complexity (Omega/NSC) operates across channels.
 - **Never** compare a complexity value across windows/conditions of different length — `c(n)`, RR, and entropy estimates all depend on `n`. Hold window length fixed.
 - **Never** compute spatial complexity without an average reference first.
@@ -93,6 +101,9 @@ Read this section in [the detailed procedure](references/procedure.md).
 ## Phase D — Temporal entropy & Lempel-Ziv
 
 Read this section in [the detailed procedure](references/procedure.md).
+Use [the symbolic LZ helper](scripts/lempel_ziv.py) for one explicit
+normalization and metric-specific range checks; it does not select the
+symbolization, ordinal-tie rule or alphabet policy for the researcher.
 
 ## Phase E — Recurrence Quantification Analysis (RQA)
 

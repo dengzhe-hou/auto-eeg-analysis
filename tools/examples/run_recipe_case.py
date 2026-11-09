@@ -154,10 +154,15 @@ def compute_statistics(related, unrelated, times, ch_names, adjacency):
         "h0": h0, "subject_uV": subject_uv}
 
 
-def create_plan(run_dir: Path, data_root: Path) -> dict:
-    recipe_text = subprocess.check_output(
-        ["git", "show", f"v0.3.2:{RECIPE}"], cwd=ROOT, text=True,
-    )
+def create_plan(run_dir: Path, data_root: Path, recipe_file: Path | None = None) -> dict:
+    if recipe_file is None:
+        recipe_text = subprocess.check_output(
+            ["git", "show", f"v0.3.2:{RECIPE}"], cwd=ROOT, text=True,
+        )
+    else:
+        # Archive replay supplies the already saved released recipe explicitly;
+        # it does not need a Git checkout or silently substitute a newer recipe.
+        recipe_text = recipe_file.read_text(encoding="utf-8-sig")
     (run_dir / "template-stage").mkdir(parents=True, exist_ok=True)
     (run_dir / "template-stage" / "RECIPE.md").write_text(recipe_text, encoding="utf-8")
     (run_dir / "template-stage" / "run_recipe_case.py").write_text(
@@ -289,12 +294,12 @@ def replay(run_dir: Path) -> dict:
     return result
 
 
-def run(data_root: Path, run_dir: Path, public_out: Path):
+def run(data_root: Path, run_dir: Path, public_out: Path, recipe_file: Path | None = None):
     import mne
     from scipy.sparse import save_npz
     from gen_recipe_case_figures import render
 
-    create_plan(run_dir, data_root)
+    create_plan(run_dir, data_root, recipe_file)
     related, unrelated, receipts = [], [], []
     for index, sub in enumerate(SUBJECTS, 1):
         print(f"[subject {index}/{len(SUBJECTS)}] {sub}: preprocessing, epochs and averages...",
@@ -410,6 +415,8 @@ def main():
     parser.add_argument("--out", type=Path,
                         help="Summary path (default: RUN_DIR/summary.json); compact figure data alongside")
     parser.add_argument("--replay", action="store_true")
+    parser.add_argument("--recipe-file", type=Path,
+                        help="Saved v0.3.2 recipe for archive replay without Git; analysis settings are unchanged")
     args = parser.parse_args()
     if args.replay:
         print(json.dumps(replay(args.run_dir), indent=2))
@@ -425,7 +432,7 @@ def main():
                "argv": sys.argv, "exit_code": None}
     write_json(args.run_dir / "process.json", process)
     try:
-        run(args.data_root, args.run_dir, args.out)
+        run(args.data_root, args.run_dir, args.out, args.recipe_file)
         process["exit_code"] = 0
     except BaseException:
         process["exit_code"] = 1

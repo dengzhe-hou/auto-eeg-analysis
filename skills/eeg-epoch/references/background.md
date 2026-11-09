@@ -1,12 +1,17 @@
 ## Domain Knowledge (distilled from EEG methodology literature)
 
+These notes explain method choices; they do not supply missing study settings.
+The approved plan determines the epoch/baseline, ICA route, rejection and
+inclusion rules. Numerical examples below are not automatic cutoffs.
+
 ### AutoReject (Jas et al. 2017, NeuroImage)
 
 - AutoReject learns per-channel amplitude thresholds using cross-validation on the epoch data.
 - **Local mode**: for each epoch, identifies bad channels and interpolates them. Only rejects the epoch if too many channels are bad. Results in higher trial retention than global rejection.
 - **Global mode**: computes a single rejection threshold dictionary (e.g., `{'eeg': 120e-6}`). Equivalent to MNE's `reject` parameter but data-driven instead of arbitrary.
-- When to use local: most analyses. When to use global: very large datasets where local is too slow, or when you need a simple threshold for reporting.
-- AutoReject should be applied **after** ICA (bad ICA components add variance that biases the learned thresholds).
+- Local and global modes change the processing method; choose them in the plan,
+  rather than switching because a run is slow. Keep approved pre-ICA handling
+  distinct from final artifact rejection and record both stages.
 - Cite: Jas, M., Engemann, D. A., Bekhti, Y., Raimondo, F., & Gramfort, A. (2017). Autoreject: Automated artifact rejection for MEG and EEG data. NeuroImage, 159, 417–429.
 
 ### Epoch parameters (Luck 2014, An Introduction to the Event-Related Potential Technique, Ch. 4)
@@ -28,12 +33,17 @@
 - Best practice: combine multiple criteria or use automated methods (FASTER, AutoReject).
 - Cite: Delorme, A., Sejnowski, T., & Makeig, S. (2007). Enhanced detection of artifacts in EEG data using higher-order statistics and independent component analysis. NeuroImage, 34(4), 1443–1449.
 
-### Amplitude rejection thresholds — converging practice (~100 µV)
+### Amplitude rejection definitions
 
-- Two independent reference workflows converge on a peak-to-peak rejection band of ~100 µV for typical scalp EEG, applied **after** ICA. The MNE-Python preprocessing tutorial's worked example uses `reject=dict(eeg=2e-4)` (200 µV) but its own annotation flags this as "set too large" and recommends 5e-5–1e-4 V (50–100 µV) for good-quality data. The MCKJ ERP course rejects at ±100 µV via EEGLAB `pop_eegthresh`, then tightens to ±60 µV once ICA has removed blinks.
-- Practical default: `dict(eeg=100e-6)` conservative; tighten to 60–75 µV for clean, low-impedance recordings; loosen only with explicit justification. 150–200 µV passes real artifacts.
-- Threshold rejection is amplitude-only and misses subtle artifacts; AutoReject (`get_rejection_threshold` for a data-driven global threshold, or local mode for per-channel interpolation) is the preferred replacement for a hand-set number when `autoreject` is available.
-- Cite: MNE-Python preprocessing tutorial, "Rejecting Epochs based on channel amplitude" (mne.tools documentation); and COBIDAS-MEEG (Pernet et al. 2020, *Nature Neuroscience* 23, 1473–1483) for the requirement to report the exact threshold used.
+- MNE's `reject={'eeg': value}` is a peak-to-peak threshold in volts. EEGLAB
+  positive/negative amplitude limits describe signed voltage bounds. A ±100 µV
+  limit is not interchangeable with a 100 µV peak-to-peak threshold; do not infer
+  a shared default from examples using these different definitions.
+- Record the actual criterion, value, units, channels and processing stage.
+  Data-driven threshold estimation and fixed limits are different methods;
+  a missing package does not authorize substitution or threshold tightening.
+- See the [MNE Epochs rejection parameters](https://mne.tools/1.8/generated/mne.Epochs.html)
+  and COBIDAS-MEEG (Pernet et al. 2020) for reporting the actual method.
 
 ### Epoch / segment duration sets spectral resolution
 
@@ -42,18 +52,12 @@
 - Pick `duration` deliberately from the resolution the downstream analysis needs; pass the same length to `eeg-spectral` (Welch `n_per_seg = duration_s * sfreq`) so the epoching and PSD stages agree.
 - Cite: Welch, P. D. (1967). The use of fast Fourier transform for the estimation of power spectra. *IEEE Trans. Audio Electroacoust.* 15(2), 70–73; standard FFT resolution relation Δf = fs/N.
 
-### Trial count requirements across paradigms
+### Trial counts and measurement quality
 
-| Paradigm / Component | Minimum trials | Recommended | Source |
-|---|---|---|---|
-| P300 (oddball) | 30 | 60+ | Luck 2014 |
-| N170 (face/object) | 30 | 40+ | Luck 2014 |
-| N400 (language) | 30 | 50+ | Luck 2014 |
-| MMN (auditory) | 100 | 200+ | Näätänen et al. 2007 |
-| N2pc (attention) | 100 | 200+ | Luck 2012 |
-| ERN (error) | 6 | 20+ | Olvet & Hajcak 2009 |
-| LPP (emotion) | 30 | 60+ | Luck 2014 |
-| SSVEP | 10 | 20+ | Norcia et al. 2015 |
+Report retained counts per participant and condition with score-specific
+uncertainty where specified. A component name does not establish a universal
+minimum trial count. Use the approved inclusion rule and preserve its scope;
+quality concerns can be flagged without inventing participant exclusions.
 
 ### COBIDAS-MEEG reporting (Pernet et al. 2020, Nature Neuroscience)
 

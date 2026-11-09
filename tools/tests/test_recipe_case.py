@@ -50,6 +50,21 @@ def test_target_mapping_excludes_prime_events():
     ]
 
 
+def test_saved_recipe_can_be_replayed_without_git_or_a_checkout(tmp_path, monkeypatch):
+    import run_recipe_case
+    recipe = tmp_path/'saved-RECIPE.md'
+    recipe.write_text('# Approved released recipe\nExplicit no-ICA benchmark branch.\n', encoding="utf-8")
+    output = tmp_path/'run';output.mkdir()
+    def no_git(*args, **kwargs):
+        pytest.fail('Saved-recipe replay must not invoke Git')
+    monkeypatch.setattr(run_recipe_case.subprocess, 'check_output', no_git)
+    plan = run_recipe_case.create_plan(output, tmp_path/'raw', recipe)
+    assert (output/'template-stage/RECIPE.md').read_text(encoding="utf-8-sig") == recipe.read_text(encoding="utf-8-sig")
+    assert plan['subjects'] == [f'sub-{i:03d}' for i in range(1,21)]
+    assert plan['n_permutations'] == 5000 and plan['seed'] == 42
+    assert plan['ica'] == 'omitted: explicit recipe benchmark branch'
+
+
 def test_adjacency_is_subset_of_full_montage_in_declared_order():
     names = ["Fp1", "F3", "F7", "FC3", "C3", "C5", "P3", "P7", "P9", "PO7",
              "PO3", "O1", "Oz", "Pz", "CPz", "Fp2", "Fz", "F4", "F8", "FC4",

@@ -26,6 +26,22 @@ For a bounded calculation, apply the relevant procedure to the supplied inputs;
 do not invent completed upstream stages or researcher approvals to satisfy an
 example directory layout. Scientific choices still follow the approved plan.
 
+For an explicit approved ERP plan, `tools/prepare_erp_packet.py` selects the
+matching execution section and callable helpers, adding group statistics only
+for group requests. See [approved ERP execution](docs/APPROVED_ERP.md).
+For its four explicit ERP CORE mean-amplitude contrasts, run the saved
+`tools/run_erp_plan.py` entry with the actual plan, input and workspace paths.
+It checkpoints participants, runs the requested tests and checks the saved
+delivery before writing `FINAL_SUBMISSION.md`. Read that actual file for the
+final response. Inspect the recorded PID and state after a timeout before
+resuming a stopped execution. Other ERP tasks retain their matching procedures.
+Complete readable metadata checks and fix programming errors within the already
+approved steps. Missing variable names or normal integer-sample epoch rounding
+do not require renewed scientific approval. Save actual computed artifacts before
+additional diagnostics; do not treat a check not yet run as a reason to stop the
+whole task. A genuinely missing input or unresolved scientific choice still
+blocks the affected step and must be recorded while independent work continues.
+
 For a client without native skill loading, the runner can use
 `tools/load_skill.py` to select a skill section and its relevant references,
 then include that complete procedure in the initial model message. This avoids
@@ -38,6 +54,21 @@ recorded as such in an evaluation.
 The section loader follows the entrypoint's explicit reference links and returns
 the requested section with its actual source path. Omitting `--section` returns
 only the compact entrypoint, not all its supporting procedures.
+
+For an approved MNE continuous GFP, Welch/band-power or Hilbert plan, use
+`tools/run_continuous_plan.py` with the resolved public plan. It executes the
+ordered operations, records actual input/output dimensions, writes the complete
+result and final JSON, and checks the source data. See the
+[complete continuous route](docs/PRELOADED_SKILLS.md#execute-and-check-a-complete-continuous-plan).
+Keep processing extent separate from the saved interval. The task determines
+the operation order and power definition; this runner adds no study defaults.
+
+For a selected set of procedures and callable templates, use
+`tools/prepare_skill_packet.py`; see [preloaded procedure setup](docs/PRELOADED_SKILLS.md).
+The public artifact self-check checks structure and internal consistency, and
+can recompute selected operations from the unchanged input when their explicit
+public settings are supplied. Its `coverage` records what actually ran. Keep
+that record separate from packet delivery and independent numerical verification.
 
 ## Project layout you will encounter
 
@@ -72,9 +103,16 @@ Always read `ENVIRONMENT.json` before invoking a FreeSurfer-dependent path. If a
 - **Degrade explicitly**: log the issue to the stage's `*.json`, and surface it in the eventual `AUDIT.md`.
 - **Never silently skip**: the user must see what is missing and how it affects the analysis.
 
-### 3. Refuse to run analyses without a frozen `ANALYSIS_PLAN.md`
+### 3. Use an approved plan for the current task
 
-The plan declares: *condition contrast → channels/ROI → time window → frequency band → statistical test → expected effect direction*. If a stage finishes and the result contradicts the planned direction, that goes in `FINDINGS.md` as a negative result — **you do not retroactively edit the plan to make the result fit**. This is enforced by `eeg-audit`.
+A full study keeps its frozen `ANALYSIS_PLAN.md`: condition contrast, channels/ROI,
+time window, frequency band and statistical test, with planned direction when
+the study has one. A bounded request with already resolved scientific choices
+can supply that plan directly or as approved JSON; save it with the outputs.
+Do not invent epochs, contrasts, hypotheses or new approvals for a single
+calculation. Missing consequential choices still follow the researcher-decision
+policy. Contradictory results remain negative findings; do not retroactively
+edit the plan to make the result fit.
 
 Recipe defaults are proposals until approved for this study. In an explicitly
 unattended run, proceed through already approved steps; record missing scientific
@@ -87,9 +125,22 @@ refer to their saved decomposition, not to the same component indices in a new f
 
 Every stage writes to disk before returning. If the agent crashes mid-pipeline, the next invocation re-reads the most recent stage output and continues. Re-runs retain the approved configuration and their comparison records; seeds alone do not guarantee identical ICA fits across numerical environments.
 
+Save the actual executed program and arguments as described in [Replay](docs/REPLAY.md).
+After a tool or terminal timeout, inspect the recorded PID, current process state,
+log and saved artifacts before any retry. A timeout is not proof that a worker
+stopped, and a missing variable is not proof that the whole session was lost.
+The saved-script runner offers `tools/replay.py status --out RUN_DIRECTORY`;
+it does not authorize a retry or certify scientific completion. Preserve failed
+directories and use a new output directory for a revised execution.
+
 ### 5. The audit step is non-optional
 
-`eeg-audit` invokes a fresh Codex CLI process (gpt-6-astra, max effort, read-only sandbox) with the plan, the stats output, and the figures. It produces an independent verdict on whether claims are evidence-supported. See [reviewer setup](docs/GETTING_STARTED.md#configure-the-reviewer) for configuration and the supported alternative connections. Do not skip even if everything "looks fine" — the same model that ran the analysis cannot grade it without bias.
+`eeg-audit` uses the approved configured reviewer with the plan, stats and figures.
+Read [project run settings](docs/RUN_SETTINGS.md) for the connection/model and
+[reviewer setup](docs/GETTING_STARTED.md#configure-the-reviewer) for supported
+connections. Record actual access, execution and verdict; do not silently switch
+models or treat an unavailable reviewer as passing. The complete-study audit
+requirement remains; the loader itself performs no review.
 
 Use direct checks for objective numerical, contract and artifact agreement. The
 model review complements those checks and does not replace independent

@@ -349,30 +349,38 @@ time = mat['Time'].flatten()
 
 Extract time courses per anatomical region for downstream connectivity or statistical analysis:
 
+The STC, source space and atlas must already be in the **same actual anatomical
+space**. For native individual STCs use that individual's atlas; after an approved
+morph use the target STC **and target source space** with the target atlas. Changing
+a subject-name field is not a morph. No MRI download or morph is initiated here.
+
 ```python
-# Use Desikan-Killiany atlas (aparc)
+# AEA example: source-roi-extraction
+import runpy
+from pathlib import Path
+roi_helper = runpy.run_path(str(Path(AEA_ROOT) / 'skills/eeg-source/scripts/roi.py'))
+params = approved_roi_params
+if stc_dspm.subject != params['atlas_subject']:
+    raise ValueError('Resolve the approved STC/atlas space before reading labels')
 labels = mne.read_labels_from_annot(
-    'fsaverage',
-    parc='aparc',            # or 'aparc.a2009s' for Destrieux, 'HCPMMP1' for Glasser
-    subjects_dir=subjects_dir
-)
-
-# Extract label time courses
-label_ts = mne.extract_label_time_course(
-    stc_dspm,
-    labels,
-    src,
-    mode='mean_flip',        # sign-flip to align dipole orientations, then mean
-    allow_empty=True
-)
-# label_ts shape: (n_labels, n_times)
-
-# Save ROI time courses
-np.savez(f'source-stage/{sub}/{sub}-{cond}-roi_ts.npz',
-         label_ts=label_ts,
-         label_names=[l.name for l in labels],
-         times=stc_dspm.times)
+    subject=stc_dspm.subject, parc=params['parc'], subjects_dir=subjects_dir)
+roi_result = roi_helper['extract_surface_rois'](
+    stc_dspm, labels, src, atlas_subject=params['atlas_subject'],
+    mode=params['mode'], empty_policy=params['empty_policy'])
+np.savez(roi_output_path, **roi_result)
 ```
+
+The scalar cortical-surface helper checks actual label/STC/src subject metadata
+and STC vertex membership. It does not claim to verify a previously executed
+morph or replace upstream coregistration inspection. Volume/mixed source spaces
+need their own approved extraction route rather than this surface example.
+
+An approved `empty_policy='error'` stops on missing ROIs. With `'flag'`, unavailable
+rows are stored as NaN with `available=False` and `n_vertices=0`. A valid, measured
+zero time course remains available. Native `allow_empty=True` returns zero-filled
+rows for empty labels; those zeros must not be interpreted as observed inactivity.
+The helper calls native extraction only on available labels, with
+`allow_empty=False`. Flagging does not itself authorize dropping a requested ROI.
 
 **ROI extraction modes:**
 - `'mean'`: Simple average across vertices in the label. Can cancel out if dipoles have opposite orientations.
@@ -385,7 +393,12 @@ np.savez(f'source-stage/{sub}/{sub}-{cond}-roi_ts.npz',
 - `'aparc.a2009s'` (Destrieux): 148 regions. Finer parcellation.
 - `'HCPMMP1'` (Glasser): 360 regions. Finest, based on HCP multimodal data.
 
-**Source-space functional connectivity (route to `eeg-connectivity`).** To compute connectivity between brain regions rather than scalp channels, first reduce dimensionality to ROI time courses (`extract_label_time_course` above), then feed `label_ts` to `mne_connectivity.spectral_connectivity_epochs`. Running connectivity on parcellated ROIs (not on all 8196 vertices) controls dimensionality and multiple comparisons. This is the source-localization arm of volume-conduction mitigation: source/ROI signals plus a VC-insensitive metric (imaginary coherency, wPLI) is the most defensible combination ('double insurance'). See `eeg-connectivity` for the metric choice and for the sensor-space alternative (surface Laplacian / `mne.preprocessing.compute_current_source_density` before FC).
+**Source-space functional connectivity (route to `eeg-connectivity`).** To compute connectivity between brain regions rather than scalp channels, first reduce dimensionality to ROI time courses (`extract_label_time_course` above), then feed the approved, available ROI time courses to `mne_connectivity.spectral_connectivity_epochs`.
+Inspect `available` before constructing its input: if any requested ROI is absent,
+stop unless the researcher has explicitly approved a missing-ROI policy. Apply
+an approved common retained ROI set across participants/conditions when required,
+record excluded identities and reorder by ROI names; never pass missing NaN rows
+or native placeholder zeros as ordinary brain signals. Running connectivity on parcellated ROIs (not on all 8196 vertices) controls dimensionality and multiple comparisons. This is the source-localization arm of volume-conduction mitigation: source/ROI signals plus a VC-insensitive metric (imaginary coherency, wPLI) is the most defensible combination ('double insurance'). See `eeg-connectivity` for the metric choice and for the sensor-space alternative (surface Laplacian / `mne.preprocessing.compute_current_source_density` before FC).
 
 **Ghost-interactions caveat for networks of >2 nodes.** Pairwise leakage corrections — orthogonalization, imaginary coherency, wPLI — only cancel zero-lag mixing *between the two sources in a pair*. When three or more sources interact at near-zero lag, residual leakage produces spurious "ghost" interactions that no bivariate metric or pairwise orthogonalization can remove, and it can additionally *mask* genuine interactions. Rule: treat dense zero-lag triangles in source-space FC as suspect, and for any putative network (>2 nodes) corroborate with multivariate / hyperedge-aware methods rather than stitching a network from independent pairwise estimates. Cite: Palva, J. M., Wang, S. H., Palva, S., Zhigalov, A., Monto, S., Brookes, M. J., Schoffelen, J. M., & Jerbi, K. (2018). Ghost interactions in MEG/EEG source space: A note of caution on inter-areal coupling measures. NeuroImage, 173, 632–643.
 
@@ -395,7 +408,10 @@ np.savez(f'source-stage/{sub}/{sub}-{cond}-roi_ts.npz',
 MNE SourceEstimate saved via `stc.save()`.
 
 ### `source-stage/<sub>/<sub>-<cond>-roi_ts.npz`
-Contains: `label_ts` (n_labels × n_times), `label_names`, `times`.
+Contains: `label_ts` (n_labels × n_times), `label_names`, `times`, `available`,
+`n_vertices`, `subject`, `atlas_subject`, `roi_extraction_mode` and `empty_policy`.
+Keep the availability/identity fields with downstream data; an NPZ row count is
+not proof that every requested region was estimated.
 
 ### `source-stage/forward/<sub>-fwd.fif`
 Forward solution for reuse.

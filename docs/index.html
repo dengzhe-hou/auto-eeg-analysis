@@ -6,7 +6,7 @@
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
 <title>AEA | Automated EEG Analysis</title>
 <meta content="An open library of EEG analysis skills and recipes for MNE-Python, with executable specifications and a numerically certified core." name="description"/>
-<meta content="#f3f7fd" name="theme-color"/>
+<meta content="#ffffff" name="theme-color"/>
 <link href="https://dengzhe-hou.github.io/auto-eeg-analysis/" rel="canonical"/>
 <link href="https://dengzhe-hou.github.io/auto-eeg-analysis/" hreflang="en" rel="alternate"/>
 <link href="https://dengzhe-hou.github.io/auto-eeg-analysis/index.zh-CN.html" hreflang="zh-Hans" rel="alternate"/>
@@ -19,14 +19,13 @@
 <a class="skip-link" href="#main">Skip to content</a>
 <header class="site-header">
 <div class="header-inner">
-<a aria-label="AEA home" class="brand" href="#main">AEA<span>EEG methods library</span></a>
+<a aria-label="AEA home" class="brand" href="#main">AEA</a>
 <div class="header-links">
 <nav aria-label="Site navigation">
 <a href="#library">Library</a>
 <a href="#examples">Example</a>
-<a href="#evidence">Validation</a>
 <a href="GETTING_STARTED.html">Docs</a>
-<a class="nav-source" href="https://github.com/dengzhe-hou/auto-eeg-analysis">GitHub <svg aria-hidden="true" class="arrow" focusable="false" viewBox="0 0 24 24"><path d="M7 17 17 7M7 7h10v10"></path></svg></a>
+<a class="nav-source" href="https://github.com/dengzhe-hou/auto-eeg-analysis">GitHub</a>
 </nav>
 <nav aria-label="Language" class="language-switcher">
 <a aria-current="page" href="index.html" hreflang="en" lang="en">English</a>
@@ -39,17 +38,13 @@
 <main id="main">
 <section aria-labelledby="hero-title" class="hero">
 <div class="container hero-inner">
-<p class="eyebrow hero-eyebrow">Open EEG methods library</p>
 <h1 id="hero-title">Automated <span>EEG</span> Analysis</h1>
 <p class="hero-description">Shareable skills and recipes that connect EEG methods,
           executable workflows, and inspectable results.</p>
-<p class="hero-detail">Built for MNE-Python, with executable specifications and a
-          <a href="#evidence">numerically certified core</a>.</p>
-<p class="hero-detail"><strong>EEGLAB extension approved.</strong> AEA 0.1.3 is listed in the <a href="https://sccn.ucsd.edu/eeglab/plugin_uploader/plugin_list_all.php">official EEGLAB extension catalogue</a>.</p>
 <div class="hero-actions">
-<a class="button button-primary" href="#get-started">Get started <svg aria-hidden="true" class="arrow" focusable="false" viewBox="0 0 24 24"><path d="M12 5v14m-6-6 6 6 6-6"></path></svg></a>
+<a class="button button-primary" href="#get-started">Get started</a>
 <a class="button button-outline" href="#recipes">Explore recipes</a>
-<a class="button button-text" href="https://github.com/dengzhe-hou/auto-eeg-analysis">View on GitHub <svg aria-hidden="true" class="arrow" focusable="false" viewBox="0 0 24 24"><path d="M7 17 17 7M7 7h10v10"></path></svg></a>
+<a class="button button-text" href="https://github.com/dengzhe-hou/auto-eeg-analysis">View on GitHub</a>
 </div>
 <ul aria-label="Library at a glance" class="hero-facts">
 <li><strong>22</strong> analysis skills</li>
@@ -59,33 +54,73 @@
 </div>
 </section>
 <div class="container content">
+<section aria-labelledby="examples-title" class="page-section" id="examples">
+<div class="section-heading example-heading">
+<div><h2 id="examples-title">N400 example</h2></div>
+</div>
+<p class="section-intro">Follow a fixed Python tutorial from a semantic-priming recipe to saved
+          epochs, participant averages, statistics, figures, and methods text. Recompute group statistics
+          from the saved averages, or replot the public arrays without raw EEG.</p>
+<figure class="framed-figure example-figure">
+<a aria-label="Open the N400 result figure at full size" href="assets/n400-example.png">
+<img alt="N400 results from 20 ERP CORE participants: related, unrelated, and difference ERPs at CPz/Cz/Pz, a descriptive scalp map, and all participant amplitude differences." loading="lazy" src="assets/n400-example.png"/>
+</a>
+<figcaption>Saved results from 20 participants. (a) CPz/Cz/Pz ERPs; shading is ±1 SEM across participants, and the grey window is 300–500 ms. (b) Descriptive difference scalp map at the ROI peak in that window. (c) Each participant's mean unrelated-minus-related amplitude in 300–500 ms; the line is the group mean. <a href="assets/n400-example.png">View full size</a>.</figcaption>
+</figure>
+<div class="example-actions">
+<a class="button button-primary" href="EXAMPLES.html#replot-the-saved-results">Replot saved results</a>
+<a class="button button-outline" href="EXAMPLES.html#erp-core-complete-n400-recipe-case">Open the full tutorial</a>
+<a class="text-link" href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/tools/examples/n400/recipe_case_results.json">Saved numerical results</a>
+</div>
+<p class="note">The fixed tutorial needs the analysis environment and Arial or Helvetica; full execution also needs the EEG data. It uses no agent or model account. <a href="EXAMPLES.html#prepare-the-n400-data">Data setup</a> · <a href="EXAMPLES.html#prepare-the-figure-fonts">Figure fonts</a>.</p>
+<details>
+<summary>Use the recipe with a coding agent</summary>
+<ol class="tutorial-steps">
+<li><strong>Research request.</strong> Test whether unrelated target words evoke a more negative N400 than related targets.</li>
+<li><strong>Researcher approval.</strong> Confirm event labels, CPz/Cz/Pz, 300–500 ms, cleaning and statistics; review ambiguous ICA components.</li>
+<li><strong>Generated code and results.</strong> The agent writes and runs scripts, retaining condition averages, statistics, figures, methods and review records.</li>
+</ol>
+<p>The <a href="EXAMPLES.html#adapt-a-recipe-to-your-study">recorded agent example</a> used ICA, local AutoReject and 1024 Hz sampling. The fixed tutorial omits ICA and uses 256 Hz; its results are separate.</p>
+</details>
+<details>
+<summary>Recorded results and scope</summary>
+<p>
+            The CPz/Cz/Pz analysis at 300–500 ms retained 60 trials per condition
+            for each participant. Unrelated minus related amplitude was −2.957 µV
+            (SEM 0.466), with one cluster at p = .0002. In the saved run, replay
+            reproduced t maps, cluster masks, p values, and permutation null values
+            exactly. The figure can also be regenerated from the compact public arrays.
+          </p>
+<p>
+            This documented branch omits ICA and amplitude rejection. The 20-person
+            worked-example cohort is smaller than the 40-person source cohort,
+            and its ROI test is separate from the historical all-channel certification.
+            Scalp maps are descriptive; clusters do not localize each electrode or
+            time point. This post-v0.3.2 example does not measure LLM success rate,
+            time savings, held-out performance, or clinical efficacy.
+          </p>
+</details>
+<details class="additional-example">
+<summary>Earlier N100 and Flankers examples</summary>
+<p>
+            These single-participant examples were corrected after v0.3.2.
+            Figures, scripts, original plans, positive and null results, and
+            correction records remain accessible through
+            <a href="EXAMPLES.html#earlier-examples">the historical examples</a>.
+            They do not establish population effects or LLM-related speedup.
+          </p>
+</details>
+</section>
 <section aria-labelledby="library-title" class="page-section" id="library">
 <div class="section-heading">
-<p class="eyebrow">The library</p>
-<h2 id="library-title">Methods you can read, adapt, and check</h2>
-<p>Skills describe individual analyses. Recipes assemble them for a study paradigm.
-            You specify the study choices and approve the analysis plan.</p>
+<h2 id="library-title">Library</h2>
+<p>Browse analysis methods, study recipes, and validation records.</p>
 </div>
-<div class="resource-grid">
-<article class="resource-card resource-blue">
-<p class="card-label">01 / Skills</p>
-<h3>The analysis procedures</h3>
-<p>EEG methods, numerical conventions, executable templates, expected outputs, and checks in plain Markdown.</p>
-<a href="GETTING_STARTED.html#choose-skills-for-a-task">Find a skill <svg aria-hidden="true" class="arrow" focusable="false" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></a>
-</article>
-<article class="resource-card resource-gold">
-<p class="card-label">02 / Recipes</p>
-<h3>The study workflows</h3>
-<p>Paradigm-specific combinations of skills, with data requirements, analysis choices, and source references.</p>
-<a href="#recipes">Choose a recipe <svg aria-hidden="true" class="arrow" focusable="false" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></a>
-</article>
-<article class="resource-card resource-violet">
-<p class="card-label">03 / Checks</p>
-<h3>The evidence behind the outputs</h3>
-<p>Numerical comparisons, output checks, and review records, with validation coverage stated for each configuration.</p>
-<a href="CERTIFICATION_LEVELS.html">Read the evidence <svg aria-hidden="true" class="arrow" focusable="false" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></a>
-</article>
-</div>
+<dl class="resource-directory">
+<div><dt>Skills</dt><dd><p>EEG methods, numerical conventions, executable templates, expected outputs, and checks in plain Markdown.</p><a href="GETTING_STARTED.html#choose-skills-for-a-task">Find a skill</a></dd></div>
+<div><dt>Recipes</dt><dd><p>Paradigm-specific combinations of skills, with data requirements, analysis choices, and source references.</p><a href="#recipes">Choose a recipe</a></dd></div>
+<div><dt>Checks</dt><dd><p>Numerical comparisons, output checks, and review records, with validation coverage stated for each configuration.</p><a href="CERTIFICATION_LEVELS.html">Read the evidence</a></dd></div>
+</dl>
 <details class="skills-disclosure">
 <summary>All 22 skills</summary>
 <ul class="skills-list">
@@ -119,12 +154,12 @@
 <h3 id="recipes">Start with a recipe</h3>
 <p>Read its requirements and choices before applying it to your data.</p>
 </div>
-<a class="text-link" href="https://github.com/dengzhe-hou/auto-eeg-analysis/tree/main/recipes">Source catalogue <svg aria-hidden="true" class="arrow" focusable="false" viewBox="0 0 24 24"><path d="M7 17 17 7M7 7h10v10"></path></svg></a>
+<a class="text-link" href="https://github.com/dengzhe-hou/auto-eeg-analysis/tree/main/recipes">Source catalogue</a>
 </div>
 <div class="recipe-picks">
-<a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/recipes/n400-semantic/RECIPE.md"><span class="recipe-kind">ERP / semantic priming</span><strong>N400</strong><span>Related and unrelated words <svg aria-hidden="true" class="arrow" focusable="false" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span></a>
-<a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/recipes/p300-oddball/RECIPE.md"><span class="recipe-kind">ERP / oddball</span><strong>P300</strong><span>Responses to rare targets <svg aria-hidden="true" class="arrow" focusable="false" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span></a>
-<a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/recipes/resting-spectral-connectivity/RECIPE.md"><span class="recipe-kind">Resting state</span><strong>Spectra &amp; connectivity</strong><span>Power, aperiodic fits, and coupling <svg aria-hidden="true" class="arrow" focusable="false" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span></a>
+<a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/recipes/n400-semantic/RECIPE.md"><span class="recipe-kind">ERP / semantic priming</span><strong>N400</strong><span>Related and unrelated words</span></a>
+<a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/recipes/p300-oddball/RECIPE.md"><span class="recipe-kind">ERP / oddball</span><strong>P300</strong><span>Responses to rare targets</span></a>
+<a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/recipes/resting-spectral-connectivity/RECIPE.md"><span class="recipe-kind">Resting state</span><strong>Spectra &amp; connectivity</strong><span>Power, aperiodic fits, and coupling</span></a>
 </div>
 <details class="catalogue-disclosure">
 <summary>Browse all 10 recipes and their declared statuses</summary>
@@ -183,15 +218,14 @@
 </section>
 <section aria-labelledby="workflow-title" class="page-section" id="workflows">
 <div class="section-heading">
-<p class="eyebrow">How it works</p>
-<h2 id="workflow-title">From study choices to inspectable results</h2>
+<h2 id="workflow-title">Workflow</h2>
 <p>A coding agent reads the procedures, adapts templates, and executes scripts.
             The analysis plan, code, results, and review remain available to inspect.</p>
 </div>
 <ol class="workflow-steps">
-<li><span class="step-number">1</span><div><h3>Specify &amp; approve</h3><p>Define the study, select a recipe or skills, and confirm the scientific choices.</p></div></li>
-<li><span class="step-number">2</span><div><h3>Adapt &amp; execute</h3><p>The agent generates and runs code in your environment, mainly with MNE-Python.</p></div></li>
-<li><span class="step-number">3</span><div><h3>Inspect &amp; replay</h3><p>Review saved outputs, figures, methods text, and checks; replay the documented analysis.</p></div></li>
+<li><div><h3>Specify &amp; approve</h3><p>Define the study, select a recipe or skills, and confirm the scientific choices.</p></div></li>
+<li><div><h3>Adapt &amp; execute</h3><p>The agent generates and runs code in your environment, mainly with MNE-Python.</p></div></li>
+<li><div><h3>Inspect &amp; replay</h3><p>Review saved outputs, figures, methods text, and checks; replay the documented analysis.</p></div></li>
 </ol>
 <figure class="framed-figure workflow-figure">
 <a aria-label="Open the AEA workflow diagram at full size" href="assets/library-overview.svg">
@@ -200,73 +234,14 @@
 <figcaption>Skills and recipes specify the analysis; you approve the plan, the agent adapts the code, and MNE-Python produces inspectable outputs. <a href="assets/library-overview.svg">View full size</a>.</figcaption>
 </figure>
 <div class="workflow-links">
-<a href="GETTING_STARTED.html#w2-design-a-custom-analysis">Design a custom analysis <svg aria-hidden="true" class="arrow" focusable="false" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></a>
-<a href="GETTING_STARTED.html#w3-audit-an-existing-analysis">Review an existing analysis <svg aria-hidden="true" class="arrow" focusable="false" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></a>
-<a href="REPLAY.html">Replay a saved analysis <svg aria-hidden="true" class="arrow" focusable="false" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></a>
+<a href="GETTING_STARTED.html#w2-design-a-custom-analysis">Design a custom analysis</a>
+<a href="GETTING_STARTED.html#w3-audit-an-existing-analysis">Review an existing analysis</a>
+<a href="REPLAY.html">Replay a saved analysis</a>
 </div>
-</section>
-<section aria-labelledby="examples-title" class="page-section" id="examples">
-<div class="section-heading example-heading">
-<div><p class="eyebrow">A worked example</p><h2 id="examples-title">An N400 analysis you can inspect</h2></div>
-<span class="quiet-label">20 ERP CORE participants</span>
-</div>
-<p class="section-intro">Follow a fixed Python tutorial from a semantic-priming recipe to saved
-          epochs, participant averages, statistics, figures, and methods text. Recompute group statistics
-          from the saved averages, or replot the public arrays without raw EEG.</p>
-<figure class="framed-figure example-figure">
-<a aria-label="Open the N400 result figure at full size" href="assets/n400-example.png">
-<img alt="N400 results from 20 ERP CORE participants: related, unrelated, and difference ERPs at CPz/Cz/Pz, a descriptive scalp map, and all participant amplitude differences." loading="lazy" src="assets/n400-example.png"/>
-</a>
-<figcaption>Saved results from 20 participants. (a) CPz/Cz/Pz ERPs; shading is ±1 SEM across participants, and the grey window is 300–500 ms. (b) Descriptive difference scalp map at the ROI peak in that window. (c) Each participant's mean unrelated-minus-related amplitude in 300–500 ms; the line is the group mean. <a href="assets/n400-example.png">View full size</a>.</figcaption>
-</figure>
-<div class="example-actions">
-<a class="button button-primary" href="EXAMPLES.html#replot-the-saved-results">Replot saved results <svg aria-hidden="true" class="arrow" focusable="false" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></a>
-<a class="button button-outline" href="EXAMPLES.html#erp-core-complete-n400-recipe-case">Open the full tutorial</a>
-<a class="text-link" href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/tools/examples/n400/recipe_case_results.json">Saved numerical results <svg aria-hidden="true" class="arrow" focusable="false" viewBox="0 0 24 24"><path d="M7 17 17 7M7 7h10v10"></path></svg></a>
-</div>
-<p class="note">The fixed tutorial needs the analysis environment and Arial or Helvetica; full execution also needs the EEG data. It uses no agent or model account. <a href="EXAMPLES.html#prepare-the-n400-data">Data setup</a> · <a href="EXAMPLES.html#prepare-the-figure-fonts">Figure fonts</a>.</p>
-<details>
-<summary>Use the recipe with a coding agent</summary>
-<ol class="tutorial-steps">
-<li><strong>Research request.</strong> Test whether unrelated target words evoke a more negative N400 than related targets.</li>
-<li><strong>Researcher approval.</strong> Confirm event labels, CPz/Cz/Pz, 300–500 ms, cleaning and statistics; review ambiguous ICA components.</li>
-<li><strong>Generated code and results.</strong> The agent writes and runs scripts, retaining condition averages, statistics, figures, methods and review records.</li>
-</ol>
-<p>The <a href="EXAMPLES.html#adapt-a-recipe-to-your-study">recorded agent example</a> used ICA, local AutoReject and 1024 Hz sampling. The fixed tutorial omits ICA and uses 256 Hz; its results are separate.</p>
-</details>
-<details>
-<summary>Recorded results and scope</summary>
-<p>
-            The CPz/Cz/Pz analysis at 300–500 ms retained 60 trials per condition
-            for each participant. Unrelated minus related amplitude was −2.957 µV
-            (SEM 0.466), with one cluster at p = .0002. In the saved run, replay
-            reproduced t maps, cluster masks, p values, and permutation null values
-            exactly. The figure can also be regenerated from the compact public arrays.
-          </p>
-<p>
-            This documented branch omits ICA and amplitude rejection. The 20-person
-            worked-example cohort is smaller than the 40-person source cohort,
-            and its ROI test is separate from the historical all-channel certification.
-            Scalp maps are descriptive; clusters do not localize each electrode or
-            time point. This post-v0.3.2 example does not measure LLM success rate,
-            time savings, held-out performance, or clinical efficacy.
-          </p>
-</details>
-<details class="additional-example">
-<summary>Earlier N100 and Flankers examples</summary>
-<p>
-            These single-participant examples were corrected after v0.3.2.
-            Figures, scripts, original plans, positive and null results, and
-            correction records remain accessible through
-            <a href="EXAMPLES.html#earlier-examples">the historical examples</a>.
-            They do not establish population effects or LLM-related speedup.
-          </p>
-</details>
 </section>
 <section aria-labelledby="evidence-title" class="page-section" id="evidence">
 <div class="section-heading">
-<p class="eyebrow">Validation</p>
-<h2 id="evidence-title">A numerical core with explicit coverage</h2>
+<h2 id="evidence-title">Validation</h2>
 <p>Certification applies to selected outputs and configurations. The coverage record
             distinguishes cross-toolbox comparisons, independent implementations, behavioural evaluations, and API checks.</p>
 </div>
@@ -276,7 +251,7 @@
 <article><p class="card-label">Spectral power</p><h3>Independent Welch implementation</h3><p>Band power checked with an independent implementation after the numerical conventions are pinned.</p></article>
 </div>
 <p class="coverage-note">These comparisons do not certify every option or generated workflow. MNE-Python is the primary backend; EEGLAB and FieldTrip also provide selected alternative paths.</p>
-<p class="section-links"><a href="CERTIFICATION_LEVELS.html">Per-skill coverage and evidence <svg aria-hidden="true" class="arrow" focusable="false" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></a><a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/995f53d42cc74205b164e8711d4b289b8c2ad3a1/docs/BENCHMARK.md">Benchmark configurations and results <svg aria-hidden="true" class="arrow" focusable="false" viewBox="0 0 24 24"><path d="M7 17 17 7M7 7h10v10"></path></svg></a></p>
+<p class="section-links"><a href="CERTIFICATION_LEVELS.html">Per-skill coverage and evidence</a><a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/995f53d42cc74205b164e8711d4b289b8c2ad3a1/docs/BENCHMARK.md">Benchmark configurations and results</a></p>
 <details class="methods-disclosure"><summary>Methods text</summary><p>
           AEA reads pipeline logs and writes a COBIDAS-MEEG paragraph.
           Every number from disk, not memory.
@@ -284,9 +259,9 @@
 </section>
 <section aria-labelledby="start-title" class="page-section" id="get-started">
 <div class="section-heading">
-<p class="eyebrow">Use AEA</p>
-<h2 id="start-title">Start with a recipe. Keep the scientific choices visible.</h2>
-<p>Install Git, Conda, and a signed-in Codex CLI or Claude Code client.
+<h2 id="start-title">Get started</h2>
+<p>Use the <a href="https://pypi.org/project/auto-eeg-analysis/0.3.3rc2/">PyPI preview</a> in an existing MNE environment, or install the <a href="https://github.com/dengzhe-hou/auto-eeg-analysis/releases/download/eeglab-v0.1.3-preview/AEA_MATLAB_EEGLAB_0_1_3_preview.mltbx">MATLAB toolbox preview</a>. <a href="https://www.mathworks.com/matlabcentral/fileexchange/185187-aea-for-matlab-and-eeglab">File Exchange</a> provides the source. See <a href="PACKAGES.html">package installation and versions</a>.</p>
+<p>For a Git checkout, install Git, Conda, and a signed-in Codex CLI or Claude Code client.
             Commands below use <code>main</code>, including fixes added after v0.3.2.</p>
 </div>
 <div class="installation-example">
@@ -323,29 +298,30 @@ claude</code></pre>
 <p>Review the detected data and confirm the analysis plan before execution.
           <a href="GETTING_STARTED.html#configure-the-reviewer">Configure the reviewer</a> for this route's default audit, including when Claude Code runs the analysis.</p>
 <p class="note">The <a href="GETTING_STARTED.html">setup guide</a> covers the shared Python environment, data formats, study directories, and output files. See <a href="PLATFORM_SUPPORT.html">platform support</a> for Windows and optional dependencies, or <a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/CHANGELOG.md#choose-a-version">choose a fixed release</a>.</p>
-<p class="note">Using EEGLAB? Open <strong>File &gt; Manage EEGLAB extensions</strong>, search for <strong>AEA</strong>, and install version 0.1.3. Follow the <a href="EEGLAB.html">extension setup guide</a> to connect your AEA checkout and coding client. On Windows, the <a href="WINDOWS_FIRST_RUN.html">first-report walkthrough</a> covers client installation, executable paths, menu settings, and opening the report. Windows MATLAB workflows with real Codex and Claude clients have been checked on fixed synthetic data, including independent result checks and replay.</p>
+<p class="note">Using EEGLAB? Open <strong>File &gt; Manage EEGLAB extensions</strong>, search for <strong>AEA</strong>, and install version 0.1.3 from the <a href="https://sccn.ucsd.edu/eeglab/plugin_uploader/plugin_list_all.php">official catalogue</a>. Follow the <a href="EEGLAB.html">extension setup guide</a> to connect your AEA checkout and coding client. On Windows, the <a href="WINDOWS_FIRST_RUN.html">first-report walkthrough</a> covers client installation, executable paths, menu settings, and opening the report. Windows MATLAB workflows with real Codex and Claude clients have been checked on fixed synthetic data, including independent result checks and replay.</p>
 <p class="note">The <a href="https://github.com/dengzhe-hou/auto-eeg-analysis/releases/tag/eeglab-v0.1.3-preview">EEGLAB 0.1.3 preview</a> adds a <a href="MATLAB_NATIVE.html">native MATLAB setup</a> for preparation and bounded ERP means, figures and reports without Python/MNE. Use the matching checkout and plugin package; the older 0.1.2 ZIP uses the MNE route.</p>
 <p class="note translation-note">This homepage and the repository README are available in English, Simplified Chinese and Japanese. Detailed guides, skill/recipe source files, figure labels, EEGLAB menus and fixed report templates are currently mainly in English. You can discuss your study with the coding client in Chinese or Japanese.</p>
 </section>
 <section aria-labelledby="project-title" class="page-section" id="project">
 <div class="section-heading">
-<p class="eyebrow">Project resources</p>
-<h2 id="project-title">Continue from here</h2>
+<h2 id="project-title">Project links</h2>
 </div>
 <div class="project-links">
-<a href="GETTING_STARTED.html"><strong>Documentation</strong><span>Setup, data, and task reference <svg aria-hidden="true" class="arrow" focusable="false" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span></a>
-<a href="EXAMPLES.html"><strong>Worked examples</strong><span>Plans, figures, and replay instructions <svg aria-hidden="true" class="arrow" focusable="false" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span></a>
-<a href="https://github.com/dengzhe-hou/auto-eeg-analysis/releases/tag/v0.3.2"><strong>Release v0.3.2</strong><span>Fixed release and version history <svg aria-hidden="true" class="arrow" focusable="false" viewBox="0 0 24 24"><path d="M7 17 17 7M7 7h10v10"></path></svg></span></a>
-<a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/CITATION.cff"><strong>Citation</strong><span>Cite AEA and the recipe source papers <svg aria-hidden="true" class="arrow" focusable="false" viewBox="0 0 24 24"><path d="M7 17 17 7M7 7h10v10"></path></svg></span></a>
-<a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/CONTRIBUTING.md"><strong>Contribute</strong><span>Recipes, skills, tutorials and test feedback <svg aria-hidden="true" class="arrow" focusable="false" viewBox="0 0 24 24"><path d="M7 17 17 7M7 7h10v10"></path></svg></span></a>
-<a href="GETTING_STARTED.html#troubleshooting"><strong>Help &amp; troubleshooting</strong><span>Setup questions and bug reports <svg aria-hidden="true" class="arrow" focusable="false" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span></a>
+<a href="https://www.fieldtriptoolbox.org/extensions/"><strong>FieldTrip directory</strong><span>AEA entry and links to the source</span></a>
+<a href="GETTING_STARTED.html"><strong>Documentation</strong><span>Setup, data, and task reference</span></a>
+<a href="EXAMPLES.html"><strong>Worked examples</strong><span>Plans, figures, and replay instructions</span></a>
+<a href="PACKAGES.html#public-versions-and-archives"><strong>Releases and versions</strong><span>Source, Python package and MATLAB adapter</span></a>
+<a href="https://doi.org/10.5281/zenodo.24012489"><strong>Zenodo archive</strong><span>Frozen resources and validation records</span></a>
+<a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/CITATION.cff"><strong>Citation</strong><span>Cite AEA and the recipe source papers</span></a>
+<a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/CONTRIBUTING.md"><strong>Contribute</strong><span>Recipes, skills, tutorials and test feedback</span></a>
+<a href="GETTING_STARTED.html#troubleshooting"><strong>Help &amp; troubleshooting</strong><span>Setup questions and bug reports</span></a>
 </div>
 <p class="project-note">AEA builds on the <a href="https://github.com/wanshuiyin/Auto-claude-code-research-in-sleep">ARIS architecture</a> and EEG domain knowledge, with MNE-Python for computation. Significant contributors are invited as co-authors on the AEA paper; see the contribution guide for details.</p>
 </section>
 <footer>
 <div><a class="footer-brand" href="#main">AEA</a><span>Automated EEG Analysis</span></div>
 <p>Software: <a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/LICENSE">MIT</a> · Recipe metadata: CC BY 4.0</p>
-<p class="design-credit">Layout reference: <a href="https://looketal.com/s/acl-2026-craft.html">CRAFT via Look et al.</a> · <a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/docs/index.html">Page source</a></p>
+<p class="design-credit">Layout reference: <a href="https://looketal.com/s/iclr-2025-ogbench.html">OGBench via Look et al.</a> · <a href="https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/docs/index.html">Page source</a></p>
 </footer>
 </div>
 </main>

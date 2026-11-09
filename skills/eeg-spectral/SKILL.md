@@ -11,26 +11,35 @@ allowed-tools: Bash(*), Read, Write, Edit, Grep, Glob
 
 ## Use this skill
 
-Read the task and the approved analysis plan before choosing a procedure. The
-name and description select this skill; they do not specify the analysis.
-Load only the relevant sections below, rather than every reference in advance.
-For a bounded calculation, use the supplied inputs without inventing upstream
-stages or approvals. Keep the actual method, parameters, outputs, and checks.
+Read the task and approved plan, then load only the matching procedure.
+For a bounded continuous PSD or band-power request, start with
+[Welch and band power](references/continuous.md#welch-and-band-power), which
+connects the approved Welch settings to callable helpers and explains their
+return order. For an approved maximum-bin peak or personalized alpha band, read
+[Maximum-bin alpha peak](references/continuous.md#maximum-bin-alpha-peak).
 
-Template values in the detailed procedures describe their documented examples.
-Resolve scientific choices against the task and approved plan before execution;
-do not treat an example, a timeout, or an unattended run as researcher approval.
-Preserve explicitly fixed configurations. Record unresolved choices and continue
-independent approved work, as described in the project instructions.
+Use the full-study stages below when that workflow is requested. Their example
+values supply no scientific defaults or extra processing for a bounded request.
+Preserve fixed settings; record unresolved choices and continue independent
+approved work. A timeout or unattended run supplies no additional approval.
 
 For clients without native skill loading, use the section loader from the
 repository root; it loads the selected procedure, not the whole reference:
 
 ```bash
-python tools/load_skill.py eeg-spectral --section "Phase A — Determine analysis type"
+python tools/load_skill.py eeg-spectral --section "Welch and band power"
 ```
 
 ## Required Inputs
+
+For a dominant-band request, first resolve absolute versus relative power and
+the channel aggregation. The [explicit power-summary procedure](references/continuous.md#explicit-band-power-summary)
+implements those choices without assuming that every power request is relative.
+
+For a bounded PSD/band/peak request, its resolved approved plan and supplied
+recording or array replace the study-directory prerequisites below. Resolve
+channel identity, units and the requested numerical settings; do not require
+unrequested preprocessing or epoching merely to match a full-study layout.
 
 1. `DATASET_BRIEF.md` — to know paradigm (resting-state vs task-related).
 2. Preprocessed data: `preprocess-stage/` (for resting-state continuous PSD) or `epoch-stage/` (for task-related epoched PSD).
@@ -60,6 +69,12 @@ python tools/load_skill.py eeg-spectral --section "Phase A — Determine analysi
 
 
 ## Procedure reference
+
+The callable
+[spectral primitives](scripts/continuous.py) require approved settings.
+For personalized alpha power, explicitly distinguish a common mean-peak band
+from per-channel bands. The helper returns the peaks and actual band centers
+alongside per-channel ratios; it supplies no study parameter defaults.
 
 Choose the section that matches the current operation. Detailed code examples
 and numerical conventions remain in the linked source.

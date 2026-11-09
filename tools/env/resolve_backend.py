@@ -198,9 +198,9 @@ def render_markdown(res: dict, env: dict) -> str:
         a(f"- minimum Lin's CCC: {ag['min_ccc']}")
         a(f"- worst grand-mean difference: {ag['worst_grand_mean_diff_pct']}%")
         a(f"- group-level conclusion reproduced: **{ag['group_conclusion_reproduced']}**")
-        if "with_fully_pinned_spec" in ag:
-            p = ag["with_fully_pinned_spec"]
-            a(f"- with the specification fully pinned ({p['component']}): "
+        if "with_matched_filter_conventions" in ag:
+            p = ag["with_matched_filter_conventions"]
+            a(f"- with the tested filter conventions matched ({p['component']}): "
               f"**{p['max_abs_diff_uV']} µV**, CCC {p['ccc']}, r {p['pearson_r']} — {p['note']}")
         a("")
         a(f"Evidence: {ag['evidence']}")

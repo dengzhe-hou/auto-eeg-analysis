@@ -1,5 +1,7 @@
 # Getting started
 
+The [packaged-installation guide](PACKAGES.md) covers the PyPI preview and the MATLAB toolbox. The Git/Conda workflow below remains available for development and a new analysis environment.
+
 AEA (Automated EEG Analysis) is a library of EEG analysis skills and recipes with
 MNE-Python as its main execution backend. An agent reads the skills, writes analysis
 code, runs it in your Python environment, and records the results in a study directory. The skills are

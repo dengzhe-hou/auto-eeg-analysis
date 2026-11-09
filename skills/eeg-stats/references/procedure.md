@@ -1,11 +1,11 @@
 ## Constants
 
 - **BACKEND = `mne`** — MNE-Python is the computation backend.
-- **DEFAULT_PERMS = `5000`** — Must match `ANALYSIS_PLAN.md`. Override: `— perms: 1000` (for speed during development).
-- **SEED = read from ANALYSIS_PLAN.md `RNG seeds > Cluster permutation`**, default `42`.
+- **N_PERMUTATIONS** — read the approved `ANALYSIS_PLAN.md`; a development override requires authorization and its own label, not silent reduction of a planned run.
+- **SEED** — read the approved `ANALYSIS_PLAN.md > RNG seeds > Cluster permutation`; no missing-seed fallback.
 - **CLAIMS = read from ANALYSIS_PLAN.md claim table** — one stat run per claim row, never extra unless `— exploratory` is passed.
 - **OUTPUT_DIR = `stats-stage/`** — Create if missing.
-- **ALPHA = read from ANALYSIS_PLAN.md claim table `α` column**, default `0.05`.
+- **ALPHA** — read the approved claim table `α` column; do not fill a missing decision from a template.
 
 > Override: `/eeg-stats projects/my-study — claim: C1 — perms: 1000 — backend: mne`
 
@@ -28,7 +28,7 @@ For each row in ANALYSIS_PLAN's claim table:
 4. Determine tail from `direction`:
    - "A more negative" → `tail = -1`, threshold must be negative.
    - "A more positive" or "A > B" → `tail = 1`, threshold positive.
-   - "any direction" or empty → `tail = 0`, two-sided.
+   - Explicitly approved "any direction" → `tail = 0`, two-sided. An empty direction remains unresolved; propose the test sidedness before the dependent computation.
 
 Write `stats-stage/STATS_PLAN.json` summarizing all resolved claims before executing.
 
@@ -59,18 +59,27 @@ The script must:
    - `tail=1`:  `threshold = scipy.stats.t.ppf(1 - alpha, df)`
    - `tail=0`:  `threshold = scipy.stats.t.ppf(1 - alpha/2, df)`  (halve alpha ONCE, here, for the two-sided forming threshold)
    - **Do not halve alpha a second time at the cluster level.** With `tail=0`, MNE already accounts for two-sidedness internally; judge the returned `cluster_p` against the full `alpha` (e.g. 0.05). FieldTrip users halve `cfg.alpha` to 0.025 because FieldTrip does not — that 0.025 is NOT a second correction to copy into MNE.
-   - **Forming-threshold sensitivity is not just "report it" — sanity-check it.** A *low* forming threshold merges genuine and spurious effects and over-spreads cluster extent; a *high* one fragments a single true effect into several small clusters. Before interpreting cluster extent, re-run with two or three forming thresholds and confirm the cluster is stable; when no principled threshold exists, default to **TFCE** (`threshold=dict(start=…, step=…)`) which integrates over thresholds. Use a **permutation** null for the cluster, not a bootstrap (bootstrap cluster nulls can be liberal). Cite: Pernet et al. (2015). Cluster-based computational methods for mass univariate analyses of event-related brain potentials/fields. *J. Neurosci. Methods*, 250, 85–93.
+   - Preserve the approved fixed-threshold or TFCE method and its exact settings.
+     Run threshold-sensitivity analyses only when approved, retaining the primary
+     specification. A missing threshold does not authorize switching to TFCE or
+     adding tests. Record the unresolved choice and continue independent work.
+     See [method choices](method-choices.md) for conditional planning options.
 6. **Run the approved design**: for paired differences, use `mne.stats.spatio_temporal_cluster_1samp_test(X, n_permutations=N, threshold=threshold, tail=tail, seed=SEED, adjacency=adj, out_type="mask")`. For an unpaired signed t contrast with unrestricted label exchangeability, use `mne.stats.spatio_temporal_cluster_test([A, B], stat_fun=mne.stats.ttest_ind_no_p, ...)` with an explicit t threshold and tail; its default statistic is F, not a signed t statistic. If the acquisition design requires block-restricted permutations, preserve those restrictions in the implementation instead of silently using the unrestricted-label API.
 7. **Extract significant clusters**: `cluster_p < alpha`.
 8. **Compute effect size** on the planned ROI+window irrespective of significance. For paired observations, Cohen's dz is mean(differences) divided by their sample standard deviation (`ddof=1`). For unpaired observations, use the difference in means divided by the pooled sample standard deviation, with the formula recorded. An unpaired contrast must not be converted into arbitrary pairwise differences to obtain an effect size.
 
-> **Robust location for amplitude/latency inference.** ERP amplitude and latency scores are outlier-prone and non-normal, and a single bad subject or trial can shift the mean enough to manufacture or erase an effect — a failure mode that permutation testing does *not* address (permutation handles the null distribution, not a corrupted central tendency). Following the LIMO-EEG convention, default subject-level amplitude/latency summaries to a **20% trimmed mean with a percentile-bootstrap CI** rather than the raw mean and parametric CI. Report the estimator alongside the test. Cite: Pernet et al. (2011). LIMO EEG: a toolbox for hierarchical linear modeling of electroencephalographic data. *Comput. Intell. Neurosci.*, 2011, 831409.
+Use the approved amplitude/latency estimator and interval. Arithmetic mean,
+trimmed mean and their uncertainty methods are not interchangeable. Do not
+replace an approved arithmetic mean with a 20% trimmed mean because a reference
+mentions it or the observed data are inconvenient. Propose an unresolved choice
+before its computation; retain approved primary and exploratory analyses under
+their own labels. See [conditional method choices](method-choices.md).
 
 ### Brain–behavior correlation (when the claim links an EEG measure to a behavioral score)
 
 For claims like "ERN amplitude predicts post-error slowing" or "frontal-theta power correlates with accuracy", the unit of analysis is a per-subject (or per-trial) **(EEG metric, behavior)** pair, not a condition contrast:
 
-- **Pick the coefficient by the data:** Pearson for linear + roughly bivariate-normal; **Spearman** (rank) when either variable is skewed, ordinal, or has outliers. Always eyeball the scatter first — Anscombe's quartet is the cautionary tale that identical r's hide wildly different shapes (a single leverage point can manufacture or destroy an r).
+- Preserve the approved correlation coefficient and diagnostics. Pearson or Spearman can be proposed with their assumptions when formulating the plan; inspecting a scatterplot does not authorize switching an approved coefficient. Record a needed change for the researcher before dependent inference.
 - **Combine / compare correlations across subjects or ROIs with the Fisher-z transform** (r is not additive; z is): `z = np.arctanh(r)` with `SE = 1/np.sqrt(n-3)`; average/compare in z-space, then back-transform `r = np.tanh(z)`. To test whether two independent correlations differ: `Z = (z1 - z2) / np.sqrt(1/(n1-3) + 1/(n2-3))`.
 - **Significance / robustness:** for small N or non-normal data prefer a permutation test (shuffle the behavior labels, recompute r, 5000×) over the parametric p; report the CI from the Fisher-z SE, and FDR across multiple electrodes/ROIs/time-windows just as for the contrast tests above.
 - **Single-trial** EEG–behavior coupling (amplitude → RT within subject) is a mixed-effects regression — route to `eeg-behavior` (statsmodels MixedLM), not a subject-level correlation.
@@ -206,14 +215,13 @@ The reporter checks `X == A - B` and recomputes the descriptive statistics from 
 
 ### Group grand-average + uncertainty band (for the figure stage)
 
-For any per-subject result handed to `eeg-figure`, **keep the subject axis** — never average across subjects before the test (the analog of FieldTrip `keepindividual='yes'`; collapsing first destroys the data the cluster/ANOVA needs). For the descriptive plot, the published convention is grand-average ± 1 SEM:
-
-```python
-avg = X.mean(axis=0)                       # mean over subjects
-sem = X.std(axis=0, ddof=0) / np.sqrt(X.shape[0])   # SEM, ddof=0
-```
-
-Use `mne.grand_average(evokeds)` or `mne.viz.plot_compare_evokeds(evokeds_dict)` (which draws mean ± SEM, or a bootstrap CI, automatically). State the band definition ("shaded = ±1 SEM, N=…") in the figure caption.
+For group inference, keep the subject axis; do not average it away before the
+test. For descriptive plotting, pass the approved estimator, uncertainty method,
+observation identifiers and units to `eeg-figure` with the actual per-subject
+values. Its mean-band helper computes approved SEM or CI bounds and a matching
+caption; it supplies no missing scientific choice. MNE `ci=True` is a 95%
+confidence band, not mean ±1 SEM. Cluster significance and a descriptive ROI
+interval remain distinct; retain the existing deterministic report checks.
 
 ## Phase F — Sanity checks
 

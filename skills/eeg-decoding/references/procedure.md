@@ -1,5 +1,10 @@
 ## Constants
 
+The numbers below describe example configurations, not scientific defaults.
+Execution requires the approved classifier, splitters, grouping identities, fold
+aggregation, scoring, chance, inference window and permutation policy. Missing
+choices remain unresolved; a template is not approval.
+
 - **CLASSIFIER = `svm`** — Default: linear SVM (`sklearn.svm.SVC(kernel='linear')`). Alternatives: `lda` (LinearDiscriminantAnalysis, faster), `logreg` (LogisticRegression, probabilistic output).
 - **METHOD = `sliding`** — Default: sliding time-point decoding. Alternatives: `generalization` (temporal generalization matrix), `searchlight` (spatial searchlight), `csp` (Common Spatial Patterns for oscillatory data).
 - **CV = `5`** — Cross-validation folds. Use `stratified_kfold` to preserve class balance. Override: `— cv: 10`.
@@ -17,18 +22,21 @@
 
 1. Read `ANALYSIS_PLAN.md` for decoding claims.
 2. Load epochs, identify conditions to decode.
-3. Equalize trial counts across conditions (`epochs.equalize_event_counts()`).
+3. Apply only the approved trial-balancing policy; preserve all trials when no equalization is approved.
 4. Standardize features (z-score per time point across channels, within each CV fold).
 5. If pooling trials across subjects, build a `groups` array of subject ids aligned to `X`/`y`, and pass it to every CV call (`cross_val_multiscore(..., groups=groups)`, `GridSearchCV(cv=GroupKFold(...))`). Decode **per subject first, then aggregate** when the design is within-subject (the standard MVPA convention: decode each subject independently, collect per-subject score time courses, test across subjects).
 
 > **AVOID SUBJECT LEAKAGE.** When samples come from multiple subjects, use `GroupKFold` / `StratifiedGroupKFold` / `LeaveOneGroupOut(groups=subject_id)` — never `KFold`/`train_test_split`. Random splitting of trials from the same subject lets the classifier learn subject-specific (not condition-specific) structure, inflating accuracy. `LeaveOneGroupOut` is the standard leave-one-subject-out generalization estimate.
 
 ```python
-from sklearn.model_selection import GroupKFold, LeaveOneGroupOut
-# trials pooled across subjects -> groups = subject id per trial
-scores = cross_val_multiscore(slider, X, y, cv=GroupKFold(n_splits=5), groups=groups)
-# leave-one-subject-out generalization:
-scores_loso = cross_val_multiscore(slider, X, y, cv=LeaveOneGroupOut(), groups=groups)
+# AEA example: decoding-splits
+import runpy
+from pathlib import Path
+validation = runpy.run_path(str(Path(AEA_ROOT) / 'skills/eeg-decoding/scripts/validation.py'))
+# approved_cv_groups is None only when the approved design needs no grouping.
+splits, split_receipt = validation['cv_splits'](
+    X, y, splitter=approved_cv_splitter, groups=approved_cv_groups)
+# Pass cv=splits to every operation on these same rows. Save split_receipt.
 ```
 
 > **AVOID TEMPORAL / BLOCK LEAKAGE.** Subject identity is not the only confound. In a **block design** (all trials of one condition presented consecutively), slow EEG drift and block-level state make temporally adjacent trials correlated *regardless of stimulus*, so plain `KFold` lets the classifier exploit time/block identity instead of the condition — and the apparent accuracy collapses to chance if you re-test on a randomized-trial design. Mitigations: (1) prefer randomized/interleaved stimulus designs at acquisition; (2) when data are blocked, use **block-aware CV** where each contiguous block is an *atomic* train-xor-test unit (build a `groups` array of block ids and use `GroupKFold`/`LeaveOneGroupOut` — never split a block across train and test); (3) treat suspiciously high block-data accuracy as a red flag, not a result. Cite: Li, R., et al. (2021). The perils and pitfalls of block design for EEG classification experiments. IEEE TPAMI, 43(1), 316–333.
@@ -46,7 +54,7 @@ from mne.decoding import Vectorizer, SlidingEstimator, cross_val_multiscore
 # Per-time-point pipeline: scale -> select -> classify, ALL re-fit each fold
 clf = make_pipeline(StandardScaler(), SelectKBest(f_classif, k=20), SVC(kernel='linear'))
 slider = SlidingEstimator(clf, scoring='roc_auc')
-scores = cross_val_multiscore(slider, X, y, cv=5)   # selector re-fit per fold
+fold_scores = cross_val_multiscore(slider, X, y, cv=splits)  # selector re-fit per fold
 ```
 
 Method → sklearn map (all Pipeline-compatible):
@@ -69,79 +77,123 @@ Decode at each time point independently. Each time point uses all channels as fe
 
 ### MNE-Python path
 
+This path decodes **one actual participant at a time**. Obtain identities from
+recording metadata/the input ledger, never from a fold number. The approved
+classifier is a Pipeline, so data-driven transformations are refit inside CV.
+
 ```python
-import numpy as np
-from sklearn.svm import SVC
-from sklearn.pipeline import make_pipeline
-from sklearn.preprocessing import StandardScaler
+# AEA example: decoding-sliding
+import runpy
+from pathlib import Path
 from mne.decoding import SlidingEstimator, cross_val_multiscore
+validation = runpy.run_path(str(Path(AEA_ROOT) / 'skills/eeg-decoding/scripts/validation.py'))
+params = approved_decoding_params
 
-clf = make_pipeline(StandardScaler(), SVC(kernel='linear'))
-slider = SlidingEstimator(clf, scoring='roc_auc', n_jobs=1)
+def decode_one_participant(epochs, *, participant_id, cv_splitter, cv_groups):
+    analysis_epochs = epochs.copy().pick(params['channels'])
+    X = analysis_epochs.get_data()
+    y = analysis_epochs.events[:, 2]
+    splits, _ = validation['cv_splits'](X, y, splitter=cv_splitter, groups=cv_groups)
+    slider = SlidingEstimator(approved_classifier, scoring=params['scoring'],
+                              n_jobs=params['n_jobs'])
+    fold_scores = cross_val_multiscore(slider, X, y, cv=splits, n_jobs=params['n_jobs'])
+    # Rows above are folds, not people. Produce one estimate for this participant.
+    return validation['participant_record'](
+        participant_id, fold_scores, times=analysis_epochs.times, splits=splits,
+        fold_aggregation=params['fold_aggregation'])
 
-X = epochs.get_data()          # (n_trials, n_channels, n_times)
-y = epochs.events[:, 2]        # condition labels
-
-# Cross-validated decoding at each time point
-scores = cross_val_multiscore(slider, X, y, cv=5)
-# scores: (n_folds, n_times)
-mean_scores = scores.mean(axis=0)  # (n_times,)
+record = decode_one_participant(epochs, participant_id=participant_id,
+                               cv_splitter=approved_cv_splitter,
+                               cv_groups=approved_cv_groups)
+fold_scores = record['fold_scores']      # (n_folds, n_times)
+mean_scores = record['score']            # (n_times,): ONE participant
 ```
 
-### Significance via permutation
+For group inference, call `decode_one_participant` separately on every entry of
+`epochs_by_participant`, using that entry's approved splitter/groups, and collect
+`participant_records`. A pooled cross-subject CV result is a generalization
+estimate with folds as rows; it cannot be relabeled as these participant records.
+The two supported fold summaries are an explicitly approved mean or test-size
+weighted mean. Neither makes folds independent participant observations.
+
+### Single-analysis significance with explicit label exchange
+
+CV splitting and permutation exchangeability answer different questions. For
+within-participant condition effects, approved exchangeable trials may shuffle
+within participant/block. For a diagnosis constant within each participant, the
+approved null may exchange **participant labels** across eligible participants,
+then broadcast to their trials. Specify actual exchangeability blocks (an explicit
+single block when unrestricted); do not automatically choose either policy.
 
 ```python
-from mne.decoding import cross_val_multiscore
-
-# Null distribution: shuffle labels N times
-null_scores = np.zeros((N_PERMUTATIONS, len(epochs.times)))
-for i in range(N_PERMUTATIONS):
-    y_perm = np.random.permutation(y)
-    null = cross_val_multiscore(slider, X, y_perm, cv=5)
-    null_scores[i] = null.mean(axis=0)
-
-# P-value per time point (naive — see corrected estimator below)
-p_values = np.mean(null_scores >= mean_scores, axis=0)
+# AEA example: decoding-permutation
+# X, y, estimator and splits refer to the same trial rows and approved model.
+# For a SlidingEstimator with its own scoring, approved_permutation_params['scoring']
+# is explicitly None; a tabular classifier needs its approved sklearn scorer.
+params = approved_permutation_params
+observed_score, null_scores, pointwise_p = validation['permutation_scores'](
+    estimator, X, y, splits, scoring=params['scoring'],
+    n_permutations=params['n_permutations'], seed=params['seed'],
+    fold_aggregation=params['fold_aggregation'], policy=params['policy'],
+    units=permutation_units, exchangeability_blocks=exchangeability_blocks)
 ```
 
-### Global accuracy significance — use the corrected estimator
+The helper refits on every shuffled dataset, retains identity permutations and
+uses `(C+1)/(n_permutations+1)`. These time-point p values are **uncorrected**;
+use the separately approved multiplicity procedure before claiming a time window.
+This path explicitly holds the materialized splits fixed for observed/null data.
+If that policy produces undefined scores (e.g. AUC without both classes in a test
+fold), stop and resolve the null/CV design, rather than silently resplitting or
+changing the scorer. Save the exchangeability policy, unit/block identities,
+seed, split receipt and null scores.
 
-For a single overall (non-time-resolved) accuracy, prefer `sklearn.model_selection.permutation_test_score`, which shuffles labels, refits, and returns the **corrected** p-value `(C+1)/(n_perm+1)` — not the naive `mean(null >= obs)` (which omits the +1 and can return p=0).
+In scikit-learn 1.8, `permutation_test_score(groups=...)` also uses those groups
+to restrict shuffling **within** groups. For a constant per-person diagnosis this
+cannot change labels. Do not infer that a grouped CV automatically supplies the
+correct null. `permutation_scores` detects a label-degenerate scheme before
+fitting; equal *scores* alone do not prove degeneracy. No automatic alternative
+null is selected on failure.
+
+### Group time-resolved significance: actual participants against chance
 
 ```python
-from sklearn.model_selection import permutation_test_score, StratifiedKFold
-score, perm_scores, pvalue = permutation_test_score(
-    clf, X_mean_time, y, cv=StratifiedKFold(5),
-    n_permutations=N_PERMUTATIONS, scoring='roc_auc', random_state=SEED)
-```
-
-When trials are grouped by subject, pass `groups=` and use a grouped CV so label shuffling respects the group structure (shuffling across subjects breaks the null).
-
-### Time-resolved significance — cluster permutation against chance
-
-```python
+# AEA example: decoding-group-inference
 from mne.stats import permutation_cluster_1samp_test
-# scores: (n_subjects, n_times) per-subject score time courses
-# Restrict the analyzed window to the POST-STIMULUS epoch only — never test the baseline
-t0 = np.searchsorted(epochs.times, 0.0)
-scores_post = scores[:, t0:] - CHANCE          # CHANCE = 0.5 (AUC/binary) or 1/n_classes
+participant_scores, participant_ids, times = validation['participant_matrix'](participant_records)
+params = approved_group_inference_params
+window = params['test_window_s']  # approved post-stimulus interval
+use = (times >= window[0]) & (times <= window[1])
+if not use.any():
+    raise ValueError('Approved inference window has no samples')
+scores_post = participant_scores[:, use] - params['chance_level']
 t_obs, clusters, cluster_p, H0 = permutation_cluster_1samp_test(
-    scores_post, n_permutations=N_PERMUTATIONS, tail=1, seed=SEED)  # tail=1 = above chance
+    scores_post, threshold=params['threshold'], tail=params['tail'],
+    n_permutations=params['n_permutations'], seed=params['seed'])
+# Save participant_ids, times[use], participant_scores, clusters and cluster_p.
 ```
 
-State `CHANCE` explicitly in the output JSON (`0.5` for AUC/binary accuracy, `1/n_classes` for balanced multiclass; verify empirically with `DummyClassifier(strategy='stratified')` if classes are imbalanced).
+The matrix builder rejects repeated participant IDs, mismatched time grids,
+fold-tagged observations and a single participant. It checks supplied records;
+the caller must still establish the real participant identities from inputs.
+Single-participant data retain their approved single-case inference and cannot
+be upgraded to a group test by using folds as the sample size.
+
+State `CHANCE` from the approved design explicitly in the output JSON (`0.5` for AUC/binary accuracy, `1/n_classes` for balanced multiclass; verify empirically with `DummyClassifier(strategy='stratified')` if classes are imbalanced).
 
 ## Phase C — Temporal generalization matrix (when `— method: generalization`)
 
 Train at each time point, test at all time points. Reveals whether neural representations are stable over time.
 
 ```python
+# AEA example: decoding-generalization
 from mne.decoding import GeneralizingEstimator, cross_val_multiscore
 
-gen = GeneralizingEstimator(clf, scoring='roc_auc', n_jobs=1)
-scores_gen = cross_val_multiscore(gen, X, y, cv=5)
-# scores_gen: (n_folds, n_train_times, n_test_times)
-mean_gen = scores_gen.mean(axis=0)  # (n_train, n_test)
+gen = GeneralizingEstimator(approved_classifier, scoring=approved_decoding_params['scoring'],
+                            n_jobs=approved_decoding_params['n_jobs'])
+fold_scores_gen = cross_val_multiscore(gen, X, y, cv=splits)
+# fold_scores_gen: (n_folds, n_train_times, n_test_times), not participants
+mean_gen = validation['aggregate_folds'](
+    fold_scores_gen, splits=splits, method=approved_decoding_params['fold_aggregation'])
 ```
 
 Interpretation:
@@ -154,19 +206,25 @@ Interpretation:
 Decode using local channel neighborhoods. Reveals spatial distribution of information.
 
 ```python
+# AEA example: decoding-searchlight
 from mne.decoding import SlidingEstimator, cross_val_multiscore
 from mne.channels import find_ch_adjacency
 
 adjacency, ch_names = find_ch_adjacency(epochs.info, ch_type='eeg')
+if ch_names != epochs.ch_names:
+    raise ValueError('Align approved EEG channel/data order before searchlight')
+slider = SlidingEstimator(approved_classifier, scoring=approved_decoding_params['scoring'],
+                          n_jobs=approved_decoding_params['n_jobs'])
 
 # For each channel neighborhood:
 searchlight_scores = np.zeros((len(epochs.ch_names), len(epochs.times)))
 for i, ch in enumerate(epochs.ch_names):
-    neighbors = adjacency[i].nonzero()[1]
-    ch_idx = np.concatenate([[i], neighbors])
+    neighbors = adjacency[[i], :].nonzero()[1]  # keep a 2D row for SciPy sparse arrays
+    ch_idx = np.unique(np.concatenate([[i], neighbors]))
     X_local = X[:, ch_idx, :]
-    scores = cross_val_multiscore(slider, X_local, y, cv=5)
-    searchlight_scores[i] = scores.mean(axis=0)
+    local_fold_scores = cross_val_multiscore(slider, X_local, y, cv=splits)
+    searchlight_scores[i] = validation['aggregate_folds'](
+        local_fold_scores, splits=splits, method=approved_decoding_params['fold_aggregation'])
 ```
 
 ## Phase E — CSP decoding (when `— method: csp`)
@@ -186,7 +244,7 @@ clf_csp = make_pipeline(csp, SVC(kernel='linear'))
 epochs_alpha = epochs.copy().filter(8, 13)
 X_alpha = epochs_alpha.get_data()
 
-scores = cross_val_score(clf_csp, X_alpha, y, cv=5, scoring='roc_auc')
+fold_scores_csp = cross_val_score(clf_csp, X_alpha, y, cv=splits, scoring='roc_auc')
 ```
 
 ## Phase E6 — Riemannian / tangent-space decoding + Euclidean Alignment (oscillatory, cross-subject)
@@ -207,7 +265,7 @@ clf_ts = make_pipeline(Covariances('lwf'),       # Ledoit-Wolf shrinkage estimat
                        LogisticRegression())
 # or Minimum-Distance-to-Riemannian-Mean directly on the manifold:
 clf_mdm = make_pipeline(Covariances('lwf'), MDM(metric='riemann'))
-scores = cross_val_multiscore(clf_ts, X, y, cv=GroupKFold(5), groups=groups)
+fold_scores_ts = cross_val_multiscore(clf_ts, X, y, cv=splits)
 ```
 
 **Euclidean Alignment (EA) for cross-subject / pooled decoding.** Before pooling trials across subjects, whiten every trial of each subject by that subject's reference covariance `R̄^(-1/2)` (the mean of the subject's trial covariances). EA is *unsupervised* (needs no test labels) and reduces inter-subject covariate shift, which is what makes cross-subject generalization work — it is orthogonal to the `GroupKFold` rule above (GroupKFold *prevents inflation*; EA *enables generalization*). Fit the alignment on the **training subjects only** inside the CV loop so the test subject's reference covariance never leaks.
@@ -242,13 +300,25 @@ The diagnostic / state path (Phase E5) invites comparing accuracy between groups
 When `C`/`gamma`/`kernel` (SVM) or `max_depth`/`n_estimators` (RF/GBDT) must be tuned, do it in an **inner** loop nested inside the **outer** evaluation loop. Tuning on the same data you report on is leakage; report the mean ± std of the outer scores, **never the max**.
 
 ```python
-from sklearn.model_selection import GridSearchCV, cross_val_score, StratifiedKFold
-from sklearn.svm import SVC
-
-param_grid = {'C': [0.01, 0.1, 1, 10, 100], 'gamma': ['scale'], 'kernel': ['linear']}
-inner = GridSearchCV(SVC(), param_grid, cv=StratifiedKFold(5), scoring='roc_auc')
-outer_scores = cross_val_score(inner, X_mean_time, y, cv=StratifiedKFold(5), scoring='roc_auc')
-print(f'{outer_scores.mean():.3f} ± {outer_scores.std():.3f}')
+# AEA example: decoding-nested-cv
+from sklearn.base import clone
+from sklearn.metrics import get_scorer
+from sklearn.model_selection import GridSearchCV
+# X_mean_time has the same trial rows as y and approved_cv_groups.
+outer_splits, outer_receipt = validation['cv_splits'](
+    X_mean_time, y, splitter=approved_cv_splitter, groups=approved_cv_groups)
+outer_scores, inner_receipts = [], []
+for train, test in outer_splits:
+    train_groups = None if approved_cv_groups is None else approved_cv_groups[train]
+    inner_splits, inner_receipt = validation['cv_splits'](
+        X_mean_time[train], y[train], splitter=approved_inner_splitter, groups=train_groups)
+    search = GridSearchCV(clone(approved_classifier), approved_param_grid,
+                          cv=inner_splits, scoring=approved_scoring, error_score='raise')
+    search.fit(X_mean_time[train], y[train])
+    outer_scores.append(get_scorer(approved_scoring)(search, X_mean_time[test], y[test]))
+    inner_receipts.append({'outer_train_indices':train.tolist(), 'inner_local_splits':inner_receipt})
+outer_scores = np.asarray(outer_scores)
+# Save both receipts; these outer-fold values are not participant observations.
 ```
 
 Use `RandomizedSearchCV` instead of `GridSearchCV` to cut search cost on large grids. For time-resolved decoding, the inner search runs inside `cross_val_multiscore` via the pipeline.
@@ -268,11 +338,16 @@ import mne_rsa
 # data RDM per time point, cross-validated Mahalanobis (crossnobis)
 rdm = mne_rsa.rdm_epochs(
     epochs, y=epochs.events[:, 2],
-    dist_metric='mahalanobis', cv=5,
+    dist_metric='mahalanobis', cv=approved_rsa_cv,
     temporal_radius=0.05)        # sliding time window
 # relate neural RDM to a model RDM via Spearman rank correlation
 rsa_tc = mne_rsa.rsa_epochs(epochs, model_rdm, rsa_metric='spearman')
 ```
+
+For RSA, construct `approved_rsa_cv` in the format supported by the installed
+mne-rsa API and verify it reproduces the approved trial/group partitions; do not
+substitute an integer fold count when that loses grouping. Group inference needs
+one RSA estimate per real participant and matched time grids, as above.
 
 Group inference on the RSA/similarity time course uses the same one-sample cluster permutation as decoding (`permutation_cluster_1samp_test`, `tail=1`, post-stimulus window only; chance for a dissimilarity/correlation time course is 0). Visualize the group-mean RDM at a peak time point as a heatmap.
 
@@ -291,7 +366,7 @@ X_feat = extract_features(epochs.get_data(), epochs.info['sfreq'], funcs)  # (n_
 
 clf = make_pipeline(StandardScaler(), SelectKBest(f_classif, k=30),
                     SVC(kernel='rbf'))
-scores = cross_val_score(clf, X_feat, y, cv=GroupKFold(5), groups=groups, scoring='roc_auc')
+fold_scores_tabular = cross_val_score(clf, X_feat, y, cv=splits, scoring='roc_auc')
 ```
 
 Optional functional-connectivity features: flatten `mne_connectivity.spectral_connectivity_epochs` output into the feature vector. See `eeg-complexity` for entropy/fractal feature parameters (e.g. SampEn `m=2`, `r=0.2*SD`).
@@ -305,14 +380,17 @@ Fix the **positive class** explicitly (patient/abnormal/eyes-closed = positive) 
 ```python
 import numpy as np
 from sklearn.metrics import confusion_matrix, balanced_accuracy_score, roc_auc_score
-from sklearn.model_selection import StratifiedKFold   # or GroupKFold(groups=subject_id)
+from sklearn.base import clone
 
 NEG, POS = 0, 1   # set POS = patient/abnormal/eyes-closed; state it in the JSON
-cv = StratifiedKFold(n_splits=CV, shuffle=True, random_state=SEED)
+# Materialized approved splits, including person/block grouping from Phase A.
+splits, split_receipt = validation['cv_splits'](
+    X_feat, y, splitter=approved_cv_splitter, groups=approved_cv_groups)
 
 per_fold = []
 cms = np.zeros((2, 2), dtype=int)   # pooled confusion matrix across folds
-for train, test in cv.split(X_feat, y):           # add groups= for grouped CV
+for train, test in splits:
+    clf = clone(approved_classifier)
     clf.fit(X_feat[train], y[train])
     y_pred = clf.predict(X_feat[test])
     cm = confusion_matrix(y[test], y_pred, labels=[NEG, POS])
@@ -353,6 +431,13 @@ Notes:
 This per-fold confusion-matrix path is the clinical complement to the metric-shortcut panel below: for routine MVPA prefer the built-in `scoring=`/`cross_validate` metrics; for a **diagnostic claim** emit the explicit sensitivity/specificity + confusion matrix here.
 
 ## Phase F — Write outputs
+
+Alongside the illustrative summary below, save actual participant IDs,
+`observation_unit`, time grids, per-fold and per-participant scores separately,
+fold aggregation, split indices and aligned trial/group identities. Permutation
+records additionally retain exchangeability units/blocks, null policy, seed,
+null scores and pointwise-versus-corrected status. Never infer n_subjects from
+`fold_scores.shape[0]` or report fold dispersion as a participant confidence interval.
 
 ### `decoding-stage/<claim_id>_decoding.json`
 ```json

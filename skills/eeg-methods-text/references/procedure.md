@@ -12,7 +12,7 @@
 
 The COBIDAS-MEEG checklist's required EEG reporting items, gathered from the project's own logs (no manual input needed):
 
-### Sample (from DATASET_BRIEF.md + epoch-stage exclusion log)
+### Sample (from DATASET_BRIEF.md + the executed stages' cohort/exclusion records)
 - N enrolled, N analyzed, N excluded with reasons.
 - Demographics (age, handedness, sex if reported).
 
@@ -20,7 +20,7 @@ The COBIDAS-MEEG checklist's required EEG reporting items, gathered from the pro
 - System, channel count + montage, online filter, sampling rate, online reference.
 
 ### Preprocessing (from preprocess-stage/preprocess_summary.json + BACKEND_RESOLUTION.md)
-- Backend + version (MNE 1.7.1).
+- Backend + actual recorded version; do not fill an unrecorded version from this template.
 - Bandpass (l_freq, h_freq, filter type, zero-phase y/n).
 - Notch frequencies.
 - Resample (if applied).
@@ -58,20 +58,34 @@ The COBIDAS-MEEG checklist's required EEG reporting items, gathered from the pro
 
 ### A. Gather
 
-Read every required source. If anything is missing, stop and tell the user *what file* needs to exist.
+Read `DATASET_BRIEF.md`, the approved `ANALYSIS_PLAN.md` and the saved
+`ENVIRONMENT.json`. Obtain planned stages and their actual required source paths
+from the approved plan/execution ledger. Do not require event epochs or cluster
+files for a continuous descriptive analysis, or ICA for a route that did not
+plan it. Do not create these stages just to fill a reporting template.
 
-Required files:
-- `DATASET_BRIEF.md`
-- `ANALYSIS_PLAN.md`
-- `preprocess-stage/preprocess_summary.json`
-- `preprocess-stage/BACKEND_RESOLUTION.md`
-- `ica-stage/ica_summary.json`
-- `ica-stage/BACKEND_RESOLUTION.md`
-- `epoch-stage/epoch_summary.json`
-- `epoch-stage/BACKEND_RESOLUTION.md`
-- `stats-stage/*_cluster_perm.json`
-- `stats-stage/BACKEND_RESOLUTION.md`
-- `ENVIRONMENT.json`
+```python
+# AEA example: methods-stage-inputs
+import runpy
+from pathlib import Path
+input_helpers = runpy.run_path(str(Path(AEA_ROOT) / 'skills/eeg-report/scripts/inputs.py'))
+for core in ('DATASET_BRIEF.md', 'ANALYSIS_PLAN.md', 'ENVIRONMENT.json'):
+    if not (Path(run_dir) / core).is_file():
+        raise ValueError(f'Required methods provenance is unavailable: {core}')
+stage_inventory = input_helpers['collect_stage_inputs'](
+    run_dir, planned_stages=approved_reporting_stages,
+    required_sources=recorded_required_stage_sources)
+input_helpers['require_planned_inputs'](stage_inventory)
+```
+
+`recorded_required_stage_sources` maps each planned stage to its actual saved
+relative file paths/patterns, including backend/settings and checks when required.
+Use source-stage/SOURCE_PARAMS.json, participant subdirectories or other real
+files when those are the actual outputs; do not invent a summary file to satisfy
+a fixed name. Available files still need their actual configuration/execution
+records inspected before prose is written. A missing planned source blocks a
+completed methods paragraph and names the required file/stage. Preserve a draft
+with the gap recorded; continue independent work without fabricating values.
 
 ### B. COBIDAS checklist auto-audit
 
@@ -113,15 +127,24 @@ Before composing the paragraph, run through the full COBIDAS-MEEG checklist and 
 | 30 | Morph-to-fsaverage before group/display | source_summary | |
 | 31 | Atlas for labeling + coordinate system (MNI) | source_summary | |
 
-Rows 27-31 are **conditional**: skip them (mark `n/a`, not `missing`) when no source-stage ran. Only treat them as `unavailable` if `ANALYSIS_PLAN.md` declares a source-localization claim but `source-stage/source_summary.json` is absent.
+Checklist items are conditional on the approved analysis. Event/trial rows are
+not_applicable for a continuous route; ICA/source/inference rows are
+not_applicable when those stages were not planned. Inference rows must match the
+actual approved test, which need not be a cluster permutation. Continuous methods
+report retained duration, segmentation, participants and the actual analysis
+parameters instead of trial counts or significance invented for the checklist.
 
-For each item:
-- `filled` — value extracted successfully.
-- `missing` — source file exists but field not found. Flag as warning.
-- `unavailable` — source file missing entirely. Flag as error.
+For each applicable item:
+- `filled`: value read from the corresponding actual source record.
+- `missing`: an applicable source exists but the field was not recorded; warn,
+  state not recorded, and never fill it from an example.
+- `unavailable`: a planned required source is absent; name it and block a
+  completed methods output until the dependent stage/input is resolved.
+- `not_applicable`: the approved workflow does not include that method; do not
+  mark it failed or create a new scientific analysis to satisfy the template.
 
-If any item is `unavailable`, **stop and tell the user which stage needs to run first**.
-If items are `missing`, proceed but include warnings in the self-check output.
+Source-specific rows use the same shared stage inventory. Preserve failed runs
+and exclusions; a directory/file merely existing does not prove method execution.
 
 ### C. Resolve venue style
 
@@ -226,7 +249,7 @@ filled  Reporting standard: cluster p, t_obs, channels, time, effect size
 warning Issue: <if any check could not be filled from logs, list here>
 ```
 
-Use `filled` / `missing` / `unavailable` status markers (no emoji — plain text labels).
+Use `filled` / `missing` / `unavailable` / `not_applicable` status markers (no emoji — plain text labels).
 
 ### G. Cross-reference suggestions
 
@@ -238,13 +261,13 @@ Use `filled` / `missing` / `unavailable` status markers (no emoji — plain text
 
 | Symptom | Action |
 |---|---|
-| Stage `*_summary.json` missing | Stop. Tell the user which stage didn't complete. |
-| `ANALYSIS_PLAN.md` empty | Stop. Methods text without a stat plan is meaningless. |
+| Planned stage source missing | Name the actual missing file/pattern and keep completed methods blocked; an unplanned stage is not_applicable. |
+| `ANALYSIS_PLAN.md` empty | Stop and resolve the approved analysis plan; a descriptive plan does not require inventing a statistical contrast. |
 | Backend version unknown | Re-run env probe; if still unknown, note "version not recorded" in the paragraph and the self-check warns. |
 | Venue not recognized | Default to `generic`. Warn user. |
 | LaTeX compilation fails | Output `.tex` anyway; note that user may need to adjust packages (siunitx, etc.). |
 | BibTeX key collision | Append suffix (`_a`, `_b`) to disambiguate. |
-| `ANALYSIS_PLAN.md` declares a source-localization claim but no `source-stage/source_summary.json` | Stop. The source rows (27-31) are `unavailable`; tell the user to run the source stage. |
+| Source analysis planned but required recorded source inputs absent | Source rows are unavailable; name the actual missing paths from the execution ledger. |
 | Cluster-forming threshold reported in stats JSON as a bare number with no df/alpha | Recompute the intended threshold note as `t = scipy.stats.t.ppf(1-alpha/2, df)`; if df is unknown, write "cluster-forming threshold = MNE default (threshold=None)" and warn. |
 | Stats JSON reports a p-value but no multiple-comparison method | Do NOT write "significant". Emit "uncorrected" with a self-check warning, and refuse to label it significant. |
 | Trial counts per condition absent from epoch_summary | Report rejection percentage only, flag retained-trials as `missing`, and warn that SNR cannot be assessed. |

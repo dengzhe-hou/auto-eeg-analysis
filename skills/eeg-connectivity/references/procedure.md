@@ -24,14 +24,13 @@ analysis; the detailed procedure and backend templates follow below.
 
 ## Constants
 
-- **BACKEND = `mne_connectivity`** (Python). The primary backend for connectivity analysis.
+- **BACKEND** — resolve the requested estimator: spectral epoch methods use `mne_connectivity`; bounded Pearson/Hilbert methods use the continuous procedures and their NumPy/SciPy/MNE input helpers.
 - **ESTIMATOR FORK** — pick by design:
   - Resting / whole-epoch FC → `spectral_connectivity_epochs` (epochs are the averaging dimension → one value per band per pair).
-  - Event-related / time-resolved task FC → `spectral_connectivity_time` (returns per-pair freq×time; phase consistency is computed *across trials* at each time-frequency point).
-- **ANALYSIS_RANGE / SMOOTHING defaults** (when none specified): 1–30(–45) Hz, multitaper spectral smoothing ~1–2 Hz; crop epochs to the a-priori task window *before* FC; average within the hypothesis band (`faverage=True`). Band edges and time window MUST be fixed a priori to avoid double-dipping.
-- **METRIC = `wpli2_debiased`** by default, matching the executable template below (debiased estimator of squared wPLI). Ordinary `wpli` is a different estimator; use it when the approved task requests ordinary wPLI.
-- **SPACE = `sensor`** unless `eeg-source` produced source estimates → `source`.
-- **FREQ_BANDS = read from DATASET_BRIEF or default**: delta (1–4 Hz), theta (4–8 Hz), alpha (8–13 Hz), beta (13–30 Hz), gamma (30–45 Hz).
+  - Within-epoch spectral FC → `spectral_connectivity_time` (computes over time within each epoch; optionally averages the resulting epoch spectra). Its returned data have no time-course axis.
+  - Approved continuous Hilbert PLV/ordinary wPLI → [continuous procedures](continuous.md); averaging is across the selected analytic time samples.
+- **ANALYSIS_RANGE / SMOOTHING** — use the approved bands, window, estimator-specific smoothing and averaging; example values below do not supply missing decisions.
+- **METRIC / SPACE / FREQ_BANDS** — read the approved plan. The epoch example uses debiased squared `wpli2_debiased`; it does not replace a request for ordinary `wpli`, PLV or another estimator. A source output's existence does not authorize switching from sensor space.
 - **OUTPUT_DIR = `connectivity-stage/`** — Create if missing.
 - **N_JOBS = `4`** — parallel jobs for spectral connectivity computation.
 - **SEED = read from ANALYSIS_PLAN.md**, default `42`.
@@ -40,11 +39,11 @@ analysis; the detailed procedure and backend templates follow below.
 
 ## Phase A — Metric selection and validation
 
-1. Read ANALYSIS_PLAN.md for connectivity-related claims.
+1. Read the approved task/plan and select the matching continuous or epoch-based procedure.
 2. Validate the requested metric against the data:
    - **wPLI** (weighted phase lag index): distinguish ordinary `wpli` from the debiased squared estimator `wpli2_debiased`; record the estimator and its averaging dimension.
-   - **PLV** (phase-locking value): requires epoched data, sensitive to volume conduction — warn user.
-   - **Coherence** (`coh`): magnitude-squared coherence, confounded by volume conduction at sensor level.
+   - **PLV** (phase-locking value): preserve averaging across epochs versus continuous Hilbert time samples; sensor PLV is sensitive to volume conduction.
+   - **Coherence** (`coh`): magnitude coherence in MNE-Connectivity, confounded by volume conduction at sensor level. Squaring it changes the reported quantity.
    - **Imaginary coherence** (`imcoh`): imaginary part of coherency, robust to volume conduction.
    - **Granger causality** (`gc`): directional, requires stationary time series, best via FieldTrip or SIFT.
    - **Phase-amplitude coupling** (`pac`): cross-frequency, requires long epochs — different pipeline (see Phase G).
@@ -53,7 +52,7 @@ analysis; the detailed procedure and backend templates follow below.
 
 | Course metric | MNE method string / function | Directed? | VC-robust? | Notes |
 |---|---|---|---|---|
-| Magnitude-squared coherence (COH) | `coh` | no | **no** | confounded by VC; pair with `imcoh` on sensor data |
+| Magnitude coherence (COH) | `coh` | no | **no** | do not silently square; confounded by VC |
 | Imaginary coherency | `imcoh` | no | **yes** | imaginary part only; Nolte 2004 |
 | PLV / mean phase coherence | `plv`, `ciplv` (corrected imaginary PLV) | no | `plv` **no**, `ciplv` **yes** | `ciplv` discards zero-lag |
 | Pairwise phase consistency | `ppc` | no | no | unbiased PLV-like (Vinck 2010) |
@@ -112,8 +111,9 @@ and [Vinck et al. (2011)](https://doi.org/10.1016/j.neuroimage.2011.01.055).
 
 ```
 1. Read ENVIRONMENT.json
-2. Verify mne_connectivity is available → generate MNE-Python code
-3. Else → ERROR: mne-connectivity required (pip install mne-connectivity)
+2. For epoch spectral methods, verify mne_connectivity is available
+3. For bounded Pearson/Hilbert methods, use the continuous procedures; require only the dependencies of that path, not mne-connectivity
+4. Report a missing dependency for the selected path; do not change estimators
 ```
 
 Write `connectivity-stage/BACKEND_RESOLUTION.md`.
@@ -162,83 +162,131 @@ np.savez(output_path,
 **Key MNE-connectivity parameters:**
 - `method='wpli2_debiased'`: Use `wpli2_debiased` (not `wpli`) for the debiased estimator (Vinck et al. 2011).
 - `method='plv'`: Phase-locking value — warn about volume conduction sensitivity.
-- `method='coh'`: Magnitude-squared coherence.
+- `method='coh'`: Magnitude coherence; do not square unless requested.
 - `method='imcoh'`: Imaginary part of coherency.
 - `mode='multitaper'`: Recommended for broadband estimation. Use `'cwt_morlet'` for time-resolved connectivity.
 - `faverage=True`: Average connectivity within each frequency band. Set `False` for frequency-resolved analysis.
 - `mt_bandwidth=4.0`: Multitaper bandwidth — controls spectral smoothing (higher = smoother, more robust).
 
-### Time-resolved task connectivity (`spectral_connectivity_time`)
+### Within-epoch spectral connectivity (`spectral_connectivity_time`)
 
-For event-related FC where you want one value per *time* and *frequency* (across-trial phase consistency at each TF point), use `spectral_connectivity_time` — it treats trials as the averaging dimension at every (f, t):
+This API computes spectral measures over time within each epoch. With
+`average=False`, it retains separate epoch spectra; `average=True` then averages
+those scores over epochs. It does not return a connectivity time course or
+implement across-trial phase consistency at each time-frequency point.
 
 ```python
 import numpy as np
 from mne_connectivity import spectral_connectivity_time
 
-freqs = np.arange(4, 31, 1)   # analysis grid (~1–30 Hz)
-con = spectral_connectivity_time(
-    epochs_cond,
-    method='wpli',            # or 'plv', 'coh', 'pli', 'ciplv' (time estimator subset)
-    mode='cwt_morlet',        # or 'multitaper'
-    freqs=freqs,
-    n_cycles=freqs / 2.0,     # Morlet cycles per freq
-    average=False,            # keep per-epoch values; True → average over epochs
-    faverage=False,           # set band tuples (fmin/fmax) + True to collapse to bands
-    n_jobs=4,
-)
-# average=False → con.get_data() is (n_epochs, n_pairs, n_freqs, n_times)
+con = spectral_connectivity_time(epochs_cond, **approved_connectivity_time_settings)
+# Bivariate average=False: (n_epochs, n_connections, n_freqs), no time axis.
+# average=True: (n_connections, n_freqs).
 ```
 
-**Rule of thumb:** `spectral_connectivity_epochs` for resting/whole-trial (epochs = sample dimension, one value per band); `spectral_connectivity_time` for time-resolved task FC. Task PLV/wPLI here = across-trial phase consistency, so it needs **many trials** to be stable (positively biased at low trial counts). Note `spectral_connectivity_time` accepts only `coh`, `plv`, `ciplv`, `pli`, `wpli`, `gc`, `gc_tr` (no `imcoh`/`wpli2_debiased`/`pli2_unbiased`/`ppc`).
+Keep these estimators distinct from `spectral_connectivity_epochs`, which uses
+epochs as the averaging observations. Check the installed version's supported
+method names instead of copying another API's method list. If the approved
+question needs time-resolved or across-trial inference, resolve an appropriate
+procedure rather than relabeling these epoch spectra.
+See the [official API and output axes](https://mne.tools/mne-connectivity/stable/generated/mne_connectivity.spectral_connectivity_time.html).
 
 ### Resting-state workflow and band looping
 
-- Epoch continuous resting data into fixed segments (~2 s) — coherence/PLV/wPLI need **many segments** to be meaningful (a single segment makes `coh` and `plv` trivially = 1).
+- For the approved across-epoch spectral estimator, use the planned segmentation and trial count. Its single-observation coherence/PLV limitation does not apply automatically to a continuous Hilbert estimator averaged over many time samples.
 - Loop **per band**: pass band tuples `fmin=(1,4,8,13,30), fmax=(4,8,13,30,45)` with `faverage=True`, or call per band. Each band can show a different network topology — never collapse across bands without justification.
 - Filter/Hilbert edge artifacts argue for sufficiently long segments (or dropping the first/last ~10% of samples) before FC.
 
 ## Phase D — Graph theory metrics
 
-After computing pairwise connectivity matrices, optionally compute graph-theoretic summaries:
+After computing pairwise connectivity matrices, compute graph summaries only
+when requested by the task/plan. Resolve the threshold method, directedness,
+weight/sign handling and reported metrics first.
+
+For a **proportional** graph, rank the available unique off-diagonal edges,
+not every array entry. MNE-Connectivity's default bivariate undirected dense
+output stores computed edges in the lower triangle; the other triangle's
+zeros are not additional measured edges. When explicit indices were supplied,
+retain those indices instead. Carry an explicit availability mask from this
+estimator record; never infer availability with `matrix != 0`. A measured
+zero is a valid candidate. See the [estimator API](https://mne.tools/mne-connectivity/stable/generated/mne_connectivity.spectral_connectivity_epochs.html).
 
 ```python
-import networkx as nx
-# Or: import bct  # Brain Connectivity Toolbox (Python)
+# AEA example: connectivity-proportional-graph
+from pathlib import Path
+import runpy
 
-# Threshold connectivity matrix (e.g., proportional threshold keeping top 20% edges)
-threshold = np.percentile(conn_matrix, 80)
-adj = (conn_matrix > threshold).astype(float)
+params = approved_graph_params
+graph = runpy.run_path(str(Path(AEA_ROOT) / 'skills/eeg-connectivity/scripts/graph.py'))
+adj, edge_audit = graph['proportional_adjacency'](
+    conn_matrix, node_names=node_names, available_edges=available_edges,
+    storage=params['storage'], directed=params['directed'],
+    density=params['density'], ranking=params['ranking'],
+    rounding=params['rounding'], ties=params['ties'],
+)
+# Save adj and edge_audit with subject, condition, band and estimator metadata.
+```
 
-# NetworkX graph metrics
+The approved settings must specify:
+
+- `storage`: lower/upper/symmetric for an undirected matrix; directed for
+  ordered edges. Mirror selected edges only for an undirected graph.
+- `density`: fraction of available unique edges, with both this denominator
+  and the full possible-edge denominator recorded. Missing edges do not
+  become measured zeros or imply a fully observed network.
+- `ranking`: signed weight or magnitude. The helper performs no implicit
+  absolute-value conversion, clipping or sign-based exclusion. Any planned
+  eligibility restriction must already be reflected in the recorded mask.
+- `rounding`: floor/ceil/nearest (nearest uses ties-to-even), so a requested
+  fraction becomes an explicit integer edge count.
+- `ties`: error (unresolved), include_all (actual density may increase), or
+  channel_order (the recorded node order breaks boundary ties). No random
+  tie breaking is introduced.
+
+For five fully observed undirected nodes there are ten unique edges. A
+20% density with integer target two retains two, whereas an 80th percentile
+of a lower-triangular 5×5 array also counts uncomputed/diagonal zeros and
+can incorrectly retain five. Save candidate count, target count, actual
+retained count/densities, cutoff and named edges in `edge_audit`.
+
+When the plan requests **binary undirected** summaries, the selected adjacency
+can feed NetworkX (optional dependency):
+
+```python
+# AEA example: connectivity-binary-graph-metrics
+import networkx as nx  # check availability before this optional branch
+
+if approved_graph_params['directed']:
+    raise ValueError('Use the approved directed metric implementation')
 G = nx.from_numpy_array(adj)
+connected = nx.is_connected(G)
 
 metrics = {
-    'clustering_coefficient': nx.average_clustering(G),                 # local clustering
-    'characteristic_path_length': nx.average_shortest_path_length(G)    # if connected
-        if nx.is_connected(G) else float('inf'),
+    'clustering_coefficient': nx.average_clustering(G),
+    'characteristic_path_length': nx.average_shortest_path_length(G)
+        if connected else None,
     'global_efficiency': nx.global_efficiency(G),
     'local_efficiency': nx.local_efficiency(G),
 }
-
-# Small-worldness (Humphries & Gurney 2008):
-# sigma = (C / C_random) / (L / L_random)
-# where C = clustering, L = path length, random = Erdos-Renyi with same N, K
-n_nodes = len(G)
-n_edges = G.number_of_edges()
-G_random = nx.erdos_renyi_graph(n_nodes, n_edges / (n_nodes * (n_nodes - 1) / 2))
-C_rand = nx.average_clustering(G_random) if nx.average_clustering(G_random) > 0 else 1e-10
-L_rand = nx.average_shortest_path_length(G_random) if nx.is_connected(G_random) else float('inf')
-metrics['small_worldness_sigma'] = (
-    (metrics['clustering_coefficient'] / C_rand) /
-    (metrics['characteristic_path_length'] / L_rand)
-) if L_rand != float('inf') and metrics['characteristic_path_length'] != float('inf') else None
-
-# Alternative: use bct-python for neuroscience-specific graph metrics
-# import bct
-# metrics['modularity'] = bct.modularity_und(conn_matrix)[1]
-# metrics['betweenness'] = bct.betweenness_wei(1.0 / conn_matrix)  # weight inversion for distance
+metric_status = {'characteristic_path_length':
+                 'computed' if connected else 'unavailable_disconnected'}
+# Save metrics and metric_status together as standard JSON (allow_nan=False).
+# A disconnected graph is retained; do not add edges to obtain a finite path.
 ```
+
+Disconnected networks have no finite all-node characteristic path length.
+Keep that value `null` with its status in JSON, while retaining the other
+computed metrics and actual graph. In particular, a sparse proportional
+graph must not silently be made connected or exported with nonstandard
+`Infinity` in place of an available measurement.
+
+Small-worldness remains a separate planned calculation:
+`sigma = (C / C_random) / (L / L_random)`. Use the approved random-graph
+construction, repetitions and seed and retain those results. Report an
+undefined reference ratio as unavailable with its reason; do not replace
+zero `C_random` with an invented epsilon or use a single unseeded graph as
+if it were a validated null ensemble. Weighted and directed metrics require
+their corresponding approved implementations, not these binary formulas.
 
 **Graph metric guidelines:**
 - **Thresholding**: Always report the thresholding method (absolute, proportional, MST-based). Results are sensitive to threshold choice.
@@ -251,9 +299,9 @@ Save `connectivity-stage/<sub>/<sub>-<cond>-<band>-graph_metrics.json`.
 
 ## Phase E — Group-level aggregation
 
-1. Average connectivity matrices across subjects per condition per band.
-2. Compute group-level graph metrics on the averaged matrix.
-3. For between-condition comparisons: compute difference matrices and save for `eeg-stats`.
+1. Align node identities, estimator/storage and available edges before averaging connectivity matrices across subjects per condition per band.
+2. A graph computed on an averaged matrix is a **descriptive group network**; its metrics are not the mean of participant graph metrics.
+3. For group inference, retain one matrix/metric per participant and condition under the approved graph policy. Save participant-level differences for paired comparisons (or preserve the approved independent-group design) for `eeg-stats`; do not treat an averaged network as multiple participants.
 4. Save:
    - `connectivity-stage/group/group-<cond>-<band>-conn_avg.npz`
    - `connectivity-stage/group/group-<cond>-<band>-graph_metrics.json`
@@ -274,9 +322,9 @@ When contrasting connectivity between two conditions/groups in source space, bui
 
 Connectivity matrices reduce to a vector over the **unique off-diagonal edges**. Edge counts (use the correct N for multiple-comparison correction):
 
-- Undirected (coh/plv/pli/wpli/imcoh): `E*(E-1)/2` edges (upper triangle only).
+- Undirected: at most `E*(E-1)/2` unique edges. Select the recorded computed triangle/indices; use upper-triangle extraction only after explicitly reconstructing a symmetric representation. Do not test uncomputed upper-triangle zeros from a lower-triangle estimator output.
 - Directed (gc/psi): `E*(E-1)` edges (full off-diagonal).
-- **Exclude the diagonal** from stats and from figure color scaling (diagonal is trivial: coh≈1, pli/wpli≈0; wPLI is NaN on the diagonal → set 0).
+- **Exclude the diagonal** and unavailable edges from stats and figure color scaling. Match the same named edges across participants/conditions; report missing edges rather than converting them into observed zeros. Multiple-comparison counts use the actual tested edge family.
 
 **Default — mass-univariate + FDR:**
 ```python
@@ -301,7 +349,7 @@ When a hypothesis exists, restrict tests to a-priori ROI edges to cut the multip
 For each subject, write:
 
 ### `connectivity-stage/<sub>/<sub>-<cond>-<band>-conn.npz`
-Contains: `conn_matrix`, `ch_names` (or `roi_names` for source space), `freq_band`, `method`.
+Contains: `conn_matrix`, `ch_names` (or `roi_names` for source space), `freq_band`, `method`, estimator indices/storage and the explicit `available_edges` mask. For a proportional graph, also save its adjacency and `edge_audit` (ranking, density, rounding, ties, candidates and retained named edges).
 
 ### `connectivity-stage/<sub>/<sub>-<cond>-<band>-graph_metrics.json`
 ```json

@@ -46,6 +46,11 @@ Before running, these must exist:
 - **Never** ignore edge artifacts. Check the longest sampled wavelet against epoch length, and check the reporting/baseline margins against its half-support. Record insufficient input support before changing any resolved analysis parameter.
 - **Never** compute ITC on averaged data — ITC requires single-trial complex estimates.
 - **Never** interpret ITC magnitude without considering trial count — ITC is biased upward with fewer trials. Report trial count alongside ITC.
+- Resolve the ITC inferential target before testing. Reordering trials within
+  one condition leaves ITC unchanged and cannot test absolute locking.
+  Exchanging labels between conditions can test a condition difference only
+  under the approved exchangeability/design rules. Do not substitute one
+  null for the other or pool participant trials for population inference.
 - **Never** describe ITPC/ITLC as connectivity or as power. ITPC/ITLC is **single-channel, across-trial** phase consistency (evoked phase-locking / phase resetting): it collapses the *trial* axis of *one* channel and discards (ITPC) or amplitude-weights (ITLC) magnitude. Inter-channel phase coupling (PLV/PLI/wPLI/coherence) is a different measure — see `eeg-connectivity` — and power is the squared magnitude, not a phase quantity.
 - **Never** set `n_cycles` too high for low frequencies (e.g., 10 cycles at 2 Hz = 5 s wavelet — longer than most epochs).
 - **Never** change `DECIM` after computation to match a claim's time resolution — recompute if needed.
@@ -58,6 +63,15 @@ Before running, these must exist:
 
 
 ## Procedure reference
+
+When comparing total, ERP-subtracted and evoked power, retain the original
+epoch time origin, sampling grid and approved channels in every branch.
+Reconstructing an ERP as a synthetic epoch must pass its original `tmin`;
+verify the actual output axes before baseline correction or interpretation.
+For ITC, retain single-trial complex coefficients and the aligned trial,
+participant, condition and block identities. The [ITC helper](scripts/itc.py)
+separates descriptive values from a bounded, explicitly approved
+single-participant condition-label test; its p-map is uncorrected.
 
 Choose the section that matches the current operation. Detailed code examples
 and numerical conventions remain in the linked source.

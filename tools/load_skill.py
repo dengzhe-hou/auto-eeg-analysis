@@ -67,11 +67,11 @@ def _selected_procedure(root: Path, skill: str, text: str, section: str):
     raise ValueError(f"Section not found in {skill} or its linked references: {section}")
 
 
-def load_skill_packet(root: Path, skill: str, *, section=None, references=()):
+def load_skill_packet(root: Path, skill: str, *, section=None, references=(), scripts=()):
     path = f"skills/{skill}/SKILL.md"
     text = (root / path).read_text(encoding="utf-8-sig")
     parts = [_selected_procedure(root, skill, text, section)] if section else [(path, text)]
-    for reference in references:
+    for reference in (*references, *scripts):
         source = f"skills/{skill}/{reference}"
         parts.append((source, (root / source).read_text(encoding="utf-8-sig")))
     packet = "\n\n".join(f"AEA procedure: {source}\n\n{body}" for source, body in parts)
@@ -102,11 +102,12 @@ def main():
     parser.add_argument("skill")
     parser.add_argument("--section")
     parser.add_argument("--reference", action="append", default=[])
+    parser.add_argument("--script", action="append", default=[])
     parser.add_argument("--root", type=Path, default=Path(__file__).resolve().parents[1])
     parser.add_argument("--receipt", type=Path)
     args = parser.parse_args()
     packet, receipt = load_skill_packet(args.root, args.skill, section=args.section,
-                                        references=args.reference)
+                                        references=args.reference, scripts=args.script)
     if args.receipt:
         args.receipt.write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf-8")
     print(packet)

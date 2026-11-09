@@ -1,14 +1,14 @@
 ## Domain Knowledge (distilled from EEG complexity / nonlinear-dynamics literature)
 
 ### Lempel-Ziv complexity (Lempel & Ziv 1976; Aboy et al. 2006)
-- Coarse-grain the signal to a binary string (median threshold is the amplitude-robust default), parse into the minimal set of distinct substrings, count `c(n)`, normalize `LZC = c(n) / (n / log2(n))` so values are ≈ `[0,1]` and comparable across epoch lengths.
+- Coarse-grain under the approved binary rule, obtain the LZ parse count `c(n)`, and normalize once as `LZC = c(n) / (n / log2(n))`. This asymptotic normalization can exceed 1 for finite sequences; do not clip it or treat it as eliminating finite-length bias. Match segment lengths when comparing conditions.
 - LZC tracks the rate of new-pattern generation — it drops under anesthesia/loss of consciousness and rises in alert, complex states.
 - Cite: Lempel, A., & Ziv, J. (1976). On the complexity of finite sequences. IEEE Transactions on Information Theory, 22(1), 75–81. Aboy, M., Hornero, R., Abásolo, D., & Álvarez, D. (2006). Interpretation of the Lempel-Ziv complexity measure in the context of biomedical signal analysis. IEEE Transactions on Biomedical Engineering, 53(11), 2282–2288.
 
 ### Permutation entropy and PLZC (Bandt & Pompe 2002; Bai et al. 2015)
 - Permutation entropy replaces amplitude values with ordinal patterns (rank order of `m` consecutive samples), making it amplitude-blind and robust to monotonic noise; `PE = H / ln(m!)`.
-- PLZC = ordinal symbolization + LZ parse, normalized by `log_{m!}(n)`; combines PE's amplitude-independence with LZC's pattern-novelty sensitivity and is more noise-robust than amplitude-thresholded LZC.
-- Default `order/m`: PE order 3 (3–7 typical), PLZC `m=4`; both require `m! ≪ window length`.
+- PLZC = ordinal symbolization + LZ parse. Under theoretical-alphabet normalization, use `c(n) * log_{m!}(n) / n`, where `n` counts ordinal symbols. AntroPy's normalized LZ output instead uses the observed alphabet (minimum 2). These definitions differ when motifs are missing; never apply a second base-2 correction blindly. Finite PLZC can exceed 1 as well.
+- Choose and report PE/PLZC dimension, delay, ordinal ties and normalization policy from the approved plan; `m=4` has 24 possible motifs. Check the number of symbols against that alphabet instead of adopting a dimension from this example.
 - Cite: Bandt, C., & Pompe, B. (2002). Permutation entropy: a natural complexity measure for time series. Physical Review Letters, 88(17), 174102. Bai, Y., Liang, Z., & Li, X. (2015). A permutation Lempel-Ziv complexity measure for EEG analysis. Biomedical Signal Processing and Control, 19, 102–114.
 
 ### Sample vs approximate entropy (Richman & Moorman 2000; Pincus 1991)

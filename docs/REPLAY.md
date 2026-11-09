@@ -64,6 +64,27 @@ outputs. A failed command stops the run and returns a nonzero exit code. Existin
 nonempty output directories and existing bundles are never overwritten. Keep the
 bundle unchanged; revisions belong in a new bundle.
 
+While a command is running, inspect its saved progress from another terminal:
+
+```bash
+python tools/replay.py status --out projects/my-study/results/run-001
+```
+
+The execution record is updated at each command's start and exit. It retains the
+actual argument list, working directory, child PID, times and exit code. Status
+queries read that record and check the coordinator and active command PIDs on the
+recorded host, without sending signals or running commands. On another host,
+process state is reported as not checked. A saved `running` value alone is not
+evidence that the process is still alive. PID checks cover the recorded command,
+not arbitrary descendants or scientific completion.
+
+A terminal or tool timeout does not establish that the analysis stopped. Inspect
+the live process state, log and already saved outputs before deciding what to do.
+If the coordinator exited while its command is still running, let the confirmed
+task finish or stop it explicitly before arranging a new run. An interruption
+does not authorize a retry. Failed or incomplete runs and their logs stay in
+their original directories. Replay does not automatically resume or repeat a step.
+
 Compare the two runs' **scientific outputs** using the tolerances specified in the
 plan. Record the compared fields, maximum differences, tolerances and pass/fail
 result. Timestamps and output paths naturally differ. Successful execution alone

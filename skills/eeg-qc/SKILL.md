@@ -47,6 +47,8 @@ QC adapts to whatever stages exist; at least one must be present.
 
 ## Critical Rules
 
+- Use [spectral QC helpers](scripts/spectral.py) to check actual frequency coverage, Nyquist and recorded filter support before computing a band ratio. An unavailable required metric produces incomplete QC, never a green pass. Do not widen an approved filter to make a metric available.
+- MNE LOF compares channel time series in signal-distance space; it does not use electrode positions. Keep it distinct from geometry-based RANSAC evidence, and preserve approved detector settings.
 - **Never** modify, re-reject, or re-reference upstream stage data — QC measures, it does not clean. A `fail` routes the user back to `eeg-preprocess`/`eeg-ica`/`eeg-epoch`; it never edits their outputs.
 - **Never** call `find_bad_channels_maxwell` on scalp EEG — it is MEG-only (Maxwell/SSS + fine-cal/crosstalk). Use `find_bad_channels_lof` (+ pyprep RANSAC) for EEG.
 - **Never** gate on a threshold that is not written to `QC_GATES.json` — hidden thresholds violate COBIDAS reproducibility.

@@ -1,6 +1,6 @@
 ---
 name: eeg-report
-description: "Build a self-contained HTML report (mne.Report) and a Markdown summary from all stage outputs: methods, sample, exclusions, per-claim results with figures, full statistical reporting. Use after eeg-stats and eeg-figure complete."
+description: "Build an HTML report (mne.Report) and Markdown summary from executed EEG stages, including continuous/descriptive analyses and per-claim statistical results when planned. Use when the user requests an analysis report or the approved analysis stages have finished."
 argument-hint: "[project-dir] [— format: html|md|both] [— cobidas: strict|normal]"
 allowed-tools: Bash(*), Read, Write, Edit, Glob
 ---
@@ -32,14 +32,18 @@ python tools/load_skill.py eeg-report --section "Phase A — Collect stage outpu
 
 ## Required Inputs
 
+For a bounded structured delivery, use
+[Final JSON and interpretation](references/procedure.md#final-json-and-interpretation):
+save and print the same result object, including the requested interpretation.
+
 Before building the report, these must exist:
 
-1. `ANALYSIS_PLAN.md` — frozen, with claim table filled. **Stop if missing or unfrozen.**
+1. `ANALYSIS_PLAN.md` — the approved version with stages and any planned claims. A descriptive workflow does not require inventing a contrast or significance test.
 2. `DATASET_BRIEF.md` — acquisition parameters, participant info, task description.
-3. At least one stage output directory: `preprocess-stage/`, `ica-stage/`, `erp-stage/`, `tfr-stage/`, `stats-stage/`, `figure-stage/`.
-4. `FINDINGS.md` — per-claim verdicts from eeg-stats.
+3. Outputs of the planned stages, including continuous spectral, connectivity, complexity and microstate routes. Use [the shared input inventory](scripts/inputs.py) with actual source paths from the plan/execution ledger.
+4. `FINDINGS.md` and statistical result files when claim verdicts are part of the approved workflow. Their absence must not be hidden if they were planned.
 5. `ENVIRONMENT.json` — software versions and backend info.
-6. `figure-stage/*.svg` and `figure-stage/*.png` — rendered figures from eeg-figure.
+6. `figure-stage/*.svg` and `figure-stage/*.png` when figures are planned. Record missing planned figures; do not treat an unplanned figure stage as a failed computation.
 
 Optional:
 - `channel_mapping.json` — for reporting channel name conventions.
@@ -47,6 +51,7 @@ Optional:
 
 ## Critical Rules
 
+- Inventory every supported output stage. Mark unplanned stages `not_applicable`, and planned-but-missing inputs `unavailable`; file presence alone does not prove a completed or validated analysis. Preserve partial/failed results in an explicitly incomplete report.
 - **Never** fabricate data or statistics in the report. Every number must trace to a stage output file.
 - **Never** omit exclusions or failed subjects — transparency is mandatory.
 - **Never** modify ANALYSIS_PLAN.md during report generation.

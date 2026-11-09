@@ -40,18 +40,25 @@ python tools/load_skill.py eeg-behavior --section "Phase A — Extract behaviora
 ## Critical Rules
 
 - **Never** include incorrect trials in RT analysis (unless specifically analyzing error RTs).
-- **Never** use raw RT without outlier removal — RT distributions are positively skewed.
+- Preserve the approved RT eligibility, outlier and inclusion policy. Skew alone does not authorize removing observations or applying an accuracy cutoff.
 - **Never** report median split as primary analysis — use regression. Median split is for visualization only.
-- **Never** correlate subject-averaged EEG with subject-averaged RT when you have single-trial data (ecological fallacy).
+- Distinguish within-subject trial associations from across-subject associations. Preserve the approved estimand; one does not establish the other.
 - **Never** fit pooled `sm.OLS` (or `pearsonr`) on single trials from multiple subjects as if they were independent — use a mixed-effects model with a subject random effect (pseudoreplication otherwise inflates significance).
 - **Never** use plain `KFold`/`train_test_split` when cross-validating an EEG->behavior model over pooled subjects — use `GroupKFold`/`LeaveOneGroupOut` with `groups=subject`. Report mean ± std across folds, never the best/max fold.
 - **Never** forget to report the number of trials excluded by each filtering step.
+- Assign responses only within the approved recording/block and response window. Record missed/unused responses and never reuse a response row across trials under the one-response assignment.
+- Join retained EEG and behavior by the original trial keys. Equal lengths or similar row order do not establish alignment. Participant comparisons need participant identities; true trial-pair comparisons need their pair identities. Never truncate conditions to manufacture pairs.
 
 
 ## Procedure reference
 
 Choose the section that matches the current operation. Detailed code examples
 and numerical conventions remain in the linked source.
+
+Use [the trial helpers](scripts/trials.py) for the explicitly selected first-unused
+response assignment, one-to-one joins and paired arrays. The helpers retain
+unmatched records, require the missing-data policy, and do not select a test or
+aggregate trials into participants.
 
 ## Constants
 

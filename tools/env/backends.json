@@ -98,12 +98,12 @@
           "min_ccc": 0.992787,
           "worst_grand_mean_diff_pct": 3.779,
           "group_conclusion_reproduced": "5/5",
-          "with_fully_pinned_spec": {
+          "with_matched_filter_conventions": {
             "component": "P3",
             "max_abs_diff_uV": 0.0496,
             "ccc": 0.999943,
             "pearson_r": 1.0,
-            "note": "Pinning the FieldTrip filter specification (cutoff convention AND transition width together) took max|d| from 0.721 to 0.050 uV; the cutoff-convention-only step at a fixed 0.1 Hz transition width is 0.802 -> 0.050 uV. Staged comparison -- not attributable to one parameter alone."
+            "note": "Matching the tested FieldTrip cutoff convention and lower transition width took max|d| from 0.721 to 0.050 uV; the cutoff-convention-only step at a fixed 0.1 Hz transition width is 0.802 -> 0.050 uV. Staged comparison -- not attributable to one parameter alone."
           },
           "evidence": "https://github.com/dengzhe-hou/auto-eeg-analysis/blob/995f53d42cc74205b164e8711d4b289b8c2ad3a1/tools/benchmark/CROSS_TOOLBOX_EVAL.md sec 1 and 2b"
         }
@@ -139,7 +139,7 @@
           "mne": "FFT / polyphase",
           "eeglab": "signal-package resample, or a cubic-spline fallback when Octave Forge signal is absent",
           "fieldtrip": "ft_resampledata (needs Octave Forge signal); decimation is exact when the data are already band-limited below the new Nyquist",
-          "consequence": "Not isolated by any experiment. After the filter was fully pinned the residual P3 disagreement was 0.05 uV, which bounds this term without attributing it."
+          "consequence": "Resampling was not isolated. Matching the tested cutoff convention and lower transition width left a total P3 difference of about 0.05 uV. The upper transition response was not fully matched. This total difference does not bound the resampling contribution because unisolated differences can offset each other."
         }
       ]
     },

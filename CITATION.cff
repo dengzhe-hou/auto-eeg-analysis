@@ -1,12 +1,17 @@
 cff-version: 1.2.0
 title: "Automated EEG Analysis (AEA)"
-message: "If you use this software in your research, please cite it as below. If you used a specific recipe, also cite the source paper declared in that recipe's citation.bib."
+message: >
+  Cite AEA and record the software version or commit used. Also cite the source
+  papers declared by the recipes you use. The referenced Zenodo dataset preserves
+  resources and validation records frozen on 6 November 2026 and is separate
+  from the current software packages.
 type: software
 authors:
   - family-names: Hou
     given-names: Dengzhe
     affiliation: Tohoku University
 repository-code: "https://github.com/dengzhe-hou/auto-eeg-analysis"
+url: "https://dengzhe-hou.github.io/auto-eeg-analysis/"
 abstract: >
   AEA is an open library of EEG analysis skills for MNE-Python, with executable
   specifications and a numerically certified core. It provides shareable
@@ -24,5 +29,14 @@ keywords:
   - EEGLAB
   - FieldTrip
 license: MIT
-version: 0.3.2
-date-released: 2026-10-03
+references:
+  - type: data
+    title: "Reusable skills for electroencephalography analysis with large language model agents (resources and validation records)"
+    authors:
+      - family-names: Hou
+        given-names: Dengzhe
+        affiliation: Tohoku University
+    doi: "10.5281/zenodo.24012489"
+    url: "https://zenodo.org/records/24012489"
+    version: "2026-11-06"
+    date-released: 2026-11-07

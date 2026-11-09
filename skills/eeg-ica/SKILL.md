@@ -35,7 +35,7 @@ python tools/load_skill.py eeg-ica --section "Phase A — Resolve parameters"
 Before running, these must exist:
 
 1. `ANALYSIS_PLAN.md` — frozen, with ICA parameters specified. **Stop if missing or unfrozen.**
-2. `preprocess-stage/` — preprocessed continuous data per subject (`.fif`, `.set`, or `.mat`).
+2. The approved analysis input: preprocessed Raw for continuous ICA, or saved analysis-bandpass `*-preica-epo.fif` for epoch-first ICA. Keep the fitting copy separate.
 3. `ENVIRONMENT.json` — to resolve backend and available packages.
 4. `channel_mapping.json` — if needed for consistent channel labeling.
 
@@ -47,16 +47,21 @@ Before running, these must exist:
 - **Never** lower the confidence threshold to reject more components post-hoc. If artifacts remain, re-examine preprocessing or add subjects to manual review.
 - **Never** change the ICA seed after inspecting results. The seed must be set before any ICA is run.
 - **Never** run ICA without setting a random seed. Reproducibility requires a fixed seed.
-- **Never** fit ICA on epoched data unless explicitly justified (continuous data is standard for EEG ICA) — **except** when the ISI is irregular or short/messy, where you should epoch FIRST and fit ICA on the concatenated epochs so the decomposition models task structure rather than inter-trial junk.
+- Follow the approved `fit_domain` (`continuous` or `epochs`). An irregular/short ISI may motivate a different proposal; it does not itself authorize switching. Hand epoch-first outputs back to `eeg-epoch` for finalization without re-cutting them.
 - **Never** expect ICA to remove slow drift or line noise — those must be filtered/notched out in `eeg-preprocess` BEFORE ICA. ICA only separates stationary linear sources; feeding it drift or line noise corrupts the decomposition and wastes components.
-- **Never** fit ICA before bad-segment deletion + bad-channel interpolation are done in the same pre-ICA pass — leftover transient excursions hijack the decomposition, and un-accounted interpolated channels break the rank (reduce `n_components` by `n_interpolated`).
-- **Never** apply a tight peak-to-peak amplitude reject (~±60 µV) before ICA. Use a loose pass pre-ICA (extreme segments only) and reserve the tight pass for AFTER artifact-IC removal (`eeg-epoch`) — otherwise you discard trials ICA could have cleaned.
+- Account for the approved bad-segment handling, interpolation and reference state before fitting. Record their effect on effective rank; do not subtract `n_interpolated` again from an already measured rank or from a variance fraction.
+- Keep the approved fitting and component-labeling configuration aligned. Do not re-reference only the labeling copy or silently refit to match ICLabel assumptions. Record actual input and classifier applicability; unresolved changes follow the researcher-decision policy.
+- Apply only approved pre-ICA bad-segment handling and post-ICA rejection, with their actual stage and threshold definitions recorded. Do not introduce a numerical threshold or tighten it automatically; peak-to-peak and signed amplitude limits are different.
 - **Never** skip reporting the number of excluded components per class. Reviewers need this information.
 - **Never** reject a borderline component just to be thorough — when in doubt, KEEP it. Over-rejection wipes out neural signal: removing a single mislabeled frontal IC can destroy part of the ERP (Chaumon et al. 2015). Prefer correction of stereotyped artifacts over trial rejection, and reserve component removal for clear artifacts confirmed by both ICLabel and a `find_bads_*` cross-check or `ica.plot_overlay`.
 - **Never** finalize a borderline exclusion without previewing its effect. Run `ica.plot_overlay(raw, exclude=[idx])` (or compare the evoked before/after) and only exclude if the overlay shows clear data improvement without flattening the ERP of interest.
 
 
 ## Procedure reference
+
+Use [component selection](scripts/selection.py) to apply the approved probability,
+class and corroboration policy to saved labels. It returns exclusions, flagged
+components and per-component reasons; it never chooses the policy or runs ICA.
 
 Choose the section that matches the current operation. Detailed code examples
 and numerical conventions remain in the linked source.

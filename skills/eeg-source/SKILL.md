@@ -42,6 +42,8 @@ Before running, these must exist:
 
 ## Critical Rules
 
+- ROI labels, STC and source space must refer to the same actual anatomical subject. Use an approved morph when spaces differ; never rename subject metadata to bypass the mismatch. [The surface ROI helper](scripts/roi.py) checks this handoff.
+- Record ROI availability and vertex counts. An empty ROI is unavailable, not zero activity; use the approved error/flag policy and resolve missing ROIs before downstream statistics or connectivity.
 - **Never** use a 1-layer BEM for EEG — EEG requires 3 layers (brain, skull, scalp). 1-layer is only acceptable for MEG.
 - **Never** interpret source localization results with millimeter precision — EEG source localization has centimeter-scale accuracy at best, even with individual MRI.
 - **Never** compare absolute source amplitudes across subjects without normalization (dSPM/sLORETA provide this; raw MNE does not).

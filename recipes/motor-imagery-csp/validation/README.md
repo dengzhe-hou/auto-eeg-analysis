@@ -85,6 +85,10 @@ and optional packages for unrelated analyses. They are not evidence that those
 paths passed. Existing warnings concern a short synthetic signal in
 `test_tfr_api` and the F-test tail argument in `test_group_compare_api`.
 
+After updating the branch to the upstream package layout on 9 November 2026,
+the three recipe tests passed again in 11.37 seconds, including the public EDF
+replay and the check of training data passed to CSP.
+
 ## Interpretation and remaining work
 
 This is a complete numerical example of the declared offline CSP/LDA analysis,
@@ -102,4 +106,3 @@ artifact-cleaned study requires a separately declared design and corresponding
 validation rather than tuning this example until its scores improve.
 
 Prepared by Haoyang Su, Fudan University and Shanghai Innovation Institute.
-OpenAI Codex assisted with implementation, execution and reporting.

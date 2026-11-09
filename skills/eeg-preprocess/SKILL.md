@@ -1,6 +1,6 @@
 ---
 name: eeg-preprocess
-description: "Filter, re-reference, detect bad channels, remove line noise on raw EEG. Reads DATASET_BRIEF.md to set defaults, ENVIRONMENT.json to verify MNE-Python. Writes per-subject preprocessed .fif under preprocess-stage/. Use when the user says \"预处理 EEG\", \"preprocess my EEG data\", \"clean the raw EEG\", or starts a new study from raw recordings."
+description: "Preprocess raw EEG according to the approved analysis plan: filtering, reference, bad channels and line noise. Also use for explicitly bounded channel/filter/export tasks and population-SD global field power (GFP) with peak times. Preserve the requested channels, operation order, units and outputs."
 argument-hint: "[project-dir] [— subjects: sub-01,sub-02,...]"
 allowed-tools: Bash(*), Read, Write, Edit, Grep, Glob
 ---
@@ -13,30 +13,45 @@ Canonical sample skill for AEA. Mirrors ARIS skill structure: Constants → Inpu
 
 ## Use this skill
 
-Read the task and the approved analysis plan before choosing a procedure. The
-name and description select this skill; they do not specify the analysis.
-Load only the relevant sections below, rather than every reference in advance.
-For a bounded calculation, use the supplied inputs without inventing upstream
-stages or approvals. Keep the actual method, parameters, outputs, and checks.
+Read the task and approved plan, then select only the matching procedure.
+For a bounded calculation, go directly to these sections:
 
-Template values in the detailed procedures describe their documented examples.
-Resolve scientific choices against the task and approved plan before execution;
-do not treat an example, a timeout, or an unattended run as researcher approval.
-Preserve explicitly fixed configurations. Record unresolved choices and continue
-independent approved work, as described in the project instructions.
+- [Bounded preprocessing](references/bounded.md#bounded-preprocessing): translate
+  approved steps, preserve their order and use a fresh input copy after errors.
+- [Population global field power](references/bounded.md#population-global-field-power):
+  preserve the approved buffer and compute absolute peak times.
+- [Result status and inference limits](references/bounded.md#result-status-and-inference-limits):
+  distinguish missing source data, supported calculations and unsupported inference.
+- [Public artifact self-check](references/bounded.md#public-artifact-self-check):
+  save actual outputs and check the processing, arrays and final JSON at the declared scope.
+
+The full-study stages below apply when that workflow is requested. Their example
+values add no processing step or scientific default to a bounded task. Preserve
+fixed settings; record unresolved scientific choices and continue independent
+approved work. A timeout or unattended run supplies no additional approval.
 
 For clients without native skill loading, use the section loader from the
 repository root; it loads the selected procedure, not the whole reference:
 
 ```bash
-python tools/load_skill.py eeg-preprocess --section "Phase A — Plan"
+python tools/load_skill.py eeg-preprocess --section "Bounded preprocessing"
 ```
+
+For an approved bounded MNE GFP, Welch or Hilbert plan, the
+[continuous-plan runner](../../docs/PRELOADED_SKILLS.md#execute-and-check-a-complete-continuous-plan)
+executes its ordered operations and saves actual metadata and a checked final
+JSON object. This route adds no scientific defaults.
 
 ## Required inputs
 
-Before running, the following must exist in the project directory:
+For a bounded channel/filter/export/GFP request, the supplied Raw or recording
+and resolved task/plan provide the inputs. Preserve documented channel roles,
+units, interval, operation order and output requirements; do not construct
+unrequested full-study directories.
 
-1. `DATASET_BRIEF.md` — auto-generated via `tools/auto_brief.py` or manually filled. Critical `[USER]` fields (paradigm, conditions) must be resolved. Non-critical fields with defaults (bandpass, reference) can proceed with defaults — note in the preprocess plan.
+For a full study, the following must exist in the project directory:
+
+1. `DATASET_BRIEF.md` — auto-generated via `tools/auto_brief.py` or manually filled. Resolve scientific choices against the approved plan. For an explicitly bounded request, its supplied public plan can provide these inputs; do not invent a new study brief or adopt example filter/reference values.
 2. `ENVIRONMENT.json` — produced by `tools/env/check_env.{sh,ps1}`. Run the probe if missing.
 3. `raw/` — directory with subject files (`.bdf`/`.set`/`.edf`/`.fif`/`.vhdr`).
 
@@ -46,19 +61,22 @@ Before running, the following must exist in the project directory:
 - **Never** use a highpass >0.1 Hz for the final ERP data without documenting the rationale (risk of filter artifacts in baseline, Tanner et al. 2015).
 - **Never** use causal (single-pass) filters for offline analysis — they introduce phase distortion and asymmetric temporal smearing.
 - **Never** apply ICA in this stage — ICA belongs in `eeg-ica`. This stage only prepares data for ICA (1 Hz highpass copy if needed).
-- **Never** skip line noise removal and assume the lowpass will handle it — harmonics and spectral leakage can persist.
+- When line-noise removal is approved, use its actual frequency and method; a lowpass does not establish that the specified operation was performed. Bounded tasks receive only their approved operations.
 - **Never** use a lowpass below 20 Hz for ERP data — it distorts component morphology.
 - **Never** include EOG/ECG/EMG/mastoid channels in an `average` reference — set their channel types (or drop them) first, or they leak into every scalp channel.
 - **Never** silently change the planned sampling rate or downsampling stage. Raw resampling affects event-time precision; epoch resampling requires edge-effect precautions, and decimation requires prior anti-alias filtering.
 - **Never** choose ICA dimensionality without accounting for the actual reference, interpolation and effective rank. Record `n_interpolated`, `avg_ref_applied` and projection state; a signal-derived rank already includes those dependencies and must not have them subtracted again.
 - **Never** try to ICA out a transient all-channel excursion (head movement, swallow) — annotate it `'bad'` and reject the segment; ICA is for spatially-stationary sources (blinks, EOG, cardiac, EMG elsewhere).
 - **Never** change the approved reference order or apply a decomposition to a different channel/reference configuration. Record whether average reference is applied or only a pending projector, and use the corresponding effective rank.
-- **Never** skip the notch even when the low-pass is below the line frequency — the LP transition band/ringing and harmonics can leave a residual 50/60 Hz peak; always run `notch_filter()` after the band-pass.
+- A FIR parameter table or spectral integration band does not authorize a filter. Keep the approved processing order and do not add a notch or bandpass to an analysis that does not request it.
 - **Never** decimate or slice samples without appropriate prior anti-alias filtering. Do not confuse this with MNE `resample`, which includes its own anti-alias filter.
 - **Never** re-filter already-baselined epochs without re-running baseline correction — filtering reshapes the baseline window and invalidates the prior correction (prefer finalizing all filtering on continuous `Raw` before epoching).
 
 
 ## Procedure reference
+
+Use the [bounded processing/export helpers](scripts/continuous.py) to select
+the actual analysis subset, preserve SI units and reopen exported EDF files.
 
 Choose the section that matches the current operation. Detailed code examples
 and numerical conventions remain in the linked source.

@@ -37,11 +37,11 @@ def _inputs(monkeypatch, n_times, n_fft, segment_seconds=2):
     monkeypatch.setattr(mne, 'read_epochs', lambda *args, **kwargs: epochs)
     plan = {'method': 'welch', 'frequency_range_hz': [1, 40],
             'welch': {'segment_seconds': segment_seconds, 'n_fft': n_fft,
-                      'window': 'hann', 'overlap_fraction': .5, 'remove_dc': True},
+                      'window': 'hann', 'overlap_fraction': .5, 'remove_dc': True, 'average': 'mean'},
             'bands': {'alpha': [8, 13]}, 'band_measure': 'mean_density'}
     namespace = {'SPECTRAL_PLAN': plan, 'EPOCH_SECONDS': 2, 'EPOCH_OVERLAP_SECONDS': 0,
                  'preprocessed_path': 'synthetic-raw.fif', 'epochs_path': 'synthetic-epo.fif',
-                 'condition': 'a'}
+                 'condition': 'a', 'AEA_ROOT': str(ROOT)}
     return raw, epochs, namespace
 
 

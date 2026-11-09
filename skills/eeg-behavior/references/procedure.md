@@ -1,12 +1,17 @@
 ## Constants
 
-- **RT_OUTLIER_METHOD = `iqr`** — Method for RT outlier removal. Alternatives: `sd` (±2.5 SD), `absolute` (200-2000ms), `mad` (median absolute deviation).
-- **RT_OUTLIER_THRESHOLD = `1.5`** — IQR multiplier. For `sd` method: number of SDs.
-- **ACCURACY_EXCLUSION = `0.5`** — Exclude subjects with accuracy below this threshold (chance for 2AFC).
-- **MEASURES = `[rt, accuracy]`** — Behavioral measures to compute. Options: `rt`, `accuracy`, `dprime`, `criterion`, `ies` (inverse efficiency score).
-- **EEG_BEHAVIOR_METHOD = `regression`** — How to link EEG to behavior. Options: `regression` (single-trial), `median_split`, `correlation` (across-subject), `robust_regression`.
+- **APPROVED SETTINGS** — resolve into `approved_behavior_params`: original
+  recording/block and trial keys, event/condition/correctness mapping, response
+  window and assignment, RT eligibility and outlier policy (including no outlier
+  removal if approved), observation unit, condition test, contrast order,
+  missing/unmatched policy, EEG estimator and regression model. Do not invent
+  thresholds or select a new test/model from the results.
+- **ACCURACY / TRIAL EXCLUSION** — use only an approved rule and its scope; no
+  automatic 50% accuracy cutoff or universal RT bounds.
+- **MEASURES / EEG_BEHAVIOR_METHOD** — use the requested scores and estimand;
+  across-subject correlation and within-subject trial regression differ.
 - **OUTPUT_DIR = `behavior-stage/`**
-- **SEED = read from ANALYSIS_PLAN**, default `42`.
+- **SEED** — read the approved seed if the selected operation needs randomness.
 
 > Override: `/eeg-behavior projects/my-study — measures: rt,accuracy,dprime — eeg-behavior: regression`
 
@@ -15,82 +20,102 @@
 ### From EEG event markers (most common)
 
 ```python
+# AEA example: behavior-responses
 import mne
 import numpy as np
 import pandas as pd
-
-# Load raw to get all events
-raw = mne.io.read_raw_fif(raw_path, preload=False)
-events, event_id = mne.events_from_annotations(raw)
-
-# Build trial table: for each stimulus, find the next response
-trials = []
-stim_events = events[np.isin(events[:, 2], stim_codes)]
-resp_events = events[np.isin(events[:, 2], resp_codes)]
-
-for stim in stim_events:
-    # Find first response after this stimulus
-    next_resp = resp_events[resp_events[:, 0] > stim[0]]
-    if len(next_resp) == 0:
-        trials.append({'stim_sample': stim[0], 'condition': stim[2],
-                       'rt': np.nan, 'response': np.nan, 'correct': False})
-        continue
-    resp = next_resp[0]
-    rt_ms = (resp[0] - stim[0]) / raw.info['sfreq'] * 1000
-    correct = is_correct(stim[2], resp[2])  # user-defined mapping
-    trials.append({'stim_sample': stim[0], 'condition': stim[2],
-                   'rt': rt_ms, 'response': resp[2], 'correct': correct})
-
-df = pd.DataFrame(trials)
+from pathlib import Path
+import runpy
+trial_helpers = runpy.run_path(str(
+    Path(AEA_ROOT) / 'skills/eeg-behavior/scripts/trials.py'))
+events, event_id = mne.events_from_annotations(raw,
+    event_id=approved_behavior_params['event_id'], regexp=None,
+    use_rounding=approved_behavior_params['use_rounding'])
+stim_events = events[np.isin(events[:, 2], approved_behavior_params['stim_codes'])]
+resp_events = events[np.isin(events[:, 2], approved_behavior_params['resp_codes'])]
+stimuli = pd.DataFrame({'stim_sample': stim_events[:, 0],
+                       'condition': stim_events[:, 2]})
+responses = pd.DataFrame({'response_sample': resp_events[:, 0],
+                         'response_code': resp_events[:, 2]})
+# Actual recording/session/block identity, not a guessed row-number pairing.
+for key, value in recording_identity.items():
+    stimuli[key] = value
+    responses[key] = value
+df, response_audit = trial_helpers['match_responses'](
+    stimuli, responses, sfreq=raw.info['sfreq'],
+    **approved_behavior_params['response_policy'])
+# Correctness comes from the approved task mapping, including no-response trials.
+df['correct'] = [is_correct(row.condition,
+    None if row.status == 'missed' else row.response_code) for row in df.itertuples()]
 ```
+
+`raw` is the supplied recording on the approved event grid. This example uses
+the original `stim_sample` plus recording/block fields as trial identity. For
+logs with existing trial IDs, retain those IDs through their approved alignment
+instead of assigning new IDs after EEG rejection.
+
+The helper requires `group_keys`, `trial_keys`, `response_window_ms`,
+`stop_at_next_stimulus` and `assignment='first_unused'`. Its window includes the
+left bound and excludes the right bound; it visits stimuli chronologically per
+recording/block and uses each response row once. Use it only when that rule is
+approved. If the design permits another assignment or boundary convention,
+implement that explicitly. Save `response_audit`, including missed, unused,
+duplicate-source and multiple-candidate information; do not silently reuse or
+deduplicate events. No-go omissions are not automatically coded incorrect.
 
 ### From behavioral log files
 
 ```python
 # If user provides a separate behavioral file (CSV, TSV, PsychoPy log)
 df = pd.read_csv(behavioral_log_path)
-# Must have columns: trial, condition, rt, response, correct
-# Align with EEG events by trial number or timestamp
+# Keep original recording/block/trial identity, condition, RT unit, response and correctness.
+# Resolve timestamp-to-sample conversion and verify event identity before joining.
 ```
 
 ## Phase B — Behavioral descriptive statistics
 
 ### RT analysis
 
+Apply the approved RT eligibility/outlier rule to form `df_clean`, retaining its
+original keys. Record each filtering step and per-subject/condition counts.
+There is no automatic IQR multiplier, absolute bound or participant exclusion.
+Descriptive RT summaries must name their unit (trials or participant summaries).
+
+For a participant-level paired test, first form the approved condition summary
+per participant; for a genuinely paired-trial test, supply the original pair
+keys. The following example is **only** for an approved paired t-test and does
+not aggregate trials or choose a test:
+
 ```python
-# 1. Filter: correct trials only, within RT bounds
-df_correct = df[df['correct'] == True].copy()
-
-# 2. Outlier removal
-if RT_OUTLIER_METHOD == 'iqr':
-    q1 = df_correct['rt'].quantile(0.25)
-    q3 = df_correct['rt'].quantile(0.75)
-    iqr = q3 - q1
-    df_clean = df_correct[(df_correct['rt'] >= q1 - 1.5*iqr) &
-                           (df_correct['rt'] <= q3 + 1.5*iqr)]
-elif RT_OUTLIER_METHOD == 'sd':
-    mean, std = df_correct['rt'].mean(), df_correct['rt'].std()
-    df_clean = df_correct[np.abs(df_correct['rt'] - mean) <= 2.5 * std]
-elif RT_OUTLIER_METHOD == 'absolute':
-    df_clean = df_correct[(df_correct['rt'] >= 200) & (df_correct['rt'] <= 2000)]
-
-# 3. Per-condition summary
-summary = df_clean.groupby('condition')['rt'].agg(['mean', 'median', 'std', 'count'])
-
-# 4. Condition comparison (paired t-test or Wilcoxon for single subject)
-from scipy.stats import ttest_rel, wilcoxon
-rt_a = df_clean[df_clean['condition'] == cond_a]['rt']
-rt_b = df_clean[df_clean['condition'] == cond_b]['rt']
-t, p = ttest_rel(rt_a[:min(len(rt_a), len(rt_b))],
-                 rt_b[:min(len(rt_a), len(rt_b))])
+# AEA example: behavior-paired-test
+from pathlib import Path
+import runpy
+from scipy.stats import ttest_rel
+trial_helpers = runpy.run_path(str(
+    Path(AEA_ROOT) / 'skills/eeg-behavior/scripts/trials.py'))
+test_spec = approved_behavior_params['condition_test']
+if test_spec['method'] != 'paired_t':
+    raise ValueError('This example requires an approved paired_t; use the planned test instead')
+rt_a, rt_b, pairing_audit = trial_helpers['paired_values'](
+    comparison_table, **test_spec['pairing'])
+if len(rt_a) < 2:
+    raise ValueError('Paired t-test needs at least two identified observation pairs')
+t, p = ttest_rel(rt_a, rt_b, alternative=test_spec['alternative'])
 ```
+
+`comparison_table` contains one value per approved unit and condition.
+`pairing` requires `unit_keys`, `condition_column`, ordered `conditions`,
+`value_column`, and `unmatched_policy` (`error` or explicitly approved
+`intersection`). Duplicate unit/condition rows fail rather than being averaged
+or truncated. Unpaired/independent designs require their approved test on the
+appropriate units; equal row counts never establish related observations.
 
 ### Accuracy analysis
 
 ```python
 accuracy = df.groupby('condition')['correct'].mean()
 
-# d-prime (signal detection theory) for 2AFC
+# Yes/no SDT with the approved target/nontarget coding, not a universal 2AFC conversion.
 from scipy.stats import norm
 hit_rate = np.clip(accuracy['target'], 0.01, 0.99)
 fa_rate = np.clip(1 - accuracy['nontarget'], 0.01, 0.99)
@@ -108,8 +133,12 @@ Link trial-by-trial EEG amplitude to RT or accuracy.
 ### Single-trial regression (recommended)
 
 ```python
-from sklearn.linear_model import LinearRegression
+# AEA example: behavior-eeg-regression
 import statsmodels.api as sm
+from pathlib import Path
+import runpy
+trial_helpers = runpy.run_path(str(
+    Path(AEA_ROOT) / 'skills/eeg-behavior/scripts/trials.py'))
 
 # Extract single-trial EEG: mean amplitude in ROI+window per trial
 epochs = mne.read_epochs(epochs_path, preload=True)
@@ -119,8 +148,21 @@ t_mask = (epochs.times >= tmin) & (epochs.times <= tmax)
 # Per-trial EEG feature
 eeg_amplitudes = epochs.get_data()[:, roi_idx, :][:, :, t_mask].mean(axis=(1, 2)) * 1e6
 
-# Match to behavioral data (same trial order)
-rt_values = df_clean['rt'].values[:len(eeg_amplitudes)]
+# Preserve original identities through epoch rejection and RT filtering.
+trial_keys = approved_behavior_params['trial_keys']
+if epochs.metadata is None:
+    raise ValueError('Original trial metadata is required; do not infer identity from row order')
+feature_table = epochs.metadata[trial_keys].copy()
+feature_table['eeg_amp'] = eeg_amplitudes
+aligned, alignment_audit = trial_helpers['align_trials'](
+    feature_table, df_clean, keys=trial_keys, right_columns=['rt'],
+    unmatched_policy=approved_behavior_params['unmatched_policy'])
+if approved_behavior_params['regression_method'] != 'single_subject_ols':
+    raise ValueError('This example is only for the approved single-subject OLS model')
+if aligned[approved_behavior_params['subject_column']].nunique() != 1:
+    raise ValueError('Do not pool multiple subjects as independent OLS trials')
+eeg_amplitudes = aligned['eeg_amp'].to_numpy()
+rt_values = aligned['rt'].to_numpy()
 
 # Regression
 X = sm.add_constant(eeg_amplitudes)
@@ -129,6 +171,16 @@ beta = model.params[1]
 r_squared = model.rsquared
 p_value = model.pvalues[1]
 ```
+
+Store the original stimulus identity in `epochs.metadata` at epoch creation;
+MNE carries the corresponding metadata through drops. Existing saved epochs
+need their retained mapping (for example from the original event table and
+`epochs.selection`); do not renumber remaining epochs. The helper preserves EEG
+feature order, checks one-to-one identity and records both unmatched sets.
+`intersection` means an explicitly approved common retained set; otherwise use
+`error`. Keep the audit with the analysis output. Equal counts alone are not a
+validation of alignment. Include condition in the identity/checks where needed
+to verify labels, and keep recording/block keys to prevent cross-session joins.
 
 > **Optional dependency:** `statsmodels` is NOT guaranteed in the `aeais` env. Guard the import (`try: import statsmodels.api as sm / import statsmodels.formula.api as smf except ImportError: ...`), log the absence to the stage JSON, surface it in AUDIT, and emit a `pip install statsmodels` hint instead of crashing. The same guard applies to the mixed-model recipe below.
 
@@ -151,7 +203,10 @@ p_value = mf.pvalues["eeg_amp"]
 # report fixed-effect beta + p, the random-effect variance, and n_subjects AND n_trials
 ```
 
-If the random-slope model fails to converge, fall back to a random-intercept-only model (`re_formula="~1"`) and say so. Center `eeg_amp` within subject if you want the slope to reflect within-subject (trial-level) coupling rather than a mix of within- and between-subject effects.
+If the approved random-slope model fails to converge, retain the failure and
+report it. A random-intercept-only fallback is allowed only if pre-authorized;
+logging a change does not authorize it. Within-subject centering and condition
+covariates also follow the approved estimand/model.
 
 For a binary outcome (`correct`) use a logistic mixed model via `statsmodels.genmod.bayes_mixed_glm.BinomialBayesMixedGLM` (also gated behind the statsmodels import guard), or `glmer(correct ~ eeg_amp + (1|subject), family=binomial)` if R/lme4 is reachable through the optional `pymer4` package (neither statsmodels nor pymer4 is guaranteed in `aeais` — degrade gracefully).
 
@@ -232,10 +287,12 @@ scores = cross_val_score(estimator, X, y, groups=groups, cv=GroupKFold(n_splits=
 
 ## Phase E — Sanity checks
 
-- [ ] RT values are plausible (200–2000 ms for typical EEG tasks).
-- [ ] Accuracy is above chance for all conditions.
+- [ ] RT units and the approved task-specific bounds/filter match the actual output; no generic 200–2000 ms cutoff is inferred.
+- [ ] Accuracy/correctness mapping includes omissions as specified by the task; chance and exclusion rules are applied only when defined in the plan.
 - [ ] Outlier removal didn't discard >20% of trials (if so, warn).
-- [ ] Trial counts match between behavioral data and epoch counts.
+- [ ] Original recording/block/trial keys join one-to-one; matched identities and both unmatched sets are retained. Counts alone are insufficient.
+- [ ] Response assignments satisfy the approved timing/ownership rule; no source response row is reused and duplicate source rows are identified.
+- [ ] Condition-test pairs use actual participant/pair identities and the approved contrast order; no truncation or automatic trial pairing.
 - [ ] EEG-behavior regression checked for outliers and influential points.
 - [ ] If median split: caveat about loss of power documented.
 
@@ -249,6 +306,6 @@ scores = cross_val_score(estimator, X, y, groups=groups, cv=GroupKFold(n_splits=
 | EEG-behavior r² very high (>0.5) | Almost certainly an artifact. Check for trial-ordering confound or data leakage. |
 | Pooled single-trial regression p-value implausibly tiny (e.g. p<1e-10) with modest effect | Pseudoreplication from treating all subjects' trials as independent in OLS. Refit as a mixed model with a subject random intercept. |
 | Cross-validated EEG->behavior accuracy/R² much higher than the explanatory effect | Subject leakage from plain KFold on pooled trials. Re-run with GroupKFold/LeaveOneGroupOut (groups=subject). |
-| Random-slope mixed model fails to converge (singular fit) | Too few trials/subjects for the slope variance. Drop to random-intercept-only (`re_formula="~1"`) and document the simplification. |
-| `import statsmodels` (or `pymer4`) fails | Optional dep absent in `aeais`. Log to stage JSON + AUDIT, emit `pip install statsmodels`, and fall back to the per-subject-slope two-step or single-subject OLS. |
-| Too few trials after RT filtering (<20 per condition) | Loosen outlier threshold or use non-parametric tests. |
+| Random-slope mixed model fails to converge (singular fit) | Retain the failure and report it. Use a simpler model only under the approved fallback policy. |
+| `import statsmodels` (or `pymer4`) fails | Record the missing selected dependency and leave the model incomplete; do not substitute single-subject OLS or a new estimand. |
+| Too few trials after approved RT filtering | Report retained identities/counts and the applicable inclusion rule; do not loosen the threshold or change tests automatically. |
