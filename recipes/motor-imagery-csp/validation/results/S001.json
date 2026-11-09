@@ -1,0 +1,666 @@
+{
+  "subject": 1,
+  "records": [
+    {
+      "subject": 1,
+      "run": 4,
+      "sfreq": 160.0,
+      "channels": [
+        "FC5",
+        "FC3",
+        "FC1",
+        "FCz",
+        "FC2",
+        "FC4",
+        "FC6",
+        "C5",
+        "C3",
+        "C1",
+        "Cz",
+        "C2",
+        "C4",
+        "C6",
+        "CP5",
+        "CP3",
+        "CP1",
+        "CPz",
+        "CP2",
+        "CP4",
+        "CP6",
+        "Fp1",
+        "Fpz",
+        "Fp2",
+        "AF7",
+        "AF3",
+        "AFz",
+        "AF4",
+        "AF8",
+        "F7",
+        "F5",
+        "F3",
+        "F1",
+        "Fz",
+        "F2",
+        "F4",
+        "F6",
+        "F8",
+        "FT7",
+        "FT8",
+        "T7",
+        "T8",
+        "T9",
+        "T10",
+        "TP7",
+        "TP8",
+        "P7",
+        "P5",
+        "P3",
+        "P1",
+        "Pz",
+        "P2",
+        "P4",
+        "P6",
+        "P8",
+        "PO7",
+        "PO3",
+        "POz",
+        "PO4",
+        "PO8",
+        "O1",
+        "Oz",
+        "O2",
+        "Iz"
+      ],
+      "event_count": 15,
+      "retained": 15,
+      "left": 8,
+      "right": 7,
+      "dropped": [],
+      "source_bytes": 2596896
+    },
+    {
+      "subject": 1,
+      "run": 8,
+      "sfreq": 160.0,
+      "channels": [
+        "FC5",
+        "FC3",
+        "FC1",
+        "FCz",
+        "FC2",
+        "FC4",
+        "FC6",
+        "C5",
+        "C3",
+        "C1",
+        "Cz",
+        "C2",
+        "C4",
+        "C6",
+        "CP5",
+        "CP3",
+        "CP1",
+        "CPz",
+        "CP2",
+        "CP4",
+        "CP6",
+        "Fp1",
+        "Fpz",
+        "Fp2",
+        "AF7",
+        "AF3",
+        "AFz",
+        "AF4",
+        "AF8",
+        "F7",
+        "F5",
+        "F3",
+        "F1",
+        "Fz",
+        "F2",
+        "F4",
+        "F6",
+        "F8",
+        "FT7",
+        "FT8",
+        "T7",
+        "T8",
+        "T9",
+        "T10",
+        "TP7",
+        "TP8",
+        "P7",
+        "P5",
+        "P3",
+        "P1",
+        "Pz",
+        "P2",
+        "P4",
+        "P6",
+        "P8",
+        "PO7",
+        "PO3",
+        "POz",
+        "PO4",
+        "PO8",
+        "O1",
+        "Oz",
+        "O2",
+        "Iz"
+      ],
+      "event_count": 15,
+      "retained": 15,
+      "left": 8,
+      "right": 7,
+      "dropped": [],
+      "source_bytes": 2596896
+    },
+    {
+      "subject": 1,
+      "run": 12,
+      "sfreq": 160.0,
+      "channels": [
+        "FC5",
+        "FC3",
+        "FC1",
+        "FCz",
+        "FC2",
+        "FC4",
+        "FC6",
+        "C5",
+        "C3",
+        "C1",
+        "Cz",
+        "C2",
+        "C4",
+        "C6",
+        "CP5",
+        "CP3",
+        "CP1",
+        "CPz",
+        "CP2",
+        "CP4",
+        "CP6",
+        "Fp1",
+        "Fpz",
+        "Fp2",
+        "AF7",
+        "AF3",
+        "AFz",
+        "AF4",
+        "AF8",
+        "F7",
+        "F5",
+        "F3",
+        "F1",
+        "Fz",
+        "F2",
+        "F4",
+        "F6",
+        "F8",
+        "FT7",
+        "FT8",
+        "T7",
+        "T8",
+        "T9",
+        "T10",
+        "TP7",
+        "TP8",
+        "P7",
+        "P5",
+        "P3",
+        "P1",
+        "Pz",
+        "P2",
+        "P4",
+        "P6",
+        "P8",
+        "PO7",
+        "PO3",
+        "POz",
+        "PO4",
+        "PO8",
+        "O1",
+        "Oz",
+        "O2",
+        "Iz"
+      ],
+      "event_count": 15,
+      "retained": 15,
+      "left": 7,
+      "right": 8,
+      "dropped": [],
+      "source_bytes": 2596896
+    }
+  ],
+  "folds": [
+    {
+      "subject": 1,
+      "held_out_run": 4,
+      "train_runs": [
+        8,
+        12
+      ],
+      "train_n": 30,
+      "test_n": 15,
+      "balanced_accuracy": 0.7857142857142857,
+      "confusion_matrix": [
+        [
+          8,
+          0
+        ],
+        [
+          3,
+          4
+        ]
+      ],
+      "manual_feature_max_error": 3.3306690738754696e-16
+    },
+    {
+      "subject": 1,
+      "held_out_run": 8,
+      "train_runs": [
+        4,
+        12
+      ],
+      "train_n": 30,
+      "test_n": 15,
+      "balanced_accuracy": 0.4732142857142857,
+      "confusion_matrix": [
+        [
+          3,
+          5
+        ],
+        [
+          3,
+          4
+        ]
+      ],
+      "manual_feature_max_error": 4.440892098500626e-16
+    },
+    {
+      "subject": 1,
+      "held_out_run": 12,
+      "train_runs": [
+        4,
+        8
+      ],
+      "train_n": 30,
+      "test_n": 15,
+      "balanced_accuracy": 0.6160714285714286,
+      "confusion_matrix": [
+        [
+          6,
+          1
+        ],
+        [
+          5,
+          3
+        ]
+      ],
+      "manual_feature_max_error": 4.440892098500626e-16
+    }
+  ],
+  "predictions": [
+    {
+      "subject": 1,
+      "run": 4,
+      "event_sample": 672,
+      "label": 1,
+      "prediction": 1,
+      "right_probability": 0.8278035019360885
+    },
+    {
+      "subject": 1,
+      "run": 4,
+      "event_sample": 2000,
+      "label": 0,
+      "prediction": 0,
+      "right_probability": 0.01105638900613097
+    },
+    {
+      "subject": 1,
+      "run": 4,
+      "event_sample": 3328,
+      "label": 0,
+      "prediction": 0,
+      "right_probability": 0.05765435147587023
+    },
+    {
+      "subject": 1,
+      "run": 4,
+      "event_sample": 4656,
+      "label": 1,
+      "prediction": 1,
+      "right_probability": 0.8533809891433263
+    },
+    {
+      "subject": 1,
+      "run": 4,
+      "event_sample": 5984,
+      "label": 1,
+      "prediction": 1,
+      "right_probability": 0.8059897039456513
+    },
+    {
+      "subject": 1,
+      "run": 4,
+      "event_sample": 7312,
+      "label": 0,
+      "prediction": 0,
+      "right_probability": 0.002054315096873552
+    },
+    {
+      "subject": 1,
+      "run": 4,
+      "event_sample": 8640,
+      "label": 1,
+      "prediction": 0,
+      "right_probability": 0.005342368520028078
+    },
+    {
+      "subject": 1,
+      "run": 4,
+      "event_sample": 9968,
+      "label": 0,
+      "prediction": 0,
+      "right_probability": 3.5524839703619024e-07
+    },
+    {
+      "subject": 1,
+      "run": 4,
+      "event_sample": 11296,
+      "label": 1,
+      "prediction": 1,
+      "right_probability": 0.8107426729632962
+    },
+    {
+      "subject": 1,
+      "run": 4,
+      "event_sample": 12624,
+      "label": 0,
+      "prediction": 0,
+      "right_probability": 0.00956988049944291
+    },
+    {
+      "subject": 1,
+      "run": 4,
+      "event_sample": 13952,
+      "label": 0,
+      "prediction": 0,
+      "right_probability": 0.008348881683460081
+    },
+    {
+      "subject": 1,
+      "run": 4,
+      "event_sample": 15280,
+      "label": 1,
+      "prediction": 0,
+      "right_probability": 0.007791298111672703
+    },
+    {
+      "subject": 1,
+      "run": 4,
+      "event_sample": 16608,
+      "label": 0,
+      "prediction": 0,
+      "right_probability": 0.11430285317186267
+    },
+    {
+      "subject": 1,
+      "run": 4,
+      "event_sample": 17936,
+      "label": 1,
+      "prediction": 0,
+      "right_probability": 0.1367621473590081
+    },
+    {
+      "subject": 1,
+      "run": 4,
+      "event_sample": 19264,
+      "label": 0,
+      "prediction": 0,
+      "right_probability": 0.0036052137788428577
+    },
+    {
+      "subject": 1,
+      "run": 8,
+      "event_sample": 672,
+      "label": 0,
+      "prediction": 1,
+      "right_probability": 0.7939022128265063
+    },
+    {
+      "subject": 1,
+      "run": 8,
+      "event_sample": 2000,
+      "label": 1,
+      "prediction": 1,
+      "right_probability": 0.5549168045898829
+    },
+    {
+      "subject": 1,
+      "run": 8,
+      "event_sample": 3328,
+      "label": 0,
+      "prediction": 1,
+      "right_probability": 0.9947303609820762
+    },
+    {
+      "subject": 1,
+      "run": 8,
+      "event_sample": 4656,
+      "label": 1,
+      "prediction": 0,
+      "right_probability": 0.3630079164222502
+    },
+    {
+      "subject": 1,
+      "run": 8,
+      "event_sample": 5984,
+      "label": 0,
+      "prediction": 0,
+      "right_probability": 0.0070365018523586825
+    },
+    {
+      "subject": 1,
+      "run": 8,
+      "event_sample": 7312,
+      "label": 1,
+      "prediction": 1,
+      "right_probability": 0.9971250506831862
+    },
+    {
+      "subject": 1,
+      "run": 8,
+      "event_sample": 8640,
+      "label": 0,
+      "prediction": 1,
+      "right_probability": 0.8725700727824974
+    },
+    {
+      "subject": 1,
+      "run": 8,
+      "event_sample": 9968,
+      "label": 1,
+      "prediction": 0,
+      "right_probability": 0.0006009938812874087
+    },
+    {
+      "subject": 1,
+      "run": 8,
+      "event_sample": 11296,
+      "label": 1,
+      "prediction": 1,
+      "right_probability": 0.5671983275727268
+    },
+    {
+      "subject": 1,
+      "run": 8,
+      "event_sample": 12624,
+      "label": 0,
+      "prediction": 0,
+      "right_probability": 0.07569002711024339
+    },
+    {
+      "subject": 1,
+      "run": 8,
+      "event_sample": 13952,
+      "label": 0,
+      "prediction": 1,
+      "right_probability": 0.9875293305431991
+    },
+    {
+      "subject": 1,
+      "run": 8,
+      "event_sample": 15280,
+      "label": 1,
+      "prediction": 0,
+      "right_probability": 0.012750439916603637
+    },
+    {
+      "subject": 1,
+      "run": 8,
+      "event_sample": 16608,
+      "label": 1,
+      "prediction": 1,
+      "right_probability": 0.9918204939014844
+    },
+    {
+      "subject": 1,
+      "run": 8,
+      "event_sample": 17936,
+      "label": 0,
+      "prediction": 1,
+      "right_probability": 0.9467333355696683
+    },
+    {
+      "subject": 1,
+      "run": 8,
+      "event_sample": 19264,
+      "label": 0,
+      "prediction": 0,
+      "right_probability": 0.02448470070796108
+    },
+    {
+      "subject": 1,
+      "run": 12,
+      "event_sample": 672,
+      "label": 1,
+      "prediction": 0,
+      "right_probability": 0.004668291114154321
+    },
+    {
+      "subject": 1,
+      "run": 12,
+      "event_sample": 2000,
+      "label": 0,
+      "prediction": 0,
+      "right_probability": 0.006721516501688583
+    },
+    {
+      "subject": 1,
+      "run": 12,
+      "event_sample": 3328,
+      "label": 1,
+      "prediction": 1,
+      "right_probability": 0.7344501997230775
+    },
+    {
+      "subject": 1,
+      "run": 12,
+      "event_sample": 4656,
+      "label": 0,
+      "prediction": 0,
+      "right_probability": 1.4658108519890591e-05
+    },
+    {
+      "subject": 1,
+      "run": 12,
+      "event_sample": 5984,
+      "label": 0,
+      "prediction": 0,
+      "right_probability": 0.00019820532728884998
+    },
+    {
+      "subject": 1,
+      "run": 12,
+      "event_sample": 7312,
+      "label": 1,
+      "prediction": 1,
+      "right_probability": 0.9522772634498204
+    },
+    {
+      "subject": 1,
+      "run": 12,
+      "event_sample": 8640,
+      "label": 1,
+      "prediction": 1,
+      "right_probability": 0.9759188989433993
+    },
+    {
+      "subject": 1,
+      "run": 12,
+      "event_sample": 9968,
+      "label": 0,
+      "prediction": 0,
+      "right_probability": 0.04507610971948886
+    },
+    {
+      "subject": 1,
+      "run": 12,
+      "event_sample": 11296,
+      "label": 0,
+      "prediction": 1,
+      "right_probability": 0.9715780495334047
+    },
+    {
+      "subject": 1,
+      "run": 12,
+      "event_sample": 12624,
+      "label": 1,
+      "prediction": 0,
+      "right_probability": 0.2971611353230524
+    },
+    {
+      "subject": 1,
+      "run": 12,
+      "event_sample": 13952,
+      "label": 1,
+      "prediction": 0,
+      "right_probability": 0.0014177513974531033
+    },
+    {
+      "subject": 1,
+      "run": 12,
+      "event_sample": 15280,
+      "label": 0,
+      "prediction": 0,
+      "right_probability": 0.00892355186577506
+    },
+    {
+      "subject": 1,
+      "run": 12,
+      "event_sample": 16608,
+      "label": 1,
+      "prediction": 0,
+      "right_probability": 0.28088660898900386
+    },
+    {
+      "subject": 1,
+      "run": 12,
+      "event_sample": 17936,
+      "label": 0,
+      "prediction": 0,
+      "right_probability": 0.00046680750971681115
+    },
+    {
+      "subject": 1,
+      "run": 12,
+      "event_sample": 19264,
+      "label": 1,
+      "prediction": 0,
+      "right_probability": 0.004361811490054375
+    }
+  ]
+}

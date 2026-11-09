@@ -44,7 +44,7 @@ Read the recipe's numerical-specification notes before comparing outputs with a 
 
 ## Available recipes
 
-The library contains **10 recipes**. The status column below reproduces each recipe's frontmatter. Validation evidence is described separately because it applies to the datasets, contrasts, and configurations recorded in that recipe.
+The library contains **11 recipes**. The status column below reproduces each recipe's frontmatter. Validation evidence is described separately because it applies to the datasets, contrasts, and configurations recorded in that recipe.
 
 | Recipe | Analysis | Declared status | Recorded validation |
 |---|---|---|---|
@@ -58,6 +58,7 @@ The library contains **10 recipes**. The status column below reproduces each rec
 | [resting-microstate](resting-microstate/RECIPE.md) | Resting microstate maps and temporal parameters | `validated` | PhysioNet EEGBCI eyes-closed analysis |
 | [resting-spectral-connectivity](resting-spectral-connectivity/RECIPE.md) | Spectral power, aperiodic fits, and debiased wPLI | `validated` | EEGBCI alpha-reactivity validation; the recipe records separate aperiodic and connectivity checks and their limitations |
 | [complexity-anesthesia](complexity-anesthesia/RECIPE.md) | Continuous complexity and entropy measures | `validated` | EEGBCI eyes-open versus eyes-closed check; the anesthesia contrast has not been tested here |
+| [motor-imagery-csp](motor-imagery-csp/RECIPE.md) | Left/right fist imagery, CSP/LDA with entire runs held out | experimental | Public EEGBCI S001–S005, runs 04/08/12; descriptive validation and numerical regression |
 
 For face selectivity, use `n170-faces`. Face inversion is a different contrast and has its own `n170-face-inversion` recipe.
 

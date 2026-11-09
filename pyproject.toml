@@ -27,7 +27,7 @@ Issues = "https://github.com/dengzhe-hou/auto-eeg-analysis/issues"
 
 [project.optional-dependencies]
 analysis = [
-  "numpy", "scipy", "matplotlib", "pandas", "h5py",
+  "numpy", "scipy", "scikit-learn", "matplotlib", "pandas", "h5py",
   "mne[hdf5]>=1.7", "mne-bids>=0.14", "mne-icalabel>=0.6",
   "onnxruntime>=1.16", "autoreject>=0.4", "pycrostates>=0.5",
   "mne-connectivity>=0.7", "pyprep>=0.4", "mffpy", "eeglabio",
