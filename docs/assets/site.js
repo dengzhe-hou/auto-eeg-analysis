@@ -62,7 +62,7 @@ if (pageSections.length) {
   const directoryLinks = pageSections.map(section => {
     const link = document.createElement('a');
     link.href = `#${section.id}`;
-    link.textContent = section.querySelector('h2').textContent.trim();
+    link.textContent = section.dataset.navTitle || section.querySelector('h2').textContent.trim();
     directoryPanel.append(link);
     return link;
   });
@@ -130,4 +130,43 @@ if (pageSections.length) {
   window.addEventListener('resize', queueDirectoryUpdate);
   window.addEventListener('load', markCurrentSection, { once: true });
   markCurrentSection();
+}
+
+// Search only the resources already rendered in the document; no network requests.
+const controls = document.querySelector('.library-controls');
+if (controls) {
+  controls.hidden = false;
+  const resources = [...document.querySelectorAll('.resource-item')];
+  const search = document.getElementById('resource-search');
+  const group = document.getElementById('resource-group');
+  const count = document.getElementById('resource-count');
+  const kindButtons = [...document.querySelectorAll('[data-kind][aria-pressed]')];
+  let kind = 'recipe';
+  function filterResources() {
+    const words = search.value.toLocaleLowerCase().trim().split(/\s+/).filter(Boolean);
+    let visible = 0;
+    for (const item of resources) {
+      const text = item.textContent.toLocaleLowerCase();
+      const matches = (kind === 'all' || item.dataset.kind === kind)
+        && (group.value === 'all' || item.dataset.group === group.value)
+        && words.every(word => text.includes(word));
+      item.hidden = !matches;
+      if (matches) visible++;
+    }
+    count.textContent = `${visible} ${count.dataset.unit}`;
+    document.getElementById('resource-empty').hidden = visible !== 0;
+  }
+  kindButtons.forEach(button => button.addEventListener('click', () => {
+    kind = button.dataset.kind;
+    kindButtons.forEach(item => item.setAttribute('aria-pressed', String(item === button)));
+    filterResources();
+  }));
+  document.querySelectorAll('[data-show-kind]').forEach(link => link.addEventListener('click', () => {
+    search.value = '';
+    group.value = 'all';
+    kindButtons.find(button => button.dataset.kind === link.dataset.showKind).click();
+  }));
+  search.addEventListener('input', filterResources);
+  group.addEventListener('change', filterResources);
+  filterResources();
 }

@@ -20,10 +20,10 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "https://dengzhe-hou.github.io/auto-eeg-analysis/"
-Repository = "https://github.com/dengzhe-hou/auto-eeg-analysis"
-Documentation = "https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/docs/GETTING_STARTED.md"
-Issues = "https://github.com/dengzhe-hou/auto-eeg-analysis/issues"
+Homepage = "https://dengzhe-hou.github.io/Auto-EEG-Analysis/"
+Repository = "https://github.com/dengzhe-hou/Auto-EEG-Analysis"
+Documentation = "https://github.com/dengzhe-hou/Auto-EEG-Analysis/blob/main/docs/GETTING_STARTED.md"
+Issues = "https://github.com/dengzhe-hou/Auto-EEG-Analysis/issues"
 
 [project.optional-dependencies]
 analysis = [

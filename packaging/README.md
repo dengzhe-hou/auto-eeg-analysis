@@ -55,6 +55,6 @@ Code and skills use the repository's MIT license. Study recipes use CC BY 4.0
 as stated in `recipes/README.md`. Preserve the recipe citations and original
 license notices. `CITATION.cff` retains the source repository's citation metadata.
 
-[Project](https://github.com/dengzhe-hou/auto-eeg-analysis) ·
-[Setup guide](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/docs/GETTING_STARTED.md) ·
-[Validation coverage](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/main/docs/CERTIFICATION_LEVELS.md)
+[Project](https://github.com/dengzhe-hou/Auto-EEG-Analysis) ·
+[Setup guide](https://github.com/dengzhe-hou/Auto-EEG-Analysis/blob/main/docs/GETTING_STARTED.md) ·
+[Validation coverage](https://github.com/dengzhe-hou/Auto-EEG-Analysis/blob/main/docs/CERTIFICATION_LEVELS.md)

@@ -8,18 +8,18 @@ Setting backend to `matlab` uses native EEGLAB preparation,
 client launch and a bounded epoched-ERP helper without Python/MNE. See
 `docs/MATLAB_NATIVE.md` in the matching checkout. This route is not
 included in the older 0.1.2 ZIP. Use the matching checkout and
-[0.1.3 preview ZIP](https://github.com/dengzhe-hou/auto-eeg-analysis/releases/tag/eeglab-v0.1.3-preview).
+[0.1.3 preview ZIP](https://github.com/dengzhe-hou/Auto-EEG-Analysis/releases/tag/eeglab-v0.1.3-preview).
 AEA 0.1.3 has been approved by the EEGLAB team and is listed in the
 [official extension catalogue](https://sccn.ucsd.edu/eeglab/plugin_uploader/plugin_list_all.php).
 
 ## Install
 
 For the native route, read `docs/MATLAB_NATIVE.md` in the matching checkout.
-For the MNE route, the [Windows walkthrough](https://dengzhe-hou.github.io/auto-eeg-analysis/WINDOWS_FIRST_RUN.html)
+For the MNE route, the [Windows walkthrough](https://dengzhe-hou.github.io/Auto-EEG-Analysis/WINDOWS_FIRST_RUN.html)
 includes client setup and executable paths. Version 0.1.3 adds a fifth Settings
 field for the analysis backend.
 
-1. Obtain the matching AEA checkout and sign in to Codex CLI or Claude Code. Choose MATLAB/EEGLAB for the native route, or set up the [Python/MNE environment](https://dengzhe-hou.github.io/auto-eeg-analysis/GETTING_STARTED.html) for the MNE route. The ZIP supplies the adapter, while the checkout supplies the AEA skills and procedures.
+1. Obtain the matching AEA checkout and sign in to Codex CLI or Claude Code. Choose MATLAB/EEGLAB for the native route, or set up the [Python/MNE environment](https://dengzhe-hou.github.io/Auto-EEG-Analysis/GETTING_STARTED.html) for the MNE route. The ZIP supplies the adapter, while the checkout supplies the AEA skills and procedures.
 2. In EEGLAB, open **File > Manage EEGLAB extensions**, search for **AEA**, and install version **0.1.3**. For manual installation instead, extract `aea-eeglab-0.1.3.zip` into EEGLAB's `plugins` folder, giving `plugins/aea0.1.3/`, or copy this `aea` folder there. Remove any previous AEA plugin folder before a manual installation. Install only one AEA plugin copy.
 3. Restart EEGLAB. Open **Tools > AEA > Settings** and select your AEA checkout, assistant (`codex` or `claude`), its executable, and backend (`matlab` or `mne`). Leave Python blank for `matlab`; for `mne`, select the full path to the configured environment's Python executable.
 
@@ -104,7 +104,7 @@ tag also predates the initial MATLAB fixes. Update the AEA checkout (including `
 for the Windows skill-link fix. Windows skill discovery uses NTFS directory junctions without requiring
 symlink privileges; other systems use relative directory symlinks.
 
-[Project](https://github.com/dengzhe-hou/auto-eeg-analysis) ·
+[Project](https://github.com/dengzhe-hou/Auto-EEG-Analysis) ·
 [EEGLAB plugin instructions](https://eeglab.org/tutorials/contribute/design_plugin.html)
 
 Code is distributed under the MIT license bundled in the ZIP. EEGLAB and the

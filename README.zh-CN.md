@@ -1,123 +1,110 @@
 <div align="center">
 
-# AEA：可共享的 EEG 分析技能与工作流配方
+# Auto EEG Analysis
 
-<p align="center"><a href="README.md">English</a> · <strong>简体中文</strong> · <a href="README.ja.md">日本語</a></p>
+**让编程助手复用 EEG 分析流程。**
 
-[![Documentation](https://img.shields.io/badge/Docs-Get_started-2f6fd0)](docs/GETTING_STARTED.md)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![EEGLAB 0.1.3](https://img.shields.io/badge/EEGLAB-0.1.3-6d4bd6)](docs/EEGLAB.md)
+[English](README.md) · **简体中文** · [日本語](README.ja.md)
 
-**[中文主页](https://dengzhe-hou.github.io/auto-eeg-analysis/index.zh-CN.html) · [使用指南](docs/GETTING_STARTED.md) · [配方目录](recipes/README.md) · [验证范围](docs/CERTIFICATION_LEVELS.md) · [参与贡献](CONTRIBUTING.md) · [发布版本](https://github.com/dengzhe-hou/auto-eeg-analysis/releases/latest)**
+[Website](https://dengzhe-hou.github.io/Auto-EEG-Analysis/index.zh-CN.html) · [使用文档](docs/GETTING_STARTED.md) · [PyPI preview](https://pypi.org/project/auto-eeg-analysis/0.3.3rc2/) · [EEGLAB 0.1.3](docs/EEGLAB.md) · [Zenodo](https://doi.org/10.5281/zenodo.24012489)
 
 </div>
 
-AEA（Automated EEG Analysis，自动化脑电分析）是一个开放资源库，提供面向 MNE-Python 的 **22 个技能（skills）和 10 个工作流配方（recipes）**，包含可执行规范和经过数值认证的核心。技能整合 EEG 方法、数值约定、代码模板和输出检查；配方将技能组合为适用于特定实验范式的工作流。
+AEA 提供面向编程助手的 **22 个分析技能和 10 个工作流配方**。研究者批准科学方案，助手读取流程并在本机环境执行代码，保留脚本、结果、图与审阅记录。
 
-研究者定义研究问题并批准分析方案。编程助手在你的环境中调整并执行模板，将方案、代码、结果、图、方法文字和审阅记录保存在一起。
+[快速开始](#quickstart) · [浏览资源库](#library) · [验证范围](#validation) · [参与贡献](#contributing)
 
-| 阶段 | 执行者与资源 | 输入 → 输出 |
-| --- | --- | --- |
-| **定义并批准** | 研究者、配方和技能 | 研究问题与数据 → 已批准的分析方案 |
-| **调整并执行** | 编程助手与代码模板 | 已批准的方案 → 主要使用 MNE-Python 执行的脚本 |
-| **检查与重放** | 研究者与输出检查 | 已保存结果 → 图、方法文字、审阅与有记录的重放 |
+[![N400 results from 20 ERP CORE participants](docs/assets/n400-example.png)](docs/EXAMPLES.md#erp-core-complete-n400-recipe-case)
 
-## 输出示例
+20 名 ERP CORE 参与者的固定教程。CPz/Cz/Pz ERP 的阴影为参与者间 ±1 SEM，幅值时间窗为 300–500 ms。教程不使用 ICA，与助手执行案例分别记录。
 
-[![20 名 ERP CORE 参与者的 N400 结果：CPz/Cz/Pz 的 ERP 曲线、描述性头皮图及各参与者的幅值差。](docs/assets/n400-example.png)](docs/assets/n400-example.png)
+[用保存的结果作图](docs/EXAMPLES.md#replot-the-saved-results) · [运行完整教程](docs/EXAMPLES.md#erp-core-complete-n400-recipe-case) · [助手执行案例](docs/EXAMPLES.md#adapt-a-recipe-to-your-study)
 
-固定 N400 示例保留了 20 名 ERP CORE 参与者的结果：CPz/Cz/Pz 的 ERP 曲线及参与者间 ±1 SEM、描述性差值头皮图，以及每位参与者在 300–500 ms 的“不相关减相关”幅值。其[保存的配置和结果](tools/examples/n400/recipe_case_results.json)与已记录的助手运行和历史认证分别记录。
-
-[运行示例](docs/EXAMPLES.md#erp-core-complete-n400-recipe-case) · [用保存的结果重新作图](docs/EXAMPLES.md#replot-the-saved-results) · [查看助手案例记录](docs/EXAMPLES.md#adapt-a-recipe-to-your-study)
-
----
-
+<a id="quickstart"></a>
 ## 快速开始
 
-此 README 和主页提供三语版本。详细指南、技能与配方源文件、图中文字、EEGLAB 菜单及固定报告模板目前仍以英文为主。可以用中文与编程助手沟通。
-
-**EEGLAB 扩展已获批准：** AEA 0.1.3 已列入 [EEGLAB 官方扩展目录](https://sccn.ucsd.edu/eeglab/plugin_uploader/plugin_list_all.php)。在 EEGLAB 中打开 **File > Manage EEGLAB extensions**，搜索 **AEA** 并安装，再按[配置指南](docs/EEGLAB.md)连接 AEA 源码目录和编程客户端。
-
-AEA 也已列入 [FieldTrip 外部扩展目录](https://www.fieldtriptoolbox.org/extensions/)，可用路线见[后端说明](templates/backends/README.md)。
-
-已有分析环境时，可用 [PyPI 预览包](https://pypi.org/project/auto-eeg-analysis/0.3.3rc2/) 创建 AEA 工程。
+PyPI 预览包会创建包含 AEA 资源的新工程，需要 Python 3.10+ 和已有的 MNE 环境。默认安装包不包含科学计算依赖。
 
 ```sh
 python -m pip install auto-eeg-analysis==0.3.3rc2
 aea-eeg init ./my-eeg-study --agent codex
 cd my-eeg-study
-```
-
-Claude Code 用户可改用 `--agent claude`，也可选择 `--agent both`。在新工程目录和已有 MNE 环境中运行客户端。默认安装包不自动安装科学计算依赖，环境配置见[安装包指南](docs/PACKAGES.md)。
-
-[MATLAB 工具箱预览包](https://github.com/dengzhe-hou/auto-eeg-analysis/releases/download/eeglab-v0.1.3-preview/AEA_MATLAB_EEGLAB_0_1_3_preview.mltbx)包含资源库和 EEGLAB 适配器。[File Exchange](https://www.mathworks.com/matlabcentral/fileexchange/185187-aea-for-matlab-and-eeglab) 提供 GitHub 源码。安装请使用前面的 `.mltbx` 链接，并按[配置指南](extensions/matlab/README.md)操作。
-
-若使用 Git 源码和新 Conda 环境，先安装 Git、Conda，以及已登录的 Codex CLI 或 Claude Code。以下命令使用 `main`，包含 [v0.3.2](CHANGELOG.md#choose-a-version) 之后的修正。
-
-```bash
-git clone https://github.com/dengzhe-hou/auto-eeg-analysis.git
-cd auto-eeg-analysis
-conda env create -f environment.yml
-conda activate aeais
-python tools/install_skills.py --agent codex
 codex
 ```
 
-在仓库根目录运行，并保持 `aeais` 环境已激活。若兼容的数据位于 `projects/my-study/raw/`，在 **Codex 内**输入：
+把兼容数据放入 my-eeg-study/raw/，在该工程内启动已登录的编程客户端。选择适合范式的配方，计算前确认分析方案。
 
 ```text
-$eeg-recipe n400-semantic --data projects/my-study
+$eeg-recipe n400-semantic --data .
 ```
 
-选择符合实验范式的配方。使用 ERP CORE 时，请参照[可直接复制的 N400 数据说明与批准提示](docs/EXAMPLES.md#adapt-a-recipe-to-your-study)，保留现有数据布局。使用 Claude Code 时，以 `--agent claude` 安装技能，启动 `claude`，并将 `$eeg-recipe` 改为 `/eeg-recipe`。
+Claude Code → `--agent claude`, `claude`, `/eeg-recipe n400-semantic --data .`
 
-执行前确认分析方案，并为审阅阶段[配置审阅模型](docs/GETTING_STARTED.md#configure-the-reviewer)。[安装指南](docs/GETTING_STARTED.md)说明了数据格式、研究目录、Windows 配置和输出文件。
+[完整安装与依赖说明](docs/GETTING_STARTED.md) · [为审阅阶段配置审阅模型。](docs/GETTING_STARTED.md#configure-the-reviewer)
 
-使用 Windows 和 EEGLAB？[首次报告教程](docs/WINDOWS_FIRST_RUN.md)涵盖客户端安装、Python 与可执行文件路径、菜单设置和报告打开方式。[预览扩展](docs/EEGLAB.md)连接 EEGLAB 与 AEA，分析主要使用 Python/MNE。
+### 选择入口
 
-**[EEGLAB 0.1.3 预览版](https://github.com/dengzhe-hou/auto-eeg-analysis/releases/tag/eeglab-v0.1.3-preview)** 新增 [MATLAB 原生路线](docs/MATLAB_NATIVE.md)，无需 Python/MNE 即可准备研究、启动客户端，并在限定范围内完成 ERP 均值计算、图和报告。请搭配该版本的源码和插件 ZIP 使用；较早的 0.1.2 安装包不包含这条路线。
+| | |
+| --- | --- |
+| **Python / MNE** | 用 PyPI 预览包创建工程，也可使用 Git 源码。 [使用文档](docs/PACKAGES.md) |
+| **MATLAB / EEGLAB** | 安装 EEGLAB 扩展或 MATLAB 工具箱预览包。 [使用文档](docs/EEGLAB.md) |
+| **不使用模型账户** | 用保存的数组重新作图，或运行固定 N400 教程。 [使用文档](docs/EXAMPLES.md#replot-the-saved-results) |
 
-> [!TIP]
-> 不使用编程助手或模型账户，也可以运行[固定 Python 教程](docs/EXAMPLES.md#erp-core-complete-n400-recipe-case)体验 N400 示例；还可以[不读取原始 EEG，直接用已保存结果重新作图](docs/EXAMPLES.md#replot-the-saved-results)。
+通过 EEGLAB 扩展管理器安装 AEA 0.1.3，或使用 MATLAB 工具箱预览包。原生 MATLAB 路线支持从已有 epochs 计算明确指定的 ERP 均值。更广泛的资源库主要使用 MNE-Python。
 
----
+[Windows 首次报告指南](docs/WINDOWS_FIRST_RUN.md) · [MATLAB 原生路线范围](docs/MATLAB_NATIVE.md) · [FieldTrip](https://www.fieldtriptoolbox.org/extensions/) · [File Exchange](https://www.mathworks.com/matlabcentral/fileexchange/185187-aea-for-matlab-and-eeglab)
 
-## 如何工作
-
-[![AEA 工作流：技能和配方指导 LLM 编程助手，研究者批准方案，MNE-Python 执行分析。](docs/assets/library-overview.svg)](docs/assets/library-overview.svg)
-
-[已记录的助手工作流](docs/EXAMPLES.md#adapt-a-recipe-to-your-study) · [自定义分析](docs/GETTING_STARTED.md#w2-design-a-custom-analysis) · [重放指南](docs/REPLAY.md)
-
----
-
+<a id="library"></a>
 ## 浏览资源库
 
-| 资源 | 内容 | 从这里开始 |
+### 10 配方
+
+| 配方 | 分析 | Status |
 | --- | --- | --- |
-| 技能 | 预处理、ERP、频谱、时频分析、连接性、统计、绘图和报告 | [任务索引](docs/GETTING_STARTED.md#choose-skills-for-a-task) · [技能文件](skills/) |
-| 配方 | 特定范式的工作流、数据要求、参数选择和来源论文 | [配方目录](recipes/README.md) |
-| 完整示例 | 方案、脚本、保存的结果、图和重放说明 | [示例指南](docs/EXAMPLES.md) |
+| [ern-flankers](recipes/ern-flankers/RECIPE.md) | N2、反应相关负波、额叶 theta | 已验证 |
+| [mmn-oddball](recipes/mmn-oddball/RECIPE.md) | 听觉失匹配负波 | 已验证 |
+| [p300-oddball](recipes/p300-oddball/RECIPE.md) | 稀有目标诱发的 P300 | 实验性 已记录组水平验证结果 |
+| [n170-faces](recipes/n170-faces/RECIPE.md) | 人脸与非人脸对照 | 已验证 |
+| [n170-face-inversion](recipes/n170-face-inversion/RECIPE.md) | 正立与倒立人脸 | 实验性 |
+| [n400-semantic](recipes/n400-semantic/RECIPE.md) | 语义启动 | 已验证 |
+| [alpha-attention-cueing](recipes/alpha-attention-cueing/RECIPE.md) | 后部 alpha 调制 | 实验性 |
+| [resting-microstate](recipes/resting-microstate/RECIPE.md) | 静息态微状态图与动态 | 已验证 |
+| [resting-spectral-connectivity](recipes/resting-spectral-connectivity/RECIPE.md) | 功率谱、非周期成分拟合、连接性 | 已验证 |
+| [complexity-anesthesia](recipes/complexity-anesthesia/RECIPE.md) | 连续信号的复杂度与熵 | 已验证 已检查清醒状态；此处尚未测试麻醉状态 |
 
----
+配方状态与验证适用于各源码文件记录的具体配置。 [配方完整目录](recipes/README.md)
 
+### 22 技能
+
+| | |
+| --- | --- |
+| 数据与准备 | [eeg-bids](skills/eeg-bids/SKILL.md) · [eeg-qc](skills/eeg-qc/SKILL.md) · [eeg-preprocess](skills/eeg-preprocess/SKILL.md) · [eeg-ica](skills/eeg-ica/SKILL.md) · [eeg-epoch](skills/eeg-epoch/SKILL.md) |
+| ERP 与时频 | [eeg-erp](skills/eeg-erp/SKILL.md) · [eeg-tfr](skills/eeg-tfr/SKILL.md) |
+| 连续信号 | [eeg-spectral](skills/eeg-spectral/SKILL.md) · [eeg-connectivity](skills/eeg-connectivity/SKILL.md) · [eeg-microstate](skills/eeg-microstate/SKILL.md) · [eeg-complexity](skills/eeg-complexity/SKILL.md) · [eeg-source](skills/eeg-source/SKILL.md) |
+| 统计与行为 | [eeg-stats](skills/eeg-stats/SKILL.md) · [eeg-group-compare](skills/eeg-group-compare/SKILL.md) · [eeg-decoding](skills/eeg-decoding/SKILL.md) · [eeg-behavior](skills/eeg-behavior/SKILL.md) |
+| 输出与审阅 | [eeg-figure](skills/eeg-figure/SKILL.md) · [eeg-methods-text](skills/eeg-methods-text/SKILL.md) · [eeg-report](skills/eeg-report/SKILL.md) · [eeg-audit](skills/eeg-audit/SKILL.md) |
+| 流程编排 | [eeg-pipeline](skills/eeg-pipeline/SKILL.md) · [eeg-recipe](skills/eeg-recipe/SKILL.md) |
+
+<a id="validation"></a>
 ## 验证范围
 
-认证仅适用于[覆盖记录](docs/CERTIFICATION_LEVELS.md)中列出的**输出和配置**。数值核心涵盖部分 ERP 幅值、cluster 统计和频带功率。EEGLAB 与 FieldTrip 提供独立比较以及部分替代后端路线。
+MNE-Python 是主要后端。EEGLAB 和 FieldTrip 提供独立比较与部分替代路线。认证适用于覆盖记录中的输出和配置。
 
-每个[配方](recipes/README.md#available-recipes)均记录其声明状态和已有评估。经过检查的数值核心不等于所有选项或生成的工作流都已认证。
+[验证范围](docs/CERTIFICATION_LEVELS.md) · [Benchmark](https://github.com/dengzhe-hou/Auto-EEG-Analysis/blob/995f53d42cc74205b164e8711d4b289b8c2ad3a1/docs/BENCHMARK.md) · [研究材料归档](https://doi.org/10.5281/zenodo.24012489) · [重放说明](docs/REPLAY.md)
 
-[验证范围](docs/CERTIFICATION_LEVELS.md) · [基准配置与结果](https://github.com/dengzhe-hou/auto-eeg-analysis/blob/995f53d42cc74205b164e8711d4b289b8c2ad3a1/docs/BENCHMARK.md)
+<a id="contributing"></a>
+## 参与贡献
 
----
+可以添加配方、改进技能、分享教程，或报告首次运行情况。验证要求和贡献认可见贡献指南。
 
-## 引用与贡献
+[贡献指南](CONTRIBUTING.md) · [报告首次运行](https://github.com/dengzhe-hou/Auto-EEG-Analysis/issues/new?template=first-run-platform-feedback.md) · [使用问题与故障](https://github.com/dengzhe-hou/Auto-EEG-Analysis/issues)
 
-引用 AEA 时请使用 [CITATION.cff](CITATION.cff)，记录实际使用的软件版本或提交，并引用所用配方声明的来源论文。[Zenodo 归档](https://doi.org/10.5281/zenodo.24012489)保存了截至 2026 年 11 月 6 日冻结的资源与验证记录。安装包和归档的对应关系见[公开版本说明](docs/PACKAGES.md#public-versions-and-archives)。新增或改进技能、配方，请参照[贡献指南](CONTRIBUTING.md)。
+## 引用实际使用的版本
 
-官方使用教程提供英文版。社区可以[贡献任意语言的教程](CONTRIBUTING.md#share-a-community-tutorial)，也可以[提交首次使用和平台测试反馈](CONTRIBUTING.md#report-a-first-run-or-platform-check)，包括未完成或失败的尝试。
+引用 AEA 时记录软件版本或提交，同时引用原始方法和数据集。Zenodo 保存的是 2026 年 11 月 6 日冻结的资源与验证记录。
 
-[更新记录](CHANGELOG.md) · [问题排查](docs/GETTING_STARTED.md#troubleshooting) · [提交问题](https://github.com/dengzhe-hou/auto-eeg-analysis/issues)
+[软件引用信息](CITATION.cff) · [安装包与版本](docs/PACKAGES.md#public-versions-and-archives)
 
-软件采用 [MIT 许可证](LICENSE)，配方元数据采用 CC BY 4.0。项目基于 [ARIS](https://github.com/wanshuiyin/Auto-claude-code-research-in-sleep) 构建。
+详细使用教程维护英文版本，欢迎提交其他语言的社区教程。
 
-版式参考：[CRAFT](https://looketal.com/s/readme-coral-lab-asu-craft.html)，来自 [Look et al.](https://looketal.com/)。
+[MIT](LICENSE) · Recipe metadata CC BY 4.0 · Built on [ARIS](https://github.com/wanshuiyin/Auto-claude-code-research-in-sleep)

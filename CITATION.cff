@@ -10,8 +10,8 @@ authors:
   - family-names: Hou
     given-names: Dengzhe
     affiliation: Tohoku University
-repository-code: "https://github.com/dengzhe-hou/auto-eeg-analysis"
-url: "https://dengzhe-hou.github.io/auto-eeg-analysis/"
+repository-code: "https://github.com/dengzhe-hou/Auto-EEG-Analysis"
+url: "https://dengzhe-hou.github.io/Auto-EEG-Analysis/"
 abstract: >
   AEA is an open library of EEG analysis skills for MNE-Python, with executable
   specifications and a numerically certified core. It provides shareable
