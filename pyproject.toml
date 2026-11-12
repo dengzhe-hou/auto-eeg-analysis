@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "auto-eeg-analysis"
-version = "0.3.3rc2"
+version = "0.3.3"
 description = "Reusable EEG analysis skills and study recipes for large language model agents"
 readme = "packaging/README.md"
 requires-python = ">=3.10"

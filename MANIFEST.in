@@ -16,6 +16,7 @@ include docs/EEGLAB.md
 include docs/EXAMPLES.md
 include docs/GETTING_STARTED.md
 include docs/MATLAB_NATIVE.md
+include docs/PACKAGES.md
 include docs/PLATFORM_SUPPORT.md
 include docs/PRELOADED_SKILLS.md
 include docs/REPLAY.md
@@ -38,6 +39,12 @@ include extensions/eeglab/aea/aea_shell_quote.m
 include extensions/eeglab/aea/aea_write_json.m
 include extensions/eeglab/aea/eegplugin_aea.m
 include extensions/eeglab/aea/pop_aea.m
+include extensions/matlab/README.md
+include extensions/matlab/aea_getting_started.m
+include extensions/matlab/aea_library_root.m
+include extensions/matlab/aea_setup.m
+include extensions/matlab/build_aea_matlab_toolbox.m
+include extensions/matlab/toolbox-identity.json
 include recipes/README.md
 include recipes/_template/RECIPE.md
 include recipes/alpha-attention-cueing/RECIPE.md

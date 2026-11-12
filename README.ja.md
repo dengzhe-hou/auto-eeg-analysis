@@ -6,7 +6,7 @@
 
 [English](README.md) · [简体中文](README.zh-CN.md) · **日本語**
 
-[Website](https://dengzhe-hou.github.io/Auto-EEG-Analysis/index.ja.html) · [ドキュメント](docs/GETTING_STARTED.md) · [PyPI preview](https://pypi.org/project/auto-eeg-analysis/0.3.3rc2/) · [EEGLAB 0.1.3](docs/EEGLAB.md) · [Zenodo](https://doi.org/10.5281/zenodo.24012489)
+[Website](https://dengzhe-hou.github.io/Auto-EEG-Analysis/index.ja.html) · [ドキュメント](docs/GETTING_STARTED.md) · [PyPI package](https://pypi.org/project/auto-eeg-analysis/0.3.3/) · [EEGLAB 0.1.3](docs/EEGLAB.md) · [Zenodo](https://doi.org/10.5281/zenodo.24012489)
 
 </div>
 
@@ -23,10 +23,10 @@ ERP COREの20名分を使う固定チュートリアルです。CPz/Cz/Pz ERPの
 <a id="quickstart"></a>
 ## クイックスタート
 
-PyPIプレビュー版から、AEAリソースを含む新しいプロジェクトを作成します。Python 3.10以降と既存のMNE環境が必要です。標準パッケージは解析用の依存関係をインストールしません。
+PyPIパッケージから、AEAリソースを含む新しいプロジェクトを作成します。Python 3.10以降と既存のMNE環境が必要です。標準パッケージは解析用の依存関係をインストールしません。
 
 ```sh
-python -m pip install auto-eeg-analysis==0.3.3rc2
+python -m pip install auto-eeg-analysis==0.3.3
 aea-eeg init ./my-eeg-study --agent codex
 cd my-eeg-study
 codex
@@ -46,7 +46,7 @@ Claude Code → `--agent claude`, `claude`, `/eeg-recipe n400-semantic --data .`
 
 | | |
 | --- | --- |
-| **Python / MNE** | PyPIプレビュー版でプロジェクトを作成、またはGitソースを利用。 [ドキュメント](docs/PACKAGES.md) |
+| **Python / MNE** | PyPIパッケージでプロジェクトを作成、またはGitソースを利用。 [ドキュメント](docs/PACKAGES.md) |
 | **MATLAB / EEGLAB** | EEGLAB拡張またはMATLABツールボックスのプレビュー版を導入。 [ドキュメント](docs/EEGLAB.md) |
 | **モデルアカウントなし** | 保存配列から作図、または固定N400チュートリアルを実行。 [ドキュメント](docs/EXAMPLES.md#replot-the-saved-results) |
 

@@ -13,7 +13,7 @@ documentation. It does not install or configure a model client or an account.
 Use Python 3.10 or newer in an environment of your choice.
 
 ```sh
-python -m pip install auto-eeg-analysis==0.3.3rc2
+python -m pip install auto-eeg-analysis==0.3.3
 aea-eeg init ./my-eeg-study --agent codex
 cd my-eeg-study
 ```
@@ -29,7 +29,7 @@ existing MNE environment, use the included `environment.yml` to create one,
 or install the analysis dependencies from the existing environment specification.
 
 ```sh
-python -m pip install 'auto-eeg-analysis[analysis]==0.3.3rc2'
+python -m pip install 'auto-eeg-analysis[analysis]==0.3.3'
 ```
 
 Read `AGENT_GUIDE.md`, select procedures through `RESOURCE_INDEX.md`, and approve
@@ -39,8 +39,8 @@ resource directory.
 
 ## Version and evidence
 
-This packaging candidate uses published AEA source commit
-`cdc0c30105cc4547aed8e5ece41739a8462cb47a`. The package version identifies this
+This distribution uses published AEA source commit
+`62944027e4484b051614dc2f1bd397db97f5823c`. The package version identifies this
 distribution. Retained scientific validation records and plugin versions keep
 their original identifiers. Packaging checks do not extend the numerical
 validation coverage in `docs/CERTIFICATION_LEVELS.md`.

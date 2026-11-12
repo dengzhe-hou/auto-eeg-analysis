@@ -6,7 +6,7 @@
 
 [English](README.md) · **简体中文** · [日本語](README.ja.md)
 
-[Website](https://dengzhe-hou.github.io/Auto-EEG-Analysis/index.zh-CN.html) · [使用文档](docs/GETTING_STARTED.md) · [PyPI preview](https://pypi.org/project/auto-eeg-analysis/0.3.3rc2/) · [EEGLAB 0.1.3](docs/EEGLAB.md) · [Zenodo](https://doi.org/10.5281/zenodo.24012489)
+[Website](https://dengzhe-hou.github.io/Auto-EEG-Analysis/index.zh-CN.html) · [使用文档](docs/GETTING_STARTED.md) · [PyPI package](https://pypi.org/project/auto-eeg-analysis/0.3.3/) · [EEGLAB 0.1.3](docs/EEGLAB.md) · [Zenodo](https://doi.org/10.5281/zenodo.24012489)
 
 </div>
 
@@ -23,10 +23,10 @@ AEA 提供面向编程助手的 **22 个分析技能和 10 个工作流配方**�
 <a id="quickstart"></a>
 ## 快速开始
 
-PyPI 预览包会创建包含 AEA 资源的新工程，需要 Python 3.10+ 和已有的 MNE 环境。默认安装包不包含科学计算依赖。
+PyPI 软件包会创建包含 AEA 资源的新工程，需要 Python 3.10+ 和已有的 MNE 环境。默认安装包不包含科学计算依赖。
 
 ```sh
-python -m pip install auto-eeg-analysis==0.3.3rc2
+python -m pip install auto-eeg-analysis==0.3.3
 aea-eeg init ./my-eeg-study --agent codex
 cd my-eeg-study
 codex
@@ -46,7 +46,7 @@ Claude Code → `--agent claude`, `claude`, `/eeg-recipe n400-semantic --data .`
 
 | | |
 | --- | --- |
-| **Python / MNE** | 用 PyPI 预览包创建工程，也可使用 Git 源码。 [使用文档](docs/PACKAGES.md) |
+| **Python / MNE** | 用 PyPI 软件包创建工程，也可使用 Git 源码。 [使用文档](docs/PACKAGES.md) |
 | **MATLAB / EEGLAB** | 安装 EEGLAB 扩展或 MATLAB 工具箱预览包。 [使用文档](docs/EEGLAB.md) |
 | **不使用模型账户** | 用保存的数组重新作图，或运行固定 N400 教程。 [使用文档](docs/EXAMPLES.md#replot-the-saved-results) |
 

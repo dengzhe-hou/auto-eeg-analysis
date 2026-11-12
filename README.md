@@ -6,7 +6,7 @@
 
 **English** · [简体中文](README.zh-CN.md) · [日本語](README.ja.md)
 
-[Website](https://dengzhe-hou.github.io/Auto-EEG-Analysis/) · [Documentation](docs/GETTING_STARTED.md) · [PyPI preview](https://pypi.org/project/auto-eeg-analysis/0.3.3rc2/) · [EEGLAB 0.1.3](docs/EEGLAB.md) · [Zenodo](https://doi.org/10.5281/zenodo.24012489)
+[Website](https://dengzhe-hou.github.io/Auto-EEG-Analysis/) · [Documentation](docs/GETTING_STARTED.md) · [PyPI package](https://pypi.org/project/auto-eeg-analysis/0.3.3/) · [EEGLAB 0.1.3](docs/EEGLAB.md) · [Zenodo](https://doi.org/10.5281/zenodo.24012489)
 
 </div>
 
@@ -23,10 +23,10 @@ A fixed tutorial on 20 ERP CORE participants. CPz/Cz/Pz ERPs show ±1 participan
 <a id="quickstart"></a>
 ## Quickstart
 
-The PyPI preview creates a new project with the AEA resources. Python 3.10+ and an existing MNE environment are required. The default package does not install the scientific dependencies.
+The PyPI package creates a new project with the AEA resources. Python 3.10+ and an existing MNE environment are required. The default package does not install the scientific dependencies.
 
 ```sh
-python -m pip install auto-eeg-analysis==0.3.3rc2
+python -m pip install auto-eeg-analysis==0.3.3
 aea-eeg init ./my-eeg-study --agent codex
 cd my-eeg-study
 codex
@@ -46,7 +46,7 @@ Claude Code → `--agent claude`, `claude`, `/eeg-recipe n400-semantic --data .`
 
 | | |
 | --- | --- |
-| **Python / MNE** | Create a project with the PyPI preview, or use a Git checkout. [Documentation](docs/PACKAGES.md) |
+| **Python / MNE** | Create a project with the PyPI package, or use a Git checkout. [Documentation](docs/PACKAGES.md) |
 | **MATLAB / EEGLAB** | Install the EEGLAB extension or MATLAB toolbox preview. [Documentation](docs/EEGLAB.md) |
 | **No model account** | Replot saved arrays, or run the fixed N400 tutorial. [Documentation](docs/EXAMPLES.md#replot-the-saved-results) |
 
