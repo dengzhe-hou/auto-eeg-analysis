@@ -1,0 +1,21 @@
+\subsection{Earlier additional-recording test}
+\label{sec:additional-recordings}
+
+Before the final two maintenance repairs, the 8 November snapshot was evaluated on 20 requests using ten additional recordings from EEG During Mental Arithmetic Tasks and Mumtaz 2016. Three paired repetitions produced 120 first deliveries. These recordings were absent from retained prior model-run records, while both data sources and all 19 task families had been used previously. Table~\ref*{tab:additional-validation} reports the result-field and complete-contract endpoints. Both differences were positive, but their intervals included zero, so the prespecified improvement criterion was not met.
+
+\begin{table}[!htbp]
+\centering\small
+\caption{Additional-recording test before the final two maintenance repairs. Each condition contains 60 first deliveries. Differences and approximate 95\,\% crossed task-family/recording intervals are in percentage points. Result-field correctness was primary.}
+\label{tab:additional-validation}
+\begin{tabular}{lrrrr}
+\toprule
+Endpoint & With AEA & Without AEA & Difference & Interval \\
+\midrule
+Result fields & 57/60 & 52/60 & +8.33 & -13.09 to 38.79 \\
+Complete contract & 57/60 & 44/60 & +21.67 & -4.64 to 48.72 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The three AEA result-field failures comprised two sample entropy (SampEn) calculations with mismatched template positions and one correct variance ranking delivered with shortened channel names. After routing these tasks through the checked execution entry, a separate 12-session engineering retest used the two affected requests with three fresh paired repetitions. Both conditions were correct in 6/6 deliveries, and all six AEA sessions actually invoked the repaired entry. This known-input check is retained separately and does not replace any of the 120 first deliveries.
+

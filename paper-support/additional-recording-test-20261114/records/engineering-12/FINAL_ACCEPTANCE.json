@@ -1,0 +1,26 @@
+{
+  "passed": true,
+  "checked_at_utc": "2026-11-09T16:45:00.616901+00:00",
+  "job_id": "37656",
+  "native_state": "COMPLETED",
+  "native_exit_code": "0:0",
+  "sessions": 12,
+  "direct_checks": 12,
+  "result_field_checks": 12,
+  "aea_entry_adopted": 6,
+  "actual_api_requests": 37,
+  "returned_models": {
+    "claude-haiku-5-5": 37
+  },
+  "thinking": "disabled",
+  "effort": "medium",
+  "response_thinking_blocks": 0,
+  "api_usage_cost_estimate_usd": 0.032691,
+  "new_api_cap_usd": 0.2,
+  "provider_invoice_verified": false,
+  "extra_model_judge_calls": 0,
+  "first_deliveries_preserved": true,
+  "old_120_results_unchanged": true,
+  "errors_or_automatic_retries": 0,
+  "resource_control": "1 CPU affinity and 4 GiB effective cgroup allocation; actual kernels observed in worker cgroup"
+}

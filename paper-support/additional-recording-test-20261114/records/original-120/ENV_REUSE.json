@@ -1,0 +1,8 @@
+{
+  "mode": "Warm reuse, no environment rebuild or dependency installation",
+  "runtime_record": "/home/hou/Research/auto-eeg-analysis/review-stage/brainbench-formal-20261022/RUNTIME_ENVIRONMENT.json",
+  "container": "/home/hou/Research/auto-eeg-analysis/review-stage/aea-next-validation-preparation-20261031/study_apptainer.py",
+  "mne_version": "1.8.0",
+  "prior_complete_600_source": "/home/hou/Research/auto-eeg-analysis/review-stage/aea-next-validation-preparation-20261031/COMPLETION.json",
+  "prior_erp_environment_record": "/home/hou/Research/auto-eeg-analysis/review-stage/aea-erp-entry-20261106/ENV_REUSE.json"
+}

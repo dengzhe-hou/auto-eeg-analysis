@@ -1,0 +1,32 @@
+{
+  "passed": true,
+  "completed_sessions": 120,
+  "requests": 20,
+  "pairs": 60,
+  "recordings": 10,
+  "new_recordings": 10,
+  "data_sources": 2,
+  "development_seen_task_families": 19,
+  "counts": {
+    "with_aea": {
+      "sessions": 60,
+      "result_fields_pass": 57,
+      "first_delivery_contract_pass": 57
+    },
+    "without_aea": {
+      "sessions": 60,
+      "result_fields_pass": 52,
+      "first_delivery_contract_pass": 44
+    }
+  },
+  "paired_field_outcomes": {
+    "1_1": 49,
+    "0_1": 3,
+    "1_0": 8
+  },
+  "all_pairs_same_node_cpu_memory": true,
+  "old_results_unchanged": true,
+  "cost_estimate_usd": 0.7845799,
+  "new_api_calls_by_this_analysis": 0,
+  "scope": "New recording/task combinations in two existing sources, not unseen sources or new analysis task types"
+}

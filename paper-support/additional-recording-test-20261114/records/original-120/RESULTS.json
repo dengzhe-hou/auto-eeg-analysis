@@ -1,0 +1,55 @@
+{
+  "analysis_complete": true,
+  "assigned_formal_sessions": 120,
+  "complete_formal_sessions": 120,
+  "pending": [],
+  "recordings": 10,
+  "requests": 20,
+  "new_recordings": 10,
+  "reused_recordings": 0,
+  "reused_seed_recordings": 0,
+  "numpy_version": "2.4.3",
+  "estimated_api_cost_usd": 0.7845799,
+  "target_cost_estimate_usd": 0.4798559,
+  "secondary_review_cost_estimate_usd": 0.304724,
+  "provider_invoice_verified": false,
+  "no_model_calls_by_collector": true,
+  "scientific_parameters_or_tolerances_changed": false,
+  "old_results_rescored": false,
+  "result_fields_pass": {
+    "with_aea": {
+      "passed": 57,
+      "sessions": 60,
+      "rate": 0.95
+    },
+    "without_aea": {
+      "passed": 52,
+      "sessions": 60,
+      "rate": 0.8666666666666667
+    },
+    "difference_pp": 8.333333333333334,
+    "ci95_crossed": [
+      -13.090333111908913,
+      38.788432548704606
+    ],
+    "criterion_met": false
+  },
+  "first_delivery_contract_pass": {
+    "with_aea": {
+      "passed": 57,
+      "sessions": 60,
+      "rate": 0.95
+    },
+    "without_aea": {
+      "passed": 44,
+      "sessions": 60,
+      "rate": 0.7333333333333333
+    },
+    "difference_pp": 21.666666666666664,
+    "ci95_crossed": [
+      -4.639150468374354,
+      48.72488577375192
+    ],
+    "criterion_met": false
+  }
+}

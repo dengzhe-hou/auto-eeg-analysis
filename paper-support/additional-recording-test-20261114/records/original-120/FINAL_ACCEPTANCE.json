@@ -1,0 +1,21 @@
+{
+  "passed": true,
+  "completed_at_jst": "2026-11-10T00:44:35.116179+09:00",
+  "target_sessions": 120,
+  "result_field_checks": 120,
+  "full_contract_checks": 120,
+  "independent_counts_passed": true,
+  "all_target_provider_config_checked": true,
+  "native_target_requests": 506,
+  "all_target_and_closing_jobs_completed_exit0": true,
+  "finalize_job": "37614",
+  "new_recordings": 10,
+  "data_sources": 2,
+  "seen_task_families": 19,
+  "new_api_cost_estimate_usd": 0.7845799,
+  "new_api_cap_usd": 2,
+  "primary_improvement_criterion_met": false,
+  "additional_model_calls_after_fixed120": 0,
+  "old_outputs_and_scores_preserved": true,
+  "published": false
+}

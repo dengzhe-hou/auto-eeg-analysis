@@ -1,0 +1,14 @@
+{
+  "mode": "Warm reuse, no rebuild, installation or new GPU probe",
+  "prior": "/home/hou/Research/auto-eeg-analysis/review-stage/aea-new-input-trial-20261109/ENV_REUSE.json",
+  "recent_MNE_1p8_acceptance": "/home/hou/Research/auto-eeg-analysis/review-stage/aea-sampen-channel-repair-20261110/OFFLINE_REPAIR_CHECK.json",
+  "root_head": "b52df1cef9ce283a254e047c606ebc60dc2b9562",
+  "resource_snapshot_base": "/home/hou/Research/auto-eeg-analysis/review-stage/aea-new-input-trial-20261109/aea_snapshot",
+  "snapshot_overlaid_files": [
+    "tools/run_continuous_plan.py",
+    "tools/check_analysis_outputs.py",
+    "tools/prepare_skill_packet.py",
+    "docs/PRELOADED_SKILLS.md",
+    "tools/tests/test_segment_metric_delivery.py"
+  ]
+}

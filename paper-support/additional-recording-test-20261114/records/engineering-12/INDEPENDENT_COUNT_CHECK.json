@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "arms": {
+    "with_aea": {
+      "result_fields_correct": 6,
+      "sessions": 6
+    },
+    "without_aea": {
+      "result_fields_correct": 6,
+      "sessions": 6
+    }
+  },
+  "source": "Count original per-session deterministic checker files separately from collector rows."
+}
